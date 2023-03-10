@@ -1,0 +1,218 @@
+<div class="page-content">
+    <div class="container-fluid">
+
+        <!-- start page title -->
+        <div class="row">
+            <div class="col-12">
+                <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+                    <h4 class="mb-sm-0 font-size-18">Register Users</h4>
+
+                    <div class="page-title-right">
+                        <ol class="breadcrumb m-0">
+                            <li class="breadcrumb-item"><a href="javascript: void(0);">Users</a></li>
+                            <li class="breadcrumb-item active">Register</li>
+                        </ol>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <!-- end page title -->
+        
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title mb-0">Basic User information</h4>
+                    </div>
+                    <div class="card-body">
+                        <div id="basic-pills-wizard" class="twitter-bs-wizard">
+                            <ul class="twitter-bs-wizard-nav nav nav-pills nav-justified">
+                                <li class="nav-item">
+                                    <a href="#seller-details" class="nav-link active" data-toggle="tab">
+                                        <div class="step-icon" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Seller Details">
+                                            <i class="bx bx-list-ul"></i>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="#company-document" class="nav-link" data-toggle="tab">
+                                        <div class="step-icon" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Company Document">
+                                            <i class="bx bx-book-bookmark"></i>
+                                        </div>
+                                    </a>
+                                </li>
+                                
+                                <li class="nav-item">
+                                    <a href="#bank-detail" class="nav-link" data-toggle="tab">
+                                        <div class="step-icon" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Bank Details">
+                                            <i class="bx bxs-bank"></i>
+                                        </div>
+                                    </a>
+                                </li>
+                            </ul>
+                            <!-- wizard-nav -->
+
+                            <div class="tab-content twitter-bs-wizard-tab-content">
+                                <div class="tab-pane active" id="seller-details">
+                                    <div class="text-center mb-4">
+                                        <h5>Personal Details</h5>
+                                        <p class="card-title-desc">Fill all information below</p>
+                                    </div>
+                                    <form>
+                                        <div class="row">
+                                            <div class="col-lg-6">
+                                                <div class="mb-3">
+                                                    <label for="basicpill-firstname-input" class="form-label">First name</label>
+                                                    <input type="text" class="form-control" id="basicpill-firstname-input" placeholder="Enter Your First Name">
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <div class="mb-3">
+                                                    <label for="basicpill-lastname-input" class="form-label">Last name</label>
+                                                    <input type="text" class="form-control" id="basicpill-lastname-input" placeholder="Enter Your Last Name">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-lg-6">
+                                                <div class="mb-3">
+                                                    <label for="basicpill-phoneno-input" class="form-label">Phone</label>
+                                                    <input type="text" class="form-control" id="basicpill-phoneno-input" placeholder="Enter your Phone No.">
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <div class="mb-3">
+                                                    <label for="basicpill-email-input" class="form-label">Email</label>
+                                                    <input type="email" class="form-control" id="basicpill-email-input" placeholder="Enter your email">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-lg-12">
+                                                <div class="mb-3">
+                                                    <label for="basicpill-address-input" class="form-label">Address</label>
+                                                    <textarea id="basicpill-address-input" class="form-control" rows="2" placeholder="Enter your Address"></textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                    <ul class="pager wizard twitter-bs-wizard-pager-link">
+                                        <li class="next"><a href="javascript: void(0);" class="btn btn-primary" onclick="nextTab()">Next <i class="bx bx-chevron-right ms-1"></i></a></li>
+                                    </ul>
+                                </div>
+                                <!-- tab pane -->
+                                <div class="tab-pane" id="company-document">
+                                  <div>
+                                    <div class="text-center mb-4">
+                                        <h5>Login Credentials </h5>
+                                        <p class="card-title-desc">Fill all information below</p>
+                                    </div>
+                                    <form>
+                                        <div class="row">
+                                            <div class="col-lg-6">
+                                                <div class="mb-3">
+                                                    <label for="basicpill-pancard-input" class="form-label">Username</label>
+                                                    <input type="text" class="form-control" id="basicpill-pancard-input" placeholder="Enter Username">
+                                                </div>
+                                            </div>
+
+                                            <div class="col-lg-6">
+                                                <div class="mb-3">
+                                                    <label for="basicpill-vatno-input" class="form-label">Recover Email.</label>
+                                                    <input type="text" class="form-control" id="basicpill-vatno-input" placeholder="Enter User Email">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-lg-6">
+                                                <div class="mb-3">
+                                                    <label for="basicpill-cstno-input" class="form-label">User Password</label>
+                                                    <input type="text" class="form-control" id="basicpill-cstno-input" placeholder="Enter User Password">
+                                                </div>
+                                            </div>
+
+                                            <div class="col-lg-6">
+                                                <div class="mb-3">
+                                                    <label for="basicpill-servicetax-input" class="form-label">Confirm Password</label>
+                                                    <input type="text" class="form-control" id="basicpill-servicetax-input" placeholder="Confirm User Password ">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                    </form>
+                                    <ul class="pager wizard twitter-bs-wizard-pager-link">
+                                        <li class="previous disabled"><a href="javascript: void(0);" class="btn btn-primary" onclick="nextTab()"><i class="bx bx-chevron-left me-1"></i> Previous</a></li>
+                                        <li class="next"><a href="javascript: void(0);" class="btn btn-primary" onclick="nextTab()">Next <i class="bx bx-chevron-right ms-1"></i></a></li>
+                                    </ul>
+                                  </div>
+                                </div>
+                                <!-- tab pane -->
+                                <div class="tab-pane" id="bank-detail">
+                                    <div>
+                                        <div class="text-center mb-4">
+                                            <h5>Access information</h5>
+                                            <p class="card-title-desc">Fill all information below</p>
+                                        </div>
+                                        <form>
+                                            <div class="row">
+                                                <div class="col-lg-6">
+                                                    <div class="mb-3">
+                                                        <label for="basicpill-namecard-input" class="form-label">Job <title></title></label>
+                                                        <input type="text" class="form-control" id="basicpill-namecard-input" placeholder="Enter Offical Job title">
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-lg-6">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">User Type</label>
+                                                        <select class="form-select">
+                                                                <option selected="">Select Type</option>
+                                                                <option value="AE">Health Care Worker</option>
+                                                                <option value="VI">Health Care Professional</option>
+
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-lg-6">
+                                                    <div class="mb-3">
+                                                        <label for="basicpill-expiration-input" class="form-label">Active Date</label>
+                                                        <input type="date" class="form-control" id="basicpill-expiration-input">
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-lg-6">
+                                                    <div class="mb-3">
+                                                        <label for="basicpill-expiration-input" class="form-label">Termination Date</label>
+                                                        <input type="date" class="form-control" id="basicpill-expiration-input">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                        </form>
+                                        <ul class="pager wizard twitter-bs-wizard-pager-link">
+                                            <li class="previous disabled"><a href="javascript: void(0);" class="btn btn-primary" onclick="nextTab()"><i class="bx bx-chevron-left me-1"></i> Previous</a></li>
+                                            <li class="float-end"><a href="javascript: void(0);" class="btn btn-primary" data-bs-toggle="modal" data-bs-target=".confirmModal">Save
+                                                    Changes</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <!-- tab pane -->
+                            </div>
+                            <!-- end tab content -->
+                        </div>
+                    </div>
+                    <!-- end card body -->
+                </div>
+                <!-- end card -->
+            </div>
+            <!-- end col -->
+        </div>
+        <!-- end row -->
+
+       
+    </div> <!-- container-fluid -->
+</div>
