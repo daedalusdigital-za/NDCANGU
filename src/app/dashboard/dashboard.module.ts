@@ -12,6 +12,7 @@ import { ListReportsComponent } from './list-reports/list-reports.component';
 import { AddReportComponent } from './add-report/add-report.component';
 import { AddStatsComponent } from './add-stats/add-stats.component';
 import { ListStatsComponent } from './list-stats/list-stats.component';
+import { GuiGridModule } from '@generic-ui/ngx-grid';
 
 
 @NgModule({
@@ -29,6 +30,7 @@ import { ListStatsComponent } from './list-stats/list-stats.component';
   ],
   imports: [
     CommonModule,
+    GuiGridModule,
     DashboardRoutingModule
   ]
 })
