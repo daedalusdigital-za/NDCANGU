@@ -290,15 +290,7 @@
                                 <h4 class="card-title mb-0">High Blood Pressure Statistics</h4>
                             </div>
                             <div class="card-body">
-                                <apx-chart
-                                [plotOptions]="pieChart.series"
-                                [chart]="pieChart.chart"
-                                [legend]="pieChart.legend"
-                                [tooltip]="pieChart.tooltip"
-                                [labels]="['DIABETIC', 'PREDIABETIC', 'CONTROLLED']" 
-                                [colors]="['#fd625e', '#2ab57d', '#4ba6ef', '#ffbf53', '#5156be']"
-                                class="e-charts"
-                              ></apx-chart>
+                                <div echarts [options]="pieChart" class="e-charts"></div>
                                 <!-- <div id="pie-chart" data-colors='["#fd625e", "#2ab57d", "#4ba6ef", "#ffbf53", "#5156be"]' class="e-charts"></div> -->
                             </div>
                         </div>

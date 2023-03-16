@@ -14,6 +14,7 @@ import { AddStatsComponent } from './add-stats/add-stats.component';
 import { ListStatsComponent } from './list-stats/list-stats.component';
 import { GuiGridModule } from '@generic-ui/ngx-grid';
 import { NgApexchartsModule } from 'ng-apexcharts';
+import { NgxEchartsModule } from 'ngx-echarts';
 
 
 @NgModule({
@@ -33,6 +34,9 @@ import { NgApexchartsModule } from 'ng-apexcharts';
     CommonModule,
     GuiGridModule,
     DashboardRoutingModule,
+    NgxEchartsModule.forRoot({
+      echarts: () => import('echarts')
+    }),
     NgApexchartsModule
   ]
 })

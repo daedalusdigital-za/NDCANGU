@@ -102,7 +102,7 @@ export class ListUsersComponent implements OnInit {
     paging: GuiPaging = {
       enabled: true,
       page: 1,
-      pageSize: 1,
+      pageSize: 5,
       pageSizes: [5, 10, 25],
       pagerTop: false,
       pagerBottom: true,
