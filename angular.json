@@ -147,5 +147,7 @@
       }
     }
   },
-  "defaultProject": "ncd-poc-ng"
+  "cli": {
+    "analytics": false
+  }
 }
