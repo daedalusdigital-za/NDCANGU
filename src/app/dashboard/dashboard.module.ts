@@ -13,6 +13,7 @@ import { AddReportComponent } from './add-report/add-report.component';
 import { AddStatsComponent } from './add-stats/add-stats.component';
 import { ListStatsComponent } from './list-stats/list-stats.component';
 import { GuiGridModule } from '@generic-ui/ngx-grid';
+import { NgApexchartsModule } from 'ng-apexcharts';
 
 
 @NgModule({
@@ -31,7 +32,8 @@ import { GuiGridModule } from '@generic-ui/ngx-grid';
   imports: [
     CommonModule,
     GuiGridModule,
-    DashboardRoutingModule
+    DashboardRoutingModule,
+    NgApexchartsModule
   ]
 })
 export class DashboardModule { }

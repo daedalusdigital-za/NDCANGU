@@ -30,12 +30,18 @@
                             <div class="col-6">
                                 <span class="text-muted mb-3 lh-1 d-block text-truncate">Non-Diabetic</span>
                                 <h4 class="mb-3">
-                                    <span class="counter-value" data-target="550">0</span>
+                                    <span class="counter-value" data-target="550">550</span>
                                 </h4>
                             </div>
 
                             <div class="col-6">
-                                <div id="mini-chart1" data-colors='["#5156be"]' class="apex-charts mb-2"></div>
+                                <apx-chart
+                                [series]="chartNonDiabiates.series"
+                                [chart]="chartNonDiabiates.chart"
+                                [xaxis]="chartNonDiabiates.xaxis"
+                                [title]="chartNonDiabiates.title"
+                                [colors]="['#5156be']"
+                              ></apx-chart>
                             </div>
                         </div>
                         <div class="text-nowrap">
@@ -55,11 +61,18 @@
                             <div class="col-6">
                                 <span class="text-muted mb-3 lh-1 d-block text-truncate">Prediabetes</span>
                                 <h4 class="mb-3">
-                                    <span class="counter-value" data-target="200">0</span>
+                                    <span class="counter-value" data-target="200">200</span>
                                 </h4>
                             </div>
                             <div class="col-6">
-                                <div id="mini-chart2" data-colors='["#5156be"]' class="apex-charts mb-2"></div>
+                                <apx-chart
+                                [series]="chartPreDiabetes.series"
+                                [chart]="chartPreDiabetes.chart"
+                                [xaxis]="chartPreDiabetes.xaxis"
+                                [title]="chartPreDiabetes.title"
+                                [colors]="['#5156be']"
+                              ></apx-chart>
+                                <!-- <div id="mini-chart2" data-colors='["#5156be"]' class="apex-charts mb-2"></div> -->
                             </div>
                         </div>
                         <div class="text-nowrap">
@@ -79,11 +92,18 @@
                             <div class="col-6">
                                 <span class="text-muted mb-3 lh-1 d-block text-truncate">Controlled</span>
                                 <h4 class="mb-3">
-                                    <span class="counter-value" data-target="110">0</span>
+                                    <span class="counter-value" data-target="110">110</span>
                                 </h4>
                             </div>
                             <div class="col-6">
-                                <div id="mini-chart3" data-colors='["#5156be"]' class="apex-charts mb-2"></div>
+                                <apx-chart
+                                [series]="chartControlled.series"
+                                [chart]="chartControlled.chart"
+                                [xaxis]="chartControlled.xaxis"
+                                [title]="chartControlled.title"
+                                [colors]="['#5156be']"
+                              ></apx-chart>
+                                <!-- <div id="mini-chart3" data-colors='["#5156be"]' class="apex-charts mb-2"></div> -->
                             </div>
                         </div>
                         <div class="text-nowrap">
@@ -103,11 +123,18 @@
                             <div class="col-6">
                                 <span class="text-muted mb-3 lh-1 d-block text-truncate">Diabetic </span>
                                 <h4 class="mb-3">
-                                    <span class="counter-value" data-target="188">0</span>
+                                    <span class="counter-value" data-target="188">188</span>
                                 </h4>
                             </div>
                             <div class="col-6">
-                                <div id="mini-chart4" data-colors='["#5156be"]' class="apex-charts mb-2"></div>
+                                <apx-chart
+                                [series]="chartDiabetes.series"
+                                [chart]="chartDiabetes.chart"
+                                [xaxis]="chartDiabetes.xaxis"
+                                [title]="chartDiabetes.title"
+                                [colors]="['#5156be']"
+                              ></apx-chart>
+                                <!-- <div id="mini-chart4" data-colors='["#5156be"]' class="apex-charts mb-2"></div> -->
                             </div>
                         </div>
                         <div class="text-nowrap">
@@ -142,7 +169,17 @@
 
                         <div class="row align-items-center">
                             <div class="col-sm">
-                                <div id="wallet-balance" data-colors='["#FF0000", "#FFA500", "#008000"]' class="apex-charts"></div>
+                                <div class="apex-charts" style="min-height: 209.8px;">
+                                    <apx-chart
+                                    [series]="walletBalenceChart.series"
+                                    [chart]="walletBalenceChart.chart"
+                                    [legend]="{ show: false}"
+                                    [labels]="['DIABETIC', 'PREDIABETIC', 'CONTROLLED']" 
+                                    [colors]="['#FF0000', '#FFA500', '#008000']"
+                                  ></apx-chart>
+                                </div>
+                             
+                                <!-- <div id="wallet-balance" data-colors='["#FF0000", "#FFA500", "#008000"]' class="apex-charts"></div> -->
                             </div>
                             <div class="col-sm align-self-center">
                                 <div class="mt-4 mt-sm-0">
@@ -253,7 +290,16 @@
                                 <h4 class="card-title mb-0">High Blood Pressure Statistics</h4>
                             </div>
                             <div class="card-body">
-                                <div id="pie-chart" data-colors='["#fd625e", "#2ab57d", "#4ba6ef", "#ffbf53", "#5156be"]' class="e-charts"></div>
+                                <apx-chart
+                                [plotOptions]="pieChart.series"
+                                [chart]="pieChart.chart"
+                                [legend]="pieChart.legend"
+                                [tooltip]="pieChart.tooltip"
+                                [labels]="['DIABETIC', 'PREDIABETIC', 'CONTROLLED']" 
+                                [colors]="['#fd625e', '#2ab57d', '#4ba6ef', '#ffbf53', '#5156be']"
+                                class="e-charts"
+                              ></apx-chart>
+                                <!-- <div id="pie-chart" data-colors='["#fd625e", "#2ab57d", "#4ba6ef", "#ffbf53", "#5156be"]' class="e-charts"></div> -->
                             </div>
                         </div>
                         <!-- end card -->
