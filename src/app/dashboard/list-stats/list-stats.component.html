@@ -26,7 +26,13 @@
                         <h4 class="card-title mb-0">Pie Chart</h4>
                     </div>
                     <div class="card-body">
-                        <div id="sparkline1" data-colors="[&quot;#2ab57d&quot;, &quot;#5156be&quot;, &quot;#e9ecef&quot;]" class="text-center"><canvas width="200" height="200" style="display: inline-block; width: 200px; height: 200px; vertical-align: top;"></canvas></div>
+                            <apx-chart
+                              [series]="pieChartOptions.series"
+                              [chart]="pieChartOptions.chart"
+                              [legend]="{ show: false}"
+                              [colors]="['#2ab57d', '#5156be', '#e9ecef']"
+                              class="text-center">
+                            </apx-chart>
                     </div>
                 </div>
             </div>
@@ -36,7 +42,14 @@
                         <h4 class="card-title mb-0">Bar Chart</h4>
                     </div>
                     <div class="card-body">
-                        <div id="sparkline2" data-colors="[&quot;#2ab57d&quot;]" class="text-center"><canvas width="231" height="200" style="display: inline-block; width: 231px; height: 200px; vertical-align: top;"></canvas></div>
+                        <apx-chart
+                        [series]="barChartOptions.series"
+                        [chart]="barChartOptions.chart"
+                        [legend]="{ show: false}"
+                        [colors]="['#2ab57d']"
+                        class="text-center"
+                      ></apx-chart>
+                        <!-- <div id="sparkline2" data-colors="[&quot;#2ab57d&quot;]" class="text-center"><canvas width="231" height="200" style="display: inline-block; width: 231px; height: 200px; vertical-align: top;"></canvas></div> -->
                     </div>
                 </div>
             </div>
@@ -46,7 +59,14 @@
                         <h4 class="card-title mb-0">Line Chart</h4>
                     </div>
                     <div class="card-body analytics-info">
-                        <div id="sparkline4" data-colors="[&quot;#5156be&quot;]"><canvas width="363" height="200" style="display: inline-block; width: 363.163px; height: 200px; vertical-align: top;"></canvas></div>
+                        <apx-chart
+                        [series]="lineChartOptions.series"
+                        [chart]="lineChartOptions.chart"
+                        [legend]="{ show: false}"
+                        [colors]="[ '#5156be']"
+                        class="text-center">
+                      </apx-chart>
+                        <!-- <div id="sparkline4" data-colors="[&quot;#5156be&quot;]"><canvas width="363" height="200" style="display: inline-block; width: 363.163px; height: 200px; vertical-align: top;"></canvas></div> -->
                     </div>
                 </div>
             </div>
@@ -57,7 +77,14 @@
                         <h4 class="card-title mb-0">Composite Bar Chart</h4>
                     </div>
                     <div class="card-body">
-                        <div id="sparkline3" data-colors="[&quot;#5156be&quot;, &quot;#2ab57d&quot;]" class="text-center"><canvas width="180" height="200" style="display: inline-block; width: 180px; height: 200px; vertical-align: top;"></canvas></div>
+                        <apx-chart
+                        [series]="compositeChartOptions.series"
+                        [chart]="compositeChartOptions.chart"
+                        [legend]="{ show: false}"
+                        [colors]="[ '#5156be', '#2ab57d']"
+                        class="text-center">
+                      </apx-chart>
+                        <!-- <div id="sparkline3" data-colors="[&quot;#5156be&quot;, &quot;#2ab57d&quot;]" class="text-center"><canvas width="180" height="200" style="display: inline-block; width: 180px; height: 200px; vertical-align: top;"></canvas></div> -->
                     </div>
                 </div>
             </div>
@@ -67,7 +94,14 @@
                         <h4 class="card-title mb-0">Line Chart</h4>
                     </div>
                     <div class="card-body">
-                        <div id="sparkline5" data-colors="[&quot;#5156be&quot;, &quot;rgba(81, 86, 190, 0.3)&quot;, &quot;#2ab57d&quot;, &quot;rgba(42, 181, 125, 0.3)&quot;]" class="text-center"><canvas width="363" height="200" style="display: inline-block; width: 363.163px; height: 200px; vertical-align: top;"></canvas></div>
+                        <apx-chart
+                        [series]="compositeLineChartOptions.series"
+                        [chart]="compositeLineChartOptions.chart"
+                        [legend]="{ show: false}"
+                        [colors]="[ '#5156be', '#2ab57d','rgba(81, 86, 190, 0.3)', 'rgba(42, 181, 125, 0.3)']"
+                        class="text-center">
+                      </apx-chart>
+                        <!-- <div id="sparkline5" data-colors="[&quot;#5156be&quot;, &quot;rgba(81, 86, 190, 0.3)&quot;, &quot;#2ab57d&quot;, &quot;rgba(42, 181, 125, 0.3)&quot;]" class="text-center"><canvas width="363" height="200" style="display: inline-block; width: 363.163px; height: 200px; vertical-align: top;"></canvas></div> -->
                     </div>
                 </div>
             </div>
@@ -77,7 +111,14 @@
                         <h4 class="card-title text-white mb-0">Discrete Chart</h4>
                     </div>
                     <div class="card-body">
-                        <div id="sparkline6" data-colors="[&quot;#fff&quot;]" class="text-center"><canvas width="280" height="200" style="display: inline-block; width: 280px; height: 200px; vertical-align: top;"></canvas></div>
+                        <apx-chart
+                        [series]="discreteChartOptions.series"
+                        [chart]="discreteChartOptions.chart"
+                        [legend]="{ show: false}"
+                        [colors]="['#fff']"
+                        class="text-center">
+                      </apx-chart>
+                        <!-- <div id="sparkline6" data-colors="[&quot;#fff&quot;]" class="text-center"><canvas width="280" height="200" style="display: inline-block; width: 280px; height: 200px; vertical-align: top;"></canvas></div> -->
                     </div>
                 </div>
             </div>
@@ -88,7 +129,13 @@
                         <h4 class="card-title mb-0">Bullet Chart</h4>
                     </div>
                     <div class="card-body">
-                        <div id="sparkline7" data-colors="[&quot;#5156be&quot;, &quot;#fd625e&quot;]" class="text-center"><canvas width="280" height="80" style="display: inline-block; width: 280px; height: 80px; vertical-align: top;"></canvas></div>
+                        <apx-chart
+                        [series]="bulletChartOptions.series"
+                        [chart]="bulletChartOptions.chart"
+                        [colors]="['#5156be', '#fd625e']"
+                        class="text-center">
+                      </apx-chart>
+                        <!-- <div id="sparkline7" data-colors="[&quot;#5156be&quot;, &quot;#fd625e&quot;]" class="text-center"><canvas width="280" height="80" style="display: inline-block; width: 280px; height: 80px; vertical-align: top;"></canvas></div> -->
                     </div>
                 </div>
             </div>
@@ -98,7 +145,14 @@
                         <h4 class="card-title mb-0">Box Plot Chart</h4>
                     </div>
                     <div class="card-body">
-                        <div id="sparkline8" data-colors="[&quot;#2ab57d&quot;]" class="text-center"><canvas width="280" height="80" style="display: inline-block; width: 280px; height: 80px; vertical-align: top;"></canvas></div>
+                        
+                        <apx-chart
+                        [series]="boxChartOptions.series"
+                        [chart]="boxChartOptions.chart"
+                        [colors]="['#2ab57d']"
+                        class="text-center">
+                      </apx-chart>
+                        <!-- <div id="sparkline8" data-colors="[&quot;#2ab57d&quot;]" class="text-center"><canvas width="280" height="80" style="display: inline-block; width: 280px; height: 80px; vertical-align: top;"></canvas></div> -->
                     </div>
                 </div>
             </div>
