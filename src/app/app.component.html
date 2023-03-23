@@ -1,1 +1,15 @@
-<router-outlet></router-outlet>
+<body data-layout="horizontal" class="pace-done" *ngIf="!isLogin">
+    <!-- -->
+    <!-- Begin page -->
+    <div id="layout-wrapper">
+        <router-outlet></router-outlet>
+    </div>
+</body>
+
+<body class="pace-done" *ngIf="isLogin">
+    <!-- -->
+    <!-- Begin page -->
+    <div id="layout-wrapper">
+        <router-outlet></router-outlet>
+    </div>
+</body>
