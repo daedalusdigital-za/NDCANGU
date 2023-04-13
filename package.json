@@ -25,6 +25,7 @@
     "echarts": "^5.4.1",
     "ng-apexcharts": "^1.7.4",
     "ngx-echarts": "^14.0.0",
+    "ngx-toastr": "^15.2.1",
     "rxjs": "~7.4.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.11.4"

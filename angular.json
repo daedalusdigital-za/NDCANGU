@@ -37,7 +37,8 @@
               "src/assets/libs/choices.js/public/assets/styles/choices.min.css",
               "src/assets/css/bootstrap.min.css",
               "src/assets/css/icons.min.css",
-              "src/assets/css/app.min.css"
+              "src/assets/css/app.min.css",
+              "node_modules/ngx-toastr/toastr.css"
             ],
             "scripts": [
               "src/assets/libs/jquery/jquery.min.js",
@@ -125,7 +126,8 @@
               "src/assets/libs/choices.js/public/assets/styles/choices.min.css",
               "src/assets/css/bootstrap.min.css",
               "src/assets/css/icons.min.css",
-              "src/assets/css/app.min.css"
+              "src/assets/css/app.min.css",
+              "node_modules/ngx-toastr/toastr.css"
             ],
             "scripts": [
               "src/assets/libs/jquery/jquery.min.js",
