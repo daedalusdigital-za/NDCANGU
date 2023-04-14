@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AppComponent } from './app.component';
 import { LockUserComponent } from './lock-user/lock-user.component';
-import { LoginUserComponent } from './login-user/login-user.component';
+import { LoginUserComponent } from './auth/login/login.component';
 
 const routes: Routes = [
   {
@@ -11,15 +11,20 @@ const routes: Routes = [
     loadChildren: () => import('./dashboard/dashboard.module').then(m => m.DashboardModule)
   },
   {
-    path: 'lock-user',
-    component: LockUserComponent
+    path: 'auth',
+    component: AppComponent,
+    loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule)
   },
+  // {
+  //   path: 'lock-user',
+  //   component: LockUserComponent
+  // },
+  // {
+  //   path: 'login',
+  //   component: LoginUserComponent
+  // },
   {
-    path: 'login',
-    component: LoginUserComponent
-  },
-  {
-    path: '', redirectTo: 'login', pathMatch: 'full'
+    path: '', redirectTo: 'auth', pathMatch: 'full'
   }
   
   

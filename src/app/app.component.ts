@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavigationStart, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { LoaderService } from './services/loader/loader.service';
 
 @Component({
@@ -9,21 +9,24 @@ import { LoaderService } from './services/loader/loader.service';
 })
 export class AppComponent {
   title = 'ncd-poc-ng';
-  isLogin: boolean = false;
+  isLogin: boolean = true;
 
   loading: boolean = true;
 
-  constructor(private router: Router, private loaderService: LoaderService) {
+  constructor(private loaderService: LoaderService, private router: ActivatedRoute) {
     this.loaderService.isLoading.subscribe((v: any) => {
       this.loading = v;
     });
-    this.router.events.subscribe(event => {
-      if (event instanceof NavigationStart) {
-        if (event.url && event.url.includes('login')) {
-          this.isLogin = true;
-        }
-      }
+
+    const urlSegments = this.router.snapshot.url;
+    console.log('URL Segments:', urlSegments);
+
+    // Apply conditions or logic based on the specific route
+    if (urlSegments.length > 0 && urlSegments[0].path !== 'auth') {
+      this.isLogin = false;
+    } else {
+      // Do something else for other routes
+      this.isLogin = true;
     }
-    );
   }
 }

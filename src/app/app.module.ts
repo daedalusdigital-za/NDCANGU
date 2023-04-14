@@ -3,7 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { LoginUserComponent } from './login-user/login-user.component';
+import { LoginUserComponent } from './auth/login/login.component';
 import { LockUserComponent } from './lock-user/lock-user.component';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
@@ -11,13 +11,13 @@ import { AuthInterceptor } from './shared/interceptors/auth.interceptor';
 import { ToastrModule } from 'ngx-toastr';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LoaderInterceptor } from './shared/interceptors/loader.interceptor';
+import { RegisterComponent } from './auth/register/register.component';
+import { AuthComponent } from './auth/auth.component';
 
 @NgModule({
   declarations: [
-    AppComponent,
-    LoginUserComponent,
-    LockUserComponent
-  ],
+    AppComponent
+    ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,

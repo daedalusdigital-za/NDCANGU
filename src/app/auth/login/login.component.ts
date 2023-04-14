@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { AuthService } from '../services/auth/auth.service';
-import { GlobalService } from '../services/global/global.service';
+import { AuthService } from '../../services/auth/auth.service';
+import { GlobalService } from '../../services/global/global.service';
 
 @Component({
-  selector: 'app-login-user',
-  templateUrl: './login-user.component.html',
-  styleUrls: ['./login-user.component.scss']
+  selector: 'app-login',
+  templateUrl: './login.component.html',
+  styleUrls: ['./login.component.scss']
 })
 export class LoginUserComponent implements OnInit {
   user: any = {
@@ -18,7 +18,7 @@ export class LoginUserComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  loginUser() {
+  loginUser() {    
     this.authService.login(this.user).subscribe({
       next: (response: any) => {
         console.log(response);

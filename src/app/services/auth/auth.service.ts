@@ -13,4 +13,8 @@ export class AuthService {
   login(payloads: any){
     return this.http.post(`${environment.apiBaseUrl}Auth/Login`, payloads);
   }
+
+  register(payloads: any){
+    return this.http.post(`${environment.apiBaseUrl}Auth/Register`, payloads);
+  }
 }
