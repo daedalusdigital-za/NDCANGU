@@ -19,7 +19,6 @@ export class LoginUserComponent implements OnInit {
   ngOnInit(): void {}
 
   loginUser() {
-    console.log(this.user);
     this.authService.login(this.user).subscribe({
       next: (response: any) => {
         console.log(response);
