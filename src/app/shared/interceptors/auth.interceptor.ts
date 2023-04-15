@@ -25,7 +25,7 @@ export class AuthInterceptor implements HttpInterceptor {
           if(httpErrorResponse.error){
             console.log('errrr');
             
-            this.toastrService.error(httpErrorResponse.error)
+            this.toastrService.error(httpErrorResponse?.error?.message || httpErrorResponse?.error || 'Something went wrong')
           }
           return throwError(() => httpErrorResponse);
         }

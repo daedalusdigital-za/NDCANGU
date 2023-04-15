@@ -9,7 +9,11 @@ export class GlobalService {
   constructor( ) { }
 
   getLocalStorage(key: string){
-    return localStorage.getItem(key);
+    const localStorageVal = localStorage.getItem(key);
+    if (localStorageVal !== null) {
+      return JSON.parse(localStorageVal);
+    } 
+    return;
   }
 
   setLocalStorage(key: string, value: JSON){

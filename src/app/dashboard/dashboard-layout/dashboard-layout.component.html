@@ -197,7 +197,7 @@
                 data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <img class="rounded-circle header-profile-user" src="assets/images/users/avatar-1.jpg"
                         alt="Header Avatar">
-                    <span class="d-none d-xl-inline-block ms-1 fw-medium">Administrator</span>
+                    <span class="d-none d-xl-inline-block ms-1 fw-medium">{{ user ? user?.fullName : 'Administrator'}}  </span>
                     <i class="mdi mdi-chevron-down d-none d-xl-inline-block"></i>
                 </button>
                 <div class="dropdown-menu dropdown-menu-end">
@@ -233,8 +233,8 @@
                         </a>
                         <div class="dropdown-menu" aria-labelledby="topnav-pages">
 
-                            <a routerLink="/dashboard/list-users" routerLinkActive="router-link-active"  class="dropdown-item" data-key="t-calendar">View Users</a>
-                            <a routerLink="/dashboard/add-user" class="dropdown-item" data-key="t-chat">Add Users</a>
+                            <a routerLink="/dashboard/users" routerLinkActive="router-link-active"  class="dropdown-item" data-key="t-calendar">View Users</a>
+                            <a routerLink="/dashboard/users/add" class="dropdown-item" data-key="t-chat">Add Users</a>
                         </div>
                     </li>
 

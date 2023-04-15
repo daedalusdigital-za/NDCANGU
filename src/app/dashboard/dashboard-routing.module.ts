@@ -2,14 +2,12 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AddReportComponent } from './add-report/add-report.component';
 import { AddStatsComponent } from './add-stats/add-stats.component';
-import { AddUserComponent } from './add-user/add-user.component';
 import { DashboardLayoutComponent } from './dashboard-layout/dashboard-layout.component';
 import { DashboardComponent } from './dashboard.component';
 import { ListFaqsComponent } from './list-faqs/list-faqs.component';
 import { ListReportsComponent } from './list-reports/list-reports.component';
 import { ListStatsComponent } from './list-stats/list-stats.component';
 import { ListTutorialsComponent } from './list-tutorials/list-tutorials.component';
-import { ListUsersComponent } from './list-users/list-users.component';
 
 const routes: Routes = [
   {
@@ -19,14 +17,6 @@ const routes: Routes = [
       {
         path: 'home',
         component: DashboardComponent
-      },
-      {
-        path: 'list-users',
-        component: ListUsersComponent
-      },
-      {
-        path: 'add-user',
-        component: AddUserComponent
       },
       {
         path: 'list-faqs',
@@ -51,6 +41,10 @@ const routes: Routes = [
       {
         path: 'add-stats',
         component: AddStatsComponent
+      },
+      {
+        path: 'users',
+        loadChildren: () => import('./users/users.module').then(m => m.UsersModule),
       },
       { path: '', redirectTo: 'home', pathMatch: 'full' }
     ]
