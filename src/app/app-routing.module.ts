@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AppComponent } from './app.component';
 import { LockUserComponent } from './lock-user/lock-user.component';
-import { LoginUserComponent } from './auth/login/login.component';
 import { AuthGuard } from './shared/guards/auth.guard';
 
 const routes: Routes = [
@@ -17,14 +16,10 @@ const routes: Routes = [
     component: AppComponent,
     loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule)
   },
-  // {
-  //   path: 'lock-user',
-  //   component: LockUserComponent
-  // },
-  // {
-  //   path: 'login',
-  //   component: LoginUserComponent
-  // },
+  {
+    path: 'lock-user',
+    component: LockUserComponent
+  },
   {
     path: '', redirectTo: 'auth', pathMatch: 'full'
   }

@@ -16,6 +16,8 @@ export class RegisterComponent implements OnInit {
     email: '',
     password: '',
   }
+
+  isPasswordHidden: boolean = true;
   constructor(private authService: AuthService,
     private router: Router) { }
 

@@ -39,7 +39,7 @@
                         </ul>
                     </div>
                     <div>
-                        <a href="ad-register.html" class="btn btn-light"><i class="bx bx-plus me-1"></i> Add New</a>
+                        <a routerLink="/dashboard/users/add"  class="btn btn-light"><i class="bx bx-plus me-1"></i> Add New</a>
                     </div>
 
 
@@ -51,473 +51,55 @@
 
         <div class="table-responsive mb-4">
 
-            <gui-grid [columns]="columns" [source]="source" [searching]="true" [paging]="paging"></gui-grid>
-            <!-- <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
-                <div class="row">
-                    <div class="col-sm-12 col-md-6">
-                        <div class="dataTables_length" id="DataTables_Table_0_length"><label>Show <select
-                                    name="DataTables_Table_0_length" aria-controls="DataTables_Table_0"
-                                    class="custom-select custom-select-sm form-control form-control-sm form-select form-select-sm">
-                                    <option value="10">10</option>
-                                    <option value="25">25</option>
-                                    <option value="50">50</option>
-                                    <option value="100">100</option>
-                                </select> entries</label></div>
-                    </div>
-                    <div class="col-sm-12 col-md-6">
-                        <div id="DataTables_Table_0_filter" class="dataTables_filter"><label>Search:<input type="search"
-                                    class="form-control form-control-sm" placeholder=""
-                                    aria-controls="DataTables_Table_0"></label></div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-sm-12">
-                        <table class="table align-middle datatable dt-responsive table-check nowrap dataTable no-footer"
-                            style="border-collapse: collapse; border-spacing: 0px 8px; width: 100%;"
-                            id="DataTables_Table_0" role="grid" aria-describedby="DataTables_Table_0_info">
-                            <thead>
-                                <tr role="row">
-                                    <th scope="col" style="width: 24px;" class="sorting sorting_asc" tabindex="0"
-                                        aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending"
-                                        aria-label=": activate to sort column descending">
-                                        <div class="form-check font-size-16">
-                                            <input type="checkbox" class="form-check-input" id="checkAll">
-                                            <label class="form-check-label" for="checkAll"></label>
-                                        </div>
-                                    </th>
-                                    <th scope="col" class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                        rowspan="1" colspan="1" aria-label="Name: activate to sort column ascending"
-                                        style="width: 239px;">Name</th>
-                                    <th scope="col" class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                        rowspan="1" colspan="1" aria-label="Job : activate to sort column ascending"
-                                        style="width: 166px;">Job <title></title>
-                                    </th>
-                                    <th scope="col" class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                        rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending"
-                                        style="width: 292px;">Email</th>
-                                    <th scope="col" class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                        rowspan="1" colspan="1" aria-label="Type: activate to sort column ascending"
-                                        style="width: 242px;">Type</th>
-                                    <th style="width: 42px; min-width: 80px;" class="sorting" tabindex="0"
-                                        aria-controls="DataTables_Table_0" rowspan="1" colspan="1"
-                                        aria-label="Action: activate to sort column ascending">Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
+            <gui-grid  [source]="source" [searching]="true" [paging]="paging">
+                <gui-grid-column header="Name" field="firstName">
+                    <ng-template let-value="value">
+                        {{value}}
+                    </ng-template>
+                </gui-grid-column>
+            
+                <gui-grid-column header="Surname" field="lastName" width="150">
+                    <ng-template let-value="value">
+                        {{value}}
+                    </ng-template>
+                </gui-grid-column>
 
+                <gui-grid-column header="Email" field="email" width="150">
+                    <ng-template let-value="value">
+                        {{value}}
+                    </ng-template>
+                </gui-grid-column>
 
+                <gui-grid-column header="Contact No" field="phoneNumber" width="150">
+                    <ng-template let-value="value">
+                        {{value}}
+                    </ng-template>
+                </gui-grid-column>
 
+                <gui-grid-column header="Job" field="positionName" width="150">
+                    <ng-template let-value="value">
+                        {{value}}
+                    </ng-template>
+                </gui-grid-column>
 
+                <gui-grid-column header="Type" field="positionDesc" width="150">
+                    <ng-template let-value="value">
+                        {{value}}
+                    </ng-template>
+                </gui-grid-column>
 
-
-
-
-
-
-
-                                <tr class="odd">
-                                    <th scope="row" class="sorting_1">
-                                        <div class="form-check font-size-16">
-                                            <input type="checkbox" class="form-check-input" id="contacusercheck1">
-                                            <label class="form-check-label" for="contacusercheck1"></label>
-                                        </div>
-                                    </th>
-                                    <td>
-                                        <div class="avatar-sm d-inline-block align-middle me-2">
-                                            <div
-                                                class="avatar-title bg-soft-light text-light font-size-24 m-0 rounded-circle">
-                                                <i class="bx bxs-user-circle"></i>
-                                            </div>
-                                        </div>
-                                        <a href="#" class="text-body">Phyllis Gatlin</a>
-                                    </td>
-                                    <td>Doctor</td>
-                                    <td>phyllisgatlin@gmail.com</td>
-                                    <td>
-                                        <div class="d-flex gap-2">
-
-                                            <a href="#" class="badge badge-soft-primary">Health Care Professional</a>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="dropdown">
-                                            <button
-                                                class="btn btn-link font-size-16 shadow-none py-0 text-muted dropdown-toggle"
-                                                type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                                <i class="bx bx-dots-horizontal-rounded"></i>
-                                            </button>
-                                            <ul class="dropdown-menu dropdown-menu-end">
-                                                <li><a class="dropdown-item" href="#">Action</a></li>
-                                                <li><a class="dropdown-item" href="#">Another action</a></li>
-                                                <li><a class="dropdown-item" href="#">Something else here</a></li>
-                                            </ul>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr class="even">
-                                    <th scope="row" class="sorting_1">
-                                        <div class="form-check font-size-16">
-                                            <input type="checkbox" class="form-check-input" id="contacusercheck2">
-                                            <label class="form-check-label" for="contacusercheck2"></label>
-                                        </div>
-                                    </th>
-                                    <td>
-                                        <div class="avatar-sm d-inline-block align-middle me-2">
-                                            <div
-                                                class="avatar-title bg-soft-light text-light font-size-24 m-0 rounded-circle">
-                                                <i class="bx bxs-user-circle"></i>
-                                            </div>
-                                        </div>
-                                        <a href="#" class="text-body">James Nix</a>
-                                    </td>
-                                    <td>Doctor</td>
-                                    <td>jamesnix@gmail.com</td>
-                                    <td>
-                                        <div class="d-flex gap-2">
-                                            <a href="#" class="badge badge-soft-primary">Health Care Professional</a>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="dropdown">
-                                            <button
-                                                class="btn btn-link font-size-16 shadow-none py-0 text-muted dropdown-toggle"
-                                                type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                                <i class="bx bx-dots-horizontal-rounded"></i>
-                                            </button>
-                                            <ul class="dropdown-menu dropdown-menu-end">
-                                                <li><a class="dropdown-item" href="#">Action</a></li>
-                                                <li><a class="dropdown-item" href="#">Another action</a></li>
-                                                <li><a class="dropdown-item" href="#">Something else here</a></li>
-                                            </ul>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr class="odd">
-                                    <th scope="row" class="sorting_1">
-                                        <div class="form-check font-size-16">
-                                            <input type="checkbox" class="form-check-input" id="contacusercheck3">
-                                            <label class="form-check-label" for="contacusercheck3"></label>
-                                        </div>
-                                    </th>
-                                    <td>
-                                        <div class="avatar-sm d-inline-block align-middle me-2">
-                                            <div
-                                                class="avatar-title bg-soft-light text-light font-size-24 m-0 rounded-circle">
-                                                <i class="bx bxs-user-circle"></i>
-                                            </div>
-                                        </div>
-                                        <a href="#" class="text-body">Darlene Smith</a>
-                                    </td>
-                                    <td>Doctor</td>
-                                    <td>darlenesmith@gmail.com</td>
-                                    <td>
-                                        <div class="d-flex gap-2">
-                                            <a href="#" class="badge badge-soft-primary">Health Care Professional</a>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="dropdown">
-                                            <button
-                                                class="btn btn-link font-size-16 shadow-none py-0 text-muted dropdown-toggle"
-                                                type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                                <i class="bx bx-dots-horizontal-rounded"></i>
-                                            </button>
-                                            <ul class="dropdown-menu dropdown-menu-end">
-                                                <li><a class="dropdown-item" href="#">Action</a></li>
-                                                <li><a class="dropdown-item" href="#">Another action</a></li>
-                                                <li><a class="dropdown-item" href="#">Something else here</a></li>
-                                            </ul>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr class="even">
-                                    <th scope="row" class="sorting_1">
-                                        <div class="form-check font-size-16">
-                                            <input type="checkbox" class="form-check-input" id="contacusercheck4">
-                                            <label class="form-check-label" for="contacusercheck4"></label>
-                                        </div>
-                                    </th>
-                                    <td>
-                                        <div class="avatar-sm d-inline-block align-middle me-2">
-                                            <div
-                                                class="avatar-title bg-soft-light text-light font-size-24 m-0 rounded-circle">
-                                                <i class="bx bxs-user-circle"></i>
-                                            </div>
-                                        </div>
-                                        <a href="#" class="text-body">William Swift</a>
-                                    </td>
-                                    <td>Doctor</td>
-                                    <td>williamswift@gmail.com</td>
-                                    <td>
-                                        <div class="d-flex gap-2">
-                                            <a href="#" class="badge badge-soft-primary">Health Care Professional</a>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="dropdown">
-                                            <button
-                                                class="btn btn-link font-size-16 shadow-none py-0 text-muted dropdown-toggle"
-                                                type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                                <i class="bx bx-dots-horizontal-rounded"></i>
-                                            </button>
-                                            <ul class="dropdown-menu dropdown-menu-end">
-                                                <li><a class="dropdown-item" href="#">Action</a></li>
-                                                <li><a class="dropdown-item" href="#">Another action</a></li>
-                                                <li><a class="dropdown-item" href="#">Something else here</a></li>
-                                            </ul>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr class="odd">
-                                    <th scope="row" class="sorting_1">
-                                        <div class="form-check font-size-16">
-                                            <input type="checkbox" class="form-check-input" id="contacusercheck5">
-                                            <label class="form-check-label" for="contacusercheck5"></label>
-                                        </div>
-                                    </th>
-                                    <td>
-                                        <div class="avatar-sm d-inline-block align-middle me-2">
-                                            <div
-                                                class="avatar-title bg-soft-light text-light font-size-24 m-0 rounded-circle">
-                                                <i class="bx bxs-user-circle"></i>
-                                            </div>
-                                        </div>
-                                        <a href="#" class="text-body">Kevin West</a>
-                                    </td>
-                                    <td>Administrator</td>
-                                    <td>kevinwest@gmail.com</td>
-                                    <td>
-                                        <div class="d-flex gap-2">
-                                            <a href="#" class="badge badge-soft-primary">Health Care Worker</a>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="dropdown">
-                                            <button
-                                                class="btn btn-link font-size-16 shadow-none py-0 text-muted dropdown-toggle"
-                                                type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                                <i class="bx bx-dots-horizontal-rounded"></i>
-                                            </button>
-                                            <ul class="dropdown-menu dropdown-menu-end">
-                                                <li><a class="dropdown-item" href="#">Action</a></li>
-                                                <li><a class="dropdown-item" href="#">Another action</a></li>
-                                                <li><a class="dropdown-item" href="#">Something else here</a></li>
-                                            </ul>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr class="even">
-                                    <th scope="row" class="sorting_1">
-                                        <div class="form-check font-size-16">
-                                            <input type="checkbox" class="form-check-input" id="contacusercheck6">
-                                            <label class="form-check-label" for="contacusercheck6"></label>
-                                        </div>
-                                    </th>
-                                    <td>
-                                        <div class="avatar-sm d-inline-block align-middle me-2">
-                                            <div
-                                                class="avatar-title bg-soft-light text-light font-size-24 m-0 rounded-circle">
-                                                <i class="bx bxs-user-circle"></i>
-                                            </div>
-                                        </div>
-                                        <a href="#" class="text-body">Tommy Hayes</a>
-                                    </td>
-                                    <td>Nurse</td>
-                                    <td>tommyhayes@gmail.com</td>
-                                    <td>
-                                        <div class="d-flex gap-2">
-                                            <a href="#" class="badge badge-soft-primary">Health Care Worker</a>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="dropdown">
-                                            <button
-                                                class="btn btn-link font-size-16 shadow-none py-0 text-muted dropdown-toggle"
-                                                type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                                <i class="bx bx-dots-horizontal-rounded"></i>
-                                            </button>
-                                            <ul class="dropdown-menu dropdown-menu-end">
-                                                <a href="#" class="badge badge-soft-primary">Health Care Worker</a>
-                                            </ul>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr class="odd">
-                                    <th scope="row" class="sorting_1">
-                                        <div class="form-check font-size-16">
-                                            <input type="checkbox" class="form-check-input" id="contacusercheck7">
-                                            <label class="form-check-label" for="contacusercheck7"></label>
-                                        </div>
-                                    </th>
-                                    <td>
-                                        <div class="avatar-sm d-inline-block align-middle me-2">
-                                            <div
-                                                class="avatar-title bg-soft-light text-light font-size-24 m-0 rounded-circle">
-                                                <i class="bx bxs-user-circle"></i>
-                                            </div>
-                                        </div>
-                                        <a href="#" class="text-body">Diana Owens</a>
-                                    </td>
-                                    <td>Nurse</td>
-                                    <td>dianaowens@gmail.com</td>
-                                    <td>
-                                        <div class="d-flex gap-2">
-                                            <a href="#" class="badge badge-soft-primary">Health Care Worker</a>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="dropdown">
-                                            <button
-                                                class="btn btn-link font-size-16 shadow-none py-0 text-muted dropdown-toggle"
-                                                type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                                <i class="bx bx-dots-horizontal-rounded"></i>
-                                            </button>
-                                            <ul class="dropdown-menu dropdown-menu-end">
-                                                <a href="#" class="badge badge-soft-primary">Health Care Worker</a>
-                                            </ul>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr class="even">
-                                    <th scope="row" class="sorting_1">
-                                        <div class="form-check font-size-16">
-                                            <input type="checkbox" class="form-check-input" id="contacusercheck8">
-                                            <label class="form-check-label" for="contacusercheck8"></label>
-                                        </div>
-                                    </th>
-                                    <td>
-                                        <div class="avatar-sm d-inline-block align-middle me-2">
-                                            <div
-                                                class="avatar-title bg-soft-light text-light font-size-24 m-0 rounded-circle">
-                                                <i class="bx bxs-user-circle"></i>
-                                            </div>
-                                        </div>
-                                        <a href="#" class="text-body">Paul Sanchez</a>
-                                    </td>
-                                    <td>Nurse</td>
-                                    <td>paulsanchez@gmail.com</td>
-                                    <td>
-                                        <div class="d-flex gap-2">
-                                            <a href="#" class="badge badge-soft-primary">Health Care Worker</a>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="dropdown">
-                                            <button
-                                                class="btn btn-link font-size-16 shadow-none py-0 text-muted dropdown-toggle"
-                                                type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                                <i class="bx bx-dots-horizontal-rounded"></i>
-                                            </button>
-                                            <ul class="dropdown-menu dropdown-menu-end">
-                                                <li><a class="dropdown-item" href="#">Action</a></li>
-                                                <li><a class="dropdown-item" href="#">Another action</a></li>
-                                                <li><a class="dropdown-item" href="#">Something else here</a></li>
-                                            </ul>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr class="odd">
-                                    <th scope="row" class="sorting_1">
-                                        <div class="form-check font-size-16">
-                                            <input type="checkbox" class="form-check-input" id="contacusercheck9">
-                                            <label class="form-check-label" for="contacusercheck9"></label>
-                                        </div>
-                                    </th>
-                                    <td>
-                                        <div class="avatar-sm d-inline-block align-middle me-2">
-                                            <div
-                                                class="avatar-title bg-soft-light text-light font-size-24 m-0 rounded-circle">
-                                                <i class="bx bxs-user-circle"></i>
-                                            </div>
-                                        </div>
-                                        <a href="#" class="text-body">Peter Dryer</a>
-                                    </td>
-                                    <td>Nurse</td>
-                                    <td>peterdryer@gmail.com</td>
-                                    <td>
-                                        <div class="d-flex gap-2">
-                                            <a href="#" class="badge badge-soft-primary">Health Care Worker</a>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="dropdown">
-                                            <button
-                                                class="btn btn-link font-size-16 shadow-none py-0 text-muted dropdown-toggle"
-                                                type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                                <i class="bx bx-dots-horizontal-rounded"></i>
-                                            </button>
-                                            <ul class="dropdown-menu dropdown-menu-end">
-                                                <li><a class="dropdown-item" href="#">Action</a></li>
-                                                <li><a class="dropdown-item" href="#">Another action</a></li>
-                                                <li><a class="dropdown-item" href="#">Something else here</a></li>
-                                            </ul>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr class="even">
-                                    <th scope="row" class="sorting_1">
-                                        <div class="form-check font-size-16">
-                                            <input type="checkbox" class="form-check-input" id="contacusercheck10">
-                                            <label class="form-check-label" for="contacusercheck10"></label>
-                                        </div>
-                                    </th>
-                                    <td>
-                                        <div class="avatar-sm d-inline-block align-middle me-2">
-                                            <div
-                                                class="avatar-title bg-soft-light text-light font-size-24 m-0 rounded-circle">
-                                                <i class="bx bxs-user-circle"></i>
-                                            </div>
-                                        </div>
-                                        <a href="#" class="text-body">Gerald Moyer</a>
-                                    </td>
-                                    <td>Nurser</td>
-                                    <td>geraldmoyer@gmail.com</td>
-                                    <td>
-                                        <div class="d-flex gap-2">
-                                            <a href="#" class="badge badge-soft-primary">Health Care Worker</a>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="dropdown">
-                                            <button
-                                                class="btn btn-link font-size-16 shadow-none py-0 text-muted dropdown-toggle"
-                                                type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                                <i class="bx bx-dots-horizontal-rounded"></i>
-                                            </button>
-                                            <ul class="dropdown-menu dropdown-menu-end">
-                                                <a href="#" class="badge badge-soft-primary">Health Care Worker</a>
-                                            </ul>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-sm-12 col-md-5">
-                        <div class="dataTables_info" id="DataTables_Table_0_info" role="status" aria-live="polite">
-                            Showing 1 to 10 of 11 entries</div>
-                    </div>
-                    <div class="col-sm-12 col-md-7">
-                        <div class="dataTables_paginate paging_simple_numbers" id="DataTables_Table_0_paginate">
-                            <ul class="pagination">
-                                <li class="paginate_button page-item previous disabled"
-                                    id="DataTables_Table_0_previous"><a href="#" aria-controls="DataTables_Table_0"
-                                        data-dt-idx="0" tabindex="0" class="page-link">Previous</a></li>
-                                <li class="paginate_button page-item active"><a href="#"
-                                        aria-controls="DataTables_Table_0" data-dt-idx="1" tabindex="0"
-                                        class="page-link">1</a></li>
-                                <li class="paginate_button page-item "><a href="#" aria-controls="DataTables_Table_0"
-                                        data-dt-idx="2" tabindex="0" class="page-link">2</a></li>
-                                <li class="paginate_button page-item next" id="DataTables_Table_0_next"><a href="#"
-                                        aria-controls="DataTables_Table_0" data-dt-idx="3" tabindex="0"
-                                        class="page-link">Next</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div> -->
+                <gui-grid-column header="Province" field="contactName" width="150">
+                    <ng-template let-value="value">
+                        {{value}}
+                    </ng-template>
+                </gui-grid-column>
+            
+                <gui-grid-column header="Actions" width="200">
+                    <ng-template let-item="item">
+                        <button class="btn btn-info buttons-copy buttons-html5" (click)="edit(item)" [routerLink]="['/dashboard/users/edit/', item.id]" routerLinkActive="router-link-active" ><i class="bx bx-edit me-1"></i>Edit</button>
+                    </ng-template>
+                </gui-grid-column>
+            </gui-grid>
             <!-- end table -->
         </div>
         <!-- end table responsive -->

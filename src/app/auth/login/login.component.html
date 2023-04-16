@@ -22,9 +22,9 @@
             </div>
 
             <div class="input-group auth-pass-inputgroup">
-                <input type="password" required="true" class="form-control" name="password" [(ngModel)]="user.password"
+                <input [type]="isPasswordHidden ? 'password' : 'text'"  required="true" class="form-control" name="password" [(ngModel)]="user.password"
                     placeholder="Enter password" aria-label="Password" aria-describedby="password-addon" required>
-                <button class="btn btn-light shadow-none ms-0" type="button" id="password-addon"><i
+                <button class="btn btn-light shadow-none ms-0" type="button" id="password-addon" (click)="isPasswordHidden = !isPasswordHidden"><i
                         class="mdi mdi-eye-outline"></i></button>
 
             </div>

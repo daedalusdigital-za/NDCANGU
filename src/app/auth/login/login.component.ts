@@ -13,6 +13,8 @@ export class LoginUserComponent implements OnInit {
     email: '',
     password: '',
   }
+
+  isPasswordHidden: boolean = true;
   constructor(private authService: AuthService, private globalService: GlobalService,
     private router: Router) { }
 
@@ -29,7 +31,6 @@ export class LoginUserComponent implements OnInit {
         console.log(err);
       }
     })
-
   }
 
 }

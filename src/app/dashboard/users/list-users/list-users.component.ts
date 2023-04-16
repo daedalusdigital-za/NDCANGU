@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';;
 import { GuiColumn, GuiPaging, GuiPagingDisplay } from '@generic-ui/ngx-grid';
-import { UserService } from 'src/app/services/users/user.service';
+import { BaseService } from 'src/app/services/base/base.service';
 
 
 @Component({
@@ -37,7 +37,7 @@ export class ListUsersComponent implements OnInit {
     {
       header: 'Province',
       field: 'contactName'
-    }
+    },
   ];
 
   source: Array<any> = [];
@@ -51,20 +51,23 @@ export class ListUsersComponent implements OnInit {
       pagerBottom: true,
       display: GuiPagingDisplay.ADVANCED
     };
-  constructor(
-    private userService: UserService
-  ) {}
+  constructor(private baseService: BaseService) {}
 
   ngOnInit(): void {
    this.getUsers()
   }
 
   private getUsers(){
-    this.userService.getUsers().subscribe({
-      next:(response: any)=> {
-        this.source = response;        
-      },
+    this.baseService.baseGet('User/GetUsers').subscribe({
+      next: (response: any)=>{
+        this.source = response; 
+      }
     })
+  }
+
+  edit(item: any){
+    console.log(item);
+    
   }
 
 }

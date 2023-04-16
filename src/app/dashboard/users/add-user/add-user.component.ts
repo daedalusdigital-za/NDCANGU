@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { UserService } from 'src/app/services/users/user.service';
+import { ActivatedRoute, Router } from '@angular/router';
+import { BaseService } from 'src/app/services/base/base.service';
 
 @Component({
   selector: 'app-add-user',
@@ -8,7 +8,7 @@ import { UserService } from 'src/app/services/users/user.service';
   styleUrls: ['./add-user.component.scss']
 })
 export class AddUserComponent implements OnInit {
-  user = {
+  user: any = {
     firstName: '',
     lastName: '',
     phoneNumber: '',
@@ -16,23 +16,48 @@ export class AddUserComponent implements OnInit {
     password: '',
   }
 
-  constructor(private userService: UserService, private router: Router) { }
+  id: any;
+  constructor(private router: Router, private baseService: BaseService, private _route: ActivatedRoute) { }
 
   ngOnInit(): void {
+    this.id = this._route?.snapshot.paramMap.get('id');
+    if(this.id){
+      this.getUserById()
+    }
+    
   }
 
-  addUser(){
-    console.log(this.user);
-
-    this.userService.registerUser(this.user).subscribe({
-      next: (response: any) => {
-        console.log(response);
-        this.router.navigateByUrl('/dashboard/users')
-      },
-      error: (err) => {
-        console.log(err);
+  private getUserById(){
+    this.baseService.baseGet(`User/GetUserById?id=${this.id}`).subscribe({
+      next: (response)=>{
+        this.user = response
       }
     })
+  }
+
+  addEditUser(){
+    if(this.id){
+      const payloads = {
+        id: this.id,
+        firstName : this.user.firstName,
+        lastName : this.user.lastName,
+        phoneNumber: this.user.phoneNumber,
+        positionId: 0,
+        roles: [0]
+      }
+      this.baseService.basePatch('User/UpdateUser', payloads).subscribe({
+        next: (response)=>{
+          this.router.navigateByUrl('/dashboard/users')
+        }
+      })
+    } else {
+      this.baseService.basePost('User/GetUsers', this.user).subscribe({
+        next: (response)=>{
+          this.router.navigateByUrl('/dashboard/users')
+        }
+      })
+    }
+   
     
   }
 
