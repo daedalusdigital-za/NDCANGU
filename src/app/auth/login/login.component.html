@@ -5,9 +5,9 @@
     </div>
     <form #form="ngForm" ngNativeValidate class="needs-validation" (ngSubmit)="form.valid && loginUser()">
         <div class="mb-3">
-            <label class="form-label">Username</label>
+            <label class="form-label">Email</label>
             <input type="email" required="true" class="form-control" name="email" [(ngModel)]="user.email"
-                placeholder="Enter username">
+                placeholder="Enter Email">
         </div>
         <div class="mb-3">
             <div class="d-flex align-items-start">
@@ -16,7 +16,7 @@
                 </div>
                 <div class="flex-shrink-0">
                     <div class="">
-                        <a href="" class="text-muted">Forgot password?</a>
+                        <a href="" class="text-muted">Forgot Password?</a>
                     </div>
                 </div>
             </div>
@@ -33,7 +33,7 @@
             <div class="col">
                 <div class="form-check">
                     <input type="checkbox" class="form-check-input" id="invalidCheck" required>
-                    <label class="form-check-label" for="invalidCheck">I accept the terms and conditions</label>
+                    <label class="form-check-label" for="invalidCheck">I accept the <a href="javascript: void(0);" class="text-primary">Terms of Use</a></label>
                     <div class="invalid-feedback">
                         You must agree before submitting.
                     </div>
