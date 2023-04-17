@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';;
-import { GuiColumn, GuiPaging, GuiPagingDisplay } from '@generic-ui/ngx-grid';
+import { GuiColumn, GuiPaging, GuiPagingDisplay, GuiSearching } from '@generic-ui/ngx-grid';
 import { BaseService } from 'src/app/services/base/base.service';
 
 
@@ -9,36 +9,6 @@ import { BaseService } from 'src/app/services/base/base.service';
   styleUrls: ['./list-users.component.scss']
 })
 export class ListUsersComponent implements OnInit {
-  columns: Array<GuiColumn> = [
-    {
-      header: 'Name',
-      field: 'firstName'
-    },
-    {
-      header: 'Surname',
-      field: 'lastName'
-    },
-    {
-      header: 'Email',
-      field: 'email'
-    },
-    {
-      header: 'Contact No',
-      field: 'phoneNumber'
-    },
-    {
-      header: 'Job',
-      field: 'positionName'
-    },
-    {
-      header: 'Type',
-      field: 'positionDesc'
-    },
-    {
-      header: 'Province',
-      field: 'contactName'
-    },
-  ];
 
   source: Array<any> = [];
 
@@ -50,6 +20,13 @@ export class ListUsersComponent implements OnInit {
       pagerTop: false,
       pagerBottom: true,
       display: GuiPagingDisplay.ADVANCED
+    };
+
+    searching: GuiSearching = {
+      enabled: true,
+      placeholder: 'Search Users',
+      phrase: '',
+      highlighting: true
     };
   constructor(private baseService: BaseService) {}
 
