@@ -10,10 +10,12 @@ import { ToastrModule } from 'ngx-toastr';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LoaderInterceptor } from './shared/interceptors/loader.interceptor';
 import { AuthTokenInterceptor } from './shared/interceptors/auth-token.interceptor';
+import { DndDirective } from './directives/dnd.directive';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    DndDirective
     ],
   imports: [
     BrowserModule,
