@@ -71,6 +71,51 @@
                                                 </div>
                                             </div>
                                         </div>
+
+                                        <div class="row" *ngIf="id">
+                                            <div class="col-lg-6">
+                                                <div class="mb-3">
+                                                    <label for="basicpill-phoneno-input" class="form-label">Position Name</label>
+                                                    <input type="text" required="true" class="form-control" id="basicpill-phoneno-input" name="Position" [(ngModel)]="user.positionName" placeholder="Enter your position Name.">
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <div class="mb-3">
+                                                    <label for="basicpill-email-input" class="form-label">Position Description</label>
+                                                    <input type="text" required="true" class="form-control" id="basicpill-email-input" name="description" [(ngModel)]="user.positionDesc" placeholder="Enter your position description">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row" *ngIf="id">
+                                            <div class="col-lg-6">
+                                                <div class="mb-3">
+                                                    <label for="basicpill-phoneno-input" class="form-label">Contact Name</label>
+                                                    <input type="text" required="true" class="form-control" id="basicpill-phoneno-input" name="contact" [(ngModel)]="user.contactName" placeholder="Enter your contact Name.">
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <div class="mb-3">
+                                                    <label for="basicpill-email-input" class="form-label">Contact Type</label>
+                                                    <input type="text" required="true" class="form-control" id="basicpill-email-input" name="contactType" [(ngModel)]="user.contactTypeName" placeholder="Enter your contact type">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row" *ngIf="id">
+                                            <div class="col-lg-6">
+                                                <div class="mb-3">
+                                                    <label for="basicpill-phoneno-input" class="form-label">Contact Data Type Name</label>
+                                                    <input type="text" required="true" class="form-control" id="basicpill-phoneno-input" name="contactDataTypeName" [(ngModel)]="user.contactDataTypeName" placeholder="Enter value.">
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <div class="mb-3">
+                                                    <label for="basicpill-email-input" class="form-label">Contact Entity Name</label>
+                                                    <input type="text" required="true" class="form-control" id="basicpill-email-input" name="contactEntityName" [(ngModel)]="user.contactEntityName" placeholder="Enter value">
+                                                </div>
+                                            </div>
+                                        </div>
                                    
                                     <ul class="pager wizard twitter-bs-wizard-pager-link">
                                         <li class="next">

@@ -8,12 +8,19 @@ import { BaseService } from 'src/app/services/base/base.service';
   styleUrls: ['./add-user.component.scss']
 })
 export class AddUserComponent implements OnInit {
-  user: any = {
+  user = {
+    id: '',
     firstName: '',
     lastName: '',
     phoneNumber: '',
     email: '',
-    password: '',
+    password: '', // not show in update
+    positionName: '',
+    positionDesc: '',
+    contactName: '',
+    contactTypeName: '',
+    contactDataTypeName: '',
+    contactEntityName: ''
   }
 
   id: any;
@@ -29,7 +36,7 @@ export class AddUserComponent implements OnInit {
 
   private getUserById(){
     this.baseService.baseGet(`User/GetUserById?id=${this.id}`).subscribe({
-      next: (response)=>{
+      next: (response: any)=>{
         this.user = response
       }
     })
@@ -43,7 +50,7 @@ export class AddUserComponent implements OnInit {
         lastName : this.user.lastName,
         phoneNumber: this.user.phoneNumber,
         positionId: 0,
-        roles: [0]
+        roles: [1]
       }
       this.baseService.basePatch('User/UpdateUser', payloads).subscribe({
         next: (response)=>{

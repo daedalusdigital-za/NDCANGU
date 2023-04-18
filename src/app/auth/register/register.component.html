@@ -34,13 +34,31 @@
             </div>
 
             <div class="input-group auth-pass-inputgroup">
-                <input [type]="isPasswordHidden ? 'password' : 'text'"  required="true" class="form-control" name="password" [(ngModel)]="user.password"
+                <input [type]="isPasswordHidden ? 'password' : 'text'" pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$"  required="true" class="form-control" name="password" [(ngModel)]="user.password"
                     placeholder="Enter password" aria-label="Password" aria-describedby="password-addon" required>
                 <button class="btn btn-light shadow-none ms-0" type="button" id="password-addon" (click)="isPasswordHidden = !isPasswordHidden"><i
                         class="mdi mdi-eye-outline"></i></button>
+                        <div class="custom-invalid-feedback" *ngIf="form['controls']['password'] && form['controls']['password']['errors'] && form['controls']['password']['errors']['pattern']">Please enter Alpha numeric password of 8 character e.g (Abc12345)</div>
 
             </div>
         </div>
+
+        <div class="mb-3">
+            <div class="d-flex align-items-start">
+                <div class="flex-grow-1">
+                    <label class="form-label">Confirm Password</label>
+                </div>
+            </div>
+
+            <div class="input-group auth-pass-inputgroup">
+                <input [type]="isPasswordHidden ? 'password' : 'text'"  required="true" class="form-control" name="password" [(ngModel)]="confirmPassword"
+                    placeholder="Enter password" aria-label="Password" aria-describedby="password-addon" required>
+            </div>
+            <div class="custom-invalid-feedback" *ngIf="user.password && confirmPassword && user.password != confirmPassword ">
+                Password & Confirm Password not match.
+            </div>
+        </div>
+
         <div class="row mb-4">
             <div class="col">
                 <label class="form-check-label">For registering you agree NCD app <a href="">Terms of Use</a></label>
