@@ -151,142 +151,14 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-sm-12">
-                                <gui-grid [columns]="columns" [searching]="true"  [source]="source" [paging]="paging"></gui-grid>
+                                <div class="col-sm-12" *ngIf="isloaded">
 
-                                    <!-- <table id="datatable-buttons"
-                                        class="table table-bordered dt-responsive nowrap w-100 dataTable no-footer dtr-inline"
-                                        role="grid" aria-describedby="datatable-buttons_info" style="width: 1215px;">
-                                        <thead>
-                                            <tr role="row">
-                                                <th class="sorting sorting_asc" tabindex="0"
-                                                    aria-controls="datatable-buttons" rowspan="1" colspan="1"
-                                                    style="width: 131.4px;" aria-sort="ascending"
-                                                    aria-label="Surame: activate to sort column descending">Surame</th>
-                                                <th class="sorting" tabindex="0" aria-controls="datatable-buttons"
-                                                    rowspan="1" colspan="1" style="width: 138.4px;"
-                                                    aria-label="Name: activate to sort column ascending">Name</th>
-                                                <th class="sorting" tabindex="0" aria-controls="datatable-buttons"
-                                                    rowspan="1" colspan="1" style="width: 162.4px;"
-                                                    aria-label="Province: activate to sort column ascending">Province
-                                                </th>
-                                                <th class="sorting" tabindex="0" aria-controls="datatable-buttons"
-                                                    rowspan="1" colspan="1" style="width: 81.4px;"
-                                                    aria-label="Age: activate to sort column ascending">Age</th>
-                                                <th class="sorting" tabindex="0" aria-controls="datatable-buttons"
-                                                    rowspan="1" colspan="1" style="width: 145.4px;"
-                                                    aria-label="Date: activate to sort column ascending">Date</th>
-                                                <th class="sorting" tabindex="0" aria-controls="datatable-buttons"
-                                                    rowspan="1" colspan="1" style="width: 119.4px;"
-                                                    aria-label="HBA1C: activate to sort column ascending">HBA1C</th>
-                                                <th class="sorting" tabindex="0" aria-controls="datatable-buttons"
-                                                    rowspan="1" colspan="1" style="width: 131.4px;"
-                                                    aria-label="Glucose: activate to sort column ascending">Glucose</th>
-                                            </tr>
-                                        </thead>
+                                    <app-dynamic-grid [columns]="cols" [data]="source"></app-dynamic-grid>
 
+                                    <!-- <gui-grid [columns]="columns" [searching]="true"  [source]="source" [paging]="paging"></gui-grid> -->
 
-                                        <tbody>
-
-
-
-
-
-
-
-
-
-                                            <tr class="odd">
-                                                <td class="dtr-control sorting_1" tabindex="0">Carl</td>
-                                                <td>Hyes</td>
-                                                <td>Mpumalanga</td>
-                                                <td>27</td>
-                                                <td>2022/06/20</td>
-                                                <td>6.3</td>
-                                                <td>3.5</td>
-                                            </tr>
-                                            <tr class="even">
-                                                <td class="dtr-control sorting_1" tabindex="0">Dube</td>
-                                                <td>Nhlanhla</td>
-                                                <td>Edinburgh</td>
-                                                <td>61</td>
-                                                <td>2011/04/25</td>
-                                                <td>4.5</td>
-                                                <td>7.3</td>
-                                            </tr>
-                                            <tr class="odd">
-                                                <td class="dtr-control sorting_1" tabindex="0">Khumalo</td>
-                                                <td>Easy</td>
-                                                <td>Cape Town</td>
-                                                <td>22</td>
-                                                <td>2012/03/29</td>
-                                                <td>9.2</td>
-                                                <td>7.3</td>
-                                            </tr>
-                                            <tr class="even">
-                                                <td class="dtr-control sorting_1" tabindex="0">Malamle</td>
-                                                <td>Welcome</td>
-                                                <td>KWaZulu-Natal</td>
-                                                <td>33</td>
-                                                <td>2008/11/28</td>
-                                                <td>7.7</td>
-                                                <td>7.3</td>
-                                            </tr>
-                                            <tr class="odd">
-                                                <td class="dtr-control sorting_1" tabindex="0">Michael</td>
-                                                <td>Ramaphosa</td>
-                                                <td>Limpopo</td>
-                                                <td>56</td>
-                                                <td>2022/06/20</td>
-                                                <td>6.3</td>
-                                                <td>7.3</td>
-                                            </tr>
-                                            <tr class="even">
-                                                <td class="dtr-control sorting_1" tabindex="0">Mkhwanazi</td>
-                                                <td>Zandile</td>
-                                                <td>San Francisco</td>
-                                                <td>66</td>
-                                                <td>2009/01/12</td>
-                                                <td>3.3</td>
-                                                <td>7.3</td>
-                                            </tr>
-                                            <tr class="odd">
-                                                <td class="dtr-control sorting_1" tabindex="0">Myeni</td>
-                                                <td>Lydia</td>
-                                                <td>Tokyo</td>
-                                                <td>63</td>
-                                                <td>2011/07/25</td>
-                                                <td>5.3</td>
-                                                <td>7.3</td>
-                                            </tr>
-                                        </tbody>
-                                    </table> -->
                                 </div>
                             </div>
-                            <!-- <div class="row">
-                                <div class="col-sm-12 col-md-5">
-                                    <div class="dataTables_info" id="datatable-buttons_info" role="status"
-                                        aria-live="polite">Showing 1 to 7 of 7 entries</div>
-                                </div>
-                                <div class="col-sm-12 col-md-7">
-                                    <div class="dataTables_paginate paging_simple_numbers"
-                                        id="datatable-buttons_paginate">
-                                        <ul class="pagination">
-                                            <li class="paginate_button page-item previous disabled"
-                                                id="datatable-buttons_previous"><a href="#"
-                                                    aria-controls="datatable-buttons" data-dt-idx="0" tabindex="0"
-                                                    class="page-link">Previous</a></li>
-                                            <li class="paginate_button page-item active"><a href="#"
-                                                    aria-controls="datatable-buttons" data-dt-idx="1" tabindex="0"
-                                                    class="page-link">1</a></li>
-                                            <li class="paginate_button page-item next disabled"
-                                                id="datatable-buttons_next"><a href="#"
-                                                    aria-controls="datatable-buttons" data-dt-idx="2" tabindex="0"
-                                                    class="page-link">Next</a></li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div> -->
                         </div>
                     </div>
                 </div>

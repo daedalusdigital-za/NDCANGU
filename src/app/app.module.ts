@@ -13,7 +13,7 @@ import { AuthTokenInterceptor } from './shared/interceptors/auth-token.intercept
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
     ],
   imports: [
     BrowserModule,

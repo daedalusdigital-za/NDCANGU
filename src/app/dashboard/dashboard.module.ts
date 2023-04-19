@@ -13,7 +13,11 @@ import { ListStatsComponent } from './list-stats/list-stats.component';
 import { GuiGridModule } from '@generic-ui/ngx-grid';
 import { NgApexchartsModule } from 'ng-apexcharts';
 import { NgxEchartsModule } from 'ngx-echarts';
-
+import { TableModule } from 'primeng/table';
+import { MultiSelectModule } from 'primeng/multiselect';
+import { FormsModule } from '@angular/forms';
+import { CheckboxModule } from 'primeng/checkbox';
+import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
   declarations: [
@@ -30,6 +34,11 @@ import { NgxEchartsModule } from 'ngx-echarts';
     CommonModule,
     GuiGridModule,
     DashboardRoutingModule,
+    MultiSelectModule,
+    FormsModule,
+    TableModule,
+    CheckboxModule,
+    SharedModule,
     NgxEchartsModule.forRoot({
       echarts: () => import('echarts')
     }),

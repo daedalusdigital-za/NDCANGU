@@ -1,0 +1,78 @@
+// :host ::ng-deep .p-datatable .p-datatable-thead > tr > th {
+//     position: -webkit-sticky;
+//     position: sticky;
+//     top: 5rem;
+// }
+
+// .layout-news-active :host ::ng-deep .p-datatable tr > th {
+//     top: 7rem;
+// }
+// .caption-align{
+//     display: flex; 
+//     justify-content: flex-end !important;
+// }
+// .checkbox-center {
+//     margin: 0px auto;
+// }
+
+// // .export-all {
+// //     font-size: 16px;
+// //     color: #fff;
+// //     border-radius: 7px;
+// //     padding: 9px 15px;
+// //     display: inline-block;
+// //     background-color: #00a19a;
+// //     border: none;
+// //     cursor: pointer;
+// // }
+// // .menu {
+// //     // font-size: 16px;
+// //     // color: #fff;
+// //     // border-radius: 7px;
+// //     // padding: 9px 15px;
+// //     // display: inline-block;
+// //     background-color: #00a19a;
+// //     // border: none;
+// //     // cursor: pointer;
+// // }
+
+// // .menu:hover {
+// //     // font-size: 16px;
+// //     // color: #fff;
+// //     // border-radius: 7px;
+// //     // padding: 9px 15px;
+// //     // display: inline-block;
+// //     background-color: #00a19a;
+// //     border-color: #00a19a;
+// //     // border: none;
+// //     // cursor: pointer;
+// // }
+
+// .dynamic-table ::-webkit-scrollbar{
+//     width: 10px !important;
+//     height: 10px !important;
+//   }
+
+// //   start rating fillable color
+
+// // .p-rating .p-rating-icon.pi-star-fill{
+// //     color: gold;
+// // }
+
+// .hidden-pagination{
+//     display: none !important
+// }
+// // MED-1616
+// .dynamic-grid{
+//     .p-datatable-table {
+//         .p-datatable-tbody {
+//             > tr {
+//                 background: #f0f3f5 !important;
+//             }
+
+//             > tr:nth-child(odd) {
+//                 background-color: #ffffff !important;
+//             }
+//         }
+//     }
+// }
