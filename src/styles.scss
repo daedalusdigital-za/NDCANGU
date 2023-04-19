@@ -1,9 +1,25 @@
 /* You can add global styles to this file, and also import other style files */
 
 .custom-invalid-feedback {
-    display: block;
-    width: 100%;
-    margin-top: 0.25rem;
-    font-size: 80%;
-    color: #fd625e;
-  }
+  display: block;
+  width: 100%;
+  margin-top: 0.25rem;
+  font-size: 80%;
+  color: #fd625e;
+}
+
+
+// hidding filters icon matchmode t
+
+p-columnfilterformelement {
+  width: 100% !important;
+}
+
+// p-columnfilterformelement .p-inputtext {
+// padding: 5% !important;
+// }
+
+.p-column-filter-clear-button,
+.p-column-filter-menu-button {
+  display: none !important;
+}

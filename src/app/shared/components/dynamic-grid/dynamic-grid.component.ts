@@ -5,7 +5,7 @@ import { Paginator } from 'primeng/paginator';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable'
 import { saveAs } from 'file-saver';
-
+import { Table } from 'primeng/table'; 
 
 
 @Component({
@@ -37,6 +37,7 @@ export class DynamicGridComponent implements OnInit {
   @Output() onPageChange: EventEmitter<any> = new EventEmitter();
 
   @ViewChild('paginator', { static: true }) paginator: Paginator;
+  @ViewChild('dt', { static: false }) dt: Table;
 
   first: number = 0;
   exportColumns: any = [];
@@ -63,7 +64,7 @@ export class DynamicGridComponent implements OnInit {
       head: [this.exportPdfColumns], body: PdfData
     })
 
-    doc.save(`table_${new Date().getTime()}.pdf`)
+    doc.save(`HCD Software Reports_${new Date().getTime()}.pdf`)
   }
 
   exportExcel() {
@@ -71,7 +72,7 @@ export class DynamicGridComponent implements OnInit {
       const worksheet = xlsx.utils.json_to_sheet(this.data);
       const workbook = { Sheets: { 'data': worksheet }, SheetNames: ['data'] };
       const excelBuffer: any = xlsx.write(workbook, { bookType: 'xlsx', type: 'array' });
-      this.saveAsExcelFile(excelBuffer, "products");
+      this.saveAsExcelFile(excelBuffer, "HCD Software Reports");
     });
   }
 
@@ -82,5 +83,17 @@ export class DynamicGridComponent implements OnInit {
       type: EXCEL_TYPE
     });
     saveAs(data, fileName + '_export_' + new Date().getTime() + EXCEL_EXTENSION);
+  }
+
+
+  copyTableContent() {
+    const tableElement = this.dt.el.nativeElement; // Get the nativeElement of the table
+    const tableHtml = tableElement.outerHTML; // Get the outerHTML of the table
+    const textAreaElement: any = document.createElement('textarea'); // Create a textarea element
+    textAreaElement.value = tableHtml; // Set the value of the textarea to the table HTML
+    document.body.appendChild(textAreaElement); // Append the textarea element to the DOM
+    textAreaElement.select(); // Select the textarea
+   const res: any = document.execCommand('copy'); // Execute the copy command
+    document.body.removeChild(textAreaElement.replace(/<[^>]*>?/gm, '')); // Remove the textarea element from the DOM
   }
 }

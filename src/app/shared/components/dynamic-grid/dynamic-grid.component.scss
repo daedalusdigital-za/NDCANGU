@@ -64,15 +64,19 @@
 // }
 // // MED-1616
 // .dynamic-grid{
-//     .p-datatable-table {
-//         .p-datatable-tbody {
-//             > tr {
-//                 background: #f0f3f5 !important;
-//             }
+    .p-datatable-table {
+        .p-datatable-tbody {
+            > tr {
+                background: #f0f3f5 !important;
+            }
 
-//             > tr:nth-child(odd) {
-//                 background-color: #ffffff !important;
-//             }
-//         }
-//     }
+            > tr:nth-child(odd) {
+                background-color: #ffffff !important;
+            }
+        }
+    }
 // }
+
+.p-datatable .p-datatable-header {
+    background: #ffffff !important;
+}
