@@ -8,8 +8,9 @@ import { IColumns } from 'src/app/shared/interfaces/dynamic-grid-interfaces';
 })
 export class ListReportsComponent implements OnInit {
   isloaded: boolean = false;
+// Surname , FirstName , Gender, Age , DateOfTesting , BloodPressure , Random HGT , HBA1c Reading , Province ,District
   cols: IColumns[] = [{
-    header: 'Name',
+    header: 'Surname',
     field: 'name',
     isAction: false,
     getValue: function(item: any) {
@@ -20,8 +21,16 @@ export class ListReportsComponent implements OnInit {
     }
   },
   {
-    header: 'Job',
+    header: 'FirstName',
     field: 'job',
+    getValue: function(item: any) {
+      return item[this.field]
+    },
+  },
+
+  {
+    header: 'Gender',
+    field: 'height',
     getValue: function(item: any) {
       return item[this.field]
     },
@@ -34,12 +43,50 @@ export class ListReportsComponent implements OnInit {
     },
   },
   {
-    header: 'Height',
-    field: 'height',
+    header: 'DateOfTesting',
+    field: 'age',
     getValue: function(item: any) {
       return item[this.field]
     },
-  }];
+  },
+  {
+    header: 'BloodPressure',
+    field: 'age',
+    getValue: function(item: any) {
+      return item[this.field]
+    },
+  },
+  {
+    header: 'Random HGT',
+    field: 'age',
+    getValue: function(item: any) {
+      return item[this.field]
+    },
+  },
+  {
+    header: 'HBA1c Reading',
+    field: 'age',
+    getValue: function(item: any) {
+      return item[this.field]
+    },
+  },
+  {
+    header: 'Province',
+    field: 'age',
+    visible: false,
+    getValue: function(item: any) {
+      return item[this.field]
+    },
+  },
+  {
+    header: 'District',
+    field: 'name',
+    visible: false,
+    getValue: function(item: any) {
+      return item[this.field]
+    },
+  },
+];
 
   source: Array<any> = [
     {

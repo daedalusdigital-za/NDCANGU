@@ -1,4 +1,4 @@
-<p-table #dt [value]="data" [columns]="columns" dataKey="_id" [rowHover]="true" [resetPageOnSort]="false"
+<p-table #dt [value]="data" [columns]="selectedColumns" dataKey="_id" [rowHover]="true" [resetPageOnSort]="false"
     [paginator]="true" [rows]="10" [filterDelay]="0" [scrollable]="true" [resizableColumns]="true"
     responsiveLayout="stack" styleClass="p-datatable-striped p-datatable-gridlines p-datatable-sm"
     columnResizeMode="expand" responsiveLayout="scroll" [customSort]="false" class="pTableResponsive">
@@ -15,14 +15,13 @@
                         (click)="exportExcel()"><span>Excel</span></button>
                     <button class="btn btn-secondary buttons-pdf buttons-html5" tabindex="0"
                         aria-controls="datatable-buttons" type="button" (click)="exportPdf()"><span>PDF</span></button>
-                    <div class="btn-group"><button
-                            class="btn btn-secondary buttons-collection dropdown-toggle buttons-colvis" tabindex="0"
-                            aria-controls="datatable-buttons" type="button" aria-haspopup="true"
-                            aria-expanded="false"><span>Column
-                                visibility</span></button></div>
+                    <div class="btn-group">
+                        <p-multiSelect [options]="columns" [(ngModel)]="selectedColumns" optionLabel="header"
+                            selectedItemsLabel="{0} columns selected" placeholder="Choose Columns">
+                        </p-multiSelect>
+                    </div>
                 </div>
             </div>
-            <!--   <button type="button" pButton  icon="pi pi-file" (click)="dt.exportCSV()" class="p-button-secondary mr-4"  pTooltip="CSV" tooltipPosition="bottom"></button>-->
         </div>
     </ng-template>
 

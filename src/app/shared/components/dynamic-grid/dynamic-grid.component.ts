@@ -22,14 +22,13 @@ export class DynamicGridComponent implements OnInit {
   @Input() isPagination: boolean = true;
 
 
-  _selectedColumns: any[] = [];
+  _selectedColumns: any[];
   @Input() get selectedColumns(): any[] {
     return this._selectedColumns;
   }
   set selectedColumns(val: any[]) {
     this._selectedColumns = this.columns.filter((col: any) => val.includes(col));
   }
-
 
   items: MenuItem[] = [];
 
@@ -46,6 +45,7 @@ export class DynamicGridComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
+    this._selectedColumns = this.columns.filter((col: any) => col?.visible !== false );
     this.exportColumns = this.columns.map(col => ({ title: col.header, dataKey: col.field }));
     this.exportPdfColumns = this.columns.map(col => col.header);
   }
