@@ -3,7 +3,7 @@
     responsiveLayout="stack" styleClass="p-datatable-striped p-datatable-gridlines p-datatable-sm"
     columnResizeMode="expand" responsiveLayout="scroll" [customSort]="false" class="pTableResponsive">
 
-    <ng-template pTemplate="caption">
+    <ng-template pTemplate="caption" *ngIf="isExportable">
         <div class="flex" style="text-align: end;">
             <div class="col-sm-12 col-md-12">
                 <div class="dt-buttons btn-group flex-wrap"> <button
@@ -44,18 +44,14 @@
             <td *ngFor="let col of columns" [pEditableColumn]="item" [pEditableColumnField]="col.field"
                 [pEditableColumnRowIndex]="index">
                 <span [ngSwitch]="col?.type" class="checkbox-center">
-                    <span *ngSwitchCase="'checkbox'">
-                        <!-- <p-checkbox [ngModel]="col.getValue(item)" [binary]="true" (click)="col.onClick(item)"></p-checkbox> -->
-                    </span>
-
-
-
                     <span *ngSwitchDefault>
                         <span *ngIf="!col?.isAction && col.getValue">
                             {{col.getValue(item)}}
                         </span>
                         <span *ngIf="col.isAction">
-                            <button type="button" (click)="col.onClick(item)">{{col.getValue(item)}}</button>
+                            <button class="btn btn-secondary buttons-excel buttons-html5" tabindex="0"
+                                aria-controls="datatable-buttons" type="button"
+                                (click)="col.onClick(item)"><span>{{col.getValue(item)}}</span></button>
                         </span>
 
                     </span>

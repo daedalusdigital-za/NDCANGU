@@ -10,7 +10,6 @@ import { ListReportsComponent } from './list-reports/list-reports.component';
 import { AddReportComponent } from './add-report/add-report.component';
 import { AddStatsComponent } from './add-stats/add-stats.component';
 import { ListStatsComponent } from './list-stats/list-stats.component';
-import { GuiGridModule } from '@generic-ui/ngx-grid';
 import { NgApexchartsModule } from 'ng-apexcharts';
 import { NgxEchartsModule } from 'ngx-echarts';
 import { TableModule } from 'primeng/table';
@@ -32,7 +31,6 @@ import { SharedModule } from '../shared/shared.module';
   ],
   imports: [
     CommonModule,
-    GuiGridModule,
     DashboardRoutingModule,
     MultiSelectModule,
     FormsModule,

@@ -22,7 +22,7 @@ export class BaseService {
     return this.http.patch(`${environment.apiBaseUrl}${url}`, payloads);
   }
 
-  baseDelete(url: string, payloads: any){
-    return this.http.delete(`${environment.apiBaseUrl}${url}`, payloads);
+  baseDelete(url: string){
+    return this.http.delete(`${environment.apiBaseUrl}${url}`);
   }
 }

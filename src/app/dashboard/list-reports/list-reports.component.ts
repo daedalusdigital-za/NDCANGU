@@ -7,8 +7,6 @@ import { IColumns } from 'src/app/shared/interfaces/dynamic-grid-interfaces';
   styleUrls: ['./list-reports.component.scss']
 })
 export class ListReportsComponent implements OnInit {
-  isloaded: boolean = false;
-// Surname , FirstName , Gender, Age , DateOfTesting , BloodPressure , Random HGT , HBA1c Reading , Province ,District
   cols: IColumns[] = [{
     header: 'Surname',
     field: 'name',
@@ -183,10 +181,6 @@ export class ListReportsComponent implements OnInit {
   
   constructor() { }
 
-  ngOnInit(): void {
-    setTimeout(() => {
-      this.isloaded = true
-    }, 100);
-  }
+  ngOnInit(): void {  }
 
 }
