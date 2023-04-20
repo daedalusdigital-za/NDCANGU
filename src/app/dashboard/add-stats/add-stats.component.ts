@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { BaseService } from 'src/app/services/base/base.service';
 
 @Component({
   selector: 'app-add-stats',
@@ -9,7 +10,7 @@ export class AddStatsComponent implements OnInit {
 
   files: any[] = [];
 
-  constructor() { }
+  constructor(private baseService: BaseService) { }
 
   ngOnInit(): void {
   }
@@ -61,20 +62,41 @@ export class AddStatsComponent implements OnInit {
     }, 1000);
   }
 
-    /**
-   * format bytes
-   * @param bytes (File size in bytes)
-   * @param decimals (Decimals point)
-   */
-    formatBytes(bytes: any, decimals?: any) {
-      if (bytes === 0) {
-        return '0 Bytes';
-      }
-      const k = 1024;
-      const dm = decimals <= 0 ? 0 : decimals || 2;
-      const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
-      const i = Math.floor(Math.log(bytes) / Math.log(k));
-      return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+  /**
+ * format bytes
+ * @param bytes (File size in bytes)
+ * @param decimals (Decimals point)
+ */
+  formatBytes(bytes: any, decimals?: any) {
+    if (bytes === 0) {
+      return '0 Bytes';
     }
+    const k = 1024;
+    const dm = decimals <= 0 ? 0 : decimals || 2;
+    const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+  }
+
+  /**
+* send files to backend
+* @param formData (Holds the Files)
+*/
+  sendFiles() {
+    const formData = new FormData();
+    this.files.forEach((file: File) => {
+      formData.append('file[]', file, file.name);
+    });
+
+    this.baseService.basePost('Upload', formData).subscribe({
+      next: (response) => {
+        console.log(response);
+      },
+      error: (error) => {
+        console.log(error);
+      }
+    });
+
+  }
 
 }
