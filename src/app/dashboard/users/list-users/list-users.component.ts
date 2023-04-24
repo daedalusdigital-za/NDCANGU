@@ -17,6 +17,8 @@ export class ListUsersComponent implements OnInit {
     header: 'Name',
     field: 'firstName',
     isAction: false,
+    isFilter: false,
+    isSortable: false,
     getValue: function (item: any) {
       return item[this.field]
     },
@@ -27,6 +29,8 @@ export class ListUsersComponent implements OnInit {
   {
     header: 'Surname',
     field: 'lastName',
+    isFilter: false,
+    isSortable: false,
     getValue: function (item: any) {
       return item[this.field]
     },
@@ -35,6 +39,8 @@ export class ListUsersComponent implements OnInit {
   {
     header: 'Email',
     field: 'email',
+    isFilter: false,
+    isSortable: false,
     getValue: function (item: any) {
       return item[this.field]
     },
@@ -42,6 +48,8 @@ export class ListUsersComponent implements OnInit {
   {
     header: 'Contact No',
     field: 'phoneNumber',
+    isFilter: false,
+    isSortable: false,
     getValue: function (item: any) {
       return item[this.field]
     },
@@ -49,6 +57,8 @@ export class ListUsersComponent implements OnInit {
   {
     header: 'Job',
     field: 'positionName',
+    isFilter: false,
+    isSortable: false,
     getValue: function (item: any) {
       return item[this.field]
     },
@@ -56,6 +66,8 @@ export class ListUsersComponent implements OnInit {
   {
     header: 'Type',
     field: 'positionDesc',
+    isFilter: false,
+    isSortable: false,
     getValue: function (item: any) {
       return item[this.field]
     },
@@ -63,6 +75,8 @@ export class ListUsersComponent implements OnInit {
   {
     header: 'Province',
     field: 'contactName',
+    isFilter: false,
+    isSortable: false,
     getValue: function (item: any) {
       return item[this.field]
     },
@@ -71,6 +85,8 @@ export class ListUsersComponent implements OnInit {
     header: 'View/Edit',
     field: 'View/Edit',
     isAction: true,
+    isFilter: false,
+    isSortable: false,
     onClick: (item: any) => {
       this.router.navigateByUrl('dashboard/users/edit/' + item.id);
     },
@@ -82,6 +98,8 @@ export class ListUsersComponent implements OnInit {
     header: 'Delete',
     field: 'Delete',
     isAction: true,
+    isFilter: false,
+    isSortable: false,
     onClick: (item: any) => {
       this.confirm(item.id);
     },

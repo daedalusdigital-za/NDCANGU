@@ -49,7 +49,7 @@ export class AddUserComponent implements OnInit {
         firstName : this.user.firstName,
         lastName : this.user.lastName,
         phoneNumber: this.user.phoneNumber,
-        positionId: 0,
+        positionId: 1,
         roles: [1]
       }
       this.baseService.basePatch('User/UpdateUser', payloads).subscribe({
