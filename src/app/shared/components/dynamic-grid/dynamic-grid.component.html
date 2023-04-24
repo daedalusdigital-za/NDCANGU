@@ -3,10 +3,12 @@
     responsiveLayout="stack" styleClass="p-datatable-striped p-datatable-gridlines p-datatable-sm"
     columnResizeMode="expand" responsiveLayout="scroll" [customSort]="false" class="pTableResponsive">
 
-    <ng-template pTemplate="caption" *ngIf="isExportable">
+    <ng-template pTemplate="caption" *ngIf="isExportable || isColVisibility">
         <div class="flex" style="text-align: end;">
             <div class="col-sm-12 col-md-12">
-                <div class="dt-buttons btn-group flex-wrap"> <button
+                <div class="dt-buttons btn-group flex-wrap"> 
+                    <span *ngIf="isExportable">
+                        <button
                         class="btn btn-secondary buttons-copy buttons-html5" tabindex="0"
                         aria-controls="datatable-buttons" type="button"
                         (click)="copyTableContent()"><span>Copy</span></button>
@@ -15,7 +17,9 @@
                         (click)="exportExcel()"><span>Excel</span></button>
                     <button class="btn btn-secondary buttons-pdf buttons-html5" tabindex="0"
                         aria-controls="datatable-buttons" type="button" (click)="exportPdf()"><span>PDF</span></button>
-                    <div class="btn-group">
+                    </span>
+                   
+                    <div class="btn-group" *ngIf="isColVisibility">
                         <p-multiSelect [options]="columns" [(ngModel)]="selectedColumns" optionLabel="header"
                             selectedItemsLabel="{0} columns selected" placeholder="Choose Columns">
                         </p-multiSelect>
@@ -28,15 +32,16 @@
     <ng-template pTemplate="header" let-columns>
         <tr>
             <th pResizableColumn id='columnSort' *ngFor="let col of columns" [pSortableColumn]="col.field">
-                {{col.header}} <p-sortIcon *ngIf="col?.isSortable  !== false" [field]="col.field"></p-sortIcon>
+                {{col.header}}
+                 <!-- <p-sortIcon *ngIf="col?.isSortable  !== false" [field]="col.field"></p-sortIcon> -->
             </th>
         </tr>
-        <tr>
+        <!-- <tr>
             <th id="p-columnFilter" [ngStyle]="col?.filterStyle" *ngFor="let col of columns" style="padding-left: 1%">
                 <p-columnFilter *ngIf="col?.isFilter !== false" type="text" matchMode="contains" [field]="col.field">
                 </p-columnFilter>
             </th>
-        </tr>
+        </tr> -->
     </ng-template>
     <ng-template pTemplate="body" let-item let-columns="columns" let-index="rowIndex">
 

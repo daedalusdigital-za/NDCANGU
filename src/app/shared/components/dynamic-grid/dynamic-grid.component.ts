@@ -19,6 +19,7 @@ export class DynamicGridComponent implements OnInit {
   @Input() totalRecords: number;
   @Input() data: any = [];
   @Input() isExportable: boolean = false;
+  @Input() isColVisibility: boolean = false;
 
   @Input() isPagination: boolean = true;
 
