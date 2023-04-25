@@ -646,7 +646,7 @@ pieChart: any = {
     ],
     "series": [
         {
-            "name": "Total sales",
+            "name": "total tests",
             "type": "pie",
             "radius": "55%",
             "center": [
