@@ -7,17 +7,17 @@
         <div class="flex" style="text-align: end;">
             <div class="col-sm-12 col-md-12">
                 <div class="dt-buttons btn-group flex-wrap"> 
-                    <span *ngIf="isExportable">
-                        <button
+                    <ng-container *ngIf="isExportable">
+                        <!-- <button
                         class="btn btn-secondary buttons-copy buttons-html5" tabindex="0"
                         aria-controls="datatable-buttons" type="button"
-                        (click)="copyTableContent()"><span>Copy</span></button>
+                        (click)="copyTableContent()"><span>Copy</span></button> -->
                     <button class="btn btn-secondary buttons-excel buttons-html5" tabindex="0"
                         aria-controls="datatable-buttons" type="button"
                         (click)="exportExcel()"><span>Excel</span></button>
                     <button class="btn btn-secondary buttons-pdf buttons-html5" tabindex="0"
                         aria-controls="datatable-buttons" type="button" (click)="exportPdf()"><span>PDF</span></button>
-                    </span>
+                    </ng-container>
                    
                     <div class="btn-group" *ngIf="isColVisibility">
                         <p-multiSelect [options]="columns" [(ngModel)]="selectedColumns" optionLabel="header"
