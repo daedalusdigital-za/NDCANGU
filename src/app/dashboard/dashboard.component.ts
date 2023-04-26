@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
+import { GlobalService } from '../services/global/global.service';
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent implements OnInit {
+    isShown: boolean = true;
 
   chartNonDiabiates: any = {
     "series": [
@@ -507,7 +509,7 @@ chartDiabetes: any = {
 }
 
 walletBalenceChart: any = {
-  "series": [
+    series: [
       35,
       70,
       15
@@ -644,50 +646,160 @@ pieChart: any = {
         "#ffbf53",
         "#5156be"
     ],
-    "series": [
-        {
-            "name": "total tests",
-            "type": "pie",
-            "radius": "55%",
-            "center": [
-                "50%",
-                "60%"
-            ],
-            "data": [
-                {
-                    "value": 335,
-                    "name": "NORMAL"
-                },
-                {
-                    "value": 310,
-                    "name": "ELEVATED"
-                },
-                {
-                    "value": 234,
-                    "name": "HYPERTENSION STAGE1"
-                },
-                {
-                    "value": 135,
-                    "name": "HYPERTENSION STAGE2"
-                },
-                {
-                    "value": 1548,
-                    "name": "HYPERTENSIVE CRISIS"
-                }
-            ],
-            "itemStyle": {
-                "emphasis": {
-                    "shadowBlur": 10,
-                    "shadowOffsetX": 0,
-                    "shadowColor": "rgba(0, 0, 0, 0.5)"
-                }
+    series: {
+        "name": "total tests",
+        "type": "pie",
+        "radius": "55%",
+        "center": [
+            "50%",
+            "60%"
+        ],
+        data: [
+            {
+                "value": 335,
+                "name": "NORMAL"
+            },
+            {
+                "value": 310,
+                "name": "ELEVATED"
+            },
+            {
+                "value": 234,
+                "name": "HYPERTENSION STAGE1"
+            },
+            {
+                "value": 135,
+                "name": "HYPERTENSION STAGE2"
+            },
+            {
+                "value": 1548,
+                "name": "HYPERTENSIVE CRISIS"
+            }
+        ],
+        "itemStyle": {
+            "emphasis": {
+                "shadowBlur": 10,
+                "shadowOffsetX": 0,
+                "shadowColor": "rgba(0, 0, 0, 0.5)"
             }
         }
-    ]
+    }
 }
-  constructor() { }
+  constructor(private globalService: GlobalService) { }
 
   ngOnInit(): void {
+
+    // this.pieChart.series.data = [
+    //     {
+    //         "value": 1548,
+    //         "name": "NORMAL"
+    //     },
+    //     {
+    //         "value": 310,
+    //         "name": "ELEVATED"
+    //     },
+    //     {
+    //         "value": 240,
+    //         "name": "HYPERTENSION STAGE1"
+    //     },
+    //     {
+    //         "value": 135,
+    //         "name": "HYPERTENSION STAGE2"
+    //     },
+    //     {
+    //         "value": 100,
+    //         "name": "HYPERTENSIVE CRISIS"
+    //     }
+    // ];
+    this.globalService.topMenuSubject.subscribe(
+        (x: any) => {     
+            this.isShown = false;
+            this.chartChanged(x);
+
+            setTimeout(() => {
+                this.isShown = true;
+            }, 500);
+     });
   }
 
+
+  private chartChanged(val: any) {
+    if(val ==1){
+        this.walletBalenceChart.series = [10,50,40];
+
+        this.pieChart.series.data = [
+            {
+                "value": 335,
+                "name": "NORMAL"
+            },
+            {
+                "value": 310,
+                "name": "ELEVATED"
+            },
+            {
+                "value": 234,
+                "name": "HYPERTENSION STAGE1"
+            },
+            {
+                "value": 135,
+                "name": "HYPERTENSION STAGE2"
+            },
+            {
+                "value": 1548,
+                "name": "HYPERTENSIVE CRISIS"
+            }
+        ];
+    } else if(val ==2){
+        this.walletBalenceChart.series = [5,20,70];
+
+        this.pieChart.series.data = [
+            {
+                "value": 500,
+                "name": "NORMAL"
+            },
+            {
+                "value": 100,
+                "name": "ELEVATED"
+            },
+            {
+                "value": 1548,
+                "name": "HYPERTENSION STAGE1"
+            },
+            {
+                "value": 50,
+                "name": "HYPERTENSION STAGE2"
+            },
+            {
+                "value": 100,
+                "name": "HYPERTENSIVE CRISIS"
+            }
+        ];
+    } else {
+        this.walletBalenceChart.series = [80,10,10];
+
+        this.pieChart.series.data = [
+            {
+                "value": 1548,
+                "name": "NORMAL"
+            },
+            {
+                "value": 310,
+                "name": "ELEVATED"
+            },
+            {
+                "value": 150,
+                "name": "HYPERTENSION STAGE1"
+            },
+            {
+                "value": 70,
+                "name": "HYPERTENSION STAGE2"
+            },
+            {
+                "value": 200,
+                "name": "HYPERTENSIVE CRISIS"
+            }
+        ]
+    }
+    
+  }
 }

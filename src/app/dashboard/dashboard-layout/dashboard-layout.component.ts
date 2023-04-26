@@ -18,4 +18,8 @@ export class DashboardLayoutComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  menuChanges(item: any){
+    this.globalService.topMenuSubject.next(item);
+  }
+
 }

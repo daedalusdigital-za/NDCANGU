@@ -1,11 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
+import { Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class GlobalService {
+  topMenuSubject = new Subject<any>();
   constructor( ) { }
 
   getLocalStorage(key: string){

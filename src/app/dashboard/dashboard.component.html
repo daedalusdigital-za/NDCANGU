@@ -44,7 +44,7 @@
 
                         <div class="row align-items-center">
                             <div class="col-sm">
-                                <div class="apex-charts" style="min-height: 209.8px;">
+                                <div class="apex-charts" style="min-height: 209.8px;" *ngIf="isShown">
                                     <apx-chart
                                     [series]="walletBalenceChart.series"
                                     [chart]="walletBalenceChart.chart"
@@ -91,7 +91,7 @@
                                 <h4 class="card-title me-2">High Blood Pressure Statistics</h4>
                                
                             </div>
-                            <div class="card-body">
+                            <div class="card-body" *ngIf="isShown">
 
                                 <div class="d-flex flex-wrap align-items-center mb-4">
                                     <div class="ms-auto">
