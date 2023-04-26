@@ -10,7 +10,7 @@
                     <div class="page-title-right">
                         <ol class="breadcrumb m-0">
                             <li class="breadcrumb-item"><a href="javascript: void(0);">Dashboard</a></li>
-                            <li class="breadcrumb-item active">Doctor</li>
+                            <li class="breadcrumb-item active">Administrator</li>
                         </ol>
                     </div>
 
@@ -19,145 +19,20 @@
         </div>
         <!-- end page title -->
 
-
-        <div class="row">
-            <div class="col-xl-3 col-md-6">
-                <!-- card -->
-                <div class="card card-h-100">
-                    <!-- card body -->
-                    <div class="card-body">
-                        <div class="row align-items-center">
-                            <div class="col-6">
-                                <span class="text-muted mb-3 lh-1 d-block text-truncate">Non-Diabetic</span>
-                                <h4 class="mb-3">
-                                    <span class="counter-value" data-target="550">550</span>
-                                </h4>
-                            </div>
-
-                            <div class="col-6">
-                                <apx-chart
-                                [series]="chartNonDiabiates.series"
-                                [chart]="chartNonDiabiates.chart"
-                                [xaxis]="chartNonDiabiates.xaxis"
-                                [title]="chartNonDiabiates.title"
-                                [colors]="['#5156be']"
-                              ></apx-chart>
-                            </div>
-                        </div>
-                        <div class="text-nowrap">
-                            <span class="badge bg-soft-success text-success">+10% Non-Diabetic patients</span>
-                            <span class="ms-1 text-muted font-size-13">Since last week</span>
-                        </div>
-                    </div><!-- end card body -->
-                </div><!-- end card -->
-            </div><!-- end col -->
-
-            <div class="col-xl-3 col-md-6">
-                <!-- card -->
-                <div class="card card-h-100">
-                    <!-- card body -->
-                    <div class="card-body">
-                        <div class="row align-items-center">
-                            <div class="col-6">
-                                <span class="text-muted mb-3 lh-1 d-block text-truncate">Prediabetes</span>
-                                <h4 class="mb-3">
-                                    <span class="counter-value" data-target="200">200</span>
-                                </h4>
-                            </div>
-                            <div class="col-6">
-                                <apx-chart
-                                [series]="chartPreDiabetes.series"
-                                [chart]="chartPreDiabetes.chart"
-                                [xaxis]="chartPreDiabetes.xaxis"
-                                [title]="chartPreDiabetes.title"
-                                [colors]="['#5156be']"
-                              ></apx-chart>
-                                <!-- <div id="mini-chart2" data-colors='["#5156be"]' class="apex-charts mb-2"></div> -->
-                            </div>
-                        </div>
-                        <div class="text-nowrap">
-                            <span class="badge bg-soft-success text-success">-5% Prediabetes patients</span>
-                            <span class="ms-1 text-muted font-size-13">Since last week</span>
-                        </div>
-                    </div><!-- end card body -->
-                </div><!-- end card -->
-            </div><!-- end col-->
-
-            <div class="col-xl-3 col-md-6">
-                <!-- card -->
-                <div class="card card-h-100">
-                    <!-- card body -->
-                    <div class="card-body">
-                        <div class="row align-items-center">
-                            <div class="col-6">
-                                <span class="text-muted mb-3 lh-1 d-block text-truncate">Controlled</span>
-                                <h4 class="mb-3">
-                                    <span class="counter-value" data-target="110">110</span>
-                                </h4>
-                            </div>
-                            <div class="col-6">
-                                <apx-chart
-                                [series]="chartControlled.series"
-                                [chart]="chartControlled.chart"
-                                [xaxis]="chartControlled.xaxis"
-                                [title]="chartControlled.title"
-                                [colors]="['#5156be']"
-                              ></apx-chart>
-                                <!-- <div id="mini-chart3" data-colors='["#5156be"]' class="apex-charts mb-2"></div> -->
-                            </div>
-                        </div>
-                        <div class="text-nowrap">
-                            <span class="badge bg-soft-success text-success">+3%</span>
-                            <span class="ms-1 text-muted font-size-13">Since last week</span>
-                        </div>
-                    </div><!-- end card body -->
-                </div><!-- end card -->
-            </div><!-- end col -->
-
-            <div class="col-xl-3 col-md-6">
-                <!-- card -->
-                <div class="card card-h-100">
-                    <!-- card body -->
-                    <div class="card-body">
-                        <div class="row align-items-center">
-                            <div class="col-6">
-                                <span class="text-muted mb-3 lh-1 d-block text-truncate">Diabetic </span>
-                                <h4 class="mb-3">
-                                    <span class="counter-value" data-target="188">188</span>
-                                </h4>
-                            </div>
-                            <div class="col-6">
-                                <apx-chart
-                                [series]="chartDiabetes.series"
-                                [chart]="chartDiabetes.chart"
-                                [xaxis]="chartDiabetes.xaxis"
-                                [title]="chartDiabetes.title"
-                                [colors]="['#5156be']"
-                              ></apx-chart>
-                                <!-- <div id="mini-chart4" data-colors='["#5156be"]' class="apex-charts mb-2"></div> -->
-                            </div>
-                        </div>
-                        <div class="text-nowrap">
-                            <span class="badge bg-soft-danger text-danger">56 Diabetic patients</span>
-                            <span class="ms-1 text-muted font-size-13">Since last week</span>
-                        </div>
-                    </div><!-- end card body -->
-                </div><!-- end card -->
-            </div><!-- end col -->    
-        </div><!-- end row-->
-
-
         
         <!-- end row-->
 
         <div class="row">
-            <div class="col-xl-5">
+            <div class="col-xl-6">
                 <!-- card -->
                 <div class="card card-h-100">
+                    <div class="card-header">
+                        <h4 class="card-title me-2">HBA1C Test Statistics</h4>
+                       
+                    </div>
                     <!-- card body -->
                     <div class="card-body">
                         <div class="d-flex flex-wrap align-items-center mb-4">
-                            <h5 class="card-title me-2">HBA1C Test Statistics</h5>
                             <div class="ms-auto">
                                 <select class="form-select form-select-sm">
                                     <option value="MAY" selected="">Feb</option>
@@ -208,88 +83,25 @@
 
             
             <!-- end col -->
-            <div class="col-xl-7">
+            <div class="col-xl-6">
                 <div class="row">
-                    
-                    <!-- end col -->
-
-                    <div class="col-xl-4">
-                        <!-- card -->
-                        <div class="card bg-primary text-white shadow-primary card-h-100">
-                            <!-- card body -->
-                            <div class="card-body p-0">
-                                <div id="carouselExampleCaptions" class="carousel slide text-center widget-carousel" data-bs-ride="carousel">                                                   
-                                    <div class="carousel-inner">
-                                        <div class="carousel-item active">
-                                            <div class="text-center p-4">
-                                                <i class="mdi mdi-cloud-sync widget-box-1-icon"></i>
-                                                <div class="avatar-md m-auto">
-                                                    <span class="avatar-title rounded-circle bg-soft-light text-white font-size-24">
-                                                        <i class="mdi mdi-cloud-sync"></i>
-                                                    </span>
-                                                </div>
-                                                <h4 class="mt-3 lh-base fw-normal text-white"><b>NCD Software</b> Update</h4>
-                                                <p class="text-white-50 font-size-13"> NCD Has increased it Cloude storage to be able to handle your all your health care worker & professional needs</p>
-                                                <button type="button" class="btn btn-light btn-sm">View details <i class="mdi mdi-arrow-right ms-1"></i></button>
-                                            </div>
-                                        </div>
-                                        <!-- end carousel-item -->
-                                        <div class="carousel-item">
-                                            <div class="text-center p-4">
-                                                <i class="mdi mdi-hospital widget-box-1-icon"></i>
-                                                <div class="avatar-md m-auto">
-                                                    <span class="avatar-title rounded-circle bg-soft-light text-white font-size-24">
-                                                        <i class="mdi mdi-hospital"></i>
-                                                    </span>
-                                                </div>
-                                                <h4 class="mt-3 lh-base fw-normal text-white"><b>More Test</b> News</h4>
-                                                <p class="text-white-50 font-size-13">NCD software too add more medical tets for reporting while capturing and updating Statistics </p>
-                                                <button type="button" class="btn btn-light btn-sm">View details <i class="mdi mdi-arrow-right ms-1"></i></button>
-                                            </div>
-                                        </div>
-                                        <!-- end carousel-item -->
-                                        <div class="carousel-item">
-                                            <div class="text-center p-4">
-                                                <i class="mdi mdi-android widget-box-1-icon"></i>
-                                                <div class="avatar-md m-auto">
-                                                    <span class="avatar-title rounded-circle bg-soft-light text-white font-size-24">
-                                                        <i class="mdi mdi-android"></i>
-                                                    </span>
-                                                </div>
-                                                <h4 class="mt-3 lh-base fw-normal text-white"><b>Mobile Development</b> News</h4>
-                                                <p class="text-white-50 font-size-13">NCD software currently developing its mobile application set to launch this year . </p>
-                                                <button type="button" class="btn btn-light btn-sm">View details <i class="mdi mdi-arrow-right ms-1"></i></button>
-                                            </div>
-                                        </div>
-                                        <!-- end carousel-item -->
-                                    </div>
-                                    <!-- end carousel-inner -->
-                                    
-                                    <div class="carousel-indicators carousel-indicators-rounded">
-                                        <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active"
-                                            aria-current="true" aria-label="Slide 1"></button>
-                                        <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1" aria-label="Slide 2"></button>
-                                        <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2" aria-label="Slide 3"></button>
-                                    </div>
-                                    <!-- end carousel-indicators -->
-                                </div>
-                                <!-- end carousel -->
-                            </div>
-                            <!-- end card body -->
-                        </div>
-
-                        
-                        <!-- end card -->
-                    </div>
-                
-                    <!-- end col -->
-
-                    <div class="col-xl-8">
+                    <div class="col-xl-9">
                         <div class="card">
                             <div class="card-header">
-                                <h4 class="card-title mb-0">High Blood Pressure Statistics</h4>
+                                <h4 class="card-title me-2">High Blood Pressure Statistics</h4>
+                               
                             </div>
                             <div class="card-body">
+
+                                <div class="d-flex flex-wrap align-items-center mb-4">
+                                    <div class="ms-auto">
+                                        <select class="form-select form-select-sm">
+                                            <option value="MAY" selected="">Feb</option>
+                                            <option value="AP">March</option>
+                                            <option value="MA">April</option>
+                                        </select>
+                                    </div>
+                                </div>
                                 <div echarts [options]="pieChart" class="e-charts"></div>
                                 <!-- <div id="pie-chart" data-colors='["#fd625e", "#2ab57d", "#4ba6ef", "#ffbf53", "#5156be"]' class="e-charts"></div> -->
                             </div>
