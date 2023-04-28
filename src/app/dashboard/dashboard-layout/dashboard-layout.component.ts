@@ -8,6 +8,8 @@ import { GlobalService } from 'src/app/services/global/global.service';
 })
 export class DashboardLayoutComponent implements OnInit {
   user: any;
+  flagText: string = 'Mpumalanga';
+  flagImg: string = 'assets/images/flags/Mpumalanga.jpg';
   constructor(private globalService: GlobalService) {
     this.user = this.globalService.getLocalStorage('currentUser');
     if(this.user){
@@ -20,6 +22,11 @@ export class DashboardLayoutComponent implements OnInit {
 
   menuChanges(item: any){
     this.globalService.topMenuSubject.next(item);
+  }
+
+  changeFlagItem(img: string, text: string){
+    this.flagImg = img;
+    this.flagText = text;
   }
 
 }
