@@ -689,28 +689,6 @@ pieChart: any = {
 
   ngOnInit(): void {
 
-    // this.pieChart.series.data = [
-    //     {
-    //         "value": 1548,
-    //         "name": "NORMAL"
-    //     },
-    //     {
-    //         "value": 310,
-    //         "name": "ELEVATED"
-    //     },
-    //     {
-    //         "value": 240,
-    //         "name": "HYPERTENSION STAGE1"
-    //     },
-    //     {
-    //         "value": 135,
-    //         "name": "HYPERTENSION STAGE2"
-    //     },
-    //     {
-    //         "value": 100,
-    //         "name": "HYPERTENSIVE CRISIS"
-    //     }
-    // ];
     this.globalService.topMenuSubject.subscribe(
         (x: any) => {     
             this.isShown = false;

@@ -124,7 +124,7 @@
                     <div class="card-header">
                         <h4 class="card-title mb-0">Pie Chart</h4>
                     </div>
-                    <div class="card-body">
+                    <div class="card-body" *ngIf="isShown">
                         <div echarts [options]="pieChart" class="demo-chart"></div>
                     </div>
                 </div>
@@ -137,7 +137,7 @@
                     <div class="card-header">
                         <h4 class="card-title mb-0">Pie Chart</h4>
                     </div>
-                    <div class="card-body">
+                    <div class="card-body" *ngIf="isShown">
                         <div echarts [options]="pieChart" class="demo-chart"></div>
                     </div>
                 </div>
