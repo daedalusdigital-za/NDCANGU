@@ -67,19 +67,19 @@
                     <div class="p-2">
                         <div class="row g-0">
                             <div class="col">
-                                <a class="dropdown-icon-item" (click)="changeFlagItem('assets/images/flags/spain.jpg', 'Gauteng')">
+                                <a class="dropdown-icon-item cp" (click)="changeFlagItem('assets/images/flags/spain.jpg', 'Gauteng')">
                                     <img src="assets/images/flags/spain.jpg" alt="Github">
                                     <span>Gauteng</span>
                                 </a>
                             </div>
                             <div class="col">
-                                <a class="dropdown-icon-item" (click)="changeFlagItem('assets/images/flags/germany.jpg', 'Northern Cape')">
+                                <a class="dropdown-icon-item cp" (click)="changeFlagItem('assets/images/flags/germany.jpg', 'Northern Cape')">
                                     <img src="assets/images/flags/germany.jpg"alt="bitbucket">
                                     <span>Northern Cape</span>
                                 </a>
                             </div>
                             <div class="col">
-                                <a class="dropdown-icon-item" (click)="changeFlagItem('assets/images/flags/italy.jpg', 'KwaZulu-Natal')">
+                                <a class="dropdown-icon-item cp" (click)="changeFlagItem('assets/images/flags/italy.jpg', 'KwaZulu-Natal')">
                                     <img src="assets/images/flags/italy.jpg" alt="dribbble">
                                     <span>KwaZulu-Natal</span>
                                 </a>
@@ -88,19 +88,19 @@
 
                         <div class="row g-0">
                             <div class="col">
-                                <a class="dropdown-icon-item" (click)="changeFlagItem('assets/images/flags/Mpumalanga.jpg', 'Mpumalanga')">
+                                <a class="dropdown-icon-item cp" (click)="changeFlagItem('assets/images/flags/Mpumalanga.jpg', 'Mpumalanga')">
                                     <img src="assets/images/flags/Mpumalanga.jpg" alt="dropbox">
                                     <span>Mpumalanga</span>
                                 </a>
                             </div>
                             <div class="col">
-                                <a class="dropdown-icon-item" (click)="changeFlagItem('assets/images/flags/russia.jpg', 'Free State')">
+                                <a class="dropdown-icon-item cp" (click)="changeFlagItem('assets/images/flags/russia.jpg', 'Free State')">
                                     <img src="assets/images/flags/russia.jpg" >
                                     <span>Free State</span>
                                 </a>
                             </div>
                             <div class="col">
-                                <a class="dropdown-icon-item" (click)="changeFlagItem('assets/images/flags/westen-cape.jpg', 'Western Cape')">
+                                <a class="dropdown-icon-item cp" (click)="changeFlagItem('assets/images/flags/westen-cape.jpg', 'Western Cape')">
                                     <img src="assets/images/flags/westen-cape.jpg">
                                     <span>Western Cape</span>
                                 </a>
@@ -109,19 +109,19 @@
 
                         <div class="row g-0">
                             <div class="col">
-                                <a class="dropdown-icon-item" (click)="changeFlagItem('assets/images/flags/limpopo.jpg', 'Limpopo')">
+                                <a class="dropdown-icon-item cp" (click)="changeFlagItem('assets/images/flags/limpopo.jpg', 'Limpopo')">
                                     <img src="assets/images/flags/limpopo.jpg">
                                     <span>Limpopo</span>
                                 </a>
                             </div>
                             <div class="col">
-                                <a class="dropdown-icon-item" (click)="changeFlagItem('assets/images/flags/Northen.jpg', 'North West')">
+                                <a class="dropdown-icon-item cp" (click)="changeFlagItem('assets/images/flags/Northen.jpg', 'North West')">
                                     <img src="assets/images/flags/Northen.jpg" >
                                     <span>North West</span>
                                 </a>
                             </div>
                             <div class="col">
-                                <a class="dropdown-icon-item" (click)="changeFlagItem('assets/images/flags/east.jpg', 'Eastern Cape')">
+                                <a class="dropdown-icon-item cp" (click)="changeFlagItem('assets/images/flags/east.jpg', 'Eastern Cape')">
                                     <img src="assets/images/flags/east.jpg">
                                     <span>Eastern Cape</span>
                                 </a>
@@ -176,7 +176,7 @@
 
                     <a class="dropdown-item" routerLink="/lock-user"><i class="mdi mdi-lock font-size-16 align-middle me-1"></i> Lock screen</a>
                     <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" routerLink="/login"><i class="mdi mdi-logout font-size-16 align-middle me-1"></i> Logout</a>
+                    <a class="dropdown-item" (click)="Logout()" routerLink="/auth/login"><i class="mdi mdi-logout font-size-16 align-middle me-1"></i> Logout</a>
                 </div>
             </div>
 
@@ -198,8 +198,8 @@
                     </li>
 
 
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle arrow-none" href="#" id="topnav-pages" role="button">
+                    <li class="nav-item dropdown" *ngIf="isRoleAdmin">
+                        <a class="nav-link dropdown-toggle arrow-none"  id="topnav-pages" role="button">
                             <i data-feather="user"></i><span data-key="t-apps">Users</span> <div class="arrow-down"></div>
                         </a>
                         <div class="dropdown-menu" aria-labelledby="topnav-pages">
@@ -209,7 +209,7 @@
                         </div>
                     </li>
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle arrow-none" href="#" id="topnav-components" role="button">
+                        <a class="nav-link dropdown-toggle arrow-none"  id="topnav-components" role="button">
                             <i data-feather="file-text"></i><span data-key="t-components">Patient</span> <div class="arrow-down"></div>
                         </a>
                         <div class="dropdown-menu" aria-labelledby="topnav-components">
@@ -222,20 +222,20 @@
 
 
                      <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle arrow-none" href="#" id="topnav-components" role="button">
+                        <a class="nav-link dropdown-toggle arrow-none"  id="topnav-components" role="button">
                             <i data-feather="file-text"></i><span data-key="t-components">Reports</span> <div class="arrow-down"></div>
                         </a>
                         <div class="dropdown-menu" aria-labelledby="topnav-components">
                                     <div class="dropdown">
                                        <a routerLink="/dashboard/list-reports" class="dropdown-item" data-key="t-calendar">View Reports</a>
-                                       <a routerLink="/dashboard/add-report" class="dropdown-item" data-key="t-calendar">Create Reports</a>
-                                       <a routerLink="/dashboard/add-report" class="dropdown-item" data-key="t-calendar">Recommendations</a>
+                                       <a routerLink="/dashboard/add-report" class="dropdown-item" data-key="t-calendar" *ngIf="isRoleAdmin">Create Reports</a>
+                                       <a routerLink="/dashboard/add-report" class="dropdown-item" data-key="t-calendar" *ngIf="isRoleAdmin">Recommendations</a>
                                      </div>
                        </div>
                     </li>
 
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle arrow-none" href="#" id="topnav-uielement" role="button">
+                        <a class="nav-link dropdown-toggle arrow-none" id="topnav-uielement" role="button">
                             <i data-feather="tool"></i>
                             <span data-key="t-elements">Tools</span> 
                             <div class="arrow-down"></div>
@@ -248,7 +248,7 @@
                     </li>
 
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle arrow-none" href="#" id="topnav-more" role="button">
+                        <a class="nav-link dropdown-toggle arrow-none" id="topnav-more" role="button">
                             <i data-feather="help-circle"></i><span data-key="t-extra-pages">Help</span> 
                             <div class="arrow-down"></div>
                         </a>
@@ -261,7 +261,7 @@
                         </div>
                     </li>
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle arrow-none" href="#" id="topnav-more" role="button">
+                        <a class="nav-link dropdown-toggle arrow-none" id="topnav-more" role="button">
                             <i data-feather="download"></i><span data-key="t-extra-pages">Download</span> 
                             <div class="arrow-down"></div>
                         </a>

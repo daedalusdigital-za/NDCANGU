@@ -685,9 +685,12 @@ pieChart: any = {
         }
     }
 }
+
+userRole: string;
   constructor(private globalService: GlobalService) { }
 
   ngOnInit(): void {
+    this.userRole = this.globalService.getLocalStorage('currentUser')?.role[0]
 
     this.globalService.topMenuSubject.subscribe(
         (x: any) => {     
