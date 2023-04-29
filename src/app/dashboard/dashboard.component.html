@@ -145,5 +145,24 @@
             </div>
             <!-- end col -->
         </div>
+
+
+        <div class="row">
+            
+            <div class="col-xl-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title mb-0">Mix Line Bar</h4>
+                    </div>
+                    <div class="card-body" *ngIf="isShown">
+                        <div echarts [options]="mixLineChart" class="demo-chart"></div>
+                    </div>
+                </div>
+                <!-- end card -->
+            </div>
+            <!-- end col -->
+
+            <!-- end col -->
+        </div>
     </div> <!-- container-fluid -->
 </div>
