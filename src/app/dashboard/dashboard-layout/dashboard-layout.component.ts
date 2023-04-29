@@ -43,15 +43,15 @@ export class DashboardLayoutComponent implements OnInit {
       this.districts = ['Capricorn', 'Mopani', 'Sekhukhune', 'Vhembe', 'Waterberge']
     } else if (text == 'North West') {
       this.districts = ['Bojanala Platinum', 'Dr kenneth kaunda', 'Dr Ruth Segomotsi Mompati', 'Ngaka Modlri Mclema']
-    } else if (text == 'Estern Cape') {
+    } else if (text == 'Eastern Cape') {
       this.districts = ['Alfred Nzo', 'Amathole', 'Buffalo', 'Chris Hani', 'Joe Gqabi', 'Nelson Mandela Bay Metropolitan']
     } else if (text == 'Western Cape') {
       this.districts = ['Cape Winelands', 'Central Karoo', 'City of CapeTown', 'Eden', 'Overberg', 'West Coast']
-    } else if (text == 'Kwazulu Natal') {
+    } else if (text == 'KwaZulu-Natal') {
       this.districts = ['Amajuba', 'eThekwini', 'Harry Gwala', 'ilembe', 'King Cetshwayo', 'Ugu', 'uMgungundlovu', 'uMkhanyakude', 'uThukela', 'Zululand']
-    } else if (text == 'Northen Cape') {
+    } else if (text == 'Northern Cape') {
       this.districts = ['Fances Baard', 'John Taolo Gaetsewe', 'Namakwa', 'Pixley Ka Seme', 'ZF Mgcawa']
-    } else if (text == 'Freestate') {
+    } else if (text == 'Free State') {
       this.districts = ['Fezile Dabi', 'lejweeleputswa', 'Mangaung Thabo Mfoutsanyana', 'Xhaariep']
     } else {
       this.districts = ['EHLANZENI', 'GERT SIBANDE', 'NKANGALA']
