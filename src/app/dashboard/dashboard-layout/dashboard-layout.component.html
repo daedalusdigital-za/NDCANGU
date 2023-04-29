@@ -143,18 +143,18 @@
                 <div class="dropdown-menu dropdown-menu-end">
 
                   <!-- item-->
-                  <a href="javascript:void(0);" (click)="menuChanges(1)" class="dropdown-item notify-item language">
-                    <span class="align-middle">EHLANZENI</span> 
+                  <a href="javascript:void(0);" *ngFor="let item of districts; let i= index" class="dropdown-item notify-item language">
+                    <span class="align-middle" (click)="menuChanges(i)">{{item}}</span> 
                 </a>
                 <!-- item-->
-                <a href="javascript:void(0);" (click)="menuChanges(2)" class="dropdown-item notify-item language">
+                <!-- <a href="javascript:void(0);" (click)="menuChanges(2)" class="dropdown-item notify-item language">
                     <span class="align-middle">GERT SIBANDE</span>
-                </a>
+                </a> -->
 
                 <!-- item-->
-                <a href="javascript:void(0);" (click)="menuChanges(3)" class="dropdown-item notify-item language">
+                <!-- <a href="javascript:void(0);" (click)="menuChanges(3)" class="dropdown-item notify-item language">
                     <span class="align-middle">NKANGALA</span>
-                </a>
+                </a> -->
                 
                 </div>
             </div>
@@ -198,7 +198,7 @@
                     </li>
 
 
-                    <li class="nav-item dropdown" *ngIf="isRoleAdmin">
+                    <li class="nav-item dropdown" *ngIf="isMenuShown">
                         <a class="nav-link dropdown-toggle arrow-none"  id="topnav-pages" role="button">
                             <i data-feather="user"></i><span data-key="t-apps">Users</span> <div class="arrow-down"></div>
                         </a>
@@ -227,9 +227,9 @@
                         </a>
                         <div class="dropdown-menu" aria-labelledby="topnav-components">
                                     <div class="dropdown">
-                                       <a routerLink="/dashboard/list-reports" class="dropdown-item" data-key="t-calendar">View Reports</a>
-                                       <a routerLink="/dashboard/add-report" class="dropdown-item" data-key="t-calendar" *ngIf="isRoleAdmin">Create Reports</a>
-                                       <a routerLink="/dashboard/add-report" class="dropdown-item" data-key="t-calendar" *ngIf="isRoleAdmin">Recommendations</a>
+                                       <a routerLink="/dashboard/list-reports" class="dropdown-item" data-key="t-calendar" *ngIf="!isNurseUser">View Reports</a>
+                                       <a routerLink="/dashboard/add-report" class="dropdown-item" data-key="t-calendar" *ngIf="isMenuShown">Create Reports</a>
+                                       <a routerLink="/dashboard/add-report" class="dropdown-item" data-key="t-calendar" *ngIf="isMenuShown">Recommendations</a>
                                      </div>
                        </div>
                     </li>

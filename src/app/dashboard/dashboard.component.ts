@@ -755,7 +755,7 @@ userRole: string;
                 "name": "HYPERTENSIVE CRISIS"
             }
         ];
-    } else {
+    } else if(val==3) {
         this.walletBalenceChart.series = [80,10,10];
 
         this.pieChart.series.data = [
@@ -780,6 +780,31 @@ userRole: string;
                 "name": "HYPERTENSIVE CRISIS"
             }
         ]
+    } else {
+        this.walletBalenceChart.series = [10,50,40];
+
+        this.pieChart.series.data = [
+            {
+                "value": 335,
+                "name": "NORMAL"
+            },
+            {
+                "value": 310,
+                "name": "ELEVATED"
+            },
+            {
+                "value": 234,
+                "name": "HYPERTENSION STAGE1"
+            },
+            {
+                "value": 135,
+                "name": "HYPERTENSION STAGE2"
+            },
+            {
+                "value": 1548,
+                "name": "HYPERTENSIVE CRISIS"
+            }
+        ];
     }
     
   }
