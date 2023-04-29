@@ -228,8 +228,8 @@
                         <div class="dropdown-menu" aria-labelledby="topnav-components">
                                     <div class="dropdown">
                                        <a routerLink="/dashboard/list-reports" class="dropdown-item" data-key="t-calendar" *ngIf="!isNurseUser">View Reports</a>
-                                       <a routerLink="/dashboard/add-report" class="dropdown-item" data-key="t-calendar" *ngIf="isMenuShown">Create Reports</a>
-                                       <a routerLink="/dashboard/add-report" class="dropdown-item" data-key="t-calendar" *ngIf="isMenuShown">Recommendations</a>
+                                       <a routerLink="/dashboard/add-report" class="dropdown-item" data-key="t-calendar" *ngIf="isMenuShown || isNurseUser">Create Reports</a>
+                                       <a routerLink="/dashboard/add-report" class="dropdown-item" data-key="t-calendar" *ngIf="isMenuShown || isNurseUser">Recommendations</a>
                                      </div>
                        </div>
                     </li>
