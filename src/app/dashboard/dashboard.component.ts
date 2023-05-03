@@ -8,6 +8,130 @@ import { GlobalService } from '../services/global/global.service';
 export class DashboardComponent implements OnInit {
     isShown: boolean = true;
 
+    columnChartOptions: any = {
+        series: [
+          {
+            name: "Net Profit",
+            data: [44, 55, 57, 56, 61, 58, 63, 60, 66]
+          },
+          {
+            name: "Revenue",
+            data: [76, 85, 101, 98, 87, 105, 91, 114, 94]
+          },
+          {
+            name: "Free Cash Flow",
+            data: [35, 41, 36, 26, 45, 48, 52, 53, 41]
+          }
+        ],
+        chart: {
+          type: "bar",
+          height: 350
+        },
+        plotOptions: {
+          bar: {
+            horizontal: false,
+            columnWidth: "55%",
+            endingShape: "rounded"
+          }
+        },
+        dataLabels: {
+          enabled: false
+        },
+        stroke: {
+          show: true,
+          width: 2,
+          colors: ["transparent"]
+        },
+        xaxis: {
+          categories: [
+            "Feb",
+            "Mar",
+            "Apr",
+            "May",
+            "Jun",
+            "Jul",
+            "Aug",
+            "Sep",
+            "Oct"
+          ]
+        },
+        yaxis: {
+          title: {
+            text: "$ (thousands)"
+          }
+        },
+        fill: {
+          opacity: 1
+        },
+        tooltip: {
+          y: {
+            formatter: (val: any) =>{
+              return "$ " + val + " thousands";
+            }
+          }
+        }
+      };
+
+    polarChartOptions: any = {
+        series: [14, 23, 21, 17, 15, 10, 12, 17, 21],
+        chart: {
+          type: "polarArea"
+        },
+        stroke: {
+          colors: ["#fff"]
+        },
+        fill: {
+          opacity: 0.8
+        },
+        responsive: [
+          {
+            breakpoint: 480,
+            options: {
+              chart: {
+                width: 200
+              },
+              legend: {
+                position: "bottom"
+              }
+            }
+          }
+        ]
+      };
+
+      barChartoptions: any = {
+        series: [
+          {
+            name: "basic",
+            data: [400, 430, 448, 470, 540, 580, 690, 1100, 1200, 1380]
+          }
+        ],
+        chart: {
+          type: "bar",
+          height: 350
+        },
+        plotOptions: {
+          bar: {
+            horizontal: true
+          }
+        },
+        dataLabels: {
+          enabled: false
+        },
+        xaxis: {
+          categories: [
+            "South Korea",
+            "Canada",
+            "United Kingdom",
+            "Netherlands",
+            "Italy",
+            "France",
+            "Japan",
+            "United States",
+            "China",
+            "Germany"
+          ]
+        }
+      };
     chartNonDiabiates: any = {
         "series": [
             {
