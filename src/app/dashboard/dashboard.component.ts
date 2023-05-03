@@ -101,7 +101,7 @@ export class DashboardComponent implements OnInit {
       barChartoptions: any = {
         series: [
           {
-            name: "basic",
+            name: "Test Done",
             data: [400, 430, 448, 470, 540, 580, 690, 1100, 1200, 1380]
           }
         ],
@@ -119,16 +119,15 @@ export class DashboardComponent implements OnInit {
         },
         xaxis: {
           categories: [
-            "South Korea",
-            "Canada",
-            "United Kingdom",
-            "Netherlands",
-            "Italy",
-            "France",
-            "Japan",
-            "United States",
-            "China",
-            "Germany"
+            "Freestate",
+            "Northen Cape",
+            "Limpopo",
+            "Gauteng ",
+            "Eastern cape",
+            "Western cape",
+            "North west",
+            "Kwazulu Natal",
+            "Mpumalanga"
           ]
         }
       };
