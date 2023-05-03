@@ -181,12 +181,10 @@
             <div class="col-xl-6">
                 <div class="card">
                     <div class="card-header">
-                        <h4 class="card-title mb-0">Polar Area Chart</h4>
+                        <h4 class="card-title mb-0">Customized Pie Chart</h4>
                     </div>
                     <div class="card-body">
-                        <apx-chart
-                            [series]="polarChartOptions.series"
-                            [chart]="polarChartOptions.chart"></apx-chart>
+                        <div echarts [options]="customizedPie"></div>
                     </div>
                 </div>
                 <!-- end card -->
