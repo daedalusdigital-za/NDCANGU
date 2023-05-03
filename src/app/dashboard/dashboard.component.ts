@@ -11,15 +11,15 @@ export class DashboardComponent implements OnInit {
     columnChartOptions: any = {
         series: [
           {
-            name: "Net Profit",
+            name: "Normal",
             data: [44, 55, 57, 56, 61, 58, 63, 60, 66]
           },
           {
-            name: "Revenue",
+            name: "Prediabetes",
             data: [76, 85, 101, 98, 87, 105, 91, 114, 94]
           },
           {
-            name: "Free Cash Flow",
+            name: "Diabetes",
             data: [35, 41, 36, 26, 45, 48, 52, 53, 41]
           }
         ],
@@ -57,7 +57,7 @@ export class DashboardComponent implements OnInit {
         },
         yaxis: {
           title: {
-            text: "$ (thousands)"
+            text: " (Cases)"
           }
         },
         fill: {
@@ -66,7 +66,7 @@ export class DashboardComponent implements OnInit {
         tooltip: {
           y: {
             formatter: (val: any) =>{
-              return "$ " + val + " thousands";
+              return "" + val + " Cases";
             }
           }
         }
