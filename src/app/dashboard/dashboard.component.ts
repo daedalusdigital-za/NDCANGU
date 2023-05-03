@@ -705,7 +705,7 @@ export class DashboardComponent implements OnInit {
             }
         },
         legend: {
-            data: ['Evaporation', 'Precipitation', 'Temperature']
+            data: ['Male', 'Female', 'Gestational']
         },
         xAxis: [
             {
@@ -719,60 +719,60 @@ export class DashboardComponent implements OnInit {
         yAxis: [
             {
                 type: 'value',
-                name: 'Precipitation',
+                name: 'Number of People',
                 min: 0,
                 max: 250,
                 interval: 50,
                 axisLabel: {
-                    formatter: '{value} ml'
+                    //formatter: '{value} ml'
                 }
             },
             {
                 type: 'value',
-                name: 'Temperature',
+                name: 'Number of People',
                 min: 0,
                 max: 25,
                 interval: 5,
                 axisLabel: {
-                    formatter: '{value} °C'
+//formatter: '{value} °C'
                 }
             }
         ],
         series: [
             {
-                name: 'Evaporation',
+                name: 'Male',
                 type: 'bar',
                 tooltip: {
                     valueFormatter: (value: any) => {
-                        return value + ' ml';
+                        return value ;
                     }
                 },
                 data: [
-                    2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 135.6, 162.2, 32.6, 20.0, 6.4, 3.3
+                    2, 4, 7, 23, 25, 76, 135, 162, 32, 20, 6, 3
                 ]
             },
             {
-                name: 'Precipitation',
+                name: 'Female',
                 type: 'bar',
                 tooltip: {
                     valueFormatter: (value: any) => {
-                        return value + ' ml';
+                        return value ;
                     }
                 },
                 data: [
-                    2.6, 5.9, 9.0, 26.4, 28.7, 70.7, 175.6, 182.2, 48.7, 18.8, 6.0, 2.3
+                    2, 5, 9, 26, 28, 70, 175, 182, 48, 18, 6, 2
                 ]
             },
             {
-                name: 'Temperature',
+                name: 'Gestational',
                 type: 'line',
                 yAxisIndex: 1,
                 tooltip: {
                     valueFormatter: (value: any) => {
-                        return value + ' °C';
+                        return value;
                     }
                 },
-                data: [2.0, 2.2, 3.3, 4.5, 6.3, 10.2, 20.3, 23.4, 23.0, 16.5, 12.0, 6.2]
+                data: [2, 2, 3, 4, 6, 10, 20, 23, 23, 16, 12, 6]
             }
         ]
     };
@@ -826,7 +826,7 @@ export class DashboardComponent implements OnInit {
 
             this.mixLineChart.series = [
                 {
-                    name: 'Evaporation',
+                    name: 'Male',
                     type: 'bar',
                     tooltip: {
                         valueFormatter: (value: any) => {
@@ -838,7 +838,7 @@ export class DashboardComponent implements OnInit {
                     ]
                 },
                 {
-                    name: 'Precipitation',
+                    name: 'Female',
                     type: 'bar',
                     tooltip: {
                         valueFormatter: (value: any) => {
@@ -850,7 +850,7 @@ export class DashboardComponent implements OnInit {
                     ]
                 },
                 {
-                    name: 'Temperature',
+                    name: 'Gestational',
                     type: 'line',
                     yAxisIndex: 1,
                     tooltip: {

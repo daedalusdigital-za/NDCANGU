@@ -5,12 +5,12 @@
         <div class="row">
             <div class="col-12">
                 <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                    <h4 class="mb-sm-0 font-size-18">Create Report</h4>
+                    <h4 class="mb-sm-0 font-size-18">Register User</h4>
 
                     <div class="page-title-right">
                         <ol class="breadcrumb m-0">
                             <li class="breadcrumb-item"><a href="javascript: void(0);">Reports</a></li>
-                            <li class="breadcrumb-item active">Create Report</li>
+                            <li class="breadcrumb-item active">Add User</li>
                         </ol>
                     </div>
 
@@ -23,45 +23,37 @@
             <div class="col-lg-12">
                 <div class="card">
                     <div class="card-header">
-                        <h4 class="card-title mb-0">Patient GluCoA1c / Limpid Tests</h4>
+                        <h4 class="card-title mb-0">Patient Details</h4>
                     </div>
                     <div class="card-body">
 
                         <div id="progrss-wizard" class="twitter-bs-wizard">
                             <ul class="twitter-bs-wizard-nav nav nav-pills nav-justified">
                                 <li class="nav-item">
-                                    <a href="#progress-seller-details" class="nav-link active" data-toggle="tab">
-                                        <div class="step-icon" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Patient Details">
+                                    <a href="#" class="nav-link active" data-toggle="tab">
+                                        <div class="step-icon" data-bs-toggle="tooltip" data-bs-placement="top" title="jjvj" data-bs-original-title="Patient Details">
                                             <i class="bx bx-list-ul"></i>
                                         </div>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="#progress-company-document" class="nav-link" data-toggle="tab">
-                                        <div class="step-icon" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Medical information">
+                                    <a href="#" class="nav-link" data-toggle="tab">
+                                        <div class="step-icon" data-bs-toggle="tooltip" data-bs-placement="top" title="gcgcgcj" data-bs-original-title="Medical information">
                                             <i class="bx bx-book-bookmark"></i>
                                         </div>
                                     </a>
                                 </li>
                                 
-                                <li class="nav-item">
-                                    <a href="#progress-bank-detail" class="nav-link" data-toggle="tab">
-                                        <div class="step-icon" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Test Results">
-                                            <i class="bx bxs-bank"></i>
-                                        </div>
-                                    </a>
-                                </li>
                             </ul>
                             <!-- wizard-nav -->
 
                             <div id="bar" class="progress mt-4">
-                                <div class="progress-bar bg-success progress-bar-striped progress-bar-animated" style="width: 33.3333%;"></div>
+                                <div class="progress-bar bg-success progress-bar-striped progress-bar-animated" style="width: 53.3333%;"></div>
                             </div>
                             <div class="tab-content twitter-bs-wizard-tab-content">
                                 <div class="tab-pane active" id="progress-seller-details">
                                     <div class="text-center mb-4">
-                                        <h5>Patient Details</h5>
-                                        <p class="card-title-desc">Fill all information below</p>
+                                        <h5>Fill all information below</h5>
                                     </div>
                                     <form>
                                         <div class="row">
@@ -101,9 +93,84 @@
                                                 </div>
                                             </div>
                                         </div>
+
+                                        <div class="row">
+                                            <div class="col-lg-6">
+                                                <div>
+                                                    <label for="exampleDataList" class="form-label">Province</label>
+                                                    <input class="form-control" list="datalistOptions" id="exampleDataList"
+                                                        placeholder="Type in Province...">
+                                                    <datalist id="datalistOptions">
+                                                        <option value="Mpumalanga">
+                                                        <option value="Free State">
+                                                        <option value="Gauteng">
+                                                        <option value="North West">
+                                                        <option value="Limpopo">
+                                                        <option value="KwaZulu-Natal">
+                                                        <option value="Eastern Cape">
+                                                        <option value="Northern Cape">
+                                                        <option value="Western Cape">
+                                                    </datalist>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <div class="mb-3">
+                                                    <div>
+                                                        <label for="exampleDataList" class="form-label">District</label>
+                                                        <input class="form-control" list="datalistOptions" id="exampleDataList"
+                                                            placeholder="Type in Province...">
+                                                        <datalist id="datalistOptions">
+                                                            <option value="Sedibeng">
+                                                            <option value="Ekurhuleni">
+                                                            <option value="City Of Johannesburg">
+                                                            <option value="City Of Tswane">
+                                                            <option value="West Rand">
+                                                            <option value="Nkangala">
+                                                            <option value=" Mopani">
+                                                            <option value="Sekhukhune">
+                                                            <option value="Capricorn">
+                                                            <option value="Vhembe">
+                                                            <option value="Waterberge">
+                                                            <option value="Cape Winelands">
+                                                            <option value="City of CapeTown">
+                                                            <option value="Limpopo">
+                                                            <option value="Overberg">
+                                                            <option value="Ugu">
+                                                            <option value="eThekwini">                                                                <option value="Western Cape">        
+                                                        </datalist>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-lg-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Gender</label>
+                                                    <select class="form-select">
+                                                          <option selected="">Male</option>
+                                                          <option value="AE">Female</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Known Diabetic</label>
+                                                    <select class="form-select">
+                                                          <option selected="">No</option>
+                                                          <option value="AE">Yes</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                      
                                     </form>
+                                    <div class="form-check form-switch" dir="ltr">
+                                        <input type="checkbox" class="form-check-input" disabled id="customSwitch2">
+                                        <label class="form-check-label" for="customSwitch2">Gestation</label>
+                                    </div>
                                     <ul class="pager wizard twitter-bs-wizard-pager-link">
-                                        <li class="next"><a href="javascript: void(0);" class="btn btn-primary" onclick="nextTab()">Next <i class="bx bx-chevron-right ms-1"></i></a></li>
+                                        <li class="next"><a href="javascript: void(0);" class="btn btn-primary" onclick="nextTab()">Confirm Details <i class="bx bx-chevron-right ms-1"></i></a></li>
                                     </ul>
                                 </div>
                                 <div class="tab-pane" id="progress-company-document">
@@ -152,56 +219,7 @@
                                     </ul>
                                   </div>
                                 </div>
-                                <div class="tab-pane" id="progress-bank-detail">
-                                    <div>
-                                        <div class="text-center mb-4">
-                                            <h5>Test Findings</h5>
-                                            <p class="card-title-desc">Fill all information below</p>
-                                        </div>
-                                      <form>
-                                          <div class="row">
-                                              <div class="col-lg-6">
-                                                  <div class="mb-3">
-                                                      <label for="progresspill-namecard-input" class="form-label">HBa1C value</label>
-                                                      <input type="text" class="form-control" id="progresspill-namecard-input" placeholder="Enter value">
-                                                  </div>
-                                              </div>
-
-                                              <div class="col-lg-6">
-                                                  <div class="mb-3">
-                                                      <label class="form-label">Machine Used</label>
-                                                      <select class="form-select">
-                                                            <option selected="">Limpid</option>
-                                                            <option value="AE">GluCoA1c</option>
-                                                            
-                                                      </select>
-                                                  </div>
-                                              </div>
-                                          </div>
-                                          <div class="row">
-                                              <div class="col-lg-6">
-                                                  <div class="mb-3">
-                                                      <label for="progresspill-cardno-input" class="form-label">Random Glocose value</label>
-                                                      <input type="text" class="form-control" id="progresspill-cardno-input" placeholder="Enter value">
-                                                  </div>
-                                              </div>
-
-                                              <div class="col-lg-6">
-                                                  <div class="mb-3">
-                                                      <label for="progresspill-card-verification-input" class="form-label">Results</label>
-                                                      <input type="text" class="form-control" id="progresspill-card-verification-input" placeholder="Enter Findngs">
-                                                  </div>
-                                              </div>
-                                          </div>
-                                          
-                                      </form>
-                                      <ul class="pager wizard twitter-bs-wizard-pager-link">
-                                        <li class="previous disabled"><a href="javascript: void(0);" class="btn btn-primary" onclick="nextTab()"><i class="bx bx-chevron-left me-1"></i> Previous</a></li>
-                                        <li class="float-end"><a href="javascript: void(0);" class="btn btn-primary" data-bs-toggle="modal" data-bs-target=".confirmModal">Save
-                                                Changes</a></li>
-                                    </ul>
-                                    </div>
-                                </div>
+                                
                             </div>
                         </div>
                     </div>
