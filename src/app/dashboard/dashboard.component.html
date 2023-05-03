@@ -23,26 +23,24 @@
 
 
         <!-- end row-->
-
         <div class="row">
             <div class="col-xl-6">
                 <!-- card -->
                 <div class="card card-h-100">
                     <div class="card-header">
-                        <h4 class="card-title me-2">HBA1C Test Statistics</h4>
+                        <h4 class="card-title me-2">HBA1C Statistics</h4>
                     </div>
                     <!-- card body -->
                     <div class="card-body">
                         <div class="d-flex flex-wrap align-items-center mb-4">
                             <div class="ms-auto">
                                 <select class="form-select form-select-sm">
-                                    <option value="MAY" selected="">Feb</option>
+                                    <option value="MAY" selected="">April</option>
                                     <option value="AP">March</option>
-                                    <option value="MA">April</option>
+                                    <option value="MA">Feb</option>
                                 </select>
                             </div>
                         </div>
-
                         <div class="row align-items-center">
                             <div class="col-sm">
                                 <div class="apex-charts" style="min-height:
@@ -56,7 +54,6 @@
                                         [colors]="['#FF0000', '#FFA500',
                                         '#008000']"></apx-chart>
                                 </div>
-
                                 <!-- <div id="wallet-balance" data-colors='["#FF0000", "#FFA500", "#008000"]' class="apex-charts"></div> -->
                             </div>
                             <div class="col-sm align-self-center">
@@ -68,7 +65,6 @@
                                         <h6>6.5% <span class="text-muted
                                                 font-size-14 fw-normal">or Above</span></h6>
                                     </div>
-
                                     <div class="mt-4 pt-2">
                                         <p class="mb-2"><i class="mdi mdi-circle
                                                 align-middle font-size-10 me-2
@@ -76,7 +72,6 @@
                                         <h6>Between 5.7%<span class="text-muted
                                                 font-size-14 fw-normal">& 6.4%</span></h6>
                                     </div>
-
                                     <div class="mt-4 pt-2">
                                         <p class="mb-2"><i class="mdi mdi-circle
                                                 align-middle font-size-10 me-2
@@ -96,12 +91,10 @@
 
             <!-- end col -->
             <div class="col-xl-6">
-                <div class="row">
-                    <div class="col-xl-9">
+                   
                         <div class="card">
                             <div class="card-header">
-                                <h4 class="card-title me-2">High Blood Pressure
-                                    Statistics</h4>
+                                <h4 class="card-title me-2">High Blood Pressure Statistics</h4>
 
                             </div>
                             <div class="card-body" *ngIf="isShown">
@@ -123,48 +116,12 @@
                             </div>
                         </div>
                         <!-- end card -->
-                    </div>
-
-
                     <!-- end col -->
-
-                </div>
                 <!-- end row -->
             </div>
         </div>
         <!-- end row -->
         <div class="row">
-
-            <div class="col-xl-6">
-                <div class="card">
-                    <div class="card-header">
-                        <h4 class="card-title mb-0">Pie Chart</h4>
-                    </div>
-                    <div class="card-body" *ngIf="isShown">
-                        <div echarts [options]="pieChart" class="demo-chart"></div>
-                    </div>
-                </div>
-                <!-- end card -->
-            </div>
-            <!-- end col -->
-
-            <div class="col-xl-6">
-                <div class="card">
-                    <div class="card-header">
-                        <h4 class="card-title mb-0">Pie Chart</h4>
-                    </div>
-                    <div class="card-body" *ngIf="isShown">
-                        <div echarts [options]="pieChart" class="demo-chart"></div>
-                    </div>
-                </div>
-                <!-- end card -->
-            </div>
-            <!-- end col -->
-        </div>
-
-
-        <div class="row">
-
             <div class="col-xl-12">
                 <div class="card">
                     <div class="card-header">
@@ -177,7 +134,8 @@
                 </div>
                 <!-- end card -->
             </div>
-
+        </div>
+        <div class="row">
             <div class="col-xl-6">
                 <div class="card">
                     <div class="card-header">
@@ -206,11 +164,12 @@
                 </div>
                 <!-- end card -->
             </div>
-
+        </div>
+        <div class="row">
             <div class="col-xl-12">
                 <div class="card">
                     <div class="card-header">
-                        <h4 class="card-title mb-0">Column Chart</h4>
+                        <h4 class="card-title mb-0">Glucose</h4>
                     </div>
                     <div class="card-body">
                         <apx-chart
@@ -223,8 +182,8 @@
                         [fill]="columnChartOptions.fill"
                         [stroke]="columnChartOptions.stroke"
                         [tooltip]="columnChartOptions.tooltip"
-                        [xaxis]="columnChartOptions.xaxis"
-                      ></apx-chart>
+                        [xaxis]="columnChartOptions.xaxis">
+                    </apx-chart>
                     </div>
                 </div>
                 <!-- end card -->
