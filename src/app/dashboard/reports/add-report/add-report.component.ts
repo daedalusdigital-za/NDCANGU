@@ -7,6 +7,17 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AddReportComponent implements OnInit {
 
+  patient: any = {
+    name: '',
+    surname: '',
+    gender: '',
+    phoneNumber: '',
+    age: null,
+    lastAppointmentDate: null,
+    nextAppointmentDate: null,
+    notes: '',
+    diagnosis: ''
+  }
   constructor() { }
 
   ngOnInit(): void {

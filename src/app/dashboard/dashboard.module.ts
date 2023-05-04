@@ -7,7 +7,6 @@ import { DashboardLayoutComponent } from './dashboard-layout/dashboard-layout.co
 import { ListFaqsComponent } from './list-faqs/list-faqs.component';
 import { ListTutorialsComponent } from './list-tutorials/list-tutorials.component';
 import { ListReportsComponent } from './list-reports/list-reports.component';
-import { AddReportComponent } from './add-report/add-report.component';
 import { AddStatsComponent } from './add-stats/add-stats.component';
 import { ListStatsComponent } from './list-stats/list-stats.component';
 import { NgApexchartsModule } from 'ng-apexcharts';
@@ -25,7 +24,7 @@ import { SharedModule } from '../shared/shared.module';
     ListFaqsComponent,
     ListTutorialsComponent,
     ListReportsComponent,
-    AddReportComponent,
+    // AddReportComponent,
     AddStatsComponent,
     ListStatsComponent
   ],

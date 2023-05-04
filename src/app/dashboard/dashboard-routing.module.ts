@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { AddReportComponent } from './add-report/add-report.component';
 import { AddStatsComponent } from './add-stats/add-stats.component';
 import { DashboardLayoutComponent } from './dashboard-layout/dashboard-layout.component';
 import { DashboardComponent } from './dashboard.component';
@@ -30,10 +29,7 @@ const routes: Routes = [
         path: 'list-reports',
         component: ListReportsComponent
       },
-      {
-        path: 'add-report',
-        component: AddReportComponent
-      },
+
       {
         path: 'list-stats',
         component: ListStatsComponent
@@ -49,6 +45,10 @@ const routes: Routes = [
       {
         path: 'patients',
         loadChildren: () => import('./patients/patients.module').then(m => m.PatientsModule),
+      },
+      {
+        path: 'reports',
+        loadChildren: () => import('./reports/reports.module').then(m => m.ReportsModule),
       },
       { path: '', redirectTo: 'home', pathMatch: 'full' }
     ]
