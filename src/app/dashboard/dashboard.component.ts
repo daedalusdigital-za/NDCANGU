@@ -72,68 +72,81 @@ export class DashboardComponent implements OnInit {
         }
       };
 
-      customizedPie: any = {
-        //backgroundColor: '#2c343c',
-      
-        title: {
-          text: 'Customized Pie',
-          left: 'center',
-          top: 20,
-          textStyle: {
-            color: '#ccc'
-          }
-        },
-      
+      nestedPie: any = {
         tooltip: {
-          trigger: 'item'
+          trigger: 'item',
+          formatter: '{a} <br/>{b}: {c} ({d}%)'
         },
-      
-        visualMap: {
-          show: false,
-          min: 80,
-          max: 600,
-          inRange: {
-            colorLightness: [0, 1]
-          }
+        legend: {
+          data: [
+            'Borderline high',
+            'High',            
+            'Normal',
+          ]
         },
         series: [
           {
             name: 'Access From',
             type: 'pie',
-            radius: '55%',
-            center: ['50%', '50%'],
-            data: [
-              { value: 335, name: 'Direct' },
-              { value: 310, name: 'Email' },
-              { value: 274, name: 'Union Ads' },
-              { value: 235, name: 'Video Ads' },
-              { value: 400, name: 'Search Engine' }
-            ].sort(function (a, b) {
-              return a.value - b.value;
-            }),
-            roseType: 'radius',
+            selectedMode: 'single',
+            radius: [0, '30%'],
             label: {
-              color: 'rgba(255, 255, 255, 0.3)'
+              position: 'inner',
+              fontSize: 14
             },
             labelLine: {
-              lineStyle: {
-                color: 'rgba(255, 255, 255, 0.3)'
-              },
-              smooth: 0.2,
-              length: 10,
-              length2: 20
+              show: false
             },
-            itemStyle: {
-              color: '#c23531',
-              shadowBlur: 200,
-              shadowColor: 'rgba(0, 0, 0, 0.5)'
+            data: [
+              { value: 1548, name: 'Borderline high' },
+              { value: 775, name: 'High' },
+              { value: 300, name: 'Normal', selected: true },
+            ]
+          },
+          {
+            name: 'Total Colestoral',
+            type: 'pie',
+            radius: ['45%', '60%'],
+            labelLine: {
+              length: 30
             },
-      
-            animationType: 'scale',
-            animationEasing: 'elasticOut',
-            animationDelay:  (idx: any) =>{
-              return Math.random() * 200;
-            }
+            label: {
+              formatter: '{a|{a}}{abg|}\n{hr|}\n  {b|{b}：}{c}  {per|{d}%}  ',
+              backgroundColor: '#F6F8FC',
+              borderColor: '#8C8D8E',
+              borderWidth: 1,
+              borderRadius: 4,
+              rich: {
+                a: {
+                  color: '#6E7079',
+                  lineHeight: 22,
+                  align: 'center'
+                },
+                hr: {
+                  borderColor: '#8C8D8E',
+                  width: '100%',
+                  borderWidth: 1,
+                  height: 0
+                },
+                b: {
+                  color: '#4C5058',
+                  fontSize: 14,
+                  fontWeight: 'bold',
+                  lineHeight: 33
+                },
+                per: {
+                  color: '#fff',
+                  backgroundColor: '#4C5058',
+                  padding: [3, 4],
+                  borderRadius: 4
+                }
+              }
+            },
+            data: [
+              { value: 1048, name: 'Borderline high' },
+              { value: 335, name: 'High' },
+              { value: 310, name: 'Normal' }
+            ]
           }
         ]
       };
