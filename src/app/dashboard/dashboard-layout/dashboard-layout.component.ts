@@ -13,6 +13,7 @@ export class DashboardLayoutComponent implements OnInit {
   isMenuShown: boolean = false;
   isNurseUser: boolean = false;
   districts: Array<string> = ['EHLANZENI', 'GERT SIBANDE', 'NKANGALA'];
+  pdflink: string = 'assets/pdfs/Mpumalanga.pdf';
   constructor(private globalService: GlobalService) {
     this.user = this.globalService.getLocalStorage('currentUser');
     if (this.user) {
@@ -37,6 +38,8 @@ export class DashboardLayoutComponent implements OnInit {
   changeFlagItem(img: string, text: string) {
     this.flagImg = img;
     this.flagText = text;
+
+    this.pdflink = `assets/pdfs/${text}.pdf`
     if (text == 'Gauteng') {
       this.districts = ['Sedibeng', 'Ekurhuleni', 'City Of Johannesburg', 'City Of Tswane', 'West Rand']
     } else if (text == 'Limpopo') {
