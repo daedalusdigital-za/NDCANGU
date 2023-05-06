@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { ConfirmationService } from 'primeng/api';
 
@@ -117,7 +118,7 @@ export class ListPatientsComponent implements OnInit {
     isFilter: false,
     isSortable: false,
     onClick: (item: any) => {
-      // this.router.navigateByUrl('dashboard/users/edit/' + item.id);
+      this.router.navigateByUrl('dashboard/patients/edit/' + item.id);
     },
     getValue: function () {
       return this.field
@@ -137,7 +138,8 @@ export class ListPatientsComponent implements OnInit {
     },
   },
   ];
-  constructor(private baseService: BaseService, private confirmationService: ConfirmationService, private toastrService: ToastrService) { }
+  constructor(private baseService: BaseService, private confirmationService: ConfirmationService, 
+    private toastrService: ToastrService, private router: Router) { }
 
   ngOnInit(): void {
     this.getPatients();

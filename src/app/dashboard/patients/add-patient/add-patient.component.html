@@ -84,7 +84,7 @@
                                             <div class="col-lg-6">
                                                 <div class="mb-3">
                                                     <label for="progresspill-email-input">Date of Birth</label>
-                                                    <input type="date" class="form-control" name="dob"  placeholder="Enter your Date of birth">
+                                                    <input type="date" class="form-control" name="dob" [(ngModel)]="patient.dateOfBirth" placeholder="Enter your Date of birth">
                                                 </div>
                                             </div>
                                         </div>
@@ -93,7 +93,7 @@
                                             <div class="col-lg-6">
                                                 <div>
                                                     <label for="exampleDataList" class="form-label">Province</label>
-                                                    <input class="form-control" list="datalistOptions" name="province" 
+                                                    <input class="form-control" list="datalistOptions" [(ngModel)]="patient.province" name="province" 
                                                         placeholder="Type in Province...">
                                                     <datalist id="datalistOptions">
                                                         <option value="Mpumalanga">
@@ -112,7 +112,7 @@
                                                 <div class="mb-3">
                                                     <div>
                                                         <label for="exampleDataList" class="form-label">District</label>
-                                                        <input class="form-control" list="datalistOptions" name="district" 
+                                                        <input class="form-control" list="datalistOptions" [(ngModel)]="patient.district" name="district" 
                                                             placeholder="Type in Province...">
                                                         <datalist id="datalistOptions">
                                                             <option value="Sedibeng">
@@ -142,13 +142,13 @@
                                             <div class="col-lg-6">
                                                 <div class="mb-3">
                                                     <label class="form-label">Patient ID</label>
-                                                    <input type="number" class="form-control" name="patient" >
+                                                    <input type="text" class="form-control" [(ngModel)]="patient.patientNumber" name="patient" >
                                                 </div>
                                             </div>
                                             <div class="col-lg-6">
                                                 <div class="mb-3">
                                                     <label class="form-label">Institution</label>
-                                                    <input type="text" class="form-control" name="Institution">
+                                                    <input type="text" class="form-control" [(ngModel)]="patient.institution" name="Institution">
                                                 </div>
                                             </div>
                                         </div>
