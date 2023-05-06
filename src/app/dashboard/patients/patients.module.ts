@@ -4,6 +4,9 @@ import { ListPatientsComponent } from './list-patients/list-patients.component';
 import { AddPatientComponent } from './add-patient/add-patient.component';
 import { PatientsRoutingModule } from './patients-routing.module';
 import { FormsModule } from '@angular/forms';
+import { SharedModule } from 'src/app/shared/shared.module';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { ButtonModule } from 'primeng/button';
 
 
 
@@ -15,6 +18,9 @@ import { FormsModule } from '@angular/forms';
   imports: [
     CommonModule,
     FormsModule,
+    SharedModule,
+    ConfirmDialogModule,
+    ButtonModule,
     PatientsRoutingModule
   ]
 })

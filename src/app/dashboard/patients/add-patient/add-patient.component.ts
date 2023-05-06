@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { BaseService } from 'src/app/services/base/base.service';
 
 @Component({
   selector: 'app-add-patient',
@@ -18,9 +20,23 @@ export class AddPatientComponent implements OnInit {
     notes: '',
     diagnosis: ''
   }
-  constructor() { }
+  constructor(private baseService: BaseService, private router: Router) { }
 
   ngOnInit(): void {
   }
 
+
+  createPatient(){
+    this.baseService.basePost('Patient/Add', {
+      name: this.patient.name,
+      surname: this.patient.surname,
+      age: this.patient.age,
+      phoneNumber: this.patient.phoneNumber
+    }).subscribe({
+      next: (response)=>{
+        this.router.navigateByUrl('/dashboard/patients')
+      }
+    })
+
+  }
 }

@@ -60,8 +60,15 @@
         </div>
 
 
+
+        <div class="table-responsive mb-4">
+            <app-dynamic-grid [columns]="cols" [data]="source" [isExportable]="false"></app-dynamic-grid>
+            <!-- end table -->
+        </div>
     </div>    
 </div>                            <!-- end row -->
                 
         
 <!-- container-fluid -->
+
+<p-confirmDialog [style]="{width: '50vw'}" [baseZIndex]="10000" rejectButtonStyleClass="p-button-text"></p-confirmDialog>
