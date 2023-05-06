@@ -58,7 +58,7 @@ export class AddUserComponent implements OnInit {
         }
       })
     } else {
-      this.baseService.basePost('User/GetUsers', this.user).subscribe({
+      this.baseService.basePost('User/Add', this.user).subscribe({
         next: (response)=>{
           this.router.navigateByUrl('/dashboard/users')
         }
