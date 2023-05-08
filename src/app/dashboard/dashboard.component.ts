@@ -11,15 +11,15 @@ export class DashboardComponent implements OnInit {
     columnChartOptions: any = {
         series: [
           {
-            name: "Normal",
+            name: "HBA1C",
             data: [44, 55, 57, 56, 61, 58, 63, 60, 66]
           },
           {
-            name: "Prediabetes",
+            name: "Cholesterol",
             data: [76, 85, 101, 98, 87, 105, 91, 114, 94]
           },
           {
-            name: "Diabetes",
+            name: "Blood Pressure",
             data: [35, 41, 36, 26, 45, 48, 52, 53, 41]
           }
         ],
@@ -44,15 +44,15 @@ export class DashboardComponent implements OnInit {
         },
         xaxis: {
           categories: [
-            "Feb",
-            "Mar",
-            "Apr",
-            "May",
-            "Jun",
-            "Jul",
-            "Aug",
-            "Sep",
-            "Oct"
+            "Freestate",
+            "Northen Cape",
+            "Eastern cape",
+            "Western cape",
+            "Mpumalanga",
+            "Kwazulu Natal",
+            "North west",
+            "Gauteng",
+            "Limpopo"
           ]
         },
         yaxis: {
