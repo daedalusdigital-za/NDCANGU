@@ -93,10 +93,9 @@
                                             <div class="col-lg-6">
                                                 <div>
                                                     <label for="exampleDataList" class="form-label">Province</label>
-                                                    <input class="form-control" required list="datalistOptions" [(ngModel)]="patient.province" name="province" 
+                                                    <input class="form-control" (change)="provinceChange(patient.province)" required list="datalistOptions" [(ngModel)]="patient.province" name="province" 
                                                         placeholder="Type in Province...">
                                                     <datalist id="datalistOptions">
-                                                        <option value="Mpumalanga">
                                                         <option value="Free State">
                                                         <option value="Gauteng">
                                                         <option value="North West">
@@ -112,26 +111,10 @@
                                                 <div class="mb-3">
                                                     <div>
                                                         <label for="exampleDataList" class="form-label">District</label>
-                                                        <input class="form-control" required list="datalistOptions" [(ngModel)]="patient.district" name="district" 
+                                                        <input class="form-control" required list="datalistOptionsDistricts" [(ngModel)]="patient.district" name="district" 
                                                             placeholder="Type in Province...">
-                                                        <datalist id="datalistOptions">
-                                                            <option value="Sedibeng">
-                                                            <option value="Ekurhuleni">
-                                                            <option value="City Of Johannesburg">
-                                                            <option value="City Of Tswane">
-                                                            <option value="West Rand">
-                                                            <option value="Nkangala">
-                                                            <option value=" Mopani">
-                                                            <option value="Sekhukhune">
-                                                            <option value="Capricorn">
-                                                            <option value="Vhembe">
-                                                            <option value="Waterberge">
-                                                            <option value="Cape Winelands">
-                                                            <option value="City of CapeTown">
-                                                            <option value="Limpopo">
-                                                            <option value="Overberg">
-                                                            <option value="Ugu">
-                                                            <option value="eThekwini">                                                                <option value="Western Cape">        
+                                                        <datalist id="datalistOptionsDistricts">
+                                                            <option  *ngFor="let item  of districts" > {{ item }}</option>
                                                         </datalist>
                                                     </div>
                                                 </div>

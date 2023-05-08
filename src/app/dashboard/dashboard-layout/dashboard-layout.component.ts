@@ -16,6 +16,8 @@ export class DashboardLayoutComponent implements OnInit {
   pdflink: string = 'assets/pdfs/Mpumalanga.pdf';
   constructor(private globalService: GlobalService) {
     this.user = this.globalService.getLocalStorage('currentUser');
+    this.globalService.selectedProvince = this.flagText;
+    this.globalService.selectedDistricts = this.districts;
     if (this.user) {
       this.user.fullName = `${this.user.firstName} ${this.user.lastName}`;
       if (this.user.role[0] == 'Admin') {
@@ -39,26 +41,11 @@ export class DashboardLayoutComponent implements OnInit {
     this.flagImg = img;
     this.flagText = text;
 
-    this.pdflink = `assets/pdfs/${text}.pdf`
-    if (text == 'Gauteng') {
-      this.districts = ['Sedibeng', 'Ekurhuleni', 'City Of Johannesburg', 'City Of Tswane', 'West Rand']
-    } else if (text == 'Limpopo') {
-      this.districts = ['Capricorn', 'Mopani', 'Sekhukhune', 'Vhembe', 'Waterberge']
-    } else if (text == 'North West') {
-      this.districts = ['Bojanala Platinum', 'Dr kenneth kaunda', 'Dr Ruth Segomotsi Mompati', 'Ngaka Modlri Mclema']
-    } else if (text == 'Eastern Cape') {
-      this.districts = ['Alfred Nzo', 'Amathole', 'Buffalo', 'Chris Hani', 'Joe Gqabi', 'Nelson Mandela Bay Metropolitan']
-    } else if (text == 'Western Cape') {
-      this.districts = ['Cape Winelands', 'Central Karoo', 'City of CapeTown', 'Eden', 'Overberg', 'West Coast']
-    } else if (text == 'KwaZulu-Natal') {
-      this.districts = ['Amajuba', 'eThekwini', 'Harry Gwala', 'ilembe', 'King Cetshwayo', 'Ugu', 'uMgungundlovu', 'uMkhanyakude', 'uThukela', 'Zululand']
-    } else if (text == 'Northern Cape') {
-      this.districts = ['Fances Baard', 'John Taolo Gaetsewe', 'Namakwa', 'Pixley Ka Seme', 'ZF Mgcawa']
-    } else if (text == 'Free State') {
-      this.districts = ['Fezile Dabi', 'lejweeleputswa', 'Mangaung Thabo Mfoutsanyana', 'Xhaariep']
-    } else {
-      this.districts = ['EHLANZENI', 'GERT SIBANDE', 'NKANGALA']
-    }
+    this.pdflink = `assets/pdfs/${text}.pdf`;
+    this.districts = this.globalService.getDistricts(text)
+   
+    this.globalService.selectedProvince = this.flagText;
+    this.globalService.selectedDistricts = this.districts;
   }
 
   Logout() {

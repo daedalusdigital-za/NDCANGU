@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BaseService } from 'src/app/services/base/base.service';
+import { GlobalService } from 'src/app/services/global/global.service';
 
 @Component({
   selector: 'app-add-patient',
@@ -22,10 +23,16 @@ export class AddPatientComponent implements OnInit {
     district: '',
     institution: ''
   }
-  constructor(private baseService: BaseService, private router: Router, private _route: ActivatedRoute) { }
+
+  provinces: any;
+  districts: any;
+  constructor(private baseService: BaseService, private router: Router, 
+    private _route: ActivatedRoute, private globalService: GlobalService) { }
 
   ngOnInit(): void {
     this.id = this._route?.snapshot.paramMap.get('id');
+    this.patient.province = this.globalService.selectedProvince;
+    this.districts = this.globalService.selectedDistricts;
     if (this.id) {
       this.getPatientById()
     }
@@ -57,17 +64,23 @@ export class AddPatientComponent implements OnInit {
     })
   }
 
+  provinceChange(text: string){
+    console.log(text);
+    
+    this.districts = this.globalService.getDistricts(text)
+  }
+
   getAge(dateString?: any) {
     var today = new Date();
     var birthDate = new Date(dateString);
     var age = today.getFullYear() - birthDate.getFullYear();
     var m = today.getMonth() - birthDate.getMonth();
     if (today.getFullYear() < birthDate.getFullYear() && m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
-        age--;
+      age--;
     }
 
 
-    this.patient.age =( age && age > 0) ? age : null;
+    this.patient.age = (age && age > 0) ? age : null;
     return age;
-}
+  }
 }
