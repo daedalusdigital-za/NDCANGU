@@ -56,4 +56,18 @@ export class AddPatientComponent implements OnInit {
       }
     })
   }
+
+  getAge(dateString?: any) {
+    var today = new Date();
+    var birthDate = new Date(dateString);
+    var age = today.getFullYear() - birthDate.getFullYear();
+    var m = today.getMonth() - birthDate.getMonth();
+    if (today.getFullYear() < birthDate.getFullYear() && m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+        age--;
+    }
+
+
+    this.patient.age =( age && age > 0) ? age : null;
+    return age;
+}
 }

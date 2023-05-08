@@ -77,14 +77,14 @@
                                         <div class="row">
                                             <div class="col-lg-6">
                                                 <div class="mb-3">
-                                                    <label for="progresspill-phoneno-input">Age</label>
-                                                    <input type="number" required name="age" [(ngModel)]="patient.age" class="form-control" placeholder="Enter your Age">
+                                                    <label for="progresspill-email-input">Date of Birth</label>
+                                                    <input type="date" required class="form-control" (change)="getAge(patient.dateOfBirth)" name="dob" [(ngModel)]="patient.dateOfBirth" placeholder="Enter your Date of birth">
                                                 </div>
                                             </div>
                                             <div class="col-lg-6">
                                                 <div class="mb-3">
-                                                    <label for="progresspill-email-input">Date of Birth</label>
-                                                    <input type="date" required class="form-control" name="dob" [(ngModel)]="patient.dateOfBirth" placeholder="Enter your Date of birth">
+                                                    <label for="progresspill-phoneno-input">Age</label>
+                                                    <input type="number" required name="age" readonly [(ngModel)]="patient.age" class="form-control" placeholder="Enter your Age">
                                                 </div>
                                             </div>
                                         </div>
