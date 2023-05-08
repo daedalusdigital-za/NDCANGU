@@ -35,18 +35,18 @@
                                     <div class="text-center mb-4">
                                         <h5>Fill all information below</h5>
                                     </div>
-                                    <form>
+                                    <form #form="ngForm" ngNativeValidate (ngSubmit)="form.valid && addEditPatient()">
                                         <div class="row">
                                             <div class="col-lg-6">
                                                 <div class="mb-3">
                                                     <label for="progresspill-firstname-input">First name</label>
-                                                    <input type="text" class="form-control" name="firstName" [(ngModel)]="patient.name" placeholder="Enter your First Name">
+                                                    <input type="text" required="true" class="form-control" name="firstName" [(ngModel)]="patient.name" placeholder="Enter your First Name">
                                                 </div>
                                             </div>
                                             <div class="col-lg-6">
                                                 <div class="mb-3">
                                                     <label for="progresspill-lastname-input"> Surname</label>
-                                                    <input type="text" class="form-control" name="last" [(ngModel)]="patient.surname" placeholder="Enter your Last Name">
+                                                    <input type="text" class="form-control" required name="last" [(ngModel)]="patient.surname" placeholder="Enter your Last Name">
                                                 </div>
                                             </div>
                                         </div>
@@ -55,13 +55,13 @@
                                             <div class="col-lg-6">
                                                 <div class="mb-3">
                                                     <label for="progresspill-phoneno-input">Phone</label>
-                                                    <input type="text" class="form-control" name="phoneNumber" [(ngModel)]="patient.phoneNumber" placeholder="Enter your Phone No">
+                                                    <input type="text" class="form-control" minlength="10" maxlength="10" required name="phoneNumber" [(ngModel)]="patient.phoneNumber" placeholder="Enter your Phone No">
                                                 </div>
                                             </div>
                                             <div class="col-lg-6">
                                                 <div class="mb-3">
                                                     <label for="progresspill-email-input">Email</label>
-                                                    <input type="email" class="form-control" name="email"  placeholder="Enter your Email">
+                                                    <input type="email" class="form-control" required name="email"  placeholder="Enter your Email">
                                                 </div>
                                             </div>
                                         </div>
@@ -69,7 +69,7 @@
                                             <div class="col-lg-12">
                                                 <div class="mb-3">
                                                     <label for="progresspill-address-input">Address</label>
-                                                    <textarea name="address" class="form-control" rows="2" placeholder="Enter your Address"></textarea>
+                                                    <textarea name="address" required class="form-control" rows="2" placeholder="Enter your Address"></textarea>
                                                 </div>
                                             </div>
                                         </div>
@@ -78,13 +78,13 @@
                                             <div class="col-lg-6">
                                                 <div class="mb-3">
                                                     <label for="progresspill-phoneno-input">Age</label>
-                                                    <input type="number" name="age" [(ngModel)]="patient.age" class="form-control" placeholder="Enter your Age">
+                                                    <input type="number" required name="age" [(ngModel)]="patient.age" class="form-control" placeholder="Enter your Age">
                                                 </div>
                                             </div>
                                             <div class="col-lg-6">
                                                 <div class="mb-3">
                                                     <label for="progresspill-email-input">Date of Birth</label>
-                                                    <input type="date" class="form-control" name="dob" [(ngModel)]="patient.dateOfBirth" placeholder="Enter your Date of birth">
+                                                    <input type="date" required class="form-control" name="dob" [(ngModel)]="patient.dateOfBirth" placeholder="Enter your Date of birth">
                                                 </div>
                                             </div>
                                         </div>
@@ -93,7 +93,7 @@
                                             <div class="col-lg-6">
                                                 <div>
                                                     <label for="exampleDataList" class="form-label">Province</label>
-                                                    <input class="form-control" list="datalistOptions" [(ngModel)]="patient.province" name="province" 
+                                                    <input class="form-control" required list="datalistOptions" [(ngModel)]="patient.province" name="province" 
                                                         placeholder="Type in Province...">
                                                     <datalist id="datalistOptions">
                                                         <option value="Mpumalanga">
@@ -112,7 +112,7 @@
                                                 <div class="mb-3">
                                                     <div>
                                                         <label for="exampleDataList" class="form-label">District</label>
-                                                        <input class="form-control" list="datalistOptions" [(ngModel)]="patient.district" name="district" 
+                                                        <input class="form-control" required list="datalistOptions" [(ngModel)]="patient.district" name="district" 
                                                             placeholder="Type in Province...">
                                                         <datalist id="datalistOptions">
                                                             <option value="Sedibeng">
@@ -142,22 +142,23 @@
                                             <div class="col-lg-6">
                                                 <div class="mb-3">
                                                     <label class="form-label">Patient ID</label>
-                                                    <input type="text" class="form-control" [(ngModel)]="patient.patientNumber" name="patient" >
+                                                    <input type="text" required class="form-control" [(ngModel)]="patient.patientNumber" name="patient" >
                                                 </div>
                                             </div>
                                             <div class="col-lg-6">
                                                 <div class="mb-3">
                                                     <label class="form-label">Institution</label>
-                                                    <input type="text" class="form-control" [(ngModel)]="patient.institution" name="Institution">
+                                                    <input type="text" required class="form-control" [(ngModel)]="patient.institution" name="Institution">
                                                 </div>
                                             </div>
                                         </div>
                                       
-                                    </form>
+                                    
                                     
                                     <ul class="pager wizard twitter-bs-wizard-pager-link">
-                                        <li class="next"><a href="javascript: void(0);" class="btn btn-primary" (click)="createPatient()">Confirm Details <i class="bx bx-chevron-right ms-1"></i></a></li>
+                                        <li class="next"> <button class="btn btn-primary w-100 waves-effect waves-light" type="submit">Save <i class="bx bx-chevron-right ms-1"></i></button></li>
                                     </ul>
+                                </form>
                                 </div>
                                 <div class="tab-pane" id="progress-company-document">
                                   <div>
@@ -168,7 +169,11 @@
                                     
                                     <ul class="pager wizard twitter-bs-wizard-pager-link">
                                         <li class="previous disabled"><a href="javascript: void(0);" class="btn btn-primary" onclick="nextTab()"><i class="bx bx-chevron-left me-1"></i> Previous</a></li>
-                                        <li class="next"><a href="javascript: void(0);" class="btn btn-primary" onclick="nextTab()">Next <i class="bx bx-chevron-right ms-1"></i></a></li>
+                                        <li class="next">
+                                            <button class="btn btn-primary w-100 waves-effect waves-light" type="submit">Save <i class="bx bx-chevron-right ms-1"></i></button>
+                                        </li>
+
+                                        
                                     </ul>
                                   </div>
                                 </div>

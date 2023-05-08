@@ -18,11 +18,11 @@ const routes: Routes = [
         component: DashboardComponent
       },
       {
-        path: 'list-faqs',
+        path: 'Faqs',
         component: ListFaqsComponent
       },
       {
-        path: 'list-tutorials',
+        path: 'Tutorials',
         component: ListTutorialsComponent
       },
       {

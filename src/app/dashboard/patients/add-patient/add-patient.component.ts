@@ -32,7 +32,7 @@ export class AddPatientComponent implements OnInit {
   }
 
 
-  createPatient() {
+  addEditPatient() {
 
     if (this.id) {
       this.baseService.basePatch('Patient/Update', this.patient).subscribe({
