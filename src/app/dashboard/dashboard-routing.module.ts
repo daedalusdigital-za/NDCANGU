@@ -18,24 +18,24 @@ const routes: Routes = [
         component: DashboardComponent
       },
       {
-        path: 'Faqs',
+        path: 'faqs',
         component: ListFaqsComponent
       },
       {
-        path: 'Tutorials',
+        path: 'tutorials',
         component: ListTutorialsComponent
       },
       {
-        path: 'list-reports',
+        path: 'reports',
         component: ListReportsComponent
       },
 
       {
-        path: 'list-stats',
+        path: 'stats',
         component: ListStatsComponent
       },
       {
-        path: 'add-stats',
+        path: 'document/upload',
         component: AddStatsComponent
       },
       {
