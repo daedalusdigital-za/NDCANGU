@@ -33,25 +33,26 @@
                                 <div class="col-md-6">
                                     <div class="mb-3">
                                         <label class="form-label" for="formrow-email-input">First Name</label>
-                                        <input type="text" class="form-control" id="formrow-firstname-input">
+                                        <input type="text" class="form-control" name="name" [(ngModel)]="formSearch.name" id="formrow-firstname-input">
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="mb-3">
                                         <label class="form-label" for="formrow-password-input">Surname</label>
-                                        <input type="text" class="form-control" id="formrow-firstname-input">
+                                        <input type="text" class="form-control" name="surName" [(ngModel)]="formSearch.surname"  id="formrow-firstname-input">
                                     </div>
                                 </div>
                             </div>
                             <div class="mb-3">
                                 <label class="form-label" for="formrow-firstname-input">Patient Number</label>
-                                <input type="text" class="form-control" id="formrow-firstname-input">
+                                <input type="text" class="form-control" name="patientNumber" [(ngModel)]="formSearch.patientNumber"  id="formrow-firstname-input">
                             </div>
 
                             <div class="form-group">
                             </div>
                             <div class="mt-4">
-                                <button type="submit" class="btn btn-info btn-rounded waves-effect waves-light">Search</button>
+                                <button type="submit" class="btn btn-info btn-rounded waves-effect waves-light" (click)="onSearch()">Search</button>
+                                <button type="submit" class="btn btn-info btn-rounded waves-effect waves-light" style="margin-left: 2%;" (click)="onClear()">Clear</button>
                             </div>
                         </form>
                     </div>

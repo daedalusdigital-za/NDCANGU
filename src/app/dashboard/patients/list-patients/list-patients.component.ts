@@ -14,7 +14,13 @@ import { IColumns } from 'src/app/shared/interfaces/dynamic-grid-interfaces';
 })
 export class ListPatientsComponent implements OnInit {
 
+  orgSource: Array<any> = [];
   source: Array<any> = [];
+  formSearch: any = {
+    name: '',
+    surname: '',
+    patientNumber: '',
+  };
   cols: IColumns[] = [{
     header: 'Patient No',
     field: 'patientNumber',
@@ -149,7 +155,8 @@ export class ListPatientsComponent implements OnInit {
   private getPatients() {
     this.baseService.baseGet('Patient/GetAll').subscribe({
       next: (response: any) => {
-        this.source = response;
+        this.source = response; 
+        this.orgSource = response;
       }
     })
   }
@@ -169,5 +176,30 @@ export class ListPatientsComponent implements OnInit {
         })
       }
     });
+  }
+
+
+  onSearch(){
+    if(this.formSearch.name){
+       this.source = this.source.filter((item: any) => item.name.toLowerCase().indexOf(this.formSearch.name) > -1);
+    } else if(this.formSearch.surname){
+      this.source = this.source.filter((item: any) => item.surname.toLowerCase().indexOf(this.formSearch.surname) > -1)
+    } else if(this.formSearch.patientNumber){
+       this.source =this.source.filter((item: any) => item.patientNumber.toLowerCase().indexOf(this.formSearch.patientNumber) > -1)      
+    } else if(this.formSearch.name && this.formSearch.surname && this.formSearch.patientNumber){
+      this.source = this.source.filter((item: any) => (item.name.toLowerCase().indexOf(this.formSearch.name) > -1) || item.surname.toLowerCase().indexOf(this.formSearch.surname) > -1 || item.patientNumber.toLowerCase().indexOf(this.formSearch.patientNumber) > -1) 
+    } else {
+        this.source = this.orgSource;
+     }
+     if(!this.source.length){
+      this.toastrService.error('No record found!')
+     }
+  }
+  
+  onClear(){
+    this.formSearch.name ='';
+    this.formSearch.surname ='';
+    this.formSearch.patientNumber ='';
+    this.source = this.orgSource;
   }
 }
