@@ -118,26 +118,28 @@ export class ListPatientsComponent implements OnInit {
     },
   },
   {
-    header: 'View/Edit',
-    field: 'View/Edit',
+    header: 'Create Report',
+    field: 'Create Report',
     isAction: true,
     isFilter: false,
     isSortable: false,
     onClick: (item: any) => {
-      this.router.navigateByUrl('dashboard/patients/edit/' + item.id);
+      // this.router.navigateByUrl('dashboard/patients/edit/' + item.id);
+      this.router.navigateByUrl('dashboard/reports/add');
     },
     getValue: function () {
       return this.field
     },
   },
   {
-    header: 'Delete',
-    field: 'Delete',
+    header: 'View Medical History',
+    field: 'View Medical History',
     isAction: true,
     isFilter: false,
     isSortable: false,
     onClick: (item: any) => {
-      this.confirm(item.id);
+      // this.confirm(item.id);
+      this.router.navigateByUrl('dashboard/reports');
     },
     getValue: function () {
       return this.field
