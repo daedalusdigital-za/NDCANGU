@@ -5126,7 +5126,7 @@ textarea.form-control-lg {
   border-bottom: 1px solid var(--bs-card-border-color);
 }
 .card-header:first-child {
-  border-radius: calc(0.25rem - 1px) calc(0.25rem - 1px) 0 0;
+  border-radius: 24px;
 }
 
 .card-footer {

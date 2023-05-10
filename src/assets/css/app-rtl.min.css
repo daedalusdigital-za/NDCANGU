@@ -1,9 +1,9 @@
 /*
-Template Name: Minia - Admin & Dashboard Template
-Author: Themesbrand
+Project Name : Ncd Application
+Author: Welcome Malamlela
 Version: 1.5.0.
-Website: https://themesbrand.com/
-Contact: themesbrand@gmail.com
+Website: https://Promedtechnologies.co.za/
+Contact: info@daedalusdigital.co.za.com
 File: Main Css File
 */
 @import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600&display=swap");
@@ -27,7 +27,7 @@ File: Main Css File
   --bs-sidebar-dark-menu-item-icon-color: #858d98;
   --bs-sidebar-dark-menu-item-hover-color: #ffffff;
   --bs-sidebar-dark-menu-item-active-color: #ffffff;
-  --bs-header-bg: #ffffff;
+  --bs-header-bg: #eaebec;
   --bs-header-item-color: #555b6d;
   --bs-header-dark-bg: #ffffff;
   --bs-header-dark-item-color: #e9ecef;
@@ -43,7 +43,7 @@ File: Main Css File
   --bs-topnav-item-color-active: #fff;
   --bs-menu-item-color: #7b8190;
   --bs-menu-item-active-color: #2385db;
-  --bs-body-bg: #ffffff;
+  --bs-body-bg: #eaebec;
   --bs-body-color: #495057;
   --bs-body-color-rgb: 73, 80, 87;
   --bs-apex-grid-color: #f8f9fa;
@@ -141,7 +141,7 @@ File: Main Css File
   --bs-topnav-item-color-active: #fff;
   --bs-menu-item-color: #99a4b1;
   --bs-menu-item-active-color: #ffffff;
-  --bs-body-bg: #313533;
+  --bs-body-bg: #eaebec;
   --bs-body-color: #ced4da;
   --bs-body-color-rgb: 73, 80, 87;
   --bs-apex-grid-color: #373c39;

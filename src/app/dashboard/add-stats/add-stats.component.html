@@ -28,27 +28,32 @@
                         </p>
                     </div>
                     <div class="card-body">
-
-                        <div>
-                            <form action="#" class="dropzone dz-clickable">
-                                
+                        <form class="dropzone dz-clickable position-relative" appDnd
+                        (fileDropped)="onFileDropped($event)">
+                            <div >
+                                <input class="position-absolute opacity-0 w-100" type="file" #fileDropRef id="fileDropRef"
+                                    multiple (change)="fileBrowseHandler($event)" />
                                 <div class="dz-message needsclick">
                                     <div class="mb-3">
                                         <i class="display-4 text-muted bx bx-cloud-upload"></i>
                                     </div>
-
                                     <h5>Drop files here or click to upload.</h5>
                                 </div>
-                            </form>
-                        </div>
-
+                            </div>
+                        </form>
+                        <ng-container *ngIf="files.length !== 0">
+                            <h5 class="mt-3">List of Uploaded File(s)</h5>
+                            <div class="row my-3" *ngFor="let file of files; let i = index;">
+                                <div class="col-12">
+                                    ({{ i + 1 }}) <strong>{{ file.name }}</strong> - <em>{{ formatBytes(file?.size) }}</em>
+                                </div>
+                            </div>
+                        </ng-container>
                         <div class="text-center mt-4">
-                            <button type="button" class="btn btn-info w-50 btn-rounded waves-effect waves-light w-sm">
-                                <i class="mdi mdi-upload d-block font-size-16"></i> Send Files
-                            </button>
+                            <button type="button" class="btn btn-primary waves-effect waves-light">Send Files</button>
                         </div>
                     </div>
-                </div>
+                
             </div> <!-- end col -->
         </div> <!-- end row -->
         
