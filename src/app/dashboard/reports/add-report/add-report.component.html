@@ -35,19 +35,20 @@
                                     <div class="text-center mb-4">
                                         <h5>Patient Details</h5>
                                     </div>
-                                    <form>
+                                    <!-- form.valid &&  -->
+                                    <form #form="ngForm" ngNativeValidate (ngSubmit)="addEditReport()">
 
                                         <div class="row">
                                             <div class="col-lg-6">
                                                 <div class="mb-3">
                                                     <label for="progresspill-firstname-input">Patient Id</label>
-                                                    <input type="text" class="form-control" name="firstName" [(ngModel)]="patient.name" placeholder="Enter Patient ID">
+                                                    <input type="text" class="form-control" name="patientId" [(ngModel)]="report.patientId" placeholder="Enter Patient ID">
                                                 </div>
                                             </div>
                                             <div class="col-lg-6">
                                                 <div class="mb-3">
                                                     <label for="progresspill-lastname-input">First Name</label>
-                                                    <input type="text" class="form-control" name="last" [(ngModel)]="patient.name" placeholder="First Name">
+                                                    <input type="text" class="form-control" name="flast" [(ngModel)]="report.name" placeholder="First Name">
                                                 </div>
                                             </div>
                                         </div>
@@ -57,32 +58,32 @@
                                             <div class="col-lg-6">
                                                 <div class="mb-3">
                                                     <label for="progresspill-firstname-input">Gender</label>
-                                                    <input type="text" class="form-control" name="firstName" [(ngModel)]="patient.name" placeholder="Enter Gender">
+                                                    <input type="text" class="form-control" name="gender" [(ngModel)]="report.gender" placeholder="Enter Gender">
                                                 </div>
                                             </div>
                                             <div class="col-lg-6">
                                                 <div class="mb-3">
                                                     <label for="progresspill-lastname-input">District</label>
-                                                    <input type="text" class="form-control" name="last" [(ngModel)]="patient.name" placeholder="Enter District">
+                                                    <input type="text" class="form-control" name="district" [(ngModel)]="report.district" placeholder="Enter District">
                                                 </div>
                                             </div>
                                         </div>
                                        
-                                        <div class="text-center mb-4">
+                                        <!-- <div class="text-center mb-4">
                                             <h5>Testing</h5>
-                                        </div>
+                                        </div> -->
 
                                         <div class="row">
                                             <div class="col-lg-6">
                                                 <div class="mb-3">
                                                     <label for="progresspill-phoneno-input">Glucose</label>
-                                                    <input type="number" name="age" [(ngModel)]="patient.name" class="form-control" placeholder="Glucose Reading">
+                                                    <input type="number" name="glucose" [(ngModel)]="report.glucose" class="form-control" placeholder="Glucose Reading">
                                                 </div>
                                             </div>
                                             <div class="col-lg-6">
                                                 <div class="mb-3">
                                                     <label for="progresspill-email-input">HBA1C</label>
-                                                    <input type="text" class="form-control" name="dob" [(ngModel)]="patient.name" placeholder="HBA1C Reading">
+                                                    <input type="text" class="form-control" name="hbA1C" [(ngModel)]="report.hbA1C" placeholder="HBA1C Reading">
                                                 </div>
                                             </div>
                                         </div>
@@ -91,14 +92,14 @@
                                             <div class="col-lg-6">
                                                 <div class="mb-3">
                                                     <label for="progresspill-email-input">Key Tone</label>
-                                                    <input type="number" class="form-control" name="dob" [(ngModel)]="patient.name" placeholder="KeyTone Reading">
+                                                    <input type="number" class="form-control" name="keyTone" [(ngModel)]="report.keyTone" placeholder="KeyTone Reading">
                                                 </div>
                                             </div>
                                             <div class="col-lg-6">
                                                 <div class="mb-3">
                                                     <div class="mb-3">
                                                         <label for="progresspill-email-input">Total Cholesterol</label>
-                                                        <input type="number" class="form-control" name="dob" [(ngModel)]="patient.name" placeholder="Cholesterol Reading">
+                                                        <input type="number" class="form-control" name="totalColestorl" [(ngModel)]="report.totalColestorl" placeholder="Cholesterol Reading">
                                                     </div>
                                                 </div>
                                             </div>
@@ -108,14 +109,14 @@
                                             <div class="col-lg-6">
                                                 <div class="mb-3">
                                                     <label for="progresspill-email-input">Uric Acid</label>
-                                                    <input type="number" class="form-control" name="dob" [(ngModel)]="patient.name" placeholder="uric Acid Reading">
+                                                    <input type="number" class="form-control" name="uricAcid" [(ngModel)]="report.uricAcid" placeholder="uric Acid Reading">
                                                 </div>
                                             </div>
                                             <div class="col-lg-6">
                                                 <div class="mb-3">
                                                     <div class="mb-3">
                                                         <label for="progresspill-email-input">Lactate</label>
-                                                        <input type="number" class="form-control" name="dob" [(ngModel)]="patient.name" placeholder="Lactate Reading">
+                                                        <input type="number" class="form-control" name="lactate" [(ngModel)]="report.lactate" placeholder="Lactate Reading">
                                                     </div>
                                                 </div>
                                             </div>
@@ -125,13 +126,13 @@
                                             <div class="col-lg-6">
                                                 <div class="mb-3">
                                                     <label class="form-label">Blood Pressure</label>
-                                                    <input type="number" class="form-control" name="patient" [(ngModel)]="patient.name">
+                                                    <input type="number" class="form-control" name="bloodPressue" [(ngModel)]="report.bloodPressue">
                                                 </div>
                                             </div>
                                             <div class="col-lg-6">
                                                 <div class="mb-3">
                                                     <label class="form-label">Next Appointment Date</label>
-                                                    <input type="date" class="form-control" name="Institution" [(ngModel)]="patient.name">
+                                                    <input type="date" class="form-control" name="nextAppointmentDate" [(ngModel)]="report.nextAppointmentDate">
                                                 </div>
                                             
                                             </div>
@@ -141,13 +142,13 @@
                                             <div class="col-lg-6">
                                                 <div class="mb-3">
                                                     <label class="form-label">Recomendations</label>
-                                                    <input type="text" class="form-control" name="patient" [(ngModel)]="patient.name">
+                                                    <input type="text" class="form-control" name="recomendations" [(ngModel)]="report.recomendations">
                                                 </div>
                                             </div>
                                             <div class="col-lg-6">
                                                 <div class="mb-3">
                                                     <label class="form-label">Remedies</label>
-                                                    <input type="text" class="form-control" name="Institution" [(ngModel)]="patient.name">
+                                                    <input type="text" class="form-control" name="remidies" [(ngModel)]="report.remidies">
                                                 </div>
                                             </div>
                                         </div>
@@ -156,11 +157,15 @@
                                           
                                         </div>
                                       
-                                    </form>
+                                   
                                     
                                     <ul class="pager wizard twitter-bs-wizard-pager-link">
-                                        <li class="next"><a href="javascript: void(0);" class="btn btn-info btn-rounded waves-effect waves-light" onclick="nextTab()">Confirm Details <i class="bx bx-chevron-right ms-1"></i></a></li>
+                                        <li class="next">
+                                            <button class="btn btn-primary w-100 waves-effect waves-light" type="submit">Save <i class="bx bx-chevron-right ms-1"></i></button>
+                                            <!-- <a href="javascript: void(0);" class="btn btn-info btn-rounded waves-effect waves-light" onclick="nextTab()">Confirm Details <i class="bx bx-chevron-right ms-1"></i></a> -->
+                                        </li>
                                     </ul>
+                                </form>
                                 </div>
                                 <div class="tab-pane" id="progress-company-document">
                                   <div>

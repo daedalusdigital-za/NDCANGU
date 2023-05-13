@@ -125,7 +125,7 @@ export class ListPatientsComponent implements OnInit {
     isSortable: false,
     onClick: (item: any) => {
       // this.router.navigateByUrl('dashboard/patients/edit/' + item.id);
-      this.router.navigateByUrl('dashboard/reports/add');
+      this.router.navigateByUrl('dashboard/reports/add/'+item.id, { state: { data: item } });
     },
     getValue: function () {
       return this.field

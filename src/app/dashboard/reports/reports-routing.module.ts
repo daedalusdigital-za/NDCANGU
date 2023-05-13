@@ -10,6 +10,10 @@ const routes: Routes = [
         path: 'add',
         component: AddReportComponent
       },
+      {
+        path: 'add/:id',
+        component: AddReportComponent
+      },
       // {
       //   path: 'add',
       //   component: AddPatientComponent
