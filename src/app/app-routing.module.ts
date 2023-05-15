@@ -3,6 +3,9 @@ import { RouterModule, Routes } from '@angular/router';
 import { AppComponent } from './app.component';
 import { LockUserComponent } from './lock-user/lock-user.component';
 import { AuthGuard } from './shared/guards/auth.guard';
+import { ProfileComponent } from './profile/profile.component';
+import { OneComponent } from './one/one.component';
+import { TwoComponent } from './two/two.component';
 
 const routes: Routes = [
   {
@@ -19,6 +22,18 @@ const routes: Routes = [
   {
     path: 'lock-user',
     component: LockUserComponent
+  },
+  {
+    path: 'profile',
+    component: ProfileComponent
+  },
+  {
+    path: 'one',
+    component: OneComponent
+  },
+  {
+    path: 'two',
+    component: TwoComponent
   },
   {
     path: '', redirectTo: 'auth', pathMatch: 'full'
