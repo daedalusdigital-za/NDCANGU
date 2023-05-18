@@ -1,1 +1,39 @@
-<p>one works!</p>
+<div class="auth-content my-auto">
+    <div class="text-center">
+        <h5 class="mb-0">Welcome</h5>
+        <p class="text-muted mt-2">Sign in to continue to NCD.</p>
+    </div>
+    <form #form="ngForm" ngNativeValidate class="needs-validation" >
+        
+        <div class="text-center">
+
+            <div class="avatar-lg mx-auto">
+                <div class="avatar-title rounded-circle bg-light">
+                    <i class="bx bxs-envelope h2 mb-0 text-primary"></i>
+                </div>
+            </div>
+            <div class="p-2 mt-4">
+
+                <h4>Verify your Phone Number</h4>
+                <p class="mb-5">Please enter the 4 digit code sent to <span
+                        class="fw-bold">Phone Number</span></p>
+
+                <form routerLink="/">
+                    <div class="row">
+                    
+                    </div>
+
+                    <div class="mt-4">
+                        <a routerLink="/"
+                            class="btn btn-primary w-100 waves-effect waves-light">Confirm</a>
+                    </div>
+                </form>
+
+            </div>
+
+        </div>
+        
+
+    </form>
+
+</div>
