@@ -13,6 +13,8 @@ import { AuthTokenInterceptor } from './shared/interceptors/auth-token.intercept
 import { ProfileComponent } from './profile/profile.component';
 import { OneComponent } from './one/one.component';
 import { TwoComponent } from './two/two.component';
+import { PageNameComponent } from './page-name/page-name.component';
+import { TermsComponent } from './terms/terms.component';
 
 @NgModule({
   declarations: [
@@ -20,6 +22,8 @@ import { TwoComponent } from './two/two.component';
     ProfileComponent,
     OneComponent,
     TwoComponent,
+    PageNameComponent,
+    TermsComponent,
     ],
   imports: [
     BrowserModule,
