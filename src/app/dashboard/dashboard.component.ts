@@ -98,9 +98,9 @@ export class DashboardComponent implements OnInit {
               show: false
             },
             data: [
-              { value: 1548, name: 'Borderline high' },
-              { value: 775, name: 'High' },
-              { value: 300, name: 'Normal', selected: true },
+              { value: 1548, name: 'Male' },
+              { value: 775, name: 'Female' },
+              { value: 300, name: 'Gestational', selected: true },
             ]
           },
           {

@@ -174,11 +174,10 @@
                 <div class="dropdown-menu dropdown-menu-end">
                     <!-- item-->
 
-                    <a class="dropdown-item" routerLink="/lock-user"><i class="mdi mdi-lock font-size-16 align-middle me-1"></i> Lock screen</a>
+                    <a class="dropdown-item" routerLink="/lock-user"><i class="mdi mdi-lock font-size-16 align-middle me-1"></i> Lock User</a>
                     <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" routerLink="/dashboard/stats"><i class="mdi mdi-logout font-size-16 align-middle me-1"></i> Profile</a>
-                    <a class="dropdown-item" routerLink="/one"><i class="mdi mdi-logout font-size-16 align-middle me-1"></i> Support</a>
-                    <a class="dropdown-item" routerLink="/lock-user"><i class="mdi mdi-logout font-size-16 align-middle me-1"></i> Lock User</a>
+                    <a class="dropdown-item" routerLink="/dashboard/stats"><i class="mdi mdi-account-cog-outline font-size-16 align-middle me-1"></i> Profile</a>
+                    <a class="dropdown-item" routerLink="/one"><i class="mdi mdi-logout font-size-16 align-middle me-1"></i> Support ticket</a>
                     <a class="dropdown-item" (click)="Logout()" routerLink="/auth/login"><i class="mdi mdi-logout font-size-16 align-middle me-1"></i> Logout</a>
                 </div>
             </div>
@@ -196,14 +195,14 @@
 
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle arrow-none" routerLink="/dashboard"  id="topnav-dashboard" role="button">
-                            <i data-feather="home"></i> <span data-key="t-dashboards">Home</span>
+                            <i class="dripicons dripicons-home" data-feather="home"></i> <span data-key="t-dashboards"> Home</span>
                         </a>
                     </li>
 
 
                     <li class="nav-item dropdown" *ngIf="isMenuShown">
                         <a class="nav-link dropdown-toggle arrow-none"  id="topnav-pages" role="button">
-                            <i data-feather="user"></i><span data-key="t-apps">Users</span> <div class="arrow-down"></div>
+                            <i class="dripicons  dripicons-user" data-feather="user"></i><span data-key="t-apps"> Users</span> <div class="arrow-down"></div>
                         </a>
                         <div class="dropdown-menu" aria-labelledby="topnav-pages">
 
@@ -213,7 +212,7 @@
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle arrow-none"  id="topnav-components" role="button">
-                            <i data-feather="file-text"></i><span data-key="t-components">Patient</span> <div class="arrow-down"></div>
+                            <i class="dripicons  dripicons-medical" data-feather="file-text"></i><span data-key="t-components"> Patient</span> <div class="arrow-down"></div>
                         </a>
                         <div class="dropdown-menu" aria-labelledby="topnav-components">
                                     <div class="dropdown">
@@ -226,7 +225,7 @@
 
                      <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle arrow-none"  id="topnav-components" role="button">
-                            <i data-feather="file-text"></i><span data-key="t-components">Reports</span> <div class="arrow-down"></div>
+                            <i class="dripicons  dripicons-document-edit" data-feather="file-text"></i><span data-key="t-components"> Reports</span> <div class="arrow-down"></div>
                         </a>
                         <div class="dropdown-menu" aria-labelledby="topnav-components">
                                     <div class="dropdown">
@@ -238,20 +237,20 @@
 
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle arrow-none" id="topnav-uielement" role="button">
-                            <i data-feather="tool"></i>
-                            <span data-key="t-elements">Tools</span> 
+                            <i class="dripicons   dripicons-monitor" data-feather="tool"></i>
+                            <span data-key="t-elements"> Tools</span> 
                             <div class="arrow-down"></div>
                         </a>
 
                         <div class="dropdown-menu" aria-labelledby="topnav-table">
                             <a routerLink="/dashboard/document/upload" class="dropdown-item" data-key="t-data-tables">Upload</a>
-                            <a routerLink="/dashboard/stats" class="dropdown-item" data-key="t-responsive-table">Statistics</a>
+                            <a routerLink="/two" class="dropdown-item" data-key="t-responsive-table">Statistics</a>
                         </div>
                     </li>
 
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle arrow-none" id="topnav-more" role="button">
-                            <i data-feather="help-circle"></i><span data-key="t-extra-pages">Help</span> 
+                            <i class="dripicons  dripicons-question" data-feather="help-circle"></i><span data-key="t-extra-pages"> Help</span> 
                             <div class="arrow-down"></div>
                         </a>
                        <div class="dropdown-menu" aria-labelledby="topnav-more">
@@ -264,7 +263,7 @@
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle arrow-none" id="topnav-more" role="button">
-                            <i data-feather="download"></i><span data-key="t-extra-pages">Download</span> 
+                            <i class="dripicons  dripicons-cloud-download" data-feather="download"></i><span data-key="t-extra-pages"> Download</span> 
                             <div class="arrow-down"></div>
                         </a>
                        <div class="dropdown-menu" aria-labelledby="topnav-more">
