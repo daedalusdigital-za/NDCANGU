@@ -6,7 +6,7 @@ import { DashboardComponent } from './dashboard.component';
 import { DashboardLayoutComponent } from './dashboard-layout/dashboard-layout.component';
 import { ListFaqsComponent } from './list-faqs/list-faqs.component';
 import { ListTutorialsComponent } from './list-tutorials/list-tutorials.component';
-import { ListReportsComponent } from './list-reports/list-reports.component';
+import { ListReportsComponent } from './reports/list-reports/list-reports.component';
 import { AddStatsComponent } from './add-stats/add-stats.component';
 import { ListStatsComponent } from './list-stats/list-stats.component';
 import { NgApexchartsModule } from 'ng-apexcharts';
