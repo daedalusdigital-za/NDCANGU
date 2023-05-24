@@ -68,8 +68,8 @@ export class AddReportComponent implements OnInit {
       console.log(window.history.state.data);
       const patient: any = window.history.state.data;
       this.report.patientId = patient.id;
-      // this.report.name = patient.name ? patient.name : '';
-      // this.report.surname = patient.surname ? patient.surname : '';
+      this.report.name = patient.name ? patient.name : '';
+      this.report.surname = patient.surname ? patient.surname : '';
       this.report.gender = patient.gender ? patient.gender : '';
       this.report.province = patient.province ? patient.province : '';
       this.report.district = patient.district ? patient.district : '';
