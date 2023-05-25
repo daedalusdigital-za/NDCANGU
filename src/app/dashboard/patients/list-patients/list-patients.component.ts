@@ -1,19 +1,23 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { ConfirmationService } from 'primeng/api';
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 
 import { BaseService } from 'src/app/services/base/base.service';
 import { IColumns } from 'src/app/shared/interfaces/dynamic-grid-interfaces';
+import { MedicalHistoryComponent } from '../medical-history/medical-history.component';
+import { GlobalService } from 'src/app/services/global/global.service';
 
 @Component({
   selector: 'app-list-patients',
   templateUrl: './list-patients.component.html',
   styleUrls: ['./list-patients.component.scss'], 
-  providers: [ConfirmationService]
+  providers: [ConfirmationService, DialogService],
 })
 export class ListPatientsComponent implements OnInit {
 
+  ref: DynamicDialogRef;
   orgSource: Array<any> = [];
   source: Array<any> = [];
   formSearch: any = {
@@ -139,7 +143,18 @@ export class ListPatientsComponent implements OnInit {
     isSortable: false,
     onClick: (item: any) => {
       // this.confirm(item.id);
-      this.router.navigateByUrl('dashboard/reports');
+      
+      this.globalService.pid = item.id
+
+
+      this.dialogService.open(MedicalHistoryComponent, {
+        header: `${item?.name} ${item?.surname} History`,
+        width: '70%',
+        contentStyle: {"max-height": "500px", "overflow": "auto"},
+        baseZIndex: 10000,
+        // data: item.id
+    });
+      // this.router.navigateByUrl('dashboard/reports');
     },
     getValue: function () {
       return this.field
@@ -147,7 +162,8 @@ export class ListPatientsComponent implements OnInit {
   },
   ];
   constructor(private baseService: BaseService, private confirmationService: ConfirmationService, 
-    private toastrService: ToastrService, private router: Router) { }
+    private toastrService: ToastrService, private router: Router, public dialogService: DialogService,
+    private globalService: GlobalService) { }
 
   ngOnInit(): void {
     this.getPatients();
