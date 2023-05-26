@@ -10,6 +10,7 @@ export class GlobalService {
   topMenuSubject = new Subject<any>();
   selectedProvince: any;
   selectedDistricts: any;
+  pid: any;
   constructor( ) { }
 
   getLocalStorage(key: string){

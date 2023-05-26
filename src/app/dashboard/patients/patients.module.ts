@@ -7,18 +7,22 @@ import { FormsModule } from '@angular/forms';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ButtonModule } from 'primeng/button';
+import { MedicalHistoryComponent } from './medical-history/medical-history.component';
+import {DynamicDialogModule} from 'primeng/dynamicdialog';
 
 
 
 @NgModule({
   declarations: [
     ListPatientsComponent,
-    AddPatientComponent
+    AddPatientComponent,
+    MedicalHistoryComponent
   ],
   imports: [
     CommonModule,
     FormsModule,
     SharedModule,
+    DynamicDialogModule,
     ConfirmDialogModule,
     ButtonModule,
     PatientsRoutingModule
