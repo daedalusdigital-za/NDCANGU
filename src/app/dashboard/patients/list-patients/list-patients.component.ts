@@ -86,7 +86,7 @@ export class ListPatientsComponent implements OnInit {
     },
   },
   {
-    header: 'Type',
+    header: 'Ges',
     field: 'gesttational',
     isFilter: false,
     isSortable: false,
