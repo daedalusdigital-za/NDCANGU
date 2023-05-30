@@ -21,20 +21,17 @@
         
         <div class="row">
             <div class="col-lg-12">
-                <div class="card">
-                    <div class="card-header">
-                        <h4 class="card-title mb-0">Patient Details</h4>
+                <div class="card customize-card">
+                    <div class="card-header ">
+                        <h2 >Patient Details</h2>
                     </div>
-                    <div class="card-body">
+                    <div class="card-body customize-card">
 
                         <div class="twitter-bs-wizard">
                            
                            
                             <div class="tab-content twitter-bs-wizard-tab-content">
                                 <div class="tab-pane active" id="progress-seller-details">
-                                    <div class="text-center mb-4">
-                                        <h5>Fill all information below</h5>
-                                    </div>
                                     <form #form="ngForm" ngNativeValidate (ngSubmit)="form.valid && addEditPatient()">
                                         <div class="row">
                                             <div class="col-lg-6">
@@ -66,12 +63,25 @@
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-lg-12">
+                                            <div class="col-lg-6">
                                                 <div class="mb-3">
                                                     <label for="progresspill-address-input">Address</label>
                                                     <textarea name="address" required class="form-control" rows="2" placeholder="Enter your Address"></textarea>
                                                 </div>
                                             </div>
+                                            <div class="col-lg-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Gender</label>
+                                                    <select class="form-select">
+                                                        <option>Male</option>
+                                                        <option>Female</option>
+                                                    </select>
+                                                </div>
+                                                <div class="form-check form-switch" dir="ltr">
+                                                    <input type="checkbox" class="form-check-input" disabled id="customSwitch2">
+                                                    <label class="form-check-label" for="customSwitch2">Gestational</label>
+                                                </div>
+                                        </div>
                                         </div>
 
                                         <div class="row">
@@ -112,7 +122,7 @@
                                                     <div>
                                                         <label for="exampleDataList" class="form-label">District</label>
                                                         <input class="form-control" required list="datalistOptionsDistricts" [(ngModel)]="patient.district" name="district" 
-                                                            placeholder="Type in Province...">
+                                                            placeholder="Type in District...">
                                                         <datalist id="datalistOptionsDistricts">
                                                             <option  *ngFor="let item  of districts" > {{ item }}</option>
                                                         </datalist>

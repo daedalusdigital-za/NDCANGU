@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BaseService } from 'src/app/services/base/base.service';
-
 @Component({
   selector: 'app-add-user',
   templateUrl: './add-user.component.html',
@@ -23,6 +22,8 @@ export class AddUserComponent implements OnInit {
     contactEntityName: ''
   }
 
+  provinces: any;
+  districts: any;
   id: any;
   constructor(private router: Router, private baseService: BaseService, private _route: ActivatedRoute) { }
 
@@ -67,5 +68,4 @@ export class AddUserComponent implements OnInit {
    
     
   }
-
 }
