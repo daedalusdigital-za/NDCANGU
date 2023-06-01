@@ -480,6 +480,7 @@ export class ListStatsComponent implements OnInit {
       }
     }
   }
+  
 
   constructor() { }
 
