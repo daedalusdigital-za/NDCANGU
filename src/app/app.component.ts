@@ -15,7 +15,9 @@ export class AppComponent {
 
   constructor(private loaderService: LoaderService, private router: ActivatedRoute) {
     this.loaderService.isLoading.subscribe((v: any) => {
-      this.loading = v;
+      setTimeout(() => {
+        this.loading = v;
+      },4000)
     });
 
     const urlSegments = this.router.snapshot.url;

@@ -1,9 +1,11 @@
-<div class="loader-overlay" style="z-index: 10001;" *ngIf="loading">
+<!-- <div class="loader-overlay" style="z-index: 10001;" *ngIf="loading">
     <div class="loader-container">
       <div class="loader"></div>
     </div>
-  </div>
-<body  [attr.data-layout]="!isLogin ? 'horizontal' : null" class="pace-done">
+  </div> -->
+<app-splash-screen *ngIf="loading"></app-splash-screen>
+
+<body [attr.data-layout]="!isLogin ? 'horizontal' : null" class="pace-done">
     <!-- -->
     <!-- Begin page -->
     <div id="layout-wrapper">

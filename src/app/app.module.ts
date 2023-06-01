@@ -14,6 +14,12 @@ import { ProfileComponent } from './profile/profile.component';
 import { OneComponent } from './one/one.component';
 import { TwoComponent } from './two/two.component';
 import { TermsComponent } from './terms/terms.component';
+import { SplashScreenComponent } from './shared/components/splash-screen/splash-screen.component';
+import { LottieModule } from 'ngx-lottie';
+
+export function playerFactory(): any {
+  return import('lottie-web');
+}
 
 @NgModule({
   declarations: [
@@ -22,6 +28,7 @@ import { TermsComponent } from './terms/terms.component';
     OneComponent,
     TwoComponent,
     TermsComponent,
+    SplashScreenComponent
     ],
   imports: [
     BrowserModule,
@@ -30,6 +37,7 @@ import { TermsComponent } from './terms/terms.component';
     FormsModule,
     HttpClientModule,
     ToastrModule.forRoot(),
+    LottieModule.forRoot({ player: playerFactory }),
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: LoaderInterceptor, multi: true },
