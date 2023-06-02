@@ -1,7 +1,10 @@
 @import '~@riapacheco/yutes/colors.scss';
 
 :host {
-  height: 100%;
+  height: 100vh;
+  width: 100vw;
+  max-height: 100%;
+  max-width: 100%;
   overflow: hidden;
   display: flex;
   flex-flow: column nowrap;
@@ -9,4 +12,11 @@
   justify-content: center;
   
   position: relative;
+}
+
+
+@media only screen and (max-width: 767px) {
+  .lottie-animation {
+    width: 350% !important;
+  }
 }
