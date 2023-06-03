@@ -5,7 +5,7 @@
   </div> -->
 <app-splash-screen *ngIf="loading"></app-splash-screen>
 
-<body [attr.data-layout]="!isLogin ? 'horizontal' : null" class="pace-done">
+<body *ngIf="!loading" [attr.data-layout]="!isLogin ? 'horizontal' : null" class="pace-done">
     <!-- -->
     <!-- Begin page -->
     <div id="layout-wrapper">

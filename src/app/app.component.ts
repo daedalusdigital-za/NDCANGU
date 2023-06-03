@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { LoaderService } from './services/loader/loader.service';
 
@@ -17,7 +17,7 @@ export class AppComponent {
     this.loaderService.isLoading.subscribe((v: any) => {
       setTimeout(() => {
         this.loading = v;
-      },4000)
+      },2000)
     });
 
     const urlSegments = this.router.snapshot.url;
