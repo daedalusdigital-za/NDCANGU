@@ -12,14 +12,13 @@ export class AppComponent {
   isLogin: boolean = true;
 
   loading: boolean = true;
-
+  lottieLoading: boolean = false;
+  urlSegment:string;
   constructor(private loaderService: LoaderService, private router: ActivatedRoute) {
     this.loaderService.isLoading.subscribe((v: any) => {
-      setTimeout(() => {
-        this.loading = v;
-      },2000)
+      this.loading = v;
     });
-
+    this.lottieLoading = false;
     const urlSegments = this.router.snapshot.url;
     console.log('URL Segments:', urlSegments);
 
@@ -29,6 +28,10 @@ export class AppComponent {
     } else {
       // Do something else for other routes
       this.isLogin = true;
+      this.lottieLoading = true;
+      setTimeout(() => {
+        this.lottieLoading = false
+      },2000)
     }
   }
 }

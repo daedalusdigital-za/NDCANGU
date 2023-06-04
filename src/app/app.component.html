@@ -3,9 +3,9 @@
       <div class="loader"></div>
     </div>
   </div> -->
-<app-splash-screen *ngIf="loading"></app-splash-screen>
+<app-splash-screen *ngIf="lottieLoading"></app-splash-screen>
 
-<body *ngIf="!loading" [attr.data-layout]="!isLogin ? 'horizontal' : null" class="pace-done">
+<body [attr.data-layout]="!isLogin ? 'horizontal' : null" class="pace-done">
     <!-- -->
     <!-- Begin page -->
     <div id="layout-wrapper">
