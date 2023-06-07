@@ -16,6 +16,8 @@ import { TwoComponent } from './two/two.component';
 import { TermsComponent } from './terms/terms.component';
 import { SplashScreenComponent } from './shared/components/splash-screen/splash-screen.component';
 import { LottieModule } from 'ngx-lottie';
+import { ErorComponent } from './eror/eror.component';
+import { FailureComponent } from './failure/failure.component';
 
 export function playerFactory(): any {
   return import('lottie-web');
@@ -28,7 +30,9 @@ export function playerFactory(): any {
     OneComponent,
     TwoComponent,
     TermsComponent,
-    SplashScreenComponent
+    SplashScreenComponent,
+    ErorComponent,
+    FailureComponent
     ],
   imports: [
     BrowserModule,

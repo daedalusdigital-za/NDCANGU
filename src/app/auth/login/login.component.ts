@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth/auth.service';
 import { GlobalService } from '../../services/global/global.service';
@@ -9,6 +9,9 @@ import { GlobalService } from '../../services/global/global.service';
   styleUrls: ['./login.component.scss']
 })
 export class LoginUserComponent implements OnInit {
+scrollModal(_t37: TemplateRef<any>) {
+throw new Error('Method not implemented.');
+}
   user: any = {
     email: '',
     password: '',
