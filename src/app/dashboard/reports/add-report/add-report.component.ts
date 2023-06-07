@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 import { BaseService } from 'src/app/services/base/base.service';
 import { GlobalService } from 'src/app/services/global/global.service';
 
@@ -22,44 +23,25 @@ export class AddReportComponent implements OnInit {
     age: '',
     province: '',
     atInstitution: '',
-    glucose: '',
-    hbA1C: '',
-    keyTone: '',
-    totalColestorl: '',
-    uricAcid: '',
-    lactate: '',
-    bloodPressue: '',
+    glucose: null,
+    hbA1C: null,
+    keyTone: null,
+    totalColestorl: null,
+    uricAcid: null,
+    lactate: null,
+    bloodPressue: null,
     recomendations: '',
     symptoms: '',
-    remidies: '',
+    remidies: null,
     gender: '',
-    nextAppointmentDate: '',
+    nextAppointmentDate: new Date().toISOString(),
     isMedicated: null,
     isDeleted: null,
-    dateCreated: ''
   }
 
-
-  // 'PatientId=11' \
-  // -F 'Perscription=' \
-  // -F 'Notes=' \
-  // -F 'Remidies=' \
-  // -F 'AtInstitution=' \
-  // -F 'RecordedBy=9' \
-  // -F 'Symptoms=' \
-  // -F 'Recomendations=' \
-  // -F 'Lactate=' \
-  // -F 'IsMedicated=' \
-  // -F 'Glucose=' \
-  // -F 'KeyTone=' \
-  // -F 'UricAcid=' \
-  // -F 'Documents=' \
-  // -F 'BloodPressue=' \
-  // -F 'HBA1C=' \
-  // -F 'NextAppointmentDate=' \
-  // -F 'TotalColestorl='
   id: any;
-  constructor(private route: ActivatedRoute, private baseService: BaseService, private globalService: GlobalService) { }
+  constructor(private route: ActivatedRoute, private baseService: BaseService, 
+              private globalService: GlobalService, private toastrService: ToastrService, private router: Router) { }
 
   ngOnInit(): void {
 
@@ -86,48 +68,44 @@ export class AddReportComponent implements OnInit {
   addEditReport() {
 
     const payload: any =  {
-      PatientId: this.report.patientId,
-      Perscription: this.report.perscription,
-      Notes: this.report.notes,
-      Remidies: this.report.remidies,
-      AtInstitution: this.report.atInstitution,
-      RecordedBy: this.report.recordedBy,
-      Symptoms: this.report.symptoms,
-      Recomendations: this.report.recomendations,
-      Lactate: this.report.lactate,
+      patientId: this.report.patientId,     
+      remidies: this.report.remidies,
+      atInstitution: this.report.atInstitution,
+      recordedBy: this.report.recordedBy,
+      recomendations: this.report.recomendations,
+      lactate: this.report.lactate,
       // IsMedicated: this.report.isMedicated,
-      Glucose: this.report.glucose,
-      KeyTone: this.report.keyTone,
-      UricAcid: this.report.uricAcid,
-      Documents: this.report.documents,
-      BloodPressue: this.report.bloodPressue,
-      HBA1C: this.report. HBA1C,
-      // NextAppointmentDate
-      TotalColestorl: this.report.totalColestorl
-      }
-    this.baseService.basePost(`MedicalHistory/Add`, {
-      "PatientId": "11",
-        "Perscription": "",
-        "Notes": "",
-        "Remidies": "",
-        "AtInstitution": "",
-        "RecordedBy": "9",
-        "Symptoms": "",
-        "Recomendations": "",
-        "Lactate": "",
-        "IsMedicated": "",
-        "Glucose": "",
-        "KeyTone": "",
-        "UricAcid": "",
-        "Documents": "",
-        "BloodPressue": "",
-        "HBA1C": "",
-        "NextAppointmentDate": "",
-        "TotalColestorl": ""
-    }).subscribe({
+      glucose: this.report.glucose,
+      keyTone: this.report.keyTone,
+      uricAcid: this.report.uricAcid,
+      bloodPressue: this.report.bloodPressue,
+      hbA1C: this.report. HBA1C,
+      totalColestorl: this.report.totalColestorl,
+      nextAppointmentDate: this.report.nextAppointmentDate
+      };
+
+    //   {
+    //     "id": 0,
+    // "recordedBy": 9,
+    // "patientId": 11,
+    // "atInstitution": "string",
+    // "glucose": 0,
+    // "hbA1C": 0,
+    // "keyTone": 0,
+    // "totalColestorl": 0,
+    // "uricAcid": 0,
+    // "lactate": 0,
+    // "bloodPressue": 0,
+    // "recomendations": "string",
+    // "remidies": 0,
+    // "nextAppointmentDate": "2023-06-07T16:25:44.628Z",
+    // "isMedicated": true
+    //   }
+    this.baseService.basePost(`MedicalHistory/Add`, payload).subscribe({
       next: (response: any) => {
         // this.report = response
-      
+        this.toastrService.success("Success!, Medical history Added");
+        this.router.navigateByUrl('/dashboard/reports');
       }
     })
 
