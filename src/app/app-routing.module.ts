@@ -6,6 +6,9 @@ import { AuthGuard } from './shared/guards/auth.guard';
 import { ProfileComponent } from './profile/profile.component';
 import { OneComponent } from './one/one.component';
 import { TwoComponent } from './two/two.component';
+import { FailureComponent } from './failure/failure.component';
+import { ErorComponent } from './eror/eror.component';
+
 
 const routes: Routes = [
   {
@@ -34,6 +37,12 @@ const routes: Routes = [
   {
     path: 'two',
     component: TwoComponent
+  },
+  {
+    path: 'failure',
+  },
+  {
+    path: 'eror',
   },
   {
     path: '', redirectTo: 'auth', pathMatch: 'full'
