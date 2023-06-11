@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AppComponent } from './app.component';
-import { LockUserComponent } from './lock-user/lock-user.component';
+import { LockUserComponent } from './components/lock-user/lock-user.component';
 import { AuthGuard } from './shared/guards/auth.guard';
-import { ProfileComponent } from './profile/profile.component';
-import { NotFoundComponent } from './not-found/not-found.component';
-import { TermsComponent } from './terms/terms.component';
+import { ProfileComponent } from './components/profile/profile.component';
+import { NotFoundComponent } from './components/not-found/not-found.component';
+import { TermsComponent } from './components/terms/terms.component';
 
 const routes: Routes = [
   {

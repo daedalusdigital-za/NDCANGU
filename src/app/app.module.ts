@@ -10,11 +10,11 @@ import { ToastrModule } from 'ngx-toastr';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LoaderInterceptor } from './shared/interceptors/loader.interceptor';
 import { AuthTokenInterceptor } from './shared/interceptors/auth-token.interceptor';
-import { SplashScreenComponent } from './shared/components/splash-screen/splash-screen.component';
+import { SplashScreenComponent } from './components/splash-screen/splash-screen.component';
 import { LottieModule } from 'ngx-lottie';
-import { ProfileComponent } from './profile/profile.component';
-import { TermsComponent } from './terms/terms.component';
-import { NotFoundComponent } from './not-found/not-found.component';
+import { ProfileComponent } from './components/profile/profile.component';
+import { TermsComponent } from './components/terms/terms.component';
+import { NotFoundComponent } from './components/not-found/not-found.component';
 
 export function playerFactory(): any {
   return import('lottie-web');
