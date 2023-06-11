@@ -1,11 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-one',
-  templateUrl: './one.component.html',
-  styleUrls: ['./one.component.scss']
+  selector: 'app-verify-phone-number',
+  templateUrl: './verify-phone-number.component.html'
 })
-export class OneComponent implements OnInit {
+export class VerifyPhoneNumberComponent implements OnInit {
 
     // set the currenr year
     year: number = new Date().getFullYear();

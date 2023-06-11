@@ -7,6 +7,7 @@ import { ListFaqsComponent } from './list-faqs/list-faqs.component';
 import { ListReportsComponent } from './reports/list-reports/list-reports.component';
 import { ListStatsComponent } from './list-stats/list-stats.component';
 import { ListTutorialsComponent } from './list-tutorials/list-tutorials.component';
+import { VerifyPhoneNumberComponent } from './verify-phone-number/verify-phone-number.component';
 
 const routes: Routes = [
   {
@@ -49,6 +50,10 @@ const routes: Routes = [
       {
         path: 'reports',
         loadChildren: () => import('./reports/reports.module').then(m => m.ReportsModule),
+      },
+      {
+        path: 'verify-phone-number',
+        component: VerifyPhoneNumberComponent
       },
       { path: '', redirectTo: 'home', pathMatch: 'full' }
     ]

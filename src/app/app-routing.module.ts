@@ -4,8 +4,8 @@ import { AppComponent } from './app.component';
 import { LockUserComponent } from './lock-user/lock-user.component';
 import { AuthGuard } from './shared/guards/auth.guard';
 import { ProfileComponent } from './profile/profile.component';
-import { OneComponent } from './one/one.component';
-import { TwoComponent } from './two/two.component';
+import { NotFoundComponent } from './not-found/not-found.component';
+import { TermsComponent } from './terms/terms.component';
 
 const routes: Routes = [
   {
@@ -28,16 +28,19 @@ const routes: Routes = [
     component: ProfileComponent
   },
   {
-    path: 'one',
-    component: OneComponent
+    path: 'terms',
+    component: TermsComponent
   },
-  {
-    path: 'two',
-    component: TwoComponent
+  { path: '404',
+   component: NotFoundComponent 
   },
+  
   {
     path: '', redirectTo: 'auth', pathMatch: 'full'
-  }
+  },
+  { path: '**',
+   redirectTo: '/404'
+  } ,
   
   
 ];
