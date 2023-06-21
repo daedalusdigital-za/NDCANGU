@@ -42,6 +42,7 @@ export class AddReportComponent implements OnInit {
   id: any;
   constructor(private route: ActivatedRoute, private baseService: BaseService, 
               private globalService: GlobalService, private toastrService: ToastrService, private router: Router) { }
+              
 
   ngOnInit(): void {
 
@@ -84,6 +85,8 @@ export class AddReportComponent implements OnInit {
       nextAppointmentDate: this.report.nextAppointmentDate
       };
 
+
+      
     //   {
     //     "id": 0,
     // "recordedBy": 9,
