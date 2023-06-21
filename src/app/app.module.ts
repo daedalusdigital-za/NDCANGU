@@ -16,6 +16,7 @@ import { ProfileComponent } from './components/profile/profile.component';
 import { TermsComponent } from './components/terms/terms.component';
 import { NotFoundComponent } from './components/not-found/not-found.component';
 
+
 export function playerFactory(): any {
   return import('lottie-web');
 }

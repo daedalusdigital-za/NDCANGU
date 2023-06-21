@@ -1,100 +1,145 @@
 <div class="page-content">
-    <div class="container-fluid">
+    <div class="">
 
-        <!-- start page title -->
         <div class="row">
             <div class="col-12">
                 <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                    <h4 class="mb-sm-0 font-size-18">Profile</h4>
 
                     <div class="page-title-right">
                         <ol class="breadcrumb m-0">
-                            <li class="breadcrumb-item"><a href="javascript: void(0);">Profile</a></li>
-                            <li class="breadcrumb-item active">Mpumalanga</li>
+                            <li class="breadcrumb-item"><a href="javascript: void(0);">Tools</a></li>
+                            <li class="breadcrumb-item active">Statistics</li>
                         </ol>
                     </div>
 
                 </div>
             </div>
         </div>
-        <!-- end page title -->
 
         <div class="row">
-            <div class="container rounded bg-white mt-5 mb-5">
-                <div class="row">
-                    <div class="col-md-3 border-right">
-                        <div class="d-flex flex-column align-items-center text-center p-3 py-5"><img class="rounded-circle mt-5" width="150px" src="https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg"> <button type="button" class="btn btn-secondary btn-lg waves-effect waves-light">
-                            <i class="font-size-16 align-middle me-2"></i> Upload Photo</button></div>
-                    </div>
-                    <div class="col-md-5 border-right">
-                        <div class="p-3 py-5">
-                            <div class="d-flex justify-content-between align-items-center mb-3">
-                                <h4 class="text-right">Profile Settings</h4>
-                            </div>
-                            <div class="row mt-2">
-                                <div class="col-md-6"><label class="labels">Name</label><input type="text" class="form-control" placeholder="First Name" value=""></div>
-                                <div class="col-md-6"><label class="labels">Surname</label><input type="text" class="form-control" value="" placeholder="Last Name"></div>
-                            </div>
-                            <div class="row mt-3">
-                                <div class="col-md-12"><label class="labels">Mobile Number</label><input type="text" class="form-control" placeholder="Enter phone number" value=""></div>
-                                <div class="col-md-12"><label class="labels">Email Address</label><input type="text" class="form-control" placeholder="Enter Email Address" value=""></div>
-                                <div class="col-md-12"><label class="labels">Institution</label><input type="text" class="form-control" placeholder="Enter institution" value=""></div>
-            
-                            </div>
-                            <div class="row mt-3">
-                                <div class="col-md-6"><label class="labels">Province</label><input type="text" class="form-control"  placeholder="Province" value=""></div>
-                                <div class="col-md-6"><label class="labels">District</label><input type="text" class="form-control" value="" placeholder="District"></div>
-                            </div>
-                            <div class="mt-5 text-center"><button class="btn btn-success btn-rounded waves-effect waves-light" type="button">Save Profile</button></div>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                       
-                        <div class="p-3 py-5">
-                           
-                        <div class="p-3 py-5">
 
-                            <div class="btn-group" ngbDropdown>
-                                <button type="button" class="btn btn-warning waves-effect waves-light" data-bs-toggle="dropdown"
-                                    aria-haspopup="true" aria-expanded="false" ngbDropdownToggle>
-                                    Edit Information <i class="mdi "></i>
-                                </button>
-                                <div class="dropdown-menu dropdown-menu-md p-4" ngbDropdownMenu>
-                                    <form>
-                                        <div class="mb-2">
-                                            <label class="form-label" for="exampleDropdownFormEmail">Email address</label>
-                                            <input type="email" class="form-control" id="exampleDropdownFormEmail"
-                                                placeholder="email@example.com">
-                                        </div>
-                                        <div class="mb-2">
-                                            <label class="form-label" for="exampleDropdownFormPassword">Password</label>
-                                            <input type="password" class="form-control" id="exampleDropdownFormPassword"
-                                                placeholder="Password">
-                                        </div>
-                                        <div class="mb-2">
-                                            <div class="form-check custom-checkbox">
-                                                <input type="checkbox" class="form-check-input" id="rememberdropdownCheck">
-                                                <label class="form-check-label" for="rememberdropdownCheck">Remember me</label>
+            <div class="col-xxl-3 col-lg-4 col-md-5 bg-white">
+                    <div class="auth-full-page-content">
+                        <div class="w-100 bg-white">
+                            <div class="d-flex flex-column h-100">
+                                <div class="mb-4 mb-md-5 text-center">
+                                    <h1>Statistics</h1>
+                                </div>
+                                
+                                <form >
+                                    <div class="mb-3">
+                                        <label class="form-label">Email</label>
+                                        <input type="email" required="true" class="form-control" name="email" placeholder="Enter Email">
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <div class="d-flex align-items-start">
+                                            <div class="flex-grow-1">
+                                                <label class="form-label">Password</label>
+                                            </div>
+                                            <div class="flex-shrink-0">
+                                                <div class="">
+                                                    <a href=""class="text-primary">Forgot Password?</a>
+                                                </div>
                                             </div>
                                         </div>
-                                        <button type="submit" class="btn btn-primary">Unlock</button>
-                                    </form>
-                                </div>
-                            </div>
-                       <br> <br>
-                            <div class="col-md-12"><label class="labels">User ID</label><input [disabled]=true type="text" class="form-control" placeholder="User ID" value=""></div> <br>
-                            <div class="col-md-12"><label class="labels">User Role</label><input [disabled]=true type="text" class="form-control" placeholder="User Role" value=""></div><br>
-                            <div class="col-md-12">
-                                <label for="example-password-input" class="form-label">Password</label>
-                                <input [disabled]=true class="form-control" type="password" value="hunter2" id="example-password-input">
-                            </div>
-                        
                             
+                                       
+                                    </div>
+                                    <div class="row mb-4">
+                                        <div class="col">
+                                            <div class="form-check">
+                                                <input type="checkbox" class="form-check-input" id="invalidCheck" required>
+                                                <label class="form-check-label" for="invalidCheck">I accept the <a href="javascript: void(0);" class="text-primary">Terms of Use</a></label>
+                                                <div class="invalid-feedback">
+                                                    You must agree before submitting.
+                                                </div>
+                                            </div>
+                                        </div>
+                            
+                                    </div>
+                                    <div class="mb-3">
+                            
+                                        <button class="btn btn-info btn-rounded w-100 waves-effect waves-light" type="submit">Generate</button>
+                                    </div>                            
+                                </form>
+
+                            </div>    
+                        </div>
+                    </div>
+            </div> 
             
+            <div class="col-xxl-9 col-lg-8 col-md-7">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="container bg-white mt-5 mb-5">
+                            <div class="row">
+                                <div class="col-xl-4 col-sm-6">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h4 class="card-title mb-0">Pie Chart</h4>
+                                        </div>
+                                        <div class="card-body">
+                                                <apx-chart
+                                                  [series]="pieChartOptions.series"
+                                                  [chart]="pieChartOptions.chart"
+                                                  [legend]="{ show: false}"
+                                                  [colors]="['#2ab57d', '#5156be', '#e9ecef']"
+                                                  class="text-center">
+                                                </apx-chart>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-4 col-sm-6">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h4 class="card-title mb-0">Bar Chart</h4>
+                                        </div>
+                                        <div class="card-body">
+                                            <apx-chart
+                                            [series]="barChartOptions.series"
+                                            [chart]="barChartOptions.chart"
+                                            [legend]="{ show: false}"
+                                            [colors]="['#2ab57d']"
+                                            class="text-center"
+                                          ></apx-chart>
+                                            <!-- <div id="sparkline2" data-colors="[&quot;#2ab57d&quot;]" class="text-center"><canvas width="231" height="200" style="display: inline-block; width: 231px; height: 200px; vertical-align: top;"></canvas></div> -->
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-xl-4 col-sm-6">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h4 class="card-title mb-0">Composite Bar Chart</h4>
+                                        </div>
+                                        <div class="card-body">
+                                            <apx-chart
+                                            [series]="compositeChartOptions.series"
+                                            [chart]="compositeChartOptions.chart"
+                                            [legend]="{ show: false}"
+                                            [colors]="[ '#5156be', '#2ab57d']"
+                                            class="text-center">
+                                          </apx-chart>
+                                            <!-- <div id="sparkline3" data-colors="[&quot;#5156be&quot;, &quot;#2ab57d&quot;]" class="text-center"><canvas width="180" height="200" style="display: inline-block; width: 180px; height: 200px; vertical-align: top;"></canvas></div> -->
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                
+                                
+                                
+                                
+                            </div>        
+                        
+                    </div>
+                </div>
+            </div>            
+
         </div>
 
-
-    </div>    
+    </div>
+   
 </div>                            <!-- end row -->
                 
         
