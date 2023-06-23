@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { AuthComponent } from './auth.component';
 import { LoginUserComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
+import { VerifyPhoneNumberComponent } from './verify-phone-number/verify-phone-number.component';
 
 const routes: Routes = [
   {
@@ -17,7 +18,10 @@ const routes: Routes = [
         path: 'register',
         component: RegisterComponent
       },
-   
+      {
+        path: 'verify',
+        component: VerifyPhoneNumberComponent
+      },
       { path: '', redirectTo: 'login', pathMatch: 'full' }
     ]
   }
