@@ -13,7 +13,6 @@ import { AuthTokenInterceptor } from './shared/interceptors/auth-token.intercept
 import { SplashScreenComponent } from './components/splash-screen/splash-screen.component';
 import { LottieModule } from 'ngx-lottie';
 import { ProfileComponent } from './components/profile/profile.component';
-import { TermsComponent } from './components/terms/terms.component';
 import { NotFoundComponent } from './components/not-found/not-found.component';
 
 
@@ -25,7 +24,6 @@ export function playerFactory(): any {
   declarations: [
     AppComponent,
     ProfileComponent,
-    TermsComponent,
     SplashScreenComponent,
     NotFoundComponent
     ],

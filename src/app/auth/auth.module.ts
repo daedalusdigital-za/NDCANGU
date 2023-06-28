@@ -7,13 +7,17 @@ import { RegisterComponent } from './register/register.component';
 import { AuthComponent } from './auth.component';
 import { FormsModule } from '@angular/forms';
 import { LockUserComponent } from '../components/lock-user/lock-user.component';
+import { VerifyPhoneNumberComponent } from './verify-phone-number/verify-phone-number.component';
+import { TermsComponent } from './terms/terms.component';
 
 @NgModule({
   declarations: [
     LoginUserComponent,
     LockUserComponent,
     RegisterComponent,
-    AuthComponent
+    AuthComponent,
+    VerifyPhoneNumberComponent,
+    TermsComponent
   ],
   imports: [
     CommonModule,

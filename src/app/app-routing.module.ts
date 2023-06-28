@@ -5,7 +5,7 @@ import { LockUserComponent } from './components/lock-user/lock-user.component';
 import { AuthGuard } from './shared/guards/auth.guard';
 import { ProfileComponent } from './components/profile/profile.component';
 import { NotFoundComponent } from './components/not-found/not-found.component';
-import { TermsComponent } from './components/terms/terms.component';
+import { TermsComponent } from './auth/terms/terms.component';
 
 const routes: Routes = [
   {

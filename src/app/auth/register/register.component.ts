@@ -25,11 +25,14 @@ export class RegisterComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  registerUser() {    
+  registerUser() {
     this.authService.register(this.user).subscribe({
       next: (response: any) => {
-        console.log(response);
-        this.router.navigateByUrl('/auth/login')
+        this.router.navigate(['/auth/verify'], {
+          state: {
+            data: this.user.phoneNumber
+          }
+        });
       },
       error: (err) => {
         console.log(err);
