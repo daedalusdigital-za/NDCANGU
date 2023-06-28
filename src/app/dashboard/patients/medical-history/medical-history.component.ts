@@ -28,6 +28,7 @@ export class MedicalHistoryComponent implements OnInit {
       {
         header: 'Name',
         field: 'name',
+        isFilter: false,
         getValue: function(item: any) {
           return item[this.field] 
         },
@@ -35,6 +36,7 @@ export class MedicalHistoryComponent implements OnInit {
       {
         header: 'Surname',
         field: 'surname',
+        isFilter: false,
         getValue: function(item: any) {
           return item[this.field] 
         },
@@ -42,6 +44,7 @@ export class MedicalHistoryComponent implements OnInit {
       {
       header: 'Date created',
       field: 'dateCreated',
+      isFilter: false,
       getValue: function(item: any) {
         const val: any = item[this.field] ? new Date(item[this.field]).toISOString().slice(0,10) : '';
         return val;
@@ -50,6 +53,7 @@ export class MedicalHistoryComponent implements OnInit {
     {
       header: 'Last Updated',
       field: 'dateCreated',
+      isFilter: false,
       getValue: function(item: any) {
         const val: any = item[this.field] ? new Date(item[this.field]).toISOString().slice(0,10) : '';
         return val;
@@ -59,6 +63,7 @@ export class MedicalHistoryComponent implements OnInit {
     {
       header: 'Atinstituation',
       field: 'atInstitution',
+      isFilter: false,
       getValue: function(item: any) {
         return item[this.field]
       },
@@ -66,6 +71,7 @@ export class MedicalHistoryComponent implements OnInit {
     {
       header: 'Bloodpressue',
       field: 'bloodPressue',
+      isFilter: false,
       getValue: function(item: any) {
         return item[this.field]
       },
@@ -73,6 +79,7 @@ export class MedicalHistoryComponent implements OnInit {
     {
       header: 'Glucose',
       field: 'glucose',
+      isFilter: false,
       getValue: function(item: any) {
         return item[this.field]
       },
@@ -80,6 +87,7 @@ export class MedicalHistoryComponent implements OnInit {
     {
       header: 'HBA1C',
       field: 'hbA1C',
+      isFilter: false,
       getValue: function(item: any) {
         return item[this.field]
       },
@@ -87,6 +95,7 @@ export class MedicalHistoryComponent implements OnInit {
     {
       header: 'IsMedicated',
       field: 'isMedicated',
+      isFilter: false,
       getValue: function(item: any) {
         return item[this.field]
       },
@@ -94,6 +103,7 @@ export class MedicalHistoryComponent implements OnInit {
     {
       header: 'Keytone',
       field: 'keyTone',
+      isFilter: false,
       getValue: function(item: any) {
         return item[this.field]
       },
@@ -101,6 +111,7 @@ export class MedicalHistoryComponent implements OnInit {
     {
       header: 'Lactate',
       field: 'lactate',
+      isFilter: false,
       getValue: function(item: any) {
         return item[this.field]
       },
@@ -110,6 +121,7 @@ export class MedicalHistoryComponent implements OnInit {
       header: 'Next Appointment',
       field: 'nextAppointmentDate',
       visible: false,
+      isFilter: false,
       getValue: function(item: any) {
         return item[this.field]
       },
@@ -118,6 +130,7 @@ export class MedicalHistoryComponent implements OnInit {
       header: 'Recomendations',
       field: 'recomendations',
       visible: false,
+      isFilter: false,
       getValue: function(item: any) {
         return item[this.field]
       },

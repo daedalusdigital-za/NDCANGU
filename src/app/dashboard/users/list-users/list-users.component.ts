@@ -73,15 +73,6 @@ export class ListUsersComponent implements OnInit {
     },
   },
   {
-    header: 'Province',
-    field: 'contactName',
-    isFilter: false,
-    isSortable: false,
-    getValue: function (item: any) {
-      return item[this.field]
-    },
-  },
-  {
     header: 'View/Edit',
     field: 'View/Edit',
     isAction: true,
