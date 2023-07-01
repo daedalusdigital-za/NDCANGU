@@ -1,6 +1,9 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth/auth.service';
+//import { GlobalService } from '../../services/global/global.service';
+//import { TermsComponent } from 'src/app/auth/terms/terms.component';
+//import { DialogService } from 'primeng/dynamicdialog';
 
 @Component({
   selector: 'app-register',
@@ -40,5 +43,18 @@ export class RegisterComponent implements OnInit {
     })
 
   }
+ // openTermsModal(){
+  //  console.log('openTermsModal');
+
+//    this.dialogService.open(TermsComponent, {
+//      header: `Terms of Use`,
+//      width: '70%',
+    //  contentStyle: {"max-height": "500px", "overflow": "auto"},
+  //    baseZIndex: 10000,
+      // data: item.id
+ // });
+    
+  //}
+  
 
 }
