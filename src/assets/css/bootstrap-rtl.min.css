@@ -3600,8 +3600,8 @@ textarea.form-control-lg {
 
 .btn-light {
   color: #000;
-  background-color: #e9e9ef;
-  border-color: #e9e9ef;
+  background-color: #B4b4bf;
+  border-color: #B4b4bf;
 }
 .btn-light:hover {
   color: #000;
@@ -3626,8 +3626,8 @@ textarea.form-control-lg {
 }
 .btn-light:disabled, .btn-light.disabled {
   color: #000;
-  background-color: #e9e9ef;
-  border-color: #e9e9ef;
+  background-color: #B4b4bf;
+  border-color: #B4b4bf;
 }
 
 .btn-dark {
@@ -3852,8 +3852,8 @@ textarea.form-control-lg {
 }
 
 .btn-outline-light {
-  color: #e9e9ef;
-  border-color: #e9e9ef;
+  color: #B4b4bf;
+  border-color: #B4b4bf;
 }
 .btn-outline-light:hover {
   color: #000;
