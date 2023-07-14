@@ -24,147 +24,137 @@
 
         <!-- end row-->
         <div class="row">
-            <div class="col-xl-6">
+            <div class="col-lg-4">
                 <!-- card -->
-                <div class="card card-h-100 customize-card">
-                    <div class="card-header">
-                        <h4 class="card-title me-2">HBA1C Statistics</h4>
-                    </div>
-                    <!-- card body -->
-                    <div class="card-body">
-                        <div class="d-flex flex-wrap align-items-center mb-4">
-                            <div class="ms-auto">
-                                <select class="form-select form-select-sm">
-                                    <option value="MAY" selected="">April</option>
-                                    <option value="AP">March</option>
-                                    <option value="MA">Feb</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="row align-items-center">
-                            <div class="col-sm">
-                                <div class="apex-charts" style="min-height:
-                                    209.8px;" *ngIf="isShown">
-                                    <apx-chart
-                                        [series]="walletBalenceChart.series"
-                                        [chart]="walletBalenceChart.chart"
-                                        [legend]="{ show: false}"
-                                        [labels]="['DIABETIC', 'PREDIABETIC',
-                                        'CONTROLLED']"
-                                        [colors]="['#FF0000', '#FFA500',
-                                        '#008000']"></apx-chart>
-                                </div>
-                                <!-- <div id="wallet-balance" data-colors='["#FF0000", "#FFA500", "#008000"]' class="apex-charts"></div> -->
-                            </div>
-                            <div class="col-sm align-self-center">
-                                <div class="mt-4 mt-sm-0">
-                                    <div>
-                                        <p class="mb-2"><i class="mdi mdi-circle
-                                                align-middle font-size-10 me-2
-                                                text-danger"></i> Diabetic</p>
-                                        <h6>6.5% <span class="text-muted
-                                                font-size-14 fw-normal">or Above</span></h6>
-                                    </div>
-                                    <div class="mt-4 pt-2">
-                                        <p class="mb-2"><i class="mdi mdi-circle
-                                                align-middle font-size-10 me-2
-                                                text-warning"></i> Prediabetic</p>
-                                        <h6>Between 5.7%<span class="text-muted
-                                                font-size-14 fw-normal">& 6.4%</span></h6>
-                                    </div>
-                                    <div class="mt-4 pt-2">
-                                        <p class="mb-2"><i class="mdi mdi-circle
-                                                align-middle font-size-10 me-2
-                                                text-success"></i> Controlled</p>
-                                        <h6>5.7% <span class="text-muted
-                                                font-size-14 fw-normal">or Below</span></h6>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                
+                  <div class="card card-h-100 customize-card">
+                      <div class="card-header">
+                          <h4 class="card-title mb-0">Total Colestoral</h4>
+                      </div>
+                      <div class="card-body">
+                        <div class="d-flex flex-wrap align-items-center
+                                    mb-4">
+                          </div>
+                          <div echarts [options]="nestedPie"></div>
+                      </div>
+                  </div>
+                  <!-- end card -->
+              
                 <!-- end card -->
             </div>
 
-
-
             <!-- end col -->
-            <div class="col-xl-6">
+            <div class="col-lg-4">
                    
-                        <div class="card card-h-100 customize-card">
+                        <div class="card card-h-80 customize-card">
                             <div class="card-header">
                                 <h4 class="card-title me-2">High Blood Pressure Statistics</h4>
-
                             </div>
                             <div class="card-body" *ngIf="isShown">
 
                                 <div class="d-flex flex-wrap align-items-center
                                     mb-4">
                                     <div class="ms-auto">
-                                        <select class="form-select
-                                            form-select-sm">
-                                            <option value="MAY" selected="">April</option>
-                                            <option value="AP">March</option>
-                                            <option value="MA">Feb</option>
-                                        </select>
-                                    </div>
+                                      <select class="form-select
+                                          form-select-sm">
+                                          <option value="MAY" selected="">June</option>
+                                          <option value="AP">May</option>
+                                          <option value="MA">April</option>
+                                      </select>
+                                  </div>
                                 </div>
                                 <div echarts [options]="pieChart"
                                     class="e-charts"></div>
-                                <!-- <div id="pie-chart" data-colors='["#fd625e", "#2ab57d", "#4ba6ef", "#ffbf53", "#5156be"]' class="e-charts"></div> -->
                             </div>
                         </div>
                         <!-- end card -->
                     <!-- end col -->
                 <!-- end row -->
             </div>
+
+            <div class="col-lg-4">
+                <div class="card h-80 customize-card">
+                  <div class="card-header">
+                    <div class="row">
+                      <div class="col-6 d-flex align-items-center">
+                        <h4 class="card-title me-2">Institutional Raw Data Reports</h4>
+                      </div>
+                      <div class="col-6 text-end">
+                        <button class="btn btn-outline-primary btn-sm mb-0">Download All</button>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="card-body p-3 pb-0">
+                    
+                    <ul class="list-group">
+                      <li class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg">
+                        <div class="d-flex flex-column">
+                          <h6 class="mb-1 text-primary font-weight-bold text-sm">HBA1C Reports </h6>
+                          <span class="text-xs">#HT-415646</span>
+                        </div>
+                        <div class="d-flex align-items-center text-sm">
+                          <a href="assets/institutionalReport2023.xls"><button class="btn btn-link text-success text-sm mb-0 px-0 ms-4"><i class="fas fa-file-excel text-lg me-1"></i> Excel</button></a>
+                          <button class="btn btn-link text-danger text-sm mb-0 px-0 ms-4"><i class="fas fa-file-pdf text-lg me-1"></i> PDF</button>
+                        </div>
+                      </li>
+                      <li class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg">
+                        <div class="d-flex flex-column">
+                          <h6 class="text-primary mb-1 font-weight-bold text-sm">Ketone Reports</h6>
+                          <span class="text-xs">#KT-126749</span>
+                        </div>
+                        <div class="d-flex align-items-center text-sm">
+                          <a href="assets/institutionalReport2023.xls"><button class="btn btn-link text-success text-sm mb-0 px-0 ms-4"><i class="fas fa-file-excel text-lg me-1"></i> Excel</button></a>
+                          <button class="btn btn-link text-danger text-sm mb-0 px-0 ms-4"><i class="fas fa-file-pdf text-lg me-1"></i> PDF</button>
+                        </div>
+                      </li>
+                      <li class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg">
+                        <div class="d-flex flex-column">
+                          <h6 class="text-primary mb-1 font-weight-bold text-sm">Glucose Reports</h6>
+                          <span class="text-xs">#GC-212562</span>
+                        </div>
+                        <div class="d-flex align-items-center text-sm">
+                          <a href="assets/institutionalReport2023.xls"><button class="btn btn-link text-success text-sm mb-0 px-0 ms-4"><i class="fas fa-file-excel text-lg me-1"></i> Excel</button></a>
+                          <button class="btn btn-link text-danger text-sm mb-0 px-0 ms-4"><i class="fas fa-file-pdf text-lg me-1"></i> PDF</button>
+                        </div>
+                      </li>
+                      <li class="list-group-item border-0 d-flex justify-content-between ps-0 border-radius-lg">
+                        <div class="d-flex flex-column">
+                          <h6 class="text-primary mb-1 font-weight-bold text-sm">Lactate Reports</h6>
+                          <span class="text-xs">#Lt-803481</span>
+                        </div>
+                        <div class="d-flex align-items-center text-sm">
+                          <a href="assets/institutionalReport2023.xls"><button class="btn btn-link text-success text-sm mb-0 px-0 ms-4"><i class="fas fa-file-excel text-lg me-1"></i> Excel</button></a>
+                          <button class="btn btn-link text-danger text-sm mb-0 px-0 ms-4"><i class="fas fa-file-pdf text-lg me-1"></i> PDF</button>
+                        </div>
+                      </li>d
+                      <li class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg">
+                        <div class="d-flex flex-column">
+                          <h6 class="text-primary mb-1 font-weight-bold text-sm">Blood Pressure Reports</h6>
+                          <span class="text-xs">#BP-103578</span>
+                        </div>
+                        <div class="d-flex align-items-center text-sm">
+                          <a href="assets/institutionalReport2023.xls"><button class="btn btn-link text-success text-sm mb-0 px-0 ms-4"><i class="fas fa-file-excel text-lg me-1"></i> Excel</button></a>
+                          <button class="btn btn-link text-danger text-sm mb-0 px-0 ms-4"><i class="fas fa-file-pdf text-lg me-1"></i> PDF</button>
+                        </div>
+                      </li>
+                      <li class="list-group-item border-0 d-flex justify-content-between ps-0 border-radius-lg">
+                        <div class="d-flex flex-column">
+                          <h6 class="text-primary mb-1 font-weight-bold text-sm">Total Cholesterol Report</h6>
+                          <span class="text-xs">#TC-803481</span>
+                        </div>
+                        <div class="d-flex align-items-center text-sm">
+                          <a href="assets/institutionalReport2023.xls"><button class="btn btn-link text-success text-sm mb-0 px-0 ms-4"><i class="fas fa-file-excel text-lg me-1"></i> Excel</button></a>
+                          <button class="btn btn-link text-danger text-sm mb-0 px-0 ms-4"><i class="fas fa-file-pdf text-lg me-1"></i> PDF</button>
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+
         </div>
         <!-- end row -->
-        <div class="row">
-            <div class="col-xl-12">
-                <div class="card card-h-100 customize-card">
-                    <div class="card-header">
-                        <h4 class="card-title mb-0">Mix Line Bar</h4>
-                    </div>
-                    <div class="card-body" *ngIf="isShown">
-                        <div echarts [options]="mixLineChart"
-                            class="demo-chart"></div>
-                    </div>
-                </div>
-                <!-- end card -->
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-xl-6">
-                <div class="card card-h-100 customize-card">
-                    <div class="card-header">
-                        <h4 class="card-title mb-0">Nested Pie Chart</h4>
-                    </div>
-                    <div class="card-body">
-                        <div echarts [options]="nestedPie"></div>
-                    </div>
-                </div>
-                <!-- end card -->
-            </div>
-
-            <div class="col-xl-6">
-                <div class="card card-h-100 customize-card">
-                    <div class="card-header">
-                        <h4 class="card-title mb-0">Bar Chart</h4>
-                    </div>
-                    <div class="card-body">
-                        <apx-chart
-                            [series]="barChartoptions.series"
-                            [chart]="barChartoptions.chart"
-                            [dataLabels]="barChartoptions.dataLabels"
-                            [plotOptions]="barChartoptions.plotOptions"
-                            [xaxis]="barChartoptions.xaxis"></apx-chart>
-                    </div>
-                </div>
-                <!-- end card -->
-            </div>
-        </div>
         <div class="row">
             <div class="col-xl-12">
                 <div class="card card-h-100 customize-card">
@@ -192,5 +182,36 @@
 
             <!-- end col -->
         </div>
+        <div class="row">
+            <div class="col-xl-6">
+                <div class="card card-h-100 customize-card">
+                    <div class="card-header">
+                        <h4 class="card-title mb-0">Total Colestoral</h4>
+                    </div>
+                    <div class="card-body">
+                        <div echarts [options]="nestedPie"></div>
+                    </div>
+                </div>
+                <!-- end card -->
+            </div>
+
+            <div class="col-xl-6">
+                <div class="card card-h-100 customize-card">
+                    <div class="card-header">
+                        <h4 class="card-title mb-0">Tests Conducted</h4>
+                    </div>
+                    <div class="card-body">
+                        <apx-chart
+                            [series]="barChartoptions.series"
+                            [chart]="barChartoptions.chart"
+                            [dataLabels]="barChartoptions.dataLabels"
+                            [plotOptions]="barChartoptions.plotOptions"
+                            [xaxis]="barChartoptions.xaxis"></apx-chart>
+                    </div>
+                </div>
+                <!-- end card -->
+            </div>
+        </div>
+        
     </div> <!-- container-fluid -->
 </div>
