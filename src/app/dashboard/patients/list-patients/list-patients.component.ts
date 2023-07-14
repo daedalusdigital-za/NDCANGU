@@ -86,15 +86,6 @@ export class ListPatientsComponent implements OnInit {
     },
   },
   {
-    header: 'Ges',
-    field: 'gesttational',
-    isFilter: false,
-    isSortable: false,
-    getValue: function (item: any) {
-      return item[this.field]
-    },
-  },
-  {
     header: 'Province',
     field: 'province',
     isFilter: false,
@@ -122,8 +113,8 @@ export class ListPatientsComponent implements OnInit {
     },
   },
   {
-    header: 'Create Report',
-    field: 'Create Report',
+    header: 'Tests',
+    field: 'Record Test',
     isAction: true,
     isFilter: false,
     isSortable: false,
@@ -136,7 +127,7 @@ export class ListPatientsComponent implements OnInit {
     },
   },
   {
-    header: 'View Medical History',
+    header: 'Medical History',
     field: 'View Medical History',
     isAction: true,
     isFilter: false,

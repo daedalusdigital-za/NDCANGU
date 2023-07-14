@@ -32,22 +32,45 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="mb-3">
-                                        <label class="form-label" for="formrow-email-input">First Name</label>
+                                        <label class="form-label" for="formrow-firstname-input">First Name</label>
                                         <input type="text" class="form-control" name="name" [(ngModel)]="formSearch.name" id="formrow-firstname-input">
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="mb-3">
-                                        <label class="form-label" for="formrow-password-input">Surname</label>
+                                        <label class="form-label" for="formrow-firstname-input">Surname</label>
                                         <input type="text" class="form-control" name="surName" [(ngModel)]="formSearch.surname"  id="formrow-firstname-input">
                                     </div>
                                 </div>
                             </div>
+                            <div class="row">    
+                          <div class="col-md-6">  
                             <div class="mb-3">
                                 <label class="form-label" for="formrow-firstname-input">Patient Number</label>
                                 <input type="text" class="form-control" name="patientNumber" [(ngModel)]="formSearch.patientNumber"  id="formrow-firstname-input">
                             </div>
-
+                          </div>    
+                        <div class="col-md-6">  
+                                <div class="mb-3">
+                                    <label class="form-label" for="formrow-firstname-input">Province</label>
+                                    <input [disabled]=true  type="text" class="form-control" name="Province"  placeholder="Province">
+                                </div>
+                        </div>
+                            </div>   
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="mb-3">
+                                        <label for="progresspill-firstname-input">District</label>
+                                        <input [disabled]=true  type="text" class="form-control" name="Province"  placeholder="District">
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="mb-3">
+                                        <label for="progresspill-lastname-input">Institution</label>
+                                        <input [disabled]=true  type="text" class="form-control" name="flast" placeholder="Institution">
+                                    </div>
+                                </div>
+                            </div>
                             <div class="form-group">
                             </div>
                             <div class="mt-4">

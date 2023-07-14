@@ -206,8 +206,8 @@
                         </a>
                         <div class="dropdown-menu" aria-labelledby="topnav-pages">
 
-                            <a routerLink="/dashboard/users" routerLinkActive="router-link-active"  class="dropdown-item" data-key="t-calendar">View Users</a>
-                            <a routerLink="/dashboard/users/add" class="dropdown-item" data-key="t-chat">Add Users</a>
+                            <a routerLink="/dashboard/users/add" class="dropdown-item" data-key="t-chat">Add New Users</a>
+                            <a routerLink="/dashboard/users" routerLinkActive="router-link-active"  class="dropdown-item" data-key="t-calendar">View Existing Users</a>
                         </div>
                     </li>
                     <li class="nav-item dropdown">
@@ -230,7 +230,7 @@
                         <div class="dropdown-menu" aria-labelledby="topnav-components">
                                     <div class="dropdown">
                                        <a routerLink="/dashboard/reports" class="dropdown-item" data-key="t-calendar" *ngIf="!isNurseUser">View Reports</a>
-                                       <a routerLink="/dashboard/reports/add" class="dropdown-item" data-key="t-calendar" *ngIf="isMenuShown || isNurseUser">Create Reports</a>
+                                       <a routerLink="/dashboard/reports/add" class="dropdown-item" data-key="t-calendar" *ngIf="isMenuShown || isNurseUser">Generate Report</a>
                                      </div>
                        </div>
                     </li>
@@ -268,7 +268,9 @@
                         </a>
                        <div class="dropdown-menu" aria-labelledby="topnav-more">
                             <div class="dropdown">
-                                <a [href]="pdflink" class="dropdown-item" data-key="t-calendar">Form</a>
+                                <a [href]="pdflink" class="dropdown-item" data-key="t-calendar">PDF Form</a>
+                                <a routerLink="" class="dropdown-item" data-key="t-calendar">Mobile App</a>
+                                <a routerLink="" class="dropdown-item" data-key="t-calendar">Desktop App</a>
                             </div>
                             
                         </div>

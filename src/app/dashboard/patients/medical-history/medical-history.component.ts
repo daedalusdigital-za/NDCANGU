@@ -52,6 +52,7 @@ export class MedicalHistoryComponent implements OnInit {
     },
     {
       header: 'Last Updated',
+      visible: false,
       field: 'dateCreated',
       isFilter: false,
       getValue: function(item: any) {
@@ -61,8 +62,8 @@ export class MedicalHistoryComponent implements OnInit {
     },
   
     {
-      header: 'Atinstituation',
-      field: 'atInstitution',
+      header: 'instituation',
+      field: 'Institution',
       isFilter: false,
       getValue: function(item: any) {
         return item[this.field]
