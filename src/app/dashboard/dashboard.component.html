@@ -184,14 +184,64 @@
         </div>
         <div class="row">
             <div class="col-xl-6">
-                <div class="card card-h-100 customize-card">
-                    <div class="card-header">
-                        <h4 class="card-title mb-0">Total Colestoral</h4>
+              <div class="card card-h-100 customize-card">
+                <div class="card-header">
+                    <h4 class="card-title me-2">HBA1C Statistics</h4>
+                </div>
+                <!-- card body -->
+                <div class="card-body">
+                    <div class="d-flex flex-wrap align-items-center mb-4">
+                        <div class="ms-auto">
+                            <select class="form-select form-select-sm">
+                                <option value="MAY" selected="">April</option>
+                                <option value="AP">March</option>
+                                <option value="MA">Feb</option>
+                            </select>
+                        </div>
                     </div>
-                    <div class="card-body">
-                        <div echarts [options]="nestedPie"></div>
+                    <div class="row align-items-center">
+                        <div class="col-sm">
+                            <div class="apex-charts" style="min-height:
+                                209.8px;" *ngIf="isShown">
+                                <apx-chart
+                                    [series]="walletBalenceChart.series"
+                                    [chart]="walletBalenceChart.chart"
+                                    [legend]="{ show: false}"
+                                    [labels]="['DIABETIC', 'PREDIABETIC',
+                                    'CONTROLLED']"
+                                    [colors]="['#FF0000', '#FFA500',
+                                    '#008000']"></apx-chart>
+                            </div>
+                            <!-- <div id="wallet-balance" data-colors='["#FF0000", "#FFA500", "#008000"]' class="apex-charts"></div> -->
+                        </div>
+                        <div class="col-sm align-self-center">
+                            <div class="mt-4 mt-sm-0">
+                                <div>
+                                    <p class="mb-2"><i class="mdi mdi-circle
+                                            align-middle font-size-10 me-2
+                                            text-danger"></i> Diabetic</p>
+                                    <h6>6.5% <span class="text-muted
+                                            font-size-14 fw-normal">or Above</span></h6>
+                                </div>
+                                <div class="mt-4 pt-2">
+                                    <p class="mb-2"><i class="mdi mdi-circle
+                                            align-middle font-size-10 me-2
+                                            text-warning"></i> Prediabetic</p>
+                                    <h6>Between 5.7%<span class="text-muted
+                                            font-size-14 fw-normal">& 6.4%</span></h6>
+                                </div>
+                                <div class="mt-4 pt-2">
+                                    <p class="mb-2"><i class="mdi mdi-circle
+                                            align-middle font-size-10 me-2
+                                            text-success"></i> Controlled</p>
+                                    <h6>5.7% <span class="text-muted
+                                            font-size-14 fw-normal">or Below</span></h6>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
+            </div>
                 <!-- end card -->
             </div>
 
