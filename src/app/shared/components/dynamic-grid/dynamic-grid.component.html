@@ -12,10 +12,10 @@
                         class="btn btn-secondary buttons-copy buttons-html5" tabindex="0"
                         aria-controls="datatable-buttons" type="button"
                         (click)="copyTableContent()"><span>Copy</span></button> -->
-                    <button class="btn btn-secondary buttons-excel buttons-html5" tabindex="0"
+                    <button class="btn btn-success buttons-excel buttons-html5" tabindex="0"
                         aria-controls="datatable-buttons" type="button"
                         (click)="exportExcel()"><span>Excel</span></button>
-                    <button class="btn btn-secondary buttons-pdf buttons-html5" tabindex="0"
+                    <button class="btn btn-danger buttons-pdf buttons-html5" tabindex="0"
                         aria-controls="datatable-buttons" type="button" (click)="exportPdf()"><span>PDF</span></button>
                     </ng-container>
                    
@@ -54,7 +54,7 @@
                             {{col.getValue(item)}}
                         </span>
                         <span *ngIf="col.isAction">
-                            <button class="btn btn-secondary buttons-excel buttons-html5" tabindex="0"
+                            <button class="btn btn-info buttons-excel buttons-html5" tabindex="0"
                                 aria-controls="datatable-buttons" type="button"
                                 (click)="col.onClick(item)"><span>{{col.getValue(item)}}</span></button>
                         </span>
@@ -66,7 +66,7 @@
     </ng-template>
     <ng-template pTemplate="emptymessage">
         <tr>
-            <td colspan="8">No record found.</td>
+            <td colspan="8">No records found.</td>
         </tr>
     </ng-template>
 </p-table>

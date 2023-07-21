@@ -21,9 +21,9 @@
 
         <div class="row">
             <div class="col-lg-12">
-                <div class="card">
-                    <div class="card-header">
-                        <h4 class="card-title">Enter Patient Cridetials </h4>
+                <div class="card customize-card">
+                    <div class="card-header customize-card">
+                        <h2 class="card-title">Enter Patient Cridetials </h2>
                     </div>
                     <!-- end card header -->
         
@@ -32,27 +32,50 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="mb-3">
-                                        <label class="form-label" for="formrow-email-input">First Name</label>
+                                        <label class="form-label" for="formrow-firstname-input">First Name</label>
                                         <input type="text" class="form-control" name="name" [(ngModel)]="formSearch.name" id="formrow-firstname-input">
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="mb-3">
-                                        <label class="form-label" for="formrow-password-input">Surname</label>
+                                        <label class="form-label" for="formrow-firstname-input">Surname</label>
                                         <input type="text" class="form-control" name="surName" [(ngModel)]="formSearch.surname"  id="formrow-firstname-input">
                                     </div>
                                 </div>
                             </div>
+                            <div class="row">    
+                          <div class="col-md-6">  
                             <div class="mb-3">
                                 <label class="form-label" for="formrow-firstname-input">Patient Number</label>
                                 <input type="text" class="form-control" name="patientNumber" [(ngModel)]="formSearch.patientNumber"  id="formrow-firstname-input">
                             </div>
-
+                          </div>    
+                        <div class="col-md-6">  
+                                <div class="mb-3">
+                                    <label class="form-label" for="formrow-firstname-input">Province</label>
+                                    <input [disabled]=true  type="text" class="form-control" name="Province"  placeholder="Province">
+                                </div>
+                        </div>
+                            </div>   
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="mb-3">
+                                        <label for="progresspill-firstname-input">District</label>
+                                        <input [disabled]=true  type="text" class="form-control" name="Province"  placeholder="District">
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="mb-3">
+                                        <label for="progresspill-lastname-input">Institution</label>
+                                        <input [disabled]=true  type="text" class="form-control" name="flast" placeholder="Institution">
+                                    </div>
+                                </div>
+                            </div>
                             <div class="form-group">
                             </div>
                             <div class="mt-4">
                                 <button type="submit" class="btn btn-info btn-rounded waves-effect waves-light" (click)="onSearch()">Search</button>
-                                <button type="submit" class="btn btn-danger btn-rounded waves-effect waves-light" style="margin-left: 2%;" (click)="onClear()">Clear</button>
+                                <button type="submit" class="btn btn-danger btn-rounded waves-effect waves-light" style="margin-left: 2%;" (click)="onClear()">Reset</button>
                             </div>
                         </form>
                     </div>

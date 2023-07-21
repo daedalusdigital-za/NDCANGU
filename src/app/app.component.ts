@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { LoaderService } from './services/loader/loader.service';
 
@@ -12,12 +12,13 @@ export class AppComponent {
   isLogin: boolean = true;
 
   loading: boolean = true;
-
+  lottieLoading: boolean = false;
+  urlSegment:string;
   constructor(private loaderService: LoaderService, private router: ActivatedRoute) {
     this.loaderService.isLoading.subscribe((v: any) => {
       this.loading = v;
     });
-
+    this.lottieLoading = false;
     const urlSegments = this.router.snapshot.url;
     console.log('URL Segments:', urlSegments);
 
@@ -27,6 +28,10 @@ export class AppComponent {
     } else {
       // Do something else for other routes
       this.isLogin = true;
+      this.lottieLoading = true;
+      setTimeout(() => {
+        this.lottieLoading = false
+      },2000)
     }
   }
 }

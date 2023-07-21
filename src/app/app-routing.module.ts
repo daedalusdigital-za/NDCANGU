@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AppComponent } from './app.component';
-import { LockUserComponent } from './lock-user/lock-user.component';
+import { LockUserComponent } from './components/lock-user/lock-user.component';
 import { AuthGuard } from './shared/guards/auth.guard';
-import { ProfileComponent } from './profile/profile.component';
-import { OneComponent } from './one/one.component';
-import { TwoComponent } from './two/two.component';
+import { ProfileComponent } from './components/profile/profile.component';
+import { NotFoundComponent } from './components/not-found/not-found.component';
+import { TermsComponent } from './auth/terms/terms.component';
 
 const routes: Routes = [
   {
@@ -28,16 +28,19 @@ const routes: Routes = [
     component: ProfileComponent
   },
   {
-    path: 'one',
-    component: OneComponent
+    path: 'terms',
+    component: TermsComponent
   },
-  {
-    path: 'two',
-    component: TwoComponent
+  { path: '404',
+   component: NotFoundComponent 
   },
+  
   {
     path: '', redirectTo: 'auth', pathMatch: 'full'
-  }
+  },
+  { path: '**',
+   redirectTo: '/404'
+  } ,
   
   
 ];

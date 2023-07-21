@@ -10,18 +10,22 @@ import { ToastrModule } from 'ngx-toastr';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LoaderInterceptor } from './shared/interceptors/loader.interceptor';
 import { AuthTokenInterceptor } from './shared/interceptors/auth-token.interceptor';
-import { ProfileComponent } from './profile/profile.component';
-import { OneComponent } from './one/one.component';
-import { TwoComponent } from './two/two.component';
-import { TermsComponent } from './terms/terms.component';
+import { SplashScreenComponent } from './components/splash-screen/splash-screen.component';
+import { LottieModule } from 'ngx-lottie';
+import { ProfileComponent } from './components/profile/profile.component';
+import { NotFoundComponent } from './components/not-found/not-found.component';
+
+
+export function playerFactory(): any {
+  return import('lottie-web');
+}
 
 @NgModule({
   declarations: [
     AppComponent,
     ProfileComponent,
-    OneComponent,
-    TwoComponent,
-    TermsComponent,
+    SplashScreenComponent,
+    NotFoundComponent
     ],
   imports: [
     BrowserModule,
@@ -30,6 +34,7 @@ import { TermsComponent } from './terms/terms.component';
     FormsModule,
     HttpClientModule,
     ToastrModule.forRoot(),
+    LottieModule.forRoot({ player: playerFactory }),
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: LoaderInterceptor, multi: true },

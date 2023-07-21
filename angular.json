@@ -41,7 +41,9 @@
               "node_modules/ngx-toastr/toastr.css",
               "node_modules/primeicons/primeicons.css",
               "node_modules/primeng/resources/themes/lara-light-blue/theme.css",
-              "node_modules/primeng/resources/primeng.min.css"
+              "node_modules/primeng/resources/primeng.min.css",
+              "node_modules/@riapacheco/yutes/yutes.scss",
+              "node_modules/@riapacheco/yutes/colors.scss"
             ],
             "scripts": [
               "src/assets/libs/jquery/jquery.min.js",

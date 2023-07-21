@@ -33,7 +33,7 @@
                             <div class="tab-content twitter-bs-wizard-tab-content">
                                 <div class="tab-pane active" id="progress-seller-details">
                                     <div class="text-center mb-4">
-                                        <h5>Patient Details</h5>
+                                        <h3>Patient Details</h3>
                                     </div>
                                     <!-- form.valid &&  -->
                                     <form #form="ngForm" ngNativeValidate (ngSubmit)="addEditReport()">
@@ -42,13 +42,13 @@
                                             <div class="col-lg-6">
                                                 <div class="mb-3">
                                                     <label for="progresspill-firstname-input">Patient Id</label>
-                                                    <input type="text" class="form-control" name="patientId" [(ngModel)]="report.patientId" placeholder="Enter Patient ID">
+                                                    <input [disabled]=true  type="text" class="form-control" name="patientId" [(ngModel)]="report.patientId" placeholder="Enter Patient ID">
                                                 </div>
                                             </div>
                                             <div class="col-lg-6">
                                                 <div class="mb-3">
                                                     <label for="progresspill-lastname-input">First Name</label>
-                                                    <input type="text" class="form-control" name="flast" [(ngModel)]="report.name" placeholder="First Name">
+                                                    <input [disabled]=true  type="text" class="form-control" name="flast" [(ngModel)]="report.name" placeholder="First Name">
                                                 </div>
                                             </div>
                                         </div>
@@ -58,13 +58,13 @@
                                             <div class="col-lg-6">
                                                 <div class="mb-3">
                                                     <label for="progresspill-firstname-input">Gender</label>
-                                                    <input type="text" class="form-control" name="gender" [(ngModel)]="report.gender" placeholder="Enter Gender">
+                                                    <input [disabled]=true  type="text" class="form-control" name="gender" [(ngModel)]="report.gender" placeholder="Enter Gender">
                                                 </div>
                                             </div>
                                             <div class="col-lg-6">
                                                 <div class="mb-3">
                                                     <label for="progresspill-lastname-input">District</label>
-                                                    <input type="text" class="form-control" name="district" [(ngModel)]="report.district" placeholder="Enter District">
+                                                    <input [disabled]=true  type="text" class="form-control" name="district" [(ngModel)]="report.district" placeholder="Enter District">
                                                 </div>
                                             </div>
                                         </div>
@@ -132,9 +132,9 @@
                                             <div class="col-lg-6">
                                                 <div class="mb-3">
                                                     <label class="form-label">Next Appointment Date</label>
-                                                    <input type="date" class="form-control" name="nextAppointmentDate" [(ngModel)]="report.nextAppointmentDate">
+                                                    <input type="datetime-local" class="form-control" name="nextAppointmentDate" value="2019-08-19T13:45:00" [(ngModel)]="report.nextAppointmentDate">
                                                 </div>
-                                            
+
                                             </div>
                                         </div>
 
@@ -142,13 +142,13 @@
                                             <div class="col-lg-6">
                                                 <div class="mb-3">
                                                     <label class="form-label">Recomendations</label>
-                                                    <input type="text" class="form-control" name="recomendations" [(ngModel)]="report.recomendations">
+                                                    <input [disabled]=true type="text" class="form-control" name="recomendations" [(ngModel)]="report.recomendations">
                                                 </div>
                                             </div>
                                             <div class="col-lg-6">
                                                 <div class="mb-3">
                                                     <label class="form-label">Remedies</label>
-                                                    <input type="text" class="form-control" name="remidies" [(ngModel)]="report.remidies">
+                                                    <input [disabled]=true type="text" class="form-control" name="remidies" [(ngModel)]="report.remidies">
                                                 </div>
                                             </div>
                                         </div>

@@ -38,7 +38,7 @@ export class ListReportsComponent implements OnInit {
         },
       },
       {
-      header: 'Date created',
+      header: 'Date Recorded',
       field: 'dateCreated',
       getValue: function(item: any) {
         const val: any = item[this.field] ? new Date(item[this.field]).toISOString().slice(0,10) : '';
@@ -47,6 +47,7 @@ export class ListReportsComponent implements OnInit {
     },
     {
       header: 'Last Updated',
+      visible: false,
       field: 'dateCreated',
       getValue: function(item: any) {
         const val: any = item[this.field] ? new Date(item[this.field]).toISOString().slice(0,10) : '';
@@ -55,7 +56,7 @@ export class ListReportsComponent implements OnInit {
     },
   
     {
-      header: 'Atinstituation',
+      header: 'Instituation',
       field: 'atInstitution',
       getValue: function(item: any) {
         return item[this.field]
@@ -83,14 +84,14 @@ export class ListReportsComponent implements OnInit {
       },
     },
     {
-      header: 'IsMedicated',
+      header: 'Treatment',
       field: 'isMedicated',
       getValue: function(item: any) {
         return item[this.field]
       },
     },
     {
-      header: 'Keytone',
+      header: 'Ketone',
       field: 'keyTone',
       getValue: function(item: any) {
         return item[this.field]

@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-
 @Component({
   selector: 'app-list-stats',
   templateUrl: './list-stats.component.html',
@@ -480,6 +479,7 @@ export class ListStatsComponent implements OnInit {
       }
     }
   }
+  
 
   constructor() { }
 

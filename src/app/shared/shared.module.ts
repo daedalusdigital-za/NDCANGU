@@ -9,8 +9,11 @@ import { MenuModule } from 'primeng/menu';
 import { ToolbarModule } from 'primeng/toolbar';
 import { PaginatorModule } from 'primeng/paginator';
 import { ButtonModule } from "primeng/button";
+import { LottieModule } from 'ngx-lottie';
 
-
+export function playerFactory(): any {
+    return import('lottie-web');
+  }
 @NgModule({
     declarations: [
         DynamicGridComponent
@@ -24,7 +27,8 @@ import { ButtonModule } from "primeng/button";
         ToolbarModule,
         MenuModule,
         PaginatorModule,
-        ButtonModule
+        ButtonModule,
+        LottieModule.forRoot({ player: playerFactory })
     ],
     exports: [DynamicGridComponent]
 })
