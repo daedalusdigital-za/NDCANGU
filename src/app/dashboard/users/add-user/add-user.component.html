@@ -42,7 +42,7 @@
                                                     <input type="text" required class="form-control"
                                                         id="basicpill-firstname-input" name="firstName"
                                                         [(ngModel)]="user.firstName"
-                                                        [ngClass]="{'is-invalid': form.controls['firstName']?.touched && form.controls['firstName']?.invalid }"
+                                                        [ngClass]="{'is-invalid': form.controls['firstName'].touched && form.controls['firstName'].invalid }"
                                                         placeholder="Enter Your First Name">
                                                         
                                                 </div>
@@ -54,7 +54,7 @@
                                                     <input type="text" required="true" class="form-control"
                                                         id="basicpill-lastname-input" [(ngModel)]="user.lastName"
                                                         name="lastName" placeholder="Enter Your Last Name"
-                                                        [ngClass]="{'is-invalid': form.controls['lastName']?.touched && form.controls['lastName']?.invalid }">
+                                                        [ngClass]="{'is-invalid': form.controls['lastName'].touched && form.controls['lastName'].invalid }">
                                                 </div>
                                             </div>
                                         </div>
