@@ -18,7 +18,7 @@
             </div>
         </div>
         <!-- end page title -->
-        
+
         <div class="row">
             <div class="col-lg-12">
                 <div class="card">
@@ -37,14 +37,24 @@
                                         <div class="row">
                                             <div class="col-lg-6">
                                                 <div class="mb-3">
-                                                    <label for="basicpill-firstname-input" class="form-label">First name</label>
-                                                    <input type="text" required="true" class="form-control" id="basicpill-firstname-input" name="firstName" [(ngModel)]="user.firstName" placeholder="Enter Your First Name">
+                                                    <label for="basicpill-firstname-input" class="form-label">First
+                                                        name </label>
+                                                    <input type="text" required class="form-control"
+                                                        id="basicpill-firstname-input" name="firstName"
+                                                        [(ngModel)]="user.firstName"
+                                                        [ngClass]="{'is-invalid': form.controls['firstName']?.touched && form.controls['firstName']?.invalid }"
+                                                        placeholder="Enter Your First Name">
+                                                        
                                                 </div>
                                             </div>
                                             <div class="col-lg-6">
                                                 <div class="mb-3">
-                                                    <label for="basicpill-lastname-input" class="form-label">Last name</label>
-                                                    <input type="text" required="true" class="form-control" id="basicpill-lastname-input" [(ngModel)]="user.lastName" name="lastName" placeholder="Enter Your Last Name">
+                                                    <label for="basicpill-lastname-input" class="form-label">Last
+                                                        name</label>
+                                                    <input type="text" required="true" class="form-control"
+                                                        id="basicpill-lastname-input" [(ngModel)]="user.lastName"
+                                                        name="lastName" placeholder="Enter Your Last Name"
+                                                        [ngClass]="{'is-invalid': form.controls['lastName']?.touched && form.controls['lastName']?.invalid }">
                                                 </div>
                                             </div>
                                         </div>
@@ -52,25 +62,37 @@
                                         <div class="row">
                                             <div class="col-lg-6">
                                                 <div class="mb-3">
-                                                    <label for="basicpill-phoneno-input" class="form-label">Phone</label>
-                                                    <input type="text" required="true" class="form-control" id="basicpill-phoneno-input" name="phoneNumber" [(ngModel)]="user.phoneNumber" placeholder="Enter your Phone No.">
+                                                    <label for="basicpill-phoneno-input"
+                                                        class="form-label">Phone</label>
+                                                    <input type="text" required="true" class="form-control"
+                                                        id="basicpill-phoneno-input" name="phoneNumber"
+                                                        [(ngModel)]="user.phoneNumber"
+                                                        placeholder="Enter your Phone No."
+                                                        [class.is-invalid]="form.submitted && form.controls['phoneNumber'].invalid">
                                                 </div>
                                             </div>
                                             <div class="col-lg-6">
                                                 <div class="mb-3">
                                                     <label for="basicpill-email-input" class="form-label">Email</label>
-                                                    <input type="email" required="true" class="form-control" id="basicpill-email-input" name="email" [(ngModel)]="user.email" placeholder="Enter your email">
+                                                    <input type="email" required="true" class="form-control"
+                                                        id="basicpill-email-input" name="email" [(ngModel)]="user.email"
+                                                        placeholder="Enter your email"
+                                                        [class.is-invalid]="form.submitted && form.controls['email'].invalid">
                                                 </div>
                                             </div>
 
-                                            
+
 
                                         </div>
                                         <div class="row" *ngIf="!id">
                                             <div class="col-lg-12">
                                                 <div class="mb-3">
-                                                    <label for="basicpill-address-input" class="form-label">Password</label>
-                                                    <input type="password" required="true" class="form-control" id="basicpill-email-input" name="password" [(ngModel)]="user.password" placeholder="Enter  password">
+                                                    <label for="basicpill-address-input"
+                                                        class="form-label">Password</label>
+                                                    <input type="password" required="true" class="form-control"
+                                                        id="basicpill-email-input" name="password"
+                                                        [(ngModel)]="user.password" placeholder="Enter password" 
+                                                        [class.is-invalid]="form.submitted && form.controls['password'].invalid">
                                                 </div>
                                             </div>
                                         </div>
@@ -78,14 +100,22 @@
                                         <div class="row" *ngIf="id">
                                             <div class="col-lg-6">
                                                 <div class="mb-3">
-                                                    <label for="basicpill-phoneno-input" class="form-label">Position Name</label>
-                                                    <input type="text" required="true" class="form-control" id="basicpill-phoneno-input" name="Position" [(ngModel)]="user.positionName" placeholder="Enter your position Name.">
+                                                    <label for="basicpill-phoneno-input" class="form-label">Position
+                                                        Name</label>
+                                                    <input type="text" required="true" class="form-control"
+                                                        id="basicpill-phoneno-input" name="Position"
+                                                        [(ngModel)]="user.positionName"
+                                                        placeholder="Enter your position Name.">
                                                 </div>
                                             </div>
                                             <div class="col-lg-6">
                                                 <div class="mb-3">
-                                                    <label for="basicpill-email-input" class="form-label">Position Description</label>
-                                                    <input type="text" required="true" class="form-control" id="basicpill-email-input" name="description" [(ngModel)]="user.positionDesc" placeholder="Enter your position description">
+                                                    <label for="basicpill-email-input" class="form-label">Position
+                                                        Description</label>
+                                                    <input type="text" required="true" class="form-control"
+                                                        id="basicpill-email-input" name="description"
+                                                        [(ngModel)]="user.positionDesc"
+                                                        placeholder="Enter your position description">
                                                 </div>
                                             </div>
                                         </div>
@@ -93,14 +123,22 @@
                                         <div class="row" *ngIf="id">
                                             <div class="col-lg-6">
                                                 <div class="mb-3">
-                                                    <label for="basicpill-phoneno-input" class="form-label">Contact Name</label>
-                                                    <input type="text" required="true" class="form-control" id="basicpill-phoneno-input" name="contact" [(ngModel)]="user.contactName" placeholder="Enter your contact Name.">
+                                                    <label for="basicpill-phoneno-input" class="form-label">Contact
+                                                        Name</label>
+                                                    <input type="text" required="true" class="form-control"
+                                                        id="basicpill-phoneno-input" name="contact"
+                                                        [(ngModel)]="user.contactName"
+                                                        placeholder="Enter your contact Name.">
                                                 </div>
                                             </div>
                                             <div class="col-lg-6">
                                                 <div class="mb-3">
-                                                    <label for="basicpill-email-input" class="form-label">Contact Type</label>
-                                                    <input type="text" required="true" class="form-control" id="basicpill-email-input" name="contactType" [(ngModel)]="user.contactTypeName" placeholder="Enter your contact type">
+                                                    <label for="basicpill-email-input" class="form-label">Contact
+                                                        Type</label>
+                                                    <input type="text" required="true" class="form-control"
+                                                        id="basicpill-email-input" name="contactType"
+                                                        [(ngModel)]="user.contactTypeName"
+                                                        placeholder="Enter your contact type">
                                                 </div>
                                             </div>
                                         </div>
@@ -108,70 +146,92 @@
                                         <div class="row" *ngIf="id">
                                             <div class="col-lg-6">
                                                 <div class="mb-3">
-                                                    <label for="basicpill-phoneno-input" class="form-label">Contact Data Type Name</label>
-                                                    <input type="text" required="true" class="form-control" id="basicpill-phoneno-input" name="contactDataTypeName" [(ngModel)]="user.contactDataTypeName" placeholder="Enter value.">
+                                                    <label for="basicpill-phoneno-input" class="form-label">Contact Data
+                                                        Type Name</label>
+                                                    <input type="text" required="true" class="form-control"
+                                                        id="basicpill-phoneno-input" name="contactDataTypeName"
+                                                        [(ngModel)]="user.contactDataTypeName"
+                                                        placeholder="Enter value.">
                                                 </div>
                                             </div>
                                             <div class="col-lg-6">
                                                 <div class="mb-3">
-                                                    <label for="basicpill-email-input" class="form-label">Contact Entity Name</label>
-                                                    <input type="text" required="true" class="form-control" id="basicpill-email-input" name="contactEntityName" [(ngModel)]="user.contactEntityName" placeholder="Enter value">
+                                                    <label for="basicpill-email-input" class="form-label">Contact Entity
+                                                        Name</label>
+                                                    <input type="text" required="true" class="form-control"
+                                                        id="basicpill-email-input" name="contactEntityName"
+                                                        [(ngModel)]="user.contactEntityName" placeholder="Enter value">
                                                 </div>
                                             </div>
                                         </div>
-                                   
-                                    <ul class="pager wizard twitter-bs-wizard-pager-link">
-                                        <li class="next">
-                                            <button class="btn btn-primary w-100 waves-effect waves-light" type="submit">Save <i class="bx bx-chevron-right ms-1"></i></button>
-                                        </li>
-                                    </ul>
-                                </form>
+
+                                        <ul class="pager wizard twitter-bs-wizard-pager-link">
+                                            <li class="next">
+                                                <button class="btn btn-primary w-100 waves-effect waves-light"
+                                                    type="submit">Save <i class="bx bx-chevron-right ms-1"></i></button>
+                                            </li>
+                                        </ul>
+                                    </form>
                                 </div>
                                 <!-- tab pane -->
                                 <div class="tab-pane" id="company-document">
-                                  <div>
-                                    <div class="text-center mb-4">
-                                        <h5>Login Credentials </h5>
-                                        <p class="card-title-desc">Fill all information below</p>
+                                    <div>
+                                        <div class="text-center mb-4">
+                                            <h5>Login Credentials </h5>
+                                            <p class="card-title-desc">Fill all information below</p>
+                                        </div>
+                                        <form>
+                                            <div class="row">
+                                                <div class="col-lg-6">
+                                                    <div class="mb-3">
+                                                        <label for="basicpill-pancard-input"
+                                                            class="form-label">Username</label>
+                                                        <input type="text" class="form-control"
+                                                            id="basicpill-pancard-input" placeholder="Enter Username">
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-lg-6">
+                                                    <div class="mb-3">
+                                                        <label for="basicpill-vatno-input" class="form-label">Recover
+                                                            Email.</label>
+                                                        <input type="text" class="form-control"
+                                                            id="basicpill-vatno-input" placeholder="Enter User Email">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-lg-6">
+                                                    <div class="mb-3">
+                                                        <label for="basicpill-cstno-input" class="form-label">User
+                                                            Password</label>
+                                                        <input type="text" class="form-control"
+                                                            id="basicpill-cstno-input"
+                                                            placeholder="Enter User Password">
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-lg-6">
+                                                    <div class="mb-3">
+                                                        <label for="basicpill-servicetax-input"
+                                                            class="form-label">Confirm Password</label>
+                                                        <input type="text" class="form-control"
+                                                            id="basicpill-servicetax-input"
+                                                            placeholder="Confirm User Password ">
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </form>
+                                        <ul class="pager wizard twitter-bs-wizard-pager-link">
+                                            <li class="previous disabled"><a href="javascript: void(0);"
+                                                    class="btn btn-primary" onclick="nextTab()"><i
+                                                        class="bx bx-chevron-left me-1"></i> Previous</a></li>
+                                            <li class="next"><a href="javascript: void(0);" class="btn btn-primary"
+                                                    onclick="nextTab()">Next <i
+                                                        class="bx bx-chevron-right ms-1"></i></a></li>
+                                        </ul>
                                     </div>
-                                    <form>
-                                        <div class="row">
-                                            <div class="col-lg-6">
-                                                <div class="mb-3">
-                                                    <label for="basicpill-pancard-input" class="form-label">Username</label>
-                                                    <input type="text" class="form-control" id="basicpill-pancard-input" placeholder="Enter Username">
-                                                </div>
-                                            </div>
-
-                                            <div class="col-lg-6">
-                                                <div class="mb-3">
-                                                    <label for="basicpill-vatno-input" class="form-label">Recover Email.</label>
-                                                    <input type="text" class="form-control" id="basicpill-vatno-input" placeholder="Enter User Email">
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-lg-6">
-                                                <div class="mb-3">
-                                                    <label for="basicpill-cstno-input" class="form-label">User Password</label>
-                                                    <input type="text" class="form-control" id="basicpill-cstno-input" placeholder="Enter User Password">
-                                                </div>
-                                            </div>
-
-                                            <div class="col-lg-6">
-                                                <div class="mb-3">
-                                                    <label for="basicpill-servicetax-input" class="form-label">Confirm Password</label>
-                                                    <input type="text" class="form-control" id="basicpill-servicetax-input" placeholder="Confirm User Password ">
-                                                </div>
-                                            </div>
-                                        </div>
-                                        
-                                    </form>
-                                    <ul class="pager wizard twitter-bs-wizard-pager-link">
-                                        <li class="previous disabled"><a href="javascript: void(0);" class="btn btn-primary" onclick="nextTab()"><i class="bx bx-chevron-left me-1"></i> Previous</a></li>
-                                        <li class="next"><a href="javascript: void(0);" class="btn btn-primary" onclick="nextTab()">Next <i class="bx bx-chevron-right ms-1"></i></a></li>
-                                    </ul>
-                                  </div>
                                 </div>
                                 <!-- tab pane -->
                                 <div class="tab-pane" id="bank-detail">
@@ -184,8 +244,11 @@
                                             <div class="row">
                                                 <div class="col-lg-6">
                                                     <div class="mb-3">
-                                                        <label for="basicpill-namecard-input" class="form-label">Job <title></title></label>
-                                                        <input type="text" class="form-control" id="basicpill-namecard-input" placeholder="Enter Offical Job title">
+                                                        <label for="basicpill-namecard-input" class="form-label">Job
+                                                            <title></title></label>
+                                                        <input type="text" class="form-control"
+                                                            id="basicpill-namecard-input"
+                                                            placeholder="Enter Offical Job title">
                                                     </div>
                                                 </div>
 
@@ -193,9 +256,9 @@
                                                     <div class="mb-3">
                                                         <label class="form-label">User Type</label>
                                                         <select class="form-select">
-                                                                <option selected="">Select Type</option>
-                                                                <option value="AE">Health Care Worker</option>
-                                                                <option value="VI">Health Care Professional</option>
+                                                            <option selected="">Select Type</option>
+                                                            <option value="AE">Health Care Worker</option>
+                                                            <option value="VI">Health Care Professional</option>
 
                                                         </select>
                                                     </div>
@@ -204,23 +267,30 @@
                                             <div class="row">
                                                 <div class="col-lg-6">
                                                     <div class="mb-3">
-                                                        <label for="basicpill-expiration-input" class="form-label">Active Date</label>
-                                                        <input type="date" class="form-control" id="basicpill-expiration-input">
+                                                        <label for="basicpill-expiration-input"
+                                                            class="form-label">Active Date</label>
+                                                        <input type="date" class="form-control"
+                                                            id="basicpill-expiration-input">
                                                     </div>
                                                 </div>
 
                                                 <div class="col-lg-6">
                                                     <div class="mb-3">
-                                                        <label for="basicpill-expiration-input" class="form-label">Termination Date</label>
-                                                        <input type="date" class="form-control" id="basicpill-expiration-input">
+                                                        <label for="basicpill-expiration-input"
+                                                            class="form-label">Termination Date</label>
+                                                        <input type="date" class="form-control"
+                                                            id="basicpill-expiration-input">
                                                     </div>
                                                 </div>
                                             </div>
-                                            
+
                                         </form>
                                         <ul class="pager wizard twitter-bs-wizard-pager-link">
-                                            <li class="previous disabled"><a href="javascript: void(0);" class="btn btn-primary" onclick="nextTab()"><i class="bx bx-chevron-left me-1"></i> Previous</a></li>
-                                            <li class="float-end"><a href="javascript: void(0);" class="btn btn-primary" data-bs-toggle="modal" data-bs-target=".confirmModal">Save
+                                            <li class="previous disabled"><a href="javascript: void(0);"
+                                                    class="btn btn-primary" onclick="nextTab()"><i
+                                                        class="bx bx-chevron-left me-1"></i> Previous</a></li>
+                                            <li class="float-end"><a href="javascript: void(0);" class="btn btn-primary"
+                                                    data-bs-toggle="modal" data-bs-target=".confirmModal">Save
                                                     Changes</a></li>
                                         </ul>
                                     </div>
@@ -238,6 +308,6 @@
         </div>
         <!-- end row -->
 
-       
+
     </div> <!-- container-fluid -->
 </div>
