@@ -51,6 +51,10 @@ const routes: Routes = [
         path: 'reports',
         loadChildren: () => import('./reports/reports.module').then(m => m.ReportsModule),
       },
+       {
+        path: 'tests',
+        loadChildren: () => import('./tests/tests.module').then(m => m.TestsModule),
+      },
       {
         path: 'verify-phone-number',
         component: VerifyPhoneNumberComponent
