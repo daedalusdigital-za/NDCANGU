@@ -949,4 +949,13 @@ export class DashboardComponent implements OnInit {
 
           this.globalService.exportToExcel(jsonData, new Date().getTime()+'_data');
     }
+
+    downloadPdf(){
+       const jsonData: any[] = [
+            { name: 'Item 1' },
+            { name: 'Item 2' },
+            // Add more data here or fetch from API
+          ];
+          this.globalService.generatePDF(jsonData, new Date().getTime()+'_data');
+    }
 }

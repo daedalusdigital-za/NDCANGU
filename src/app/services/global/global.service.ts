@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import jsPDF from 'jspdf';
 import { Subject } from 'rxjs';
 import * as XLSX from 'xlsx';
 
@@ -84,6 +85,19 @@ export class GlobalService {
     link.href = url;
     link.download = fileName + '.xlsx';
     link.click();
+  }
+
+
+  generatePDF(data: any[], fileName: string): void {
+    const doc = new jsPDF();
+
+    // Customize the PDF content based on your JSON data
+    // For example, if the JSON data is an array of objects, you can loop through the array and add content to the PDF
+    data.forEach((item, index) => {
+      doc.text(`Item ${index + 1}: ${item.name}`, 10, 10 + index * 10);
+    });
+
+    doc.save(`${fileName}.pdf`);
   }
   
 }
