@@ -912,4 +912,14 @@ export class DashboardComponent implements OnInit {
         }
 
     }
+
+    downloadExcel(){
+       const jsonData: any[] = [
+            { name: 'John Doe', age: 30, email: 'john@example.com' },
+            { name: 'Jane Smith', age: 25, email: 'jane@example.com' },
+            // Add more JSON data here...
+          ];
+
+          this.globalService.exportToExcel(jsonData, new Date().getTime()+'_data');
+    }
 }
