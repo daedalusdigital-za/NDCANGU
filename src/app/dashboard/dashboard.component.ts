@@ -152,38 +152,65 @@ export class DashboardComponent implements OnInit {
       };
 
       barChartoptions: any = {
+        colors : ['#346beb', '#eb4034'],
         series: [
-          {
-            name: "Test Done",
-            data: [400, 430, 448, 470, 540, 580, 690, 1100, 1200, 1380]
+            {
+              name: "Pending Tests",
+              data: [44, 55, 41, 37, 22, 43, 21]
+            },
+            {
+              name: "Test Done",
+              data: [53, 32, 33, 52, 13, 43, 32]
+            },
+           
+          ],
+          chart: {
+            type: "bar",
+            height: 350,
+            stacked: true
+          },
+          plotOptions: {
+            bar: {
+              horizontal: true
+            }
+          },
+          stroke: {
+            width: 1,
+            // colors: ["#fff"]
+          },
+          title: {
+            text: "Tests Conducted"
+          },
+          xaxis: {
+            categories: [2018, 2019, 2020, 2021, 2022, 2023],
+            labels: {
+              formatter: (val: any) =>{
+                return val + "K";
+              }
+            }
+          },
+          yaxis: {
+            title: {
+              text: undefined
+            }
+          },
+          tooltip: {
+            y: {
+              formatter: (val: any) =>{
+                return val + "K";
+              }
+            }
+          },
+          fill: {
+            opacity: 1
+          },
+          legend: {
+            position: "top",
+            horizontalAlign: "left",
+            offsetX: 40
           }
-        ],
-        chart: {
-          type: "bar",
-          height: 350
-        },
-        plotOptions: {
-          bar: {
-            horizontal: true
-          }
-        },
-        dataLabels: {
-          enabled: false
-        },
-        xaxis: {
-          categories: [
-            "Freestate",
-            "Northen Cape",
-            "Limpopo",
-            "Gauteng ",
-            "Eastern cape",
-            "Western cape",
-            "North west",
-            "Kwazulu Natal",
-            "Mpumalanga"
-          ]
-        }
-      };
+        };
+
     chartNonDiabiates: any = {
         "series": [
             {
