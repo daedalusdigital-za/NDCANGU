@@ -206,8 +206,8 @@
                         </a>
                         <div class="dropdown-menu" aria-labelledby="topnav-pages">
 
-                            <a routerLink="/dashboard/users/add" class="dropdown-item" data-key="t-chat">Add New Users</a>
-                            <a routerLink="/dashboard/users" routerLinkActive="router-link-active"  class="dropdown-item" data-key="t-calendar">View Existing Users</a>
+                            <a routerLink="/dashboard/users/add" class= "dripicons-plus dropdown-item" data-key="t-chat"> Add New Users</a>
+                            <a routerLink="/dashboard/users" routerLinkActive="router-link-active"  class=" dripicons-user-group dropdown-item" data-key="t-calendar"> View Existing Users</a>
                         </div>
                     </li>
                     <li class="nav-item dropdown">
@@ -216,12 +216,23 @@
                         </a>
                         <div class="dropdown-menu" aria-labelledby="topnav-components">
                                     <div class="dropdown">
-                                       <a routerLink="/dashboard/patients/add" class="dropdown-item" data-key="t-calendar">New Patient</a>
-                                       <a routerLink="/dashboard/patients" class="dropdown-item" data-key="t-calendar">Existing Patient</a>
+                                       <a routerLink="/dashboard/patients/add" class="dripicons-plus dropdown-item" data-key="t-calendar"> Add Patient</a>
+                                       <a routerLink="/dashboard/patients" class="dripicons-user-id dropdown-item" data-key="t-calendar"> Existing Patient</a>
                                      </div>
                        </div>
                     </li>
 
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle arrow-none"  id="topnav-components" role="button">
+                            <i class="dripicons  dripicons-to-do" data-feather="file-text"></i><span data-key="t-components"> Tests</span> <div class="arrow-down"></div>
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="topnav-components">
+                                    <div class="dropdown">
+                                       <a routerLink="/dashboard/reports" class="dripicons-plus dropdown-item" data-key="t-calendar" *ngIf="!isNurseUser">Add Test</a>
+                                       <a routerLink="/dashboard/reports/add" class="dripicons-preview dropdown-item" data-key="t-calendar" *ngIf="isMenuShown || isNurseUser"> Veiw Tests</a>
+                                     </div>
+                       </div>
+                    </li>
 
                      <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle arrow-none"  id="topnav-components" role="button">
@@ -229,8 +240,8 @@
                         </a>
                         <div class="dropdown-menu" aria-labelledby="topnav-components">
                                     <div class="dropdown">
-                                       <a routerLink="/dashboard/reports" class="dropdown-item" data-key="t-calendar" *ngIf="!isNurseUser">View Reports</a>
-                                       <a routerLink="/dashboard/reports/add" class="dropdown-item" data-key="t-calendar" *ngIf="isMenuShown || isNurseUser">Generate Report</a>
+                                       <a routerLink="/dashboard/reports" class="dripicons-graph-bar dropdown-item" data-key="t-calendar" *ngIf="!isNurseUser"> View Reports</a>
+                                       <a routerLink="/dashboard/reports/add" class="dripicons-graph-line dropdown-item" data-key="t-calendar" *ngIf="isMenuShown || isNurseUser"> Generate Report</a>
                                      </div>
                        </div>
                     </li>
@@ -255,22 +266,24 @@
                         </a>
                        <div class="dropdown-menu" aria-labelledby="topnav-more">
                             <div class="dropdown">
-                                <a routerLink="/dashboard/faqs" class="dropdown-item" data-key="t-calendar">FAQ</a>
-                                 <a routerLink="/dashboard/tutorials" class="dropdown-item" data-key="t-chat">Tutorials</a>
+                                <a routerLink="/dashboard/faqs" class="dropdown-item dripicons-message" data-key="t-calendar"> FAQ</a>
+                                 <a routerLink="/dashboard/tutorials" class="dripicons-graduation dropdown-item" data-key="t-chat"> Tutorials</a>
                             </div>
                             
                         </div>
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle arrow-none" id="topnav-more" role="button">
-                            <i class="dripicons  dripicons-cloud-download" data-feather="download"></i><span data-key="t-extra-pages"> Download</span> 
+                            <i class="dripicons  dripicons-download" data-feather="download"></i><span data-key="t-extra-pages"> Download</span> 
                             <div class="arrow-down"></div>
                         </a>
-                       <div class="dropdown-menu" aria-labelledby="topnav-more">
+                       <div class="dropdown-menu mega-dropdown-menu dropdown-menu-right dropdown-mega-menu-x" aria-labelledby="topnav-more">
                             <div class="dropdown">
-                                <a [href]="pdflink" class="dropdown-item" data-key="t-calendar">PDF Form</a>
-                                <a routerLink="" class="dropdown-item" data-key="t-calendar">Mobile App</a>
-                                <a routerLink="" class="dropdown-item" data-key="t-calendar">Desktop App</a>
+                                    <div class = "col-lg-4">
+                                        <a [href]="pdflink" class="dripicons-document dropdown-item" data-key="t-calendar"> PDF Form</a>
+                                        <a routerLink="" class="dripicons-device-mobile dropdown-item" data-key="t-calendar"> Mobile App</a>
+                                        <a routerLink="" class="dripicons-monitor dropdown-item" data-key="t-calendar"> Desktop App</a>
+                                    </div>    
                             </div>
                             
                         </div>
@@ -291,7 +304,7 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-sm-6">
-                <script>document.write(new Date().getFullYear())</script> NCD SOFTWARE.
+                <script>document.write(new Date().getFullYear())</script> NCD SOFTWARE. V1.5
             </div>
             <div class="col-sm-6">
                 <div class="text-sm-end d-none d-sm-block">
