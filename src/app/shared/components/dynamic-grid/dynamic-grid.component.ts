@@ -5,7 +5,7 @@ import { Paginator } from 'primeng/paginator';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable'
 import { saveAs } from 'file-saver';
-import { Table } from 'primeng/table'; 
+import { Table } from 'primeng/table';
 
 
 @Component({
@@ -47,7 +47,7 @@ export class DynamicGridComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
-    this._selectedColumns = this.columns.filter((col: any) => col?.visible !== false );
+    this._selectedColumns = this.columns.filter((col: any) => col?.visible !== false);
     this.exportColumns = this.columns.map(col => ({ title: col.header, dataKey: col.field }));
     this.exportPdfColumns = this.columns.map(col => col.header);
   }
@@ -59,19 +59,34 @@ export class DynamicGridComponent implements OnInit {
 
 
   exportPdf() {
-    const PdfData = this.data.map((item: any) => ([item.name, item.age, item.job, item.height]))
-
+    const PdfData = this.data.map((item: any) => this._selectedColumns.map(column => item[column.field]));
+    const columnsToExport = this._selectedColumns.map((item) => item.header);
     const doc = new jsPDF();
     autoTable(doc, {
-      head: [this.exportPdfColumns], body: PdfData
-    })
-
-    doc.save(`HCD Software Reports_${new Date().getTime()}.pdf`)
+      head: [columnsToExport],
+      body: PdfData
+    });
+    doc.save(`HCD Software Reports_${new Date().getTime()}.pdf`);
   }
 
   exportExcel() {
+    const columnsToExport: any = [];
+    const customColumnNames: { [key: string]: string } = {};
+    this._selectedColumns.map((item) => {
+      columnsToExport.push(item.field);
+      customColumnNames[item.field] = item.header;
+    });
+
+    const filteredExportData = this.data.map((row: any) =>
+      columnsToExport.reduce((acc: any, key: any) => {
+        acc[customColumnNames[key] || key] = row[key];
+        return acc;
+      }, {})
+    );
+
+
     import("xlsx").then(xlsx => {
-      const worksheet = xlsx.utils.json_to_sheet(this.data);
+      const worksheet = xlsx.utils.json_to_sheet(filteredExportData);
       const workbook = { Sheets: { 'data': worksheet }, SheetNames: ['data'] };
       const excelBuffer: any = xlsx.write(workbook, { bookType: 'xlsx', type: 'array' });
       this.saveAsExcelFile(excelBuffer, "HCD Software Reports");
@@ -95,7 +110,7 @@ export class DynamicGridComponent implements OnInit {
     textAreaElement.value = tableHtml; // Set the value of the textarea to the table HTML
     document.body.appendChild(textAreaElement); // Append the textarea element to the DOM
     textAreaElement.select(); // Select the textarea
-   const res: any = document.execCommand('copy'); // Execute the copy command
+    const res: any = document.execCommand('copy'); // Execute the copy command
     document.body.removeChild(textAreaElement.replace(/<[^>]*>?/gm, '')); // Remove the textarea element from the DOM
   }
 }
