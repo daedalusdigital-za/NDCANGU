@@ -9,6 +9,8 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ButtonModule } from 'primeng/button';
 import { MedicalHistoryComponent } from './medical-history/medical-history.component';
 import {DynamicDialogModule} from 'primeng/dynamicdialog';
+import { ModalRecordTestComponent } from './list-patients/modal-record-test/modal-record-test.component';
+import { MultiSelectModule } from 'primeng/multiselect';
 
 
 
@@ -16,7 +18,8 @@ import {DynamicDialogModule} from 'primeng/dynamicdialog';
   declarations: [
     ListPatientsComponent,
     AddPatientComponent,
-    MedicalHistoryComponent
+    MedicalHistoryComponent,
+    ModalRecordTestComponent
   ],
   imports: [
     CommonModule,
@@ -25,7 +28,8 @@ import {DynamicDialogModule} from 'primeng/dynamicdialog';
     DynamicDialogModule,
     ConfirmDialogModule,
     ButtonModule,
-    PatientsRoutingModule
+    PatientsRoutingModule,
+    MultiSelectModule
   ]
 })
 export class PatientsModule { }

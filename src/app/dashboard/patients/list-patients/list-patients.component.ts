@@ -8,6 +8,7 @@ import { BaseService } from 'src/app/services/base/base.service';
 import { IColumns } from 'src/app/shared/interfaces/dynamic-grid-interfaces';
 import { MedicalHistoryComponent } from '../medical-history/medical-history.component';
 import { GlobalService } from 'src/app/services/global/global.service';
+import { ModalRecordTestComponent } from './modal-record-test/modal-record-test.component';
 
 @Component({
   selector: 'app-list-patients',
@@ -119,8 +120,13 @@ export class ListPatientsComponent implements OnInit {
     isFilter: false,
     isSortable: false,
     onClick: (item: any) => {
-      // this.router.navigateByUrl('dashboard/patients/edit/' + item.id);
-      this.router.navigateByUrl('dashboard/reports/add/'+item.id, { state: { data: item } });
+      this.dialogService.open(ModalRecordTestComponent, {
+        header: `${item?.name} ${item?.surname} Add Record`,
+        width: '70%',
+        contentStyle: {"max-height": "500px", "overflow": "auto"},
+        baseZIndex: 10000,
+        data: item
+    });
     },
     getValue: function () {
       return this.field
