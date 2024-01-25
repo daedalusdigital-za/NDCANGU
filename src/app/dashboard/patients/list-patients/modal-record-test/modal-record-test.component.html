@@ -39,7 +39,7 @@
         <div class="col-lg-6">
             <div class="mb-3">
                 <label class="form-label">Select Test Category</label>
-                <p-multiSelect  class="p-multiselect" [options]="medicalRecordCategories" [(ngModel)]="testCateogry" [filter]="true" ></p-multiSelect>
+                <p-multiSelect  class="p-multiselect" [options]="medicalRecordCategories" [(ngModel)]="testCateogry" [filter]="false" ></p-multiSelect>
             </div>
         </div>
         <div class="col-lg-6" *ngIf="testCateogry.includes('Glucose')">

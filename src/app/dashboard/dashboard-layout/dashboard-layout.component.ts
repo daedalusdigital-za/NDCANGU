@@ -8,8 +8,8 @@ import { GlobalService } from 'src/app/services/global/global.service';
 })
 export class DashboardLayoutComponent implements OnInit {
   user: any;
-  flagText: string = 'Mpumalanga';
-  flagImg: string = 'assets/images/flags/Mpumalanga.png';
+  flagText: string = 'KwaZulu-Natal';
+  flagImg: string = 'assets/images/flags/italy.png';
   isMenuShown: boolean = false;
   isNurseUser: boolean = false;
   districts: Array<string> = ['EHLANZENI', 'GERT SIBANDE', 'NKANGALA'];
@@ -26,6 +26,8 @@ export class DashboardLayoutComponent implements OnInit {
         this.isNurseUser = true;
       }
 
+      this.districts = this.globalService.getDistricts(this.flagText)
+      this.pdflink = `assets/pdfs/${this.flagText}.pdf`;
       // this.userRole = this.user.role && this.user.role[0] ? this.user.role[0] : ''
     }
   }
