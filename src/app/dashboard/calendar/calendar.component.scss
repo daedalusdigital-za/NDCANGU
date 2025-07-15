@@ -1,0 +1,515 @@
+.calendar-container {
+  padding: 20px;
+  padding-top: 90px; // Add top padding to clear the fixed navigation (70px + 20px)
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  min-height: 100vh;
+
+  .calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    padding: 20px;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(226, 232, 240, 0.8);
+
+    .header-left {
+      .page-title {
+        font-size: 28px;
+        font-weight: 700;
+        color: #1e3a8a;
+        margin: 0;
+        background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+        background-clip: text;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+
+      .page-subtitle {
+        color: #64748b;
+        margin: 5px 0 0 0;
+        font-size: 16px;
+      }
+    }
+
+    .header-right {
+      .btn {
+        padding: 12px 24px;
+        border-radius: 12px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+        border: none;
+        color: white;
+
+        &:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 8px 25px rgba(30, 58, 138, 0.3);
+        }
+
+        i {
+          margin-right: 8px;
+        }
+      }
+    }
+  }
+
+  .view-selector {
+    margin-bottom: 30px;
+    text-align: center;
+
+    .btn-group {
+      display: inline-flex;
+      background: white;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      border: 1px solid rgba(226, 232, 240, 0.8);
+
+      .btn {
+        padding: 12px 20px;
+        border: none;
+        background: transparent;
+        color: #64748b;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        border-radius: 0;
+
+        &:hover {
+          background: rgba(59, 130, 246, 0.1);
+          color: #1e3a8a;
+        }
+
+        &.active {
+          background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+          color: white;
+        }
+      }
+    }
+  }
+
+  .calendar-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+
+    .calendar-panel {
+      .calendar-widget {
+        background: white;
+        border-radius: 16px;
+        padding: 25px;
+        margin-bottom: 30px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+        border: 1px solid rgba(226, 232, 240, 0.8);
+
+        ::ng-deep .p-calendar {
+          .p-calendar-w-btn {
+            width: 100%;
+          }            .p-datepicker {
+              border: none;
+              border-radius: 12px;
+              box-shadow: none;
+              margin: 0;
+              width: 100%;
+              min-height: 400px;              .p-datepicker-header {
+                background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+                color: white;
+                border-radius: 12px 12px 0 0;
+                padding: 18px 20px;
+                margin: 0;                .p-datepicker-prev,
+                .p-datepicker-next {
+                  color: white;
+                  border-radius: 8px;
+                  transition: all 0.3s ease;
+                  width: 40px;
+                  height: 40px;
+
+                &:hover {
+                  background: rgba(255, 255, 255, 0.2);
+                }
+              }
+
+              .p-datepicker-title {
+                color: white;
+                font-weight: 600;
+                margin: 0;
+              }
+            }              .p-datepicker-calendar {
+                padding: 20px;
+                margin: 0;                thead th {
+                  padding: 12px 8px;
+                  font-size: 14px;
+                  font-weight: 600;
+                  color: #64748b;
+                  text-align: center;
+                }                tbody td {
+                  padding: 4px;
+                  text-align: center;
+
+                  span {
+                    width: 44px;
+                    height: 44px;
+                    border-radius: 10px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-weight: 500;
+                    transition: all 0.3s ease;
+                    font-size: 16px;
+                    margin: 0 auto;
+
+                  &:hover {
+                    background: rgba(59, 130, 246, 0.1);
+                    color: #1e3a8a;
+                  }
+                }
+
+                &.p-datepicker-today span {
+                  background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+                  color: white;
+                }
+
+                &.p-datepicker-selected span {
+                  background: linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%);
+                  color: white;
+                }
+              }
+            }              .p-datepicker-buttonbar {
+                padding: 15px 20px;
+                border-top: 1px solid #e2e8f0;
+                background: #f8fafc;
+                border-radius: 0 0 12px 12px;
+              }
+          }
+        }
+      }
+
+      .today-trainings {
+        background: white;
+        border-radius: 16px;
+        padding: 20px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+        border: 1px solid rgba(226, 232, 240, 0.8);
+
+        h4 {
+          color: #1e3a8a;
+          margin-bottom: 20px;
+          font-weight: 700;
+        }
+
+        .training-card {
+          display: flex;
+          align-items: center;
+          padding: 15px;
+          background: #f8fafc;
+          border-radius: 12px;
+          margin-bottom: 15px;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          border: 1px solid rgba(226, 232, 240, 0.8);
+
+          &:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+          }
+
+          .training-indicator {
+            width: 4px;
+            height: 60px;
+            border-radius: 2px;
+            margin-right: 15px;
+          }
+
+          .training-content {
+            flex: 1;
+
+            h5 {
+              margin: 0 0 8px 0;
+              color: #1e3a8a;
+              font-size: 16px;
+              font-weight: 600;
+            }
+
+            p {
+              margin: 4px 0;
+              color: #64748b;
+              font-size: 14px;
+
+              i {
+                margin-right: 6px;
+                color: #94a3b8;
+              }
+            }
+
+            .training-status {
+              font-size: 12px;
+              font-weight: 600;
+              text-transform: uppercase;
+              margin-top: 8px;
+            }
+          }
+        }
+      }
+    }
+
+    .details-panel {
+      .selected-date-section {
+        background: white;
+        border-radius: 16px;
+        padding: 20px;
+        margin-bottom: 30px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+        border: 1px solid rgba(226, 232, 240, 0.8);
+
+        h4 {
+          color: #1e3a8a;
+          margin-bottom: 20px;
+          font-weight: 700;
+        }
+
+        .training-item {
+          display: flex;
+          align-items: flex-start;
+          padding: 20px;
+          background: #f8fafc;
+          border-radius: 12px;
+          margin-bottom: 15px;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          border: 1px solid rgba(226, 232, 240, 0.8);
+
+          &:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+          }
+
+          .training-time {
+            display: flex;
+            align-items: center;
+            margin-right: 20px;
+            min-width: 120px;
+
+            .time-indicator {
+              width: 8px;
+              height: 8px;
+              border-radius: 50%;
+              margin-right: 8px;
+            }
+
+            span {
+              font-size: 14px;
+              color: #64748b;
+              font-weight: 600;
+            }
+          }
+
+          .training-details {
+            flex: 1;
+
+            h5 {
+              margin: 0 0 10px 0;
+              color: #1e3a8a;
+              font-size: 18px;
+              font-weight: 600;
+            }
+
+            p {
+              margin: 6px 0;
+              color: #64748b;
+              font-size: 14px;
+
+              i {
+                margin-right: 6px;
+                color: #94a3b8;
+              }
+            }
+
+            .training-participants {
+              margin: 10px 0;
+              color: #64748b;
+              font-size: 14px;
+            }
+
+            .training-status-badge {
+              display: inline-block;
+              padding: 6px 12px;
+              border-radius: 20px;
+              color: white;
+              font-size: 12px;
+              font-weight: 600;
+              text-transform: uppercase;
+              margin-top: 10px;
+            }
+          }
+        }
+
+        .no-trainings {
+          text-align: center;
+          padding: 40px;
+          color: #94a3b8;
+
+          i {
+            font-size: 48px;
+            margin-bottom: 20px;
+          }
+
+          p {
+            font-size: 16px;
+            margin: 0;
+          }
+        }
+      }
+
+      .upcoming-section {
+        background: white;
+        border-radius: 16px;
+        padding: 20px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+        border: 1px solid rgba(226, 232, 240, 0.8);
+
+        h4 {
+          color: #1e3a8a;
+          margin-bottom: 20px;
+          font-weight: 700;
+        }
+
+        .upcoming-item {
+          display: flex;
+          align-items: center;
+          padding: 15px;
+          background: #f8fafc;
+          border-radius: 12px;
+          margin-bottom: 15px;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          border: 1px solid rgba(226, 232, 240, 0.8);
+
+          &:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+          }
+
+          .upcoming-date {
+            display: flex;
+            align-items: center;
+            margin-right: 20px;
+
+            .date-circle {
+              width: 50px;
+              height: 50px;
+              border-radius: 50%;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              color: white;
+              font-weight: 700;
+              font-size: 18px;
+              margin-right: 10px;
+            }
+
+            .date-info {
+              display: flex;
+              flex-direction: column;
+
+              .month {
+                font-size: 14px;
+                color: #64748b;
+                font-weight: 600;
+                text-transform: uppercase;
+              }
+
+              .day {
+                font-size: 12px;
+                color: #94a3b8;
+                font-weight: 500;
+              }
+            }
+          }
+
+          .upcoming-details {
+            flex: 1;
+
+            h6 {
+              margin: 0 0 5px 0;
+              color: #1e3a8a;
+              font-size: 16px;
+              font-weight: 600;
+            }
+
+            .training-category {
+              color: #64748b;
+              font-size: 12px;
+              margin: 0 0 8px 0;
+              text-transform: uppercase;
+              font-weight: 600;
+            }
+
+            .training-location {
+              color: #64748b;
+              font-size: 14px;
+              margin: 5px 0;
+
+              i {
+                margin-right: 6px;
+                color: #94a3b8;
+              }
+            }
+
+            .participant-progress {
+              display: flex;
+              align-items: center;
+              margin-top: 10px;
+
+              .progress-bar {
+                flex: 1;
+                height: 6px;
+                background: #e2e8f0;
+                border-radius: 3px;
+                overflow: hidden;
+                margin-right: 10px;
+
+                .progress-fill {
+                  height: 100%;
+                  border-radius: 3px;
+                  transition: width 0.3s ease;
+                }
+              }
+
+              .progress-text {
+                font-size: 12px;
+                color: #64748b;
+                font-weight: 600;
+                min-width: 50px;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .calendar-container {
+    .calendar-header {
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .calendar-layout {
+      grid-template-columns: 1fr;
+    }
+
+    .view-selector {
+      .btn-group {
+        width: 100%;
+
+        .btn {
+          flex: 1;
+        }
+      }
+    }
+  }
+}

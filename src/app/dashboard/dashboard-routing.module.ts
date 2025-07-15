@@ -9,6 +9,7 @@ import { ListStatsComponent } from './list-stats/list-stats.component';
 import { ListTutorialsComponent } from './list-tutorials/list-tutorials.component';
 import { AuthDebugComponent } from './auth-debug.component';
 import { VerifyPhoneNumberComponent } from './verify-phone-number/verify-phone-number.component';
+import { CalendarComponent } from './calendar/calendar.component';
 
 const routes: Routes = [
   {
@@ -40,8 +41,8 @@ const routes: Routes = [
         loadChildren: () => import('./users/users.module').then(m => m.UsersModule),
       },
       {
-        path: 'patients',
-        loadChildren: () => import('./patients/patients.module').then(m => m.PatientsModule),
+        path: 'calendar',
+        component: CalendarComponent,
       },
       {
         path: 'reports',

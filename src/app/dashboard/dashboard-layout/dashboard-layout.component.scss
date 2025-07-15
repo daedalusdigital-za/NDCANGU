@@ -18,7 +18,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background: linear-gradient(45deg, rgba(255, 255, 255, 0.1) 0%, transparent 100%);
+    background: linear-gradient(45deg, rgba(255, 255, 255, 0.1), transparent);
     pointer-events: none;
   }
   
@@ -1131,7 +1131,6 @@
 
 // Enhanced main content area
 .main-content {
-  padding-top: 140px; // Account for fixed header + nav
   min-height: calc(100vh - 140px);
   transition: all 0.3s ease;
 }

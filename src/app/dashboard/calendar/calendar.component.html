@@ -1,0 +1,145 @@
+<div class="calendar-container">
+  <!-- Header -->
+  <div class="calendar-header">
+    <div class="header-left">
+      <h2 class="page-title">Training Calendar</h2>
+      <p class="page-subtitle">View and manage training sessions</p>
+    </div>
+    <div class="header-right">
+      <button class="btn btn-primary" (click)="addNewTraining()">
+        <i class="fas fa-plus"></i>
+        Add Training
+      </button>
+    </div>
+  </div>
+
+  <!-- View Mode Selector -->
+  <div class="view-selector">
+    <div class="btn-group">
+      <button 
+        class="btn btn-outline-primary" 
+        [class.active]="viewMode === 'month'"
+        (click)="changeViewMode('month')">
+        Month
+      </button>
+      <button 
+        class="btn btn-outline-primary" 
+        [class.active]="viewMode === 'week'"
+        (click)="changeViewMode('week')">
+        Week
+      </button>
+      <button 
+        class="btn btn-outline-primary" 
+        [class.active]="viewMode === 'day'"
+        (click)="changeViewMode('day')">
+        Day
+      </button>
+    </div>
+  </div>
+
+  <!-- Main Calendar Layout -->
+  <div class="calendar-layout">
+    <!-- Left Panel - Calendar -->
+    <div class="calendar-panel">
+      <div class="calendar-widget">
+        <p-calendar 
+          [(ngModel)]="selectedDate" 
+          [inline]="true"
+          [showWeek]="true"
+          (onSelect)="onDateSelect($event)"
+          styleClass="modern-calendar">
+        </p-calendar>
+      </div>
+
+      <!-- Today's Trainings -->
+      <div class="today-trainings" *ngIf="getTodayTrainings().length > 0">
+        <h4>Today's Trainings</h4>
+        <div class="training-card" *ngFor="let training of getTodayTrainings()" (click)="onTrainingClick(training)">
+          <div class="training-indicator" [style.background-color]="training.color"></div>
+          <div class="training-content">
+            <h5>{{ training.title }}</h5>
+            <p><i class="fas fa-map-marker-alt"></i> {{ training.location }}</p>
+            <p><i class="fas fa-user"></i> {{ training.trainer }}</p>
+            <div class="training-status" [style.color]="getStatusColor(training.status)">
+              {{ getStatusText(training.status) }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Panel - Training Details -->
+    <div class="details-panel">
+      <!-- Selected Date Trainings -->
+      <div class="selected-date-section">
+        <h4>{{ selectedDate | date:'MMMM d, yyyy' }}</h4>
+        
+        <div class="trainings-list" *ngIf="getTrainingsForDate(selectedDate).length > 0; else noTrainings">
+          <div class="training-item" *ngFor="let training of getTrainingsForDate(selectedDate)" (click)="onTrainingClick(training)">
+            <div class="training-time">
+              <div class="time-indicator" [style.background-color]="training.color"></div>
+              <span>{{ training.date | date:'h:mm a' }}</span>
+            </div>
+            <div class="training-details">
+              <h5>{{ training.title }}</h5>
+              <p class="training-location">
+                <i class="fas fa-map-marker-alt"></i> {{ training.location }}
+              </p>
+              <p class="training-trainer">
+                <i class="fas fa-user"></i> {{ training.trainer }}
+              </p>
+              <div class="training-participants">
+                <i class="fas fa-users"></i> 
+                {{ training.registeredParticipants }}/{{ training.maxParticipants }} participants
+              </div>
+              <div class="training-status-badge" [style.background-color]="getStatusColor(training.status)">
+                {{ getStatusText(training.status) }}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <ng-template #noTrainings>
+          <div class="no-trainings">
+            <i class="fas fa-calendar-times"></i>
+            <p>No trainings scheduled for this date</p>
+          </div>
+        </ng-template>
+      </div>
+
+      <!-- Upcoming Trainings -->
+      <div class="upcoming-section">
+        <h4>Upcoming Trainings</h4>
+        <div class="upcoming-list">
+          <div class="upcoming-item" *ngFor="let training of getUpcomingTrainings()" (click)="onTrainingClick(training)">
+            <div class="upcoming-date">
+              <div class="date-circle" [style.background-color]="training.color">
+                {{ training.date | date:'dd' }}
+              </div>
+              <div class="date-info">
+                <span class="month">{{ training.date | date:'MMM' }}</span>
+                <span class="day">{{ training.date | date:'EEE' }}</span>
+              </div>
+            </div>
+            <div class="upcoming-details">
+              <h6>{{ training.title }}</h6>
+              <p class="training-category">{{ training.category }}</p>
+              <p class="training-location">
+                <i class="fas fa-map-marker-alt"></i> {{ training.location }}
+              </p>
+              <div class="participant-progress">
+                <div class="progress-bar">
+                  <div class="progress-fill" 
+                       [style.width.%]="(training.registeredParticipants / training.maxParticipants) * 100"
+                       [style.background-color]="training.color">
+                  </div>
+                </div>
+                <span class="progress-text">{{ training.registeredParticipants }}/{{ training.maxParticipants }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
