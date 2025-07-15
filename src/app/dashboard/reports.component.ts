@@ -162,8 +162,196 @@ interface ReportData {
                 <button class="btn btn-outline-secondary btn-sm" (click)="clearFilters()">
                   <i class="fas fa-undo me-1"></i>Reset All
                 </button>
-              </div>
+            </div>
 
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Advanced Search Section -->
+      <div class="row" *ngIf="reportGenerated && hasData">
+        <div class="col-12">
+          <div class="card shadow-sm search-card">
+            <div class="card-header bg-gradient-info text-white">
+              <div class="d-flex align-items-center justify-content-between">
+                <div class="d-flex align-items-center">
+                  <i class="fas fa-search me-2"></i>
+                  <h6 class="mb-0">Advanced Search & Filter</h6>
+                </div>
+                <button class="btn btn-sm btn-outline-light" (click)="clearSearch()" *ngIf="searchTerm">
+                  <i class="fas fa-times me-1"></i>Clear
+                </button>
+              </div>
+            </div>
+            <div class="card-body search-body">
+              <div class="row align-items-center">
+                <div class="col-lg-6 col-md-8 mb-3 mb-lg-0">
+                  <div class="search-input-container">
+                    <div class="search-input-wrapper">
+                      <i class="fas fa-search search-icon"></i>
+                      <input 
+                        type="text" 
+                        class="form-control search-input" 
+                        placeholder="Search" 
+                        [(ngModel)]="searchTerm"
+                        (input)="onSearchChange()"
+                        (keyup.enter)="performSearch()"
+                        autocomplete="off"
+                      >
+                      <button 
+                        class="btn btn-link search-clear-btn" 
+                        *ngIf="searchTerm" 
+                        (click)="clearSearch()"
+                        type="button"
+                      >
+                        <i class="fas fa-times"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-4 mb-3 mb-lg-0">
+                  <div class="search-field-selector">
+                    <select class="form-select search-field-select" [(ngModel)]="searchField" (change)="onSearchFieldChange()">
+                      <option value="all">🔍 All Fields</option>
+                      <option value="patientName">👤 Patient Name</option>
+                      <option value="patientId">🆔 Patient ID</option>
+                      <option value="testType">🧪 Test Type</option>
+                      <option value="hospital">🏥 Hospital</option>
+                      <option value="doctorName">👨‍⚕️ Doctor</option>
+                      <option value="result">📊 Result</option>
+                      <option value="status">📋 Status</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-12">
+                  <div class="search-actions">
+                    <button class="btn btn-primary search-btn" (click)="performSearch()" [disabled]="isSearching">
+                      <i class="fas fa-search me-1" *ngIf="!isSearching"></i>
+                      <i class="fas fa-spinner fa-spin me-1" *ngIf="isSearching"></i>
+                      {{ isSearching ? 'Searching...' : 'Search' }}
+                    </button>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Search Results Summary -->
+              <div class="search-results-summary" *ngIf="searchTerm && reportGenerated">
+                <div class="row align-items-center">
+                  <div class="col-md-6">
+                    <div class="results-count">
+                      <i class="fas fa-filter me-2 text-primary"></i>
+                      <span class="fw-semibold">{{ filteredReportData.length }}</span> 
+                      of {{ reportData.length }} results
+                      <span class="text-muted" *ngIf="searchTerm">for "</span>
+                      <span class="search-term-highlight" *ngIf="searchTerm">{{ searchTerm }}</span>
+                      <span class="text-muted" *ngIf="searchTerm">"</span>
+                    </div>
+                  </div>
+                  <div class="col-md-6 text-end">
+                    <div class="search-field-info">
+                      <small class="text-muted">
+                        <i class="fas fa-crosshairs me-1"></i>
+                        Searching in: <strong>{{ getSearchFieldLabel() }}</strong>
+                      </small>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Results Table -->
+      <div class="row mt-4" *ngIf="reportGenerated && hasData">
+        <div class="col-12">
+          <div class="card shadow-sm">
+            <div class="card-header bg-success text-white">
+              <div class="d-flex align-items-center justify-content-between">
+                <div>
+                  <h6 class="mb-0">
+                    <i class="fas fa-table me-2"></i>Report Results
+                  </h6>
+                </div>
+                <div class="d-flex align-items-center">
+                  <span class="badge bg-light text-dark me-2">
+                    {{ filteredReportData.length }} Records
+                  </span>
+                  <button class="btn btn-sm btn-outline-light" (click)="exportToExcel()">
+                    <i class="fas fa-file-excel me-1"></i>Export
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="card-body p-0">
+              <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                  <thead class="table-dark">
+                    <tr>
+                      <th>Patient</th>
+                      <th>ID</th>
+                      <th>Test Type</th>
+                      <th>Date</th>
+                      <th>Result</th>
+                      <th>Status</th>
+                      <th>Hospital</th>
+                      <th>Doctor</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let row of filteredReportData; trackBy: trackByFn">
+                      <td>
+                        <div class="d-flex align-items-center">
+                          <div class="patient-avatar">
+                            {{ row.patientName.charAt(0) }}
+                          </div>
+                          <div class="ms-2">
+                            <div class="fw-semibold">{{ row.patientName }}</div>
+                            <small class="text-muted">{{ row.age }} yrs, {{ row.gender }}</small>
+                          </div>
+                        </div>
+                      </td>
+                      <td>
+                        <code class="patient-id">{{ row.patientId }}</code>
+                      </td>
+                      <td>
+                        <span class="badge bg-info">{{ row.testType }}</span>
+                      </td>
+                      <td>
+                        <small>{{ row.testDate | date:'mediumDate' }}</small>
+                      </td>
+                      <td>
+                        <span class="badge" [ngClass]="getResultBadgeClass(row.result)">
+                          {{ row.result }}
+                        </span>
+                      </td>
+                      <td>
+                        <span class="badge" [ngClass]="getStatusBadgeClass(row.status)">
+                          {{ row.status }}
+                        </span>
+                      </td>
+                      <td>
+                        <div class="text-truncate" style="max-width: 150px;">
+                          {{ row.hospital }}
+                        </div>
+                      </td>
+                      <td>{{ row.doctorName }}</td>
+                      <td>
+                        <div class="btn-group btn-group-sm">
+                          <button class="btn btn-outline-primary" title="View Details">
+                            <i class="fas fa-eye"></i>
+                          </button>
+                          <button class="btn btn-outline-secondary" title="Edit">
+                            <i class="fas fa-edit"></i>
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
         </div>
@@ -382,6 +570,186 @@ interface ReportData {
       box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !important;
     }
     
+    /* Search Card Styles */
+    .search-card {
+      border: 1px solid #e3f2fd;
+      background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+      margin-bottom: 1.5rem;
+    }
+    
+    .search-card .card-header {
+      background: linear-gradient(135deg, #17a2b8 0%, #138496 100%) !important;
+      border-bottom: 2px solid #0c7489;
+    }
+    
+    .search-body {
+      padding: 1.5rem;
+    }
+    
+    .search-input-container {
+      position: relative;
+    }
+    
+    .search-input-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+    
+    .search-input {
+      padding-left: 3rem !important;
+      padding-right: 3rem !important;
+      border-radius: 50px !important;
+      border: 2px solid #e9ecef;
+      font-size: 1rem;
+      height: 3rem;
+      background: #fff;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    
+    .search-input:focus {
+      border-color: #17a2b8;
+      box-shadow: 0 0 0 0.2rem rgba(23, 162, 184, 0.25), 0 4px 8px rgba(0, 0, 0, 0.15);
+      transform: translateY(-1px);
+    }
+    
+    .search-icon {
+      position: absolute;
+      left: 1rem;
+      z-index: 10;
+      color: #6c757d;
+      font-size: 1.1rem;
+    }
+    
+    .search-clear-btn {
+      position: absolute;
+      right: 0.5rem;
+      z-index: 10;
+      color: #6c757d;
+      border: none;
+      background: none;
+      padding: 0.5rem;
+      border-radius: 50%;
+      transition: all 0.2s ease;
+    }
+    
+    .search-clear-btn:hover {
+      color: #dc3545;
+      background: #f8f9fa;
+    }
+    
+    .search-field-select {
+      border-radius: 12px !important;
+      border: 2px solid #e9ecef;
+      height: 3rem;
+      background: #fff;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    
+    .search-field-select:focus {
+      border-color: #17a2b8;
+      box-shadow: 0 0 0 0.2rem rgba(23, 162, 184, 0.25);
+    }
+    
+    .search-btn {
+      border-radius: 12px !important;
+      height: 3rem;
+      padding: 0 1.5rem;
+      font-weight: 600;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
+    }
+    
+    .search-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+    
+    .search-results-summary {
+      margin-top: 1.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid #e9ecef;
+    }
+    
+    .results-count {
+      display: flex;
+      align-items: center;
+      font-size: 1rem;
+    }
+    
+    .search-term-highlight {
+      background: linear-gradient(135deg, #fff3cd, #ffeaa7);
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+      font-weight: 600;
+      color: #856404;
+    }
+    
+    .search-field-info {
+      text-align: right;
+    }
+    
+    /* Patient Avatar */
+    .patient-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #007bff, #0056b3);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 1.1rem;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    
+    .patient-id {
+      background: #e9ecef;
+      color: #495057;
+      padding: 0.25rem 0.5rem;
+      border-radius: 4px;
+      font-size: 0.875rem;
+    }
+    
+    /* Badge Styles */
+    .badge {
+      font-size: 0.75rem;
+      padding: 0.35em 0.65em;
+      border-radius: 6px;
+    }
+    
+    .bg-gradient-info {
+      background: linear-gradient(135deg, #17a2b8 0%, #138496 100%) !important;
+    }
+    
+    /* Table Enhancements */
+    .table {
+      border-radius: 0 0 12px 12px;
+      overflow: hidden;
+    }
+    
+    .table th {
+      background: #343a40 !important;
+      color: white !important;
+      font-weight: 600;
+      text-transform: uppercase;
+      font-size: 0.875rem;
+      letter-spacing: 0.5px;
+      padding: 1rem 0.75rem;
+    }
+    
+    .table td {
+      padding: 1rem 0.75rem;
+      vertical-align: middle;
+    }
+    
+    .table-hover tbody tr:hover {
+      background-color: rgba(23, 162, 184, 0.05);
+    }
+    
     @media (max-width: 768px) {
       .container-fluid {
         padding-top: 140px !important;
@@ -428,8 +796,14 @@ export class ReportsComponent implements OnInit {
   
   selectedFields: string[] = [];
   reportData: ReportData[] = [];
+  filteredReportData: ReportData[] = [];
   reportGenerated: boolean = false;
   hasData: boolean = false;
+  
+  // Search functionality
+  searchTerm: string = '';
+  searchField: string = 'all';
+  isSearching: boolean = false;
 
   provinces: string[] = [
     'Eastern Cape', 'Free State', 'Gauteng', 'KwaZulu-Natal',
@@ -544,7 +918,15 @@ export class ReportsComponent implements OnInit {
     // Apply filters
     this.reportData = this.applyFilters(this.reportData);
     
+    // Initialize filtered data
+    this.filteredReportData = [...this.reportData];
+    
     this.hasData = this.reportData.length > 0;
+    
+    // Apply search if there's a search term
+    if (this.searchTerm) {
+      this.performSearch();
+    }
   }
 
   generateSampleData(): ReportData[] {
@@ -639,6 +1021,117 @@ export class ReportsComponent implements OnInit {
     saveAs(blob, fileName);
   }
 
+  // Search functionality methods
+
+  // Search functionality methods
+  onSearchChange(): void {
+    if (this.searchTerm.trim() === '') {
+      this.filteredReportData = [...this.reportData];
+    } else {
+      this.performSearch();
+    }
+  }
+
+  onSearchFieldChange(): void {
+    if (this.searchTerm.trim() !== '') {
+      this.performSearch();
+    }
+  }
+
+  performSearch(): void {
+    if (!this.searchTerm.trim()) {
+      this.filteredReportData = [...this.reportData];
+      return;
+    }
+
+    this.isSearching = true;
+    
+    // Simulate search delay for better UX
+    setTimeout(() => {
+      const searchTerm = this.searchTerm.toLowerCase().trim();
+      
+      this.filteredReportData = this.reportData.filter(item => {
+        if (this.searchField === 'all') {
+          // Search in all fields
+          return this.searchInAllFields(item, searchTerm);
+        } else {
+          // Search in specific field
+          const fieldValue = this.getFieldValue(item, this.searchField);
+          return fieldValue && fieldValue.toString().toLowerCase().includes(searchTerm);
+        }
+      });
+      
+      this.isSearching = false;
+    }, 300);
+  }
+
+  searchInAllFields(item: ReportData, searchTerm: string): boolean {
+    const searchableFields = [
+      'patientName', 'patientId', 'testType', 'result', 'status',
+      'hospital', 'doctorName', 'province', 'priority', 'notes'
+    ];
+    
+    return searchableFields.some(field => {
+      const value = this.getFieldValue(item, field);
+      return value && value.toString().toLowerCase().includes(searchTerm);
+    });
+  }
+
+  clearSearch(): void {
+    this.searchTerm = '';
+    this.searchField = 'all';
+    this.filteredReportData = [...this.reportData];
+  }
+
+  getSearchFieldLabel(): string {
+    const fieldLabels: { [key: string]: string } = {
+      'all': 'All Fields',
+      'patientName': 'Patient Name',
+      'patientId': 'Patient ID',
+      'testType': 'Test Type',
+      'hospital': 'Hospital',
+      'doctorName': 'Doctor',
+      'result': 'Result',
+      'status': 'Status'
+    };
+    
+    return fieldLabels[this.searchField] || 'All Fields';
+  }
+
+  getResultBadgeClass(result: string): string {
+    switch (result.toLowerCase()) {
+      case 'normal':
+        return 'bg-success';
+      case 'abnormal':
+        return 'bg-warning';
+      case 'critical':
+        return 'bg-danger';
+      case 'pending':
+        return 'bg-secondary';
+      default:
+        return 'bg-info';
+    }
+  }
+
+  getStatusBadgeClass(status: string): string {
+    switch (status.toLowerCase()) {
+      case 'completed':
+        return 'bg-success';
+      case 'pending':
+        return 'bg-warning';
+      case 'in progress':
+        return 'bg-primary';
+      case 'cancelled':
+        return 'bg-danger';
+      default:
+        return 'bg-secondary';
+    }
+  }
+
+  trackByFn(index: number, item: ReportData): number {
+    return item.id;
+  }
+
   clearFilters() {
     this.reportType = '';
     this.selectedProvince = '';
@@ -646,8 +1139,11 @@ export class ReportsComponent implements OnInit {
     this.selectedTestType = '';
     this.selectedStatus = '';
     this.reportData = [];
+    this.filteredReportData = [];
     this.reportGenerated = false;
     this.hasData = false;
+    this.searchTerm = '';
+    this.searchField = 'all';
     this.setDefaultDateRange();
     this.filteredHospitals = this.getAllHospitals();
   }

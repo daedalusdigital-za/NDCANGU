@@ -1,187 +1,219 @@
-<header id="page-topbar">
-    <div class="navbar-header">
-        <div class="d-flex">
+<header id="page-topbar" class="modern-topbar">
+    <div class="topbar-container">
+        <div class="topbar-left">
             <!-- LOGO -->
-            <div class="navbar-brand-box">
-                <a routerLink="/dashboard" class="logo logo-dark">
-                    <span class="logo-sm">
-                        <img src="./assets/images/logo-sm.svg" alt="" height="50">
-                    </span>
-                    <span class="logo-lg">
-                        <img src="./assets/images/logo-sm.svg" alt="" height="50"> <span class="logo-txt"></span>
-                    </span>
-                </a>
-
-                <a routerLink="/dashboard"  class="logo logo-light">
-                    <span class="logo-sm">
-                        <img src="./assets/images/logo-sm.svg" alt="" height="24">
-                    </span>
-                    <span class="logo-lg">
-                        <img src="./assets/images/logo-sm.svg" alt="" height="50"> <span class="logo-txt">HCD</span>
-                    </span>
+            <div class="logo-container">
+                <a routerLink="/dashboard" class="logo-link">
+                    <div class="logo-wrapper">
+                        <img src="./assets/images/logo-sm.svg" alt="NCD Logo" class="logo-image">
+                        <span class="logo-text">NCD Health</span>
+                    </div>
                 </a>
             </div>
 
-            <button type="button" class="btn btn-sm px-3 font-size-16 d-lg-none header-item waves-effect waves-light" data-bs-toggle="collapse" data-bs-target="#topnav-menu-content">
-                <i class="fa fa-fw fa-bars"></i>
+            <!-- Mobile Menu Toggle -->
+            <button type="button" class="mobile-menu-toggle d-lg-none" data-bs-toggle="collapse" data-bs-target="#topnav-menu-content">
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
             </button>
 
-            <!-- App Search-->
-            <form class="app-search d-none d-lg-block">
-                <div class="position-relative">
-                    <input type="text" class="form-control" placeholder="Search...">
-                    <button class="btn btn-primary" type="button"><i class="bx bx-search-alt align-middle"></i></button>
+            <!-- Global Search -->
+            <div class="global-search d-none d-lg-flex">
+                <div class="search-wrapper">
+                    <i class="fas fa-search search-icon"></i>
+                    <input type="text" class="search-input" placeholder="Search">
+                    <div class="search-shortcut">
+                        <span>Ctrl + K</span>
+                    </div>
                 </div>
-            </form>
+            </div>
         </div>
 
-        <div class="d-flex">
-
-            <div class="dropdown d-inline-block d-lg-none ms-2">
-                <button type="button" class="btn header-item" id="page-header-search-dropdown"
-                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <i data-feather="search" class="icon-lg"></i>
+        <div class="topbar-right">
+            <!-- Mobile Search -->
+            <div class="mobile-search-dropdown d-lg-none">
+                <button type="button" class="topbar-action-btn" data-bs-toggle="dropdown">
+                    <i class="fas fa-search"></i>
                 </button>
-                <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0"
-                    aria-labelledby="page-header-search-dropdown">
-
-                    <form class="p-3">
-                        <div class="form-group m-0">
-                            <div class="input-group">
-                                <input type="text" class="form-control" placeholder="Search ..." aria-label="Search Result">
-
-                                <button class="btn btn-primary" type="submit"><i class="mdi mdi-magnify"></i></button>
-                            </div>
-                        </div>
-                    </form>
+                <div class="dropdown-menu dropdown-menu-end mobile-search-menu">
+                    <div class="search-wrapper mobile">
+                        <i class="fas fa-search search-icon"></i>
+                        <input type="text" class="search-input" placeholder="Search...">
+                    </div>
                 </div>
             </div>
 
-
-            <div class="dropdown d-none d-sm-inline-block">
-                <button type="button" class="btn header-item"
-                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <img id="header-lang-img" src="assets/images/flags/us.png" alt="Header Language" height="50"><span class="align-middle"></span>
+            <!-- Province Selector -->
+            <div class="province-selector dropdown">
+                <button type="button" class="province-btn" data-bs-toggle="dropdown">
+                    <img [src]="flagImg" alt="Province Flag" class="province-flag">
+                    <span class="province-name">{{ flagText }}</span>
+                    <i class="fas fa-chevron-down dropdown-arrow"></i>
                 </button>
-                <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end">
-                    <div class="p-2">
-                        <div class="row g-0">
-                            <div class="col">
-                                <a class="dropdown-icon-item cp" (click)="changeFlagItem('assets/images/flags/spain.png', 'Gauteng')">
-                                    <img src="assets/images/flags/spain.png" alt="Github">
-                                    <span>Gauteng</span>
-                                </a>
-                            </div>
-                            <div class="col">
-                                <a class="dropdown-icon-item cp" (click)="changeFlagItem('assets/images/flags/germany.png', 'Northern Cape')">
-                                    <img src="assets/images/flags/germany.png"alt="bitbucket">
-                                    <span>Northern Cape</span>
-                                </a>
-                            </div>
-                            <div class="col">
-                                <a class="dropdown-icon-item cp" (click)="changeFlagItem('assets/images/flags/italy.png', 'KwaZulu-Natal')">
-                                    <img src="assets/images/flags/italy.png" alt="dribbble">
-                                    <span>KwaZulu-Natal</span>
-                                </a>
-                            </div>
+                <div class="dropdown-menu province-dropdown">
+                    <div class="province-header">
+                        <h6>Select Province</h6>
+                    </div>
+                    <div class="province-grid">
+                        <div class="province-group">
+                            <a class="province-item" (click)="changeFlagItem('assets/images/flags/spain.png', 'Gauteng')">
+                                <img src="assets/images/flags/spain.png" alt="Gauteng">
+                                <span>Gauteng</span>
+                            </a>
+                            <a class="province-item" (click)="changeFlagItem('assets/images/flags/germany.png', 'Northern Cape')">
+                                <img src="assets/images/flags/germany.png" alt="Northern Cape">
+                                <span>Northern Cape</span>
+                            </a>
+                            <a class="province-item" (click)="changeFlagItem('assets/images/flags/italy.png', 'KwaZulu-Natal')">
+                                <img src="assets/images/flags/italy.png" alt="KwaZulu-Natal">
+                                <span>KwaZulu-Natal</span>
+                            </a>
                         </div>
-
-                        <div class="row g-0">
-                            <div class="col">
-                                <a class="dropdown-icon-item cp" (click)="changeFlagItem('assets/images/flags/Mpumalanga.png', 'Mpumalanga')">
-                                    <img src="assets/images/flags/Mpumalanga.png" alt="dropbox">
-                                    <span>Mpumalanga</span>
-                                </a>
-                            </div>
-                            <div class="col">
-                                <a class="dropdown-icon-item cp" (click)="changeFlagItem('assets/images/flags/russia.png', 'Free State')">
-                                    <img src="assets/images/flags/russia.png" >
-                                    <span>Free State</span>
-                                </a>
-                            </div>
-                            <div class="col">
-                                <a class="dropdown-icon-item cp" (click)="changeFlagItem('assets/images/flags/westen-cape.png', 'Western Cape')">
-                                    <img src="assets/images/flags/westen-cape.png">
-                                    <span>Western Cape</span>
-                                </a>
-                            </div>
+                        <div class="province-group">
+                            <a class="province-item" (click)="changeFlagItem('assets/images/flags/Mpumalanga.png', 'Mpumalanga')">
+                                <img src="assets/images/flags/Mpumalanga.png" alt="Mpumalanga">
+                                <span>Mpumalanga</span>
+                            </a>
+                            <a class="province-item" (click)="changeFlagItem('assets/images/flags/russia.png', 'Free State')">
+                                <img src="assets/images/flags/russia.png" alt="Free State">
+                                <span>Free State</span>
+                            </a>
+                            <a class="province-item" (click)="changeFlagItem('assets/images/flags/westen-cape.png', 'Western Cape')">
+                                <img src="assets/images/flags/westen-cape.png" alt="Western Cape">
+                                <span>Western Cape</span>
+                            </a>
                         </div>
-
-                        <div class="row g-0">
-                            <div class="col">
-                                <a class="dropdown-icon-item cp" (click)="changeFlagItem('assets/images/flags/limpopo.png', 'Limpopo')">
-                                    <img src="assets/images/flags/limpopo.png">
-                                    <span>Limpopo</span>
-                                </a>
-                            </div>
-                            <div class="col">
-                                <a class="dropdown-icon-item cp" (click)="changeFlagItem('assets/images/flags/Northen.png', 'North West')">
-                                    <img src="assets/images/flags/Northen.png" >
-                                    <span>North West</span>
-                                </a>
-                            </div>
-                            <div class="col">
-                                <a class="dropdown-icon-item cp" (click)="changeFlagItem('assets/images/flags/east.png', 'Eastern Cape')">
-                                    <img src="assets/images/flags/east.png">
-                                    <span>Eastern Cape</span>
-                                </a>
-                            </div>
+                        <div class="province-group">
+                            <a class="province-item" (click)="changeFlagItem('assets/images/flags/limpopo.png', 'Limpopo')">
+                                <img src="assets/images/flags/limpopo.png" alt="Limpopo">
+                                <span>Limpopo</span>
+                            </a>
+                            <a class="province-item" (click)="changeFlagItem('assets/images/flags/Northen.png', 'North West')">
+                                <img src="assets/images/flags/Northen.png" alt="North West">
+                                <span>North West</span>
+                            </a>
+                            <a class="province-item" (click)="changeFlagItem('assets/images/flags/east.png', 'Eastern Cape')">
+                                <img src="assets/images/flags/east.png" alt="Eastern Cape">
+                                <span>Eastern Cape</span>
+                            </a>
                         </div>
                     </div>
                 </div>
             </div>
-        
 
-
-
-            
-            <div class="dropdown d-none d-sm-inline-block">
-                <button type="button" class="btn header-item"
-                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <img id="header-lang-img" [src]="flagImg" alt="Header Language" height="50"><span class="align-middle"> {{ flagText }}</span>
+            <!-- District Selector -->
+            <div class="district-selector dropdown">
+                <button type="button" class="district-btn" data-bs-toggle="dropdown">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span class="district-name">{{ flagText }}</span>
+                    <i class="fas fa-chevron-down dropdown-arrow"></i>
                 </button>
-                <div class="dropdown-menu dropdown-menu-end">
-
-                  <!-- item-->
-                  <a href="javascript:void(0);" *ngFor="let item of districts; let i= index" class="dropdown-item notify-item language">
-                    <span class="align-middle" (click)="menuChanges(i)">{{item}}</span> 
-                </a>
-                <!-- item-->
-                <!-- <a href="javascript:void(0);" (click)="menuChanges(2)" class="dropdown-item notify-item language">
-                    <span class="align-middle">GERT SIBANDE</span>
-                </a> -->
-
-                <!-- item-->
-                <!-- <a href="javascript:void(0);" (click)="menuChanges(3)" class="dropdown-item notify-item language">
-                    <span class="align-middle">NKANGALA</span>
-                </a> -->
-                
+                <div class="dropdown-menu district-dropdown">
+                    <div class="district-header">
+                        <h6>Select District</h6>
+                    </div>
+                    <div class="district-list">
+                        <a *ngFor="let item of districts; let i = index" class="district-item" (click)="menuChanges(i)">
+                            <span>{{ item }}</span>
+                        </a>
+                    </div>
                 </div>
             </div>
 
-            
-
-            
-
-            <div class="dropdown d-inline-block">
-                <button type="button" class="btn header-item bg-soft-light border-start border-end" id="page-header-user-dropdown"
-                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <img class="rounded-circle header-profile-user" src="assets/images/users/avatar-1.jpg"
-                        alt="Header Avatar">
-                    <span class="d-none d-xl-inline-block ms-1 fw-medium">{{ user ? user?.fullName : 'Administrator'}}  </span>
-                    <i class="mdi mdi-chevron-down d-none d-xl-inline-block"></i>
+            <!-- Notifications -->
+            <div class="notifications-dropdown dropdown">
+                <button type="button" class="topbar-action-btn notifications-btn" data-bs-toggle="dropdown">
+                    <i class="fas fa-bell"></i>
+                    <span class="notification-badge">3</span>
                 </button>
-                <div class="dropdown-menu dropdown-menu-end">
-                    <!-- item-->
-
-                    <a class="dropdown-item" routerLink="/lock-user"><i class="mdi mdi-lock font-size-16 align-middle me-1"></i> Lock User</a>
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" routerLink="/dashboard/stats"><i class="mdi mdi-account-cog-outline font-size-16 align-middle me-1"></i> Profile</a>
-                    <a class="dropdown-item" routerLink="/dashboard/verify-phone-number"><i class="mdi mdi-logout font-size-16 align-middle me-1"></i> Support ticket</a>
-                    <a class="dropdown-item" (click)="Logout()" routerLink="/auth/login"><i class="mdi mdi-logout font-size-16 align-middle me-1"></i> Logout</a>
+                <div class="dropdown-menu dropdown-menu-end notifications-menu">
+                    <div class="notifications-header">
+                        <h6>Notifications</h6>
+                        <span class="notification-count">3 new</span>
+                    </div>
+                    <div class="notifications-content">
+                        <div class="notification-item">
+                            <div class="notification-icon success">
+                                <i class="fas fa-check"></i>
+                            </div>
+                            <div class="notification-content">
+                                <h6>Test Results Available</h6>
+                                <p>Blood test results for Patient P000123 are ready</p>
+                                <span class="notification-time">2 minutes ago</span>
+                            </div>
+                        </div>
+                        <div class="notification-item">
+                            <div class="notification-icon warning">
+                                <i class="fas fa-exclamation-triangle"></i>
+                            </div>
+                            <div class="notification-content">
+                                <h6>System Maintenance</h6>
+                                <p>Scheduled maintenance tonight at 2:00 AM</p>
+                                <span class="notification-time">1 hour ago</span>
+                            </div>
+                        </div>
+                        <div class="notification-item">
+                            <div class="notification-icon info">
+                                <i class="fas fa-info-circle"></i>
+                            </div>
+                            <div class="notification-content">
+                                <h6>New Feature Available</h6>
+                                <p>Advanced reporting features are now live</p>
+                                <span class="notification-time">3 hours ago</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="notifications-footer">
+                        <a href="#" class="view-all-btn">View All Notifications</a>
+                    </div>
                 </div>
             </div>
 
+            <!-- User Profile -->
+            <div class="user-profile dropdown">
+                <button type="button" class="user-profile-btn" data-bs-toggle="dropdown">
+                    <div class="user-avatar">
+                        <img src="assets/images/users/avatar-1.jpg" alt="User Avatar">
+                        <div class="user-status-indicator online"></div>
+                    </div>
+                    <div class="user-info d-none d-xl-block">
+                        <span class="user-name">{{ user ? user?.fullName : 'Administrator' }}</span>
+                        <span class="user-role">System Admin</span>
+                    </div>
+                    <i class="fas fa-chevron-down dropdown-arrow d-none d-xl-block"></i>
+                </button>
+                <div class="dropdown-menu dropdown-menu-end user-menu">
+                    <div class="user-menu-header">
+                        <div class="user-avatar large">
+                            <img src="assets/images/users/avatar-1.jpg" alt="User Avatar">
+                        </div>
+                        <div class="user-details">
+                            <h6>{{ user ? user?.fullName : 'Administrator' }}</h6>
+                            <span class="user-email">admin@ncdhealth.co.za</span>
+                        </div>
+                    </div>
+                    <div class="user-menu-content">
+                        <a class="user-menu-item" routerLink="/dashboard/stats">
+                            <i class="fas fa-user-cog"></i>
+                            <span>Profile Settings</span>
+                        </a>
+                        <a class="user-menu-item" routerLink="/dashboard/verify-phone-number">
+                            <i class="fas fa-headset"></i>
+                            <span>Support Ticket</span>
+                        </a>
+                        <a class="user-menu-item" routerLink="/lock-user">
+                            <i class="fas fa-lock"></i>
+                            <span>Lock Screen</span>
+                        </a>
+                        <div class="user-menu-divider"></div>
+                        <a class="user-menu-item logout" (click)="Logout()" routerLink="/auth/login">
+                            <i class="fas fa-sign-out-alt"></i>
+                            <span>Logout</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </header>
@@ -189,111 +221,181 @@
 <!-- Skip Link for Accessibility -->
 <a href="#main-content" class="skip-link">Skip to main content</a>
 
-<div class="topnav" role="navigation" aria-label="Main navigation">
-    <div class="container-fluid">
-        <nav class="navbar navbar-light navbar-expand-lg topnav-menu">
-
-            <div class="collapse navbar-collapse" id="topnav-menu-content">
-                <ul class="navbar-nav" role="menubar">
-
-                    <li class="nav-item dropdown" role="none">
-                        <a class="nav-link dropdown-toggle arrow-none" routerLink="/dashboard"  id="topnav-dashboard" role="button">
-                            <i class="dripicons dripicons-home" data-feather="home"></i> <span data-key="t-dashboards"> Home</span>
-                        </a>
-                    </li>
-
-
-                    <li class="nav-item dropdown" *ngIf="isMenuShown">
-                        <a class="nav-link dropdown-toggle arrow-none"  id="topnav-pages" role="button">
-                            <i class="dripicons  dripicons-user" data-feather="user"></i><span data-key="t-apps"> Users</span> <div class="arrow-down"></div>
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="topnav-pages">
-
-                            <a routerLink="/dashboard/users" routerLinkActive="router-link-active"  class="dropdown-item" data-key="t-calendar">View Users</a>
-                            <a routerLink="/dashboard/users/add" class="dropdown-item" data-key="t-chat">Add Users</a>
-                        </div>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle arrow-none"  id="topnav-components" role="button">
-                            <i class="dripicons  dripicons-medical" data-feather="file-text"></i><span data-key="t-components"> Patient</span> <div class="arrow-down"></div>
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="topnav-components">
-                                    <div class="dropdown">
-                                       <a routerLink="/dashboard/patients/add" class="dropdown-item" data-key="t-calendar">New Patient</a>
-                                       <a routerLink="/dashboard/patients" class="dropdown-item" data-key="t-calendar">Existing Patient</a>
-                                     </div>
-                       </div>
-                    </li>
-
-
-                     <li class="nav-item dropdown">
-                        <a class="nav-link" routerLink="/dashboard/reports" id="topnav-reports" role="button">
-                            <i class="dripicons dripicons-document-edit" data-feather="file-text"></i><span data-key="t-reports"> Reports</span>
-                        </a>
-                    </li>
-
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle arrow-none" id="topnav-sales" role="button">
-                            <i class="dripicons dripicons-basket" data-feather="shopping-cart"></i><span data-key="t-sales"> Sales</span> 
-                            <div class="arrow-down"></div>
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="topnav-sales">
-                            <div class="dropdown">
-                                <a routerLink="/dashboard/sales" class="dropdown-item" data-key="t-sales-dashboard">Sales Dashboard</a>
-                                <a routerLink="/dashboard/sales/add" class="dropdown-item" data-key="t-add-sale">New Sale</a>
-                                <a routerLink="/dashboard/sales/list" class="dropdown-item" data-key="t-list-sales">All Sales</a>
-                                <a routerLink="/dashboard/sales/products" class="dropdown-item" data-key="t-products">Products</a>
-                                <a routerLink="/dashboard/sales/reports" class="dropdown-item" data-key="t-sales-reports">Sales Reports</a>
+<nav class="modern-navigation" role="navigation" aria-label="Main navigation">
+    <div class="nav-container">
+        <div class="nav-wrapper">
+            <div class="nav-collapse" id="topnav-menu-content">
+                <ul class="nav-menu" role="menubar">
+                    <!-- Home -->
+                    <li class="nav-item" role="none">
+                        <a class="nav-link" routerLink="/dashboard" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+                            <div class="nav-link-content">
+                                <i class="nav-icon fas fa-home"></i>
+                                <span class="nav-text">Home</span>
                             </div>
-                        </div>
+                        </a>
                     </li>
 
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle arrow-none" id="topnav-training" role="button">
-                            <i class="dripicons dripicons-graduation" data-feather="book-open"></i>
-                            <span data-key="t-training"> Training</span> 
-                            <div class="arrow-down"></div>
-                        </a>
-
-                        <div class="dropdown-menu" aria-labelledby="topnav-training">
-                            <a routerLink="/dashboard/training/upload" class="dropdown-item" data-key="t-upload-training">Upload Training Register</a>
-                            <a routerLink="/dashboard/training/add" class="dropdown-item" data-key="t-add-training">Add Training Session</a>
-                            <a routerLink="/dashboard/training/list" class="dropdown-item" data-key="t-list-training">View Training Sessions</a>
-                            <a routerLink="/dashboard/training/trainers" class="dropdown-item" data-key="t-trainers">Manage Trainers</a>
-                            <a routerLink="/dashboard/training/reports" class="dropdown-item" data-key="t-training-reports">Training Reports</a>
-                        </div>
-                    </li>
-
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle arrow-none" id="topnav-more" role="button">
-                            <i class="dripicons  dripicons-question" data-feather="help-circle"></i><span data-key="t-extra-pages"> Help</span> 
-                            <div class="arrow-down"></div>
-                        </a>
-                       <div class="dropdown-menu" aria-labelledby="topnav-more">
-                            <div class="dropdown">
-                                <a routerLink="/dashboard/faqs" class="dropdown-item" data-key="t-calendar">FAQ</a>
-                                 <a routerLink="/dashboard/tutorials" class="dropdown-item" data-key="t-chat">Tutorials</a>
+                    <!-- Users -->
+                    <li class="nav-item nav-dropdown" *ngIf="isMenuShown" role="none">
+                        <a class="nav-link nav-dropdown-toggle" role="button">
+                            <div class="nav-link-content">
+                                <i class="nav-icon fas fa-users"></i>
+                                <span class="nav-text">Users</span>
+                                <i class="nav-arrow fas fa-chevron-down"></i>
                             </div>
-                            
+                        </a>
+                        <div class="nav-dropdown-menu">
+                            <a routerLink="/dashboard/users" routerLinkActive="active" class="nav-dropdown-item">
+                                <i class="nav-dropdown-icon fas fa-list"></i>
+                                <span>View Users</span>
+                            </a>
+                            <a routerLink="/dashboard/users/add" routerLinkActive="active" class="nav-dropdown-item">
+                                <i class="nav-dropdown-icon fas fa-plus"></i>
+                                <span>Add Users</span>
+                            </a>
                         </div>
                     </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle arrow-none" id="topnav-more" role="button">
-                            <i class="dripicons  dripicons-cloud-download" data-feather="download"></i><span data-key="t-extra-pages"> Download</span> 
-                            <div class="arrow-down"></div>
-                        </a>
-                       <div class="dropdown-menu" aria-labelledby="topnav-more">
-                            <div class="dropdown">
-                                <a [href]="pdflink" class="dropdown-item" data-key="t-calendar">Form</a>
+
+                    <!-- Patients -->
+                    <li class="nav-item nav-dropdown" role="none">
+                        <a class="nav-link nav-dropdown-toggle" role="button">
+                            <div class="nav-link-content">
+                                <i class="nav-icon fas fa-user-injured"></i>
+                                <span class="nav-text">Patients</span>
+                                <i class="nav-arrow fas fa-chevron-down"></i>
                             </div>
-                            
+                        </a>
+                        <div class="nav-dropdown-menu">
+                            <a routerLink="/dashboard/patients/add" routerLinkActive="active" class="nav-dropdown-item">
+                                <i class="nav-dropdown-icon fas fa-plus"></i>
+                                <span>New Patient</span>
+                            </a>
+                            <a routerLink="/dashboard/patients" routerLinkActive="active" class="nav-dropdown-item">
+                                <i class="nav-dropdown-icon fas fa-list"></i>
+                                <span>Existing Patients</span>
+                            </a>
+                        </div>
+                    </li>
+
+                    <!-- Reports -->
+                    <li class="nav-item" role="none">
+                        <a class="nav-link" routerLink="/dashboard/reports" routerLinkActive="active">
+                            <div class="nav-link-content">
+                                <i class="nav-icon fas fa-chart-bar"></i>
+                                <span class="nav-text">Reports</span>
+                            </div>
+                        </a>
+                    </li>
+
+                    <!-- Sales -->
+                    <li class="nav-item nav-dropdown" role="none">
+                        <a class="nav-link nav-dropdown-toggle" role="button">
+                            <div class="nav-link-content">
+                                <i class="nav-icon fas fa-shopping-cart"></i>
+                                <span class="nav-text">Sales</span>
+                                <i class="nav-arrow fas fa-chevron-down"></i>
+                            </div>
+                        </a>
+                        <div class="nav-dropdown-menu">
+                            <a routerLink="/dashboard/sales" routerLinkActive="active" class="nav-dropdown-item">
+                                <i class="nav-dropdown-icon fas fa-tachometer-alt"></i>
+                                <span>Sales Dashboard</span>
+                            </a>
+                            <a routerLink="/dashboard/sales/add" routerLinkActive="active" class="nav-dropdown-item">
+                                <i class="nav-dropdown-icon fas fa-plus"></i>
+                                <span>New Sale</span>
+                            </a>
+                            <a routerLink="/dashboard/sales/list" routerLinkActive="active" class="nav-dropdown-item">
+                                <i class="nav-dropdown-icon fas fa-list"></i>
+                                <span>All Sales</span>
+                            </a>
+                            <a routerLink="/dashboard/sales/products" routerLinkActive="active" class="nav-dropdown-item">
+                                <i class="nav-dropdown-icon fas fa-box"></i>
+                                <span>Products</span>
+                            </a>
+                            <a routerLink="/dashboard/sales/reports" routerLinkActive="active" class="nav-dropdown-item">
+                                <i class="nav-dropdown-icon fas fa-chart-line"></i>
+                                <span>Sales Reports</span>
+                            </a>
+                        </div>
+                    </li>
+
+                    <!-- Training -->
+                    <li class="nav-item nav-dropdown" role="none">
+                        <a class="nav-link nav-dropdown-toggle" role="button">
+                            <div class="nav-link-content">
+                                <i class="nav-icon fas fa-graduation-cap"></i>
+                                <span class="nav-text">Training</span>
+                                <i class="nav-arrow fas fa-chevron-down"></i>
+                            </div>
+                        </a>
+                        <div class="nav-dropdown-menu">
+                            <a routerLink="/dashboard/training/upload" routerLinkActive="active" class="nav-dropdown-item">
+                                <i class="nav-dropdown-icon fas fa-upload"></i>
+                                <span>Upload Training Register</span>
+                            </a>
+                            <a routerLink="/dashboard/training/add" routerLinkActive="active" class="nav-dropdown-item">
+                                <i class="nav-dropdown-icon fas fa-plus"></i>
+                                <span>Add Training Session</span>
+                            </a>
+                            <a routerLink="/dashboard/training/list" routerLinkActive="active" class="nav-dropdown-item">
+                                <i class="nav-dropdown-icon fas fa-list"></i>
+                                <span>View Training Sessions</span>
+                            </a>
+                            <a routerLink="/dashboard/training/trainers" routerLinkActive="active" class="nav-dropdown-item">
+                                <i class="nav-dropdown-icon fas fa-chalkboard-teacher"></i>
+                                <span>Manage Trainers</span>
+                            </a>
+                            <a routerLink="/dashboard/training/reports" routerLinkActive="active" class="nav-dropdown-item">
+                                <i class="nav-dropdown-icon fas fa-chart-line"></i>
+                                <span>Training Reports</span>
+                            </a>
+                        </div>
+                    </li>
+
+                    <!-- Help -->
+                    <li class="nav-item nav-dropdown" role="none">
+                        <a class="nav-link nav-dropdown-toggle" role="button">
+                            <div class="nav-link-content">
+                                <i class="nav-icon fas fa-question-circle"></i>
+                                <span class="nav-text">Help</span>
+                                <i class="nav-arrow fas fa-chevron-down"></i>
+                            </div>
+                        </a>
+                        <div class="nav-dropdown-menu">
+                            <a routerLink="/dashboard/faqs" routerLinkActive="active" class="nav-dropdown-item">
+                                <i class="nav-dropdown-icon fas fa-question"></i>
+                                <span>FAQ</span>
+                            </a>
+                            <a routerLink="/dashboard/tutorials" routerLinkActive="active" class="nav-dropdown-item">
+                                <i class="nav-dropdown-icon fas fa-play-circle"></i>
+                                <span>Tutorials</span>
+                            </a>
+                        </div>
+                    </li>
+
+                    <!-- Downloads -->
+                    <li class="nav-item nav-dropdown" role="none">
+                        <a class="nav-link nav-dropdown-toggle" role="button">
+                            <div class="nav-link-content">
+                                <i class="nav-icon fas fa-download"></i>
+                                <span class="nav-text">Downloads</span>
+                                <i class="nav-arrow fas fa-chevron-down"></i>
+                            </div>
+                        </a>
+                        <div class="nav-dropdown-menu">
+                            <a [href]="pdflink" class="nav-dropdown-item">
+                                <i class="nav-dropdown-icon fas fa-file-pdf"></i>
+                                <span>Forms</span>
+                            </a>
                         </div>
                     </li>
                 </ul>
             </div>
-        </nav>
+        </div>
     </div>
-</div>
+</nav>
 
 
 
