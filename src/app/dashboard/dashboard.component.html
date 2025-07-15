@@ -18,18 +18,21 @@
         </div>
 
         <!-- Statistics Cards Row -->
-        <div class="row g-3 mobile-mb-3">
+        <div class="row g-4 mobile-mb-3">
             <!-- Total Cholesterol Card -->
             <div class="col-12 col-lg-4">
                 <div class="card card-h-100 customize-card">
                     <div class="card-header">
-                        <h2 class="card-title mb-0 h5">Total Cholesterol</h2>
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-heartbeat me-2"></i>
+                            <h2 class="card-title mb-0 h5">Total Cholesterol</h2>
+                        </div>
                     </div>
                     <div class="card-body">
-                        <div class="d-flex flex-wrap align-items-center mb-4"></div>
                         <div class="chart-container" 
                              echarts 
                              [options]="nestedPie" 
+                             style="height: 400px;"
                              aria-label="Total cholesterol distribution chart">
                         </div>
                     </div>
@@ -41,9 +44,12 @@
                 <div class="card card-h-100 customize-card">
                     <div class="card-header">
                         <div class="d-flex justify-content-between align-items-center flex-wrap">
-                            <h2 class="card-title mb-0 h5">Blood Pressure Statistics</h2>
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-stethoscope me-2"></i>
+                                <h2 class="card-title mb-0 h5">Blood Pressure Statistics</h2>
+                            </div>
                             <select class="form-select form-select-sm" 
-                                    style="width: auto;"
+                                    style="width: auto; background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3); color: white;"
                                     aria-label="Select time period">
                                 <option value="JUNE" selected>June</option>
                                 <option value="MAY">May</option>
@@ -55,6 +61,7 @@
                         <div class="chart-container" 
                              echarts 
                              [options]="pieChart"
+                             style="height: 400px;"
                              class="e-charts"
                              aria-label="Blood pressure statistics pie chart">
                         </div>
@@ -257,38 +264,47 @@
 
         </div>
         <!-- end row -->
-        <div class="row">
+        <div class="row g-4 mt-2">
             <div class="col-xl-12">
                 <div class="card card-h-100 customize-card">
                     <div class="card-header">
-                        <h4 class="card-title mb-0">Glucose</h4>
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-chart-bar me-2"></i>
+                            <h4 class="card-title mb-0">Glucose Levels by Province</h4>
+                        </div>
                     </div>
                     <div class="card-body">
-                        <apx-chart
-                            [series]="columnChartOptions.series"
-                            [chart]="columnChartOptions.chart"
-                            [dataLabels]="columnChartOptions.dataLabels"
-                            [plotOptions]="columnChartOptions.plotOptions"
-                            [yaxis]="columnChartOptions.yaxis"
-                            [legend]="columnChartOptions.legend"
-                            [fill]="columnChartOptions.fill"
-                            [stroke]="columnChartOptions.stroke"
-                            [tooltip]="columnChartOptions.tooltip"
-                            [xaxis]="columnChartOptions.xaxis">
-                        </apx-chart>
+                        <div class="chart-wrapper">
+                            <apx-chart
+                                [series]="columnChartOptions.series"
+                                [chart]="columnChartOptions.chart"
+                                [dataLabels]="columnChartOptions.dataLabels"
+                                [plotOptions]="columnChartOptions.plotOptions"
+                                [yaxis]="columnChartOptions.yaxis"
+                                [legend]="columnChartOptions.legend"
+                                [fill]="columnChartOptions.fill"
+                                [stroke]="columnChartOptions.stroke"
+                                [tooltip]="columnChartOptions.tooltip"
+                                [xaxis]="columnChartOptions.xaxis"
+                                [colors]="columnChartOptions.colors"
+                                [grid]="columnChartOptions.grid">
+                            </apx-chart>
+                        </div>
                     </div>
                 </div>
                 <!-- end card -->
             </div>
             <!-- end col -->
-
-            <!-- end col -->
         </div>
-        <div class="row">
+        
+        <div class="row g-4 mt-2">
             <div class="col-xl-6">
               <div class="card card-h-100 customize-card">
                 <div class="card-header">
-                    <h4 class="card-title me-2">HBA1C Statistics</h4>
+                    <div class="d-flex align-items-center">
+                        <i class="fas fa-chart-pie me-2"></i>
+                        <h4 class="card-title me-2">HBA1C Statistics</h4>
+                    </div>
                 </div>
                 <!-- card body -->
                 <div class="card-body">
@@ -303,7 +319,7 @@
                     </div>
                     <div class="row align-items-center">
                         <div class="col-sm">
-                            <div class="d-flex justify-content-center align-items-center" style="min-height: 209.8px;" *ngIf="isShown">
+                            <div class="d-flex justify-content-center align-items-center chart-wrapper" style="min-height: 280px;" *ngIf="isShown">
                                 <apx-chart
                                     [series]="walletBalenceChart.series"
                                     [chart]="walletBalenceChart.chart"
@@ -311,33 +327,38 @@
                                     [labels]="walletBalenceChart.labels"
                                     [plotOptions]="walletBalenceChart.plotOptions"
                                     [stroke]="walletBalenceChart.stroke"
-                                    [legend]="walletBalenceChart.legend">
+                                    [legend]="walletBalenceChart.legend"
+                                    [dataLabels]="walletBalenceChart.dataLabels"
+                                    [tooltip]="walletBalenceChart.tooltip"
+                                    [responsive]="walletBalenceChart.responsive">
                                 </apx-chart>
                             </div>
-                            <!-- <div id="wallet-balance" data-colors='["#FF0000", "#FFA500", "#008000"]' class="apex-charts"></div> -->
                         </div>
                         <div class="col-sm align-self-center">
                             <div class="mt-4 mt-sm-0">
-                                <div>
-                                    <p class="mb-2"><i class="mdi mdi-circle
-                                            align-middle font-size-10 me-2
-                                            text-danger"></i> Diabetic</p>
-                                    <h6>6.5% <span class="text-muted
-                                            font-size-14 fw-normal">or Above</span></h6>
+                                <div class="stats-card">
+                                    <div class="stats-icon">
+                                        <i class="fas fa-exclamation-triangle"></i>
+                                    </div>
+                                    <div class="stats-title">Diabetic</div>
+                                    <div class="stats-value">6.5%</div>
+                                    <div class="stats-change text-muted">or Above</div>
                                 </div>
-                                <div class="mt-4 pt-2">
-                                    <p class="mb-2"><i class="mdi mdi-circle
-                                            align-middle font-size-10 me-2
-                                            text-warning"></i> Prediabetic</p>
-                                    <h6>Between 5.7%<span class="text-muted
-                                            font-size-14 fw-normal">& 6.4%</span></h6>
+                                <div class="stats-card">
+                                    <div class="stats-icon" style="background: linear-gradient(135deg, #fdcb6e 0%, #e17055 100%);">
+                                        <i class="fas fa-warning"></i>
+                                    </div>
+                                    <div class="stats-title">Prediabetic</div>
+                                    <div class="stats-value">5.7-6.4%</div>
+                                    <div class="stats-change text-muted">Range</div>
                                 </div>
-                                <div class="mt-4 pt-2">
-                                    <p class="mb-2"><i class="mdi mdi-circle
-                                            align-middle font-size-10 me-2
-                                            text-success"></i> Controlled</p>
-                                    <h6>5.7% <span class="text-muted
-                                            font-size-14 fw-normal">or Below</span></h6>
+                                <div class="stats-card">
+                                    <div class="stats-icon" style="background: linear-gradient(135deg, #00b894 0%, #00cec9 100%);">
+                                        <i class="fas fa-check-circle"></i>
+                                    </div>
+                                    <div class="stats-title">Controlled</div>
+                                    <div class="stats-value">5.7%</div>
+                                    <div class="stats-change text-muted">or Below</div>
                                 </div>
                             </div>
                         </div>
@@ -350,18 +371,29 @@
             <div class="col-xl-6">
                 <div class="card card-h-100 customize-card">
                     <div class="card-header">
-                        <h4 class="card-title mb-0">Tests Conducted</h4>
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-chart-line me-2"></i>
+                            <h4 class="card-title mb-0">Test Performance Overview</h4>
+                        </div>
                     </div>
                     <div class="card-body">
-                        <apx-chart
-                            [series]="barChartoptions.series"
-                            [chart]="barChartoptions.chart"
-                            [dataLabels]="barChartoptions.dataLabels"
-                            [plotOptions]="barChartoptions.plotOptions"
-                            [colors]="barChartoptions.colors"
-                            [legend]="barChartoptions.legend"
-                            [xaxis]="barChartoptions.xaxis">
-                        </apx-chart>
+                        <div class="chart-wrapper">
+                            <apx-chart
+                                [series]="barChartoptions.series"
+                                [chart]="barChartoptions.chart"
+                                [dataLabels]="barChartoptions.dataLabels"
+                                [plotOptions]="barChartoptions.plotOptions"
+                                [colors]="barChartoptions.colors"
+                                [legend]="barChartoptions.legend"
+                                [xaxis]="barChartoptions.xaxis"
+                                [yaxis]="barChartoptions.yaxis"
+                                [fill]="barChartoptions.fill"
+                                [stroke]="barChartoptions.stroke"
+                                [tooltip]="barChartoptions.tooltip"
+                                [grid]="barChartoptions.grid"
+                                [title]="barChartoptions.title">
+                            </apx-chart>
+                        </div>
                     </div>
                 </div>
                 <!-- end card -->

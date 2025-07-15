@@ -1,6 +1,293 @@
-.customize-card{
-    border-radius: 24px;
+// Modern Dashboard Styling
+.page-content {
+    background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+    min-height: 100vh;
+    padding: 2rem 0;
 }
-.customize-card .card-header{
-    border-radius: 24px;
+
+.container-fluid {
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+// Enhanced Card Styling
+.customize-card {
+    border-radius: 20px;
+    border: none;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px);
+    background: rgba(255, 255, 255, 0.95);
+    transition: all 0.3s ease;
+    overflow: hidden;
+    
+    &:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    }
+}
+
+.customize-card .card-header {
+    border-radius: 20px 20px 0 0;
+    background: linear-gradient(135deg, #1e3a8a 0%, #1d4ed8 100%);
+    border: none;
+    color: white;
+    padding: 1.5rem;
+    position: relative;
+    overflow: hidden;
+    
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(45deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0) 100%);
+        pointer-events: none;
+    }
+    
+    .card-title {
+        font-weight: 600;
+        font-size: 1.1rem;
+        margin-bottom: 0;
+        color: white;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+}
+
+// Chart Container Enhancements
+.chart-container, .e-charts {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    padding: 1rem;
+    
+    canvas, svg {
+        border-radius: 12px;
+    }
+}
+
+// Enhanced Breadcrumb
+.breadcrumb {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 0.75rem 1rem;
+    backdrop-filter: blur(10px);
+    
+    .breadcrumb-item {
+        color: rgba(255, 255, 255, 0.8);
+        
+        &.active {
+            color: white;
+            font-weight: 500;
+        }
+        
+        a {
+            color: rgba(255, 255, 255, 0.9);
+            text-decoration: none;
+            transition: color 0.2s ease;
+            
+            &:hover {
+                color: white;
+            }
+        }
+    }
+}
+
+// Page Title Box
+.page-title-box {
+    background: linear-gradient(135deg, #1e3a8a 0%, #1d4ed8 100%);
+    border-radius: 20px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    color: white;
+    box-shadow: 0 10px 30px rgba(30, 58, 138, 0.3);
+    
+    h1 {
+        font-weight: 700;
+        font-size: 2rem;
+        margin-bottom: 0.5rem;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        color: white;
+    }
+    
+    p {
+        color: white;
+        opacity: 0.9;
+    }
+    
+    * {
+        color: white;
+    }
+}
+
+// Enhanced Form Controls
+.form-select {
+    border-radius: 12px;
+    border: 2px solid rgba(30, 58, 138, 0.1);
+    padding: 0.75rem 1rem;
+    background: white;
+    transition: all 0.3s ease;
+    
+    &:focus {
+        border-color: #1e3a8a;
+        box-shadow: 0 0 0 0.2rem rgba(30, 58, 138, 0.25);
+        background: #f8fafc;
+    }
+}
+
+// Enhanced Button Styles
+.btn {
+    border-radius: 12px;
+    padding: 0.75rem 1.5rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    border: none;
+    
+    &.btn-outline-primary {
+        background: linear-gradient(135deg, #1e3a8a 0%, #1d4ed8 100%);
+        color: white;
+        border: 2px solid transparent;
+        
+        &:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(30, 58, 138, 0.3);
+        }
+    }
+    
+    &.btn-link {
+        border-radius: 8px;
+        padding: 0.5rem;
+        
+        &:hover {
+            background: rgba(30, 58, 138, 0.1);
+        }
+    }
+}
+
+// List Group Enhancements
+.list-group-item {
+    border: none;
+    padding: 1rem 0;
+    background: transparent;
+    border-bottom: 1px solid rgba(30, 58, 138, 0.1) !important;
+    
+    &:last-child {
+        border-bottom: none !important;
+    }
+    
+    h6 {
+        color: #1e3a8a;
+        font-weight: 600;
+        margin-bottom: 0.25rem;
+    }
+    
+    small {
+        color: #8e8da4;
+        font-size: 0.875rem;
+    }
+}
+
+// Chart Specific Enhancements
+.chart-wrapper {
+    position: relative;
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 16px;
+    backdrop-filter: blur(10px);
+    margin: 1rem 0;
+}
+
+// Statistics Cards
+.stats-card {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.7) 100%);
+    backdrop-filter: blur(20px);
+    border-radius: 20px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    
+    .stats-icon {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #1e3a8a 0%, #1d4ed8 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+    }
+    
+    .stats-title {
+        font-size: 0.9rem;
+        color: #8e8da4;
+        font-weight: 500;
+        margin-bottom: 0.5rem;
+    }
+    
+    .stats-value {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #304758;
+        margin-bottom: 0.5rem;
+    }
+    
+    .stats-change {
+        font-size: 0.875rem;
+        
+        &.positive {
+            color: #00b894;
+        }
+        
+        &.negative {
+            color: #e17055;
+        }
+    }
+}
+
+// Mobile Responsive
+@media (max-width: 768px) {
+    .container-fluid {
+        padding: 1rem;
+    }
+    
+    .page-title-box {
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+        
+        h1 {
+            font-size: 1.5rem;
+        }
+    }
+    
+    .customize-card {
+        margin-bottom: 1.5rem;
+    }
+    
+    .customize-card .card-header {
+        padding: 1rem;
+    }
+    
+    .chart-container {
+        padding: 0.5rem;
+    }
+}
+
+// Dark Theme Support
+@media (prefers-color-scheme: dark) {
+    .page-content {
+        background: linear-gradient(135deg, #2d3748 0%, #4a5568 100%);
+    }
+    
+    .customize-card {
+        background: rgba(45, 55, 72, 0.95);
+        color: white;
+    }
+    
+    .stats-card {
+        background: linear-gradient(135deg, rgba(45, 55, 72, 0.9) 0%, rgba(74, 85, 104, 0.7) 100%);
+        color: white;
+    }
 }

@@ -26,17 +26,57 @@ export class DashboardComponent implements OnInit {
         ],
         chart: {
           type: "bar",
-          height: 350
+          height: 380,
+          background: 'transparent',
+          toolbar: {
+            show: true,
+            tools: {
+              download: true,
+              selection: true,
+              zoom: true,
+              zoomin: true,
+              zoomout: true,
+              pan: true,
+              reset: true
+            }
+          },
+          animations: {
+            enabled: true,
+            easing: 'easeinout',
+            speed: 800,
+            animateGradually: {
+              enabled: true,
+              delay: 150
+            },
+            dynamicAnimation: {
+              enabled: true,
+              speed: 350
+            }
+          }
         },
         plotOptions: {
           bar: {
             horizontal: false,
-            columnWidth: "55%",
-            endingShape: "rounded"
+            columnWidth: "65%",
+            endingShape: "rounded",
+            borderRadius: 8,
+            dataLabels: {
+              position: "top"
+            }
           }
         },
+        colors: ['#1e3a8a', '#1d4ed8', '#3b82f6'],
         dataLabels: {
-          enabled: false
+          enabled: true,
+          formatter: function (val: any) {
+            return val + "";
+          },
+          offsetY: -20,
+          style: {
+            fontSize: '12px',
+            fontWeight: 600,
+            colors: ['#304758']
+          }
         },
         stroke: {
           show: true,
@@ -45,210 +85,493 @@ export class DashboardComponent implements OnInit {
         },
         xaxis: {
           categories: [
-            "Freestate",
-            "Northen Cape",
-            "Eastern cape",
-            "Western cape",
+            "Free State",
+            "Northern Cape",
+            "Eastern Cape",
+            "Western Cape",
             "Mpumalanga",
-            "Kwazulu Natal",
-            "North west",
+            "KwaZulu-Natal",
+            "North West",
             "Gauteng",
             "Limpopo"
-          ]
+          ],
+          labels: {
+            style: {
+              colors: '#8e8da4',
+              fontSize: '12px',
+              fontWeight: 500
+            }
+          },
+          axisBorder: {
+            show: false
+          },
+          axisTicks: {
+            show: false
+          }
         },
         yaxis: {
           title: {
-            text: " (Cases)"
+            text: "Cases",
+            style: {
+              color: '#8e8da4',
+              fontSize: '13px',
+              fontWeight: 600
+            }
+          },
+          labels: {
+            style: {
+              colors: '#8e8da4',
+              fontSize: '12px'
+            }
           }
         },
         fill: {
-          opacity: 1
+          type: 'gradient',
+          gradient: {
+            shade: 'light',
+            type: 'vertical',
+            shadeIntensity: 0.25,
+            gradientToColors: ['#3b82f6', '#1e40af', '#1e3a8a'],
+            inverseColors: false,
+            opacityFrom: 0.85,
+            opacityTo: 0.55,
+            stops: [0, 100]
+          }
         },
         tooltip: {
+          theme: 'dark',
           y: {
-            formatter: (val: any) =>{
-              return "" + val + " Cases";
+            formatter: (val: any) => {
+              return val + " Cases";
             }
+          },
+          style: {
+            fontSize: '12px',
+            fontFamily: 'Inter, sans-serif'
+          }
+        },
+        legend: {
+          position: 'top',
+          horizontalAlign: 'center',
+          fontSize: '13px',
+          fontWeight: 500,
+          labels: {
+            colors: '#8e8da4'
+          },
+          markers: {
+            width: 8,
+            height: 8,
+            radius: 4
+          }
+        },
+        grid: {
+          borderColor: '#f1f1f1',
+          strokeDashArray: 3,
+          xaxis: {
+            lines: {
+              show: false
+            }
+          },
+          yaxis: {
+            lines: {
+              show: true
+            }
+          },
+          padding: {
+            top: 0,
+            right: 0,
+            bottom: 0,
+            left: 0
           }
         }
       };
 
       nestedPie: any = {
+        backgroundColor: 'transparent',
         tooltip: {
           trigger: 'item',
-          formatter: '{a} <br/>{b}: {c} ({d}%)'
+          formatter: '{a} <br/>{b}: {c} ({d}%)',
+          backgroundColor: 'rgba(0, 0, 0, 0.8)',
+          borderColor: '#1e3a8a',
+          borderWidth: 1,
+          textStyle: {
+            color: '#fff',
+            fontFamily: 'Inter, sans-serif'
+          }
         },
         legend: {
+          orient: 'horizontal',
+          bottom: '5%',
+          left: 'center',
           data: [
-            'Borderline high',
+            'Borderline High',
             'High',            
             'Normal',
-          ]
+          ],
+          textStyle: {
+            color: '#8e8da4',
+            fontSize: 12,
+            fontWeight: 500
+          },
+          itemGap: 20,
+          icon: 'circle'
         },
         series: [
           {
             name: 'Gender',
             type: 'pie',
             selectedMode: 'single',
-            radius: [0, '30%'],
+            radius: [0, '35%'],
+            center: ['50%', '45%'],
             label: {
               position: 'inner',
-              fontSize: 14
+              fontSize: 13,
+              fontWeight: 600,
+              color: '#fff'
             },
             labelLine: {
               show: false
             },
+            itemStyle: {
+              borderWidth: 3,
+              borderColor: '#fff',
+              shadowBlur: 10,
+              shadowOffsetX: 0,
+              shadowOffsetY: 0,
+              shadowColor: 'rgba(0, 0, 0, 0.1)'
+            },
             data: [
-              { value: 1548, name: 'Male' },
-              { value: 775, name: 'Female' },
-              { value: 300, name: 'Ges', selected: true },
+              { 
+                value: 1548, 
+                name: 'Male',
+                itemStyle: {
+                  color: {
+                    type: 'linear',
+                    x: 0, y: 0, x2: 0, y2: 1,
+                    colorStops: [
+                      { offset: 0, color: '#1e3a8a' },
+                      { offset: 1, color: '#1d4ed8' }
+                    ]
+                  }
+                }
+              },
+              { 
+                value: 775, 
+                name: 'Female',
+                itemStyle: {
+                  color: {
+                    type: 'linear',
+                    x: 0, y: 0, x2: 0, y2: 1,
+                    colorStops: [
+                      { offset: 0, color: '#3b82f6' },
+                      { offset: 1, color: '#1e40af' }
+                    ]
+                  }
+                }
+              },
+              { 
+                value: 300, 
+                name: 'Other', 
+                selected: true,
+                itemStyle: {
+                  color: {
+                    type: 'linear',
+                    x: 0, y: 0, x2: 0, y2: 1,
+                    colorStops: [
+                      { offset: 0, color: '#60a5fa' },
+                      { offset: 1, color: '#2563eb' }
+                    ]
+                  }
+                }
+              },
             ]
           },
           {
-            name: 'Total Colestoral',
+            name: 'Total Cholesterol',
             type: 'pie',
-            radius: ['45%', '60%'],
-            labelLine: {
-              length: 30
+            radius: ['50%', '75%'],
+            center: ['50%', '45%'],
+            avoidLabelOverlap: false,
+            itemStyle: {
+              borderWidth: 2,
+              borderColor: '#fff',
+              shadowBlur: 8,
+              shadowOffsetX: 0,
+              shadowOffsetY: 2,
+              shadowColor: 'rgba(0, 0, 0, 0.1)'
             },
             label: {
-              formatter: '{a|{a}}{abg|}\n{hr|}\n  {b|{b}：}{c}  {per|{d}%}  ',
-              backgroundColor: '#F6F8FC',
-              borderColor: '#8C8D8E',
-              borderWidth: 1,
-              borderRadius: 4,
-              rich: {
-                a: {
-                  color: '#6E7079',
-                  lineHeight: 22,
-                  align: 'center'
-                },
-                hr: {
-                  borderColor: '#8C8D8E',
-                  width: '100%',
-                  borderWidth: 1,
-                  height: 0
-                },
-                b: {
-                  color: '#4C5058',
-                  fontSize: 14,
-                  fontWeight: 'bold',
-                  lineHeight: 33
-                },
-                per: {
-                  color: '#fff',
-                  backgroundColor: '#4C5058',
-                  padding: [3, 4],
-                  borderRadius: 4
-                }
-              }
+              show: true,
+              position: 'outside',
+              formatter: '{b}: {c} ({d}%)',
+              fontSize: 12,
+              fontWeight: 500,
+              color: '#5a5a5a'
+            },
+            labelLine: {
+              show: true,
+              length: 10,
+              length2: 20,
+              smooth: true
             },
             data: [
-              { value: 1048, name: 'Borderline high' },
-              { value: 335, name: 'High' },
-              { value: 310, name: 'Normal' }
+              { 
+                value: 1048, 
+                name: 'Borderline High',
+                itemStyle: {
+                  color: {
+                    type: 'linear',
+                    x: 0, y: 0, x2: 0, y2: 1,
+                    colorStops: [
+                      { offset: 0, color: '#ffeaa7' },
+                      { offset: 1, color: '#fab1a0' }
+                    ]
+                  }
+                }
+              },
+              { 
+                value: 335, 
+                name: 'High',
+                itemStyle: {
+                  color: {
+                    type: 'linear',
+                    x: 0, y: 0, x2: 0, y2: 1,
+                    colorStops: [
+                      { offset: 0, color: '#fd79a8' },
+                      { offset: 1, color: '#e84393' }
+                    ]
+                  }
+                }
+              },
+              { 
+                value: 310, 
+                name: 'Normal',
+                itemStyle: {
+                  color: {
+                    type: 'linear',
+                    x: 0, y: 0, x2: 0, y2: 1,
+                    colorStops: [
+                      { offset: 0, color: '#00b894' },
+                      { offset: 1, color: '#00cec9' }
+                    ]
+                  }
+                }
+              }
             ]
           }
         ]
       };
 
       barChartoptions: any = {
-        colors : ['#346beb', '#eb4034'],
+        colors: ['#1e3a8a', '#3b82f6'],
         series: [
             {
               name: "Pending Tests",
               data: [44, 55, 41, 37, 22, 43, 21]
             },
             {
-              name: "Test Done",
+              name: "Tests Completed",
               data: [53, 32, 33, 52, 13, 43, 32]
             },
-           
           ],
           chart: {
             type: "bar",
-            height: 350,
-            stacked: true
+            height: 380,
+            stacked: true,
+            background: 'transparent',
+            toolbar: {
+              show: true,
+              tools: {
+                download: true,
+                selection: false,
+                zoom: false,
+                zoomin: false,
+                zoomout: false,
+                pan: false,
+                reset: false
+              }
+            },
+            animations: {
+              enabled: true,
+              easing: 'easeinout',
+              speed: 800
+            }
           },
           plotOptions: {
             bar: {
-              horizontal: true
+              horizontal: true,
+              borderRadius: 8,
+              dataLabels: {
+                total: {
+                  enabled: true,
+                  style: {
+                    fontSize: '12px',
+                    fontWeight: 600,
+                    color: '#304758'
+                  }
+                }
+              }
+            }
+          },
+          dataLabels: {
+            enabled: true,
+            formatter: function (val: any) {
+              return val + "K";
+            },
+            style: {
+              fontSize: '11px',
+              fontWeight: 600,
+              colors: ['#fff']
             }
           },
           stroke: {
             width: 1,
-            // colors: ["#fff"]
+            colors: ['#fff']
           },
           title: {
-            text: "Tests Conducted"
+            text: "Test Performance Overview",
+            align: 'left',
+            style: {
+              fontSize: '16px',
+              fontWeight: 600,
+              color: '#304758'
+            }
           },
           xaxis: {
             categories: [2018, 2019, 2020, 2021, 2022, 2023],
             labels: {
-              formatter: (val: any) =>{
+              formatter: (val: any) => {
                 return val + "K";
+              },
+              style: {
+                colors: '#8e8da4',
+                fontSize: '12px',
+                fontWeight: 500
               }
+            },
+            axisBorder: {
+              show: false
+            },
+            axisTicks: {
+              show: false
             }
           },
           yaxis: {
             title: {
               text: undefined
-            }
-          },
-          tooltip: {
-            y: {
-              formatter: (val: any) =>{
-                return val + "K";
+            },
+            labels: {
+              style: {
+                colors: '#8e8da4',
+                fontSize: '12px'
               }
             }
           },
+          tooltip: {
+            theme: 'dark',
+            y: {
+              formatter: (val: any) => {
+                return val + "K";
+              }
+            },
+            style: {
+              fontSize: '12px',
+              fontFamily: 'Inter, sans-serif'
+            }
+          },
           fill: {
-            opacity: 1
+            type: 'gradient',
+            gradient: {
+              shade: 'light',
+              type: 'horizontal',
+              shadeIntensity: 0.25,
+              gradientToColors: ['#1d4ed8', '#1e40af'],
+              inverseColors: false,
+              opacityFrom: 0.85,
+              opacityTo: 0.55,
+              stops: [0, 100]
+            }
           },
           legend: {
             position: "top",
             horizontalAlign: "left",
-            offsetX: 40
+            offsetX: 40,
+            fontSize: '13px',
+            fontWeight: 500,
+            labels: {
+              colors: '#8e8da4'
+            },
+            markers: {
+              width: 8,
+              height: 8,
+              radius: 4
+            }
+          },
+          grid: {
+            borderColor: '#f1f1f1',
+            strokeDashArray: 3,
+            xaxis: {
+              lines: {
+                show: true
+              }
+            },
+            yaxis: {
+              lines: {
+                show: false
+              }
+            },
+            padding: {
+              top: 0,
+              right: 0,
+              bottom: 0,
+              left: 0
+            }
           }
         };
 
     chartNonDiabiates: any = {
         "series": [
             {
+                "name": "Non-Diabetic Cases",
                 "data": [
-                    2,
-                    10,
-                    18,
-                    22,
-                    36,
-                    15,
-                    47,
-                    75,
-                    65,
-                    19,
-                    14,
-                    2,
-                    47,
-                    42,
-                    15
+                    2, 10, 18, 22, 36, 15, 47, 75, 65, 19, 14, 2, 47, 42, 15
                 ]
             }
         ],
         "chart": {
-            "type": "line",
-            "height": 50,
+            "type": "area",
+            "height": 60,
             "sparkline": {
                 "enabled": true
+            },
+            "animations": {
+                "enabled": true,
+                "easing": "easeinout",
+                "speed": 800
             }
         },
         "colors": [
-            "#5156be"
+            "#1e3a8a"
         ],
+        "fill": {
+            "type": "gradient",
+            "gradient": {
+                "shade": "light",
+                "type": "vertical",
+                "shadeIntensity": 0.4,
+                "gradientToColors": ["#1d4ed8"],
+                "inverseColors": false,
+                "opacityFrom": 0.8,
+                "opacityTo": 0.2,
+                "stops": [0, 100]
+            }
+        },
         "stroke": {
             "curve": "smooth",
-            "width": 2
+            "width": 3
         },
         "tooltip": {
+            "theme": "dark",
             "fixed": {
                 "enabled": false
             },
@@ -256,124 +579,74 @@ export class DashboardComponent implements OnInit {
                 "show": false
             },
             "y": {
-                "title": {}
+                "title": {
+                    "formatter": function () {
+                        return "Cases: ";
+                    }
+                }
             },
             "marker": {
                 "show": false
+            },
+            "style": {
+                "fontSize": "12px",
+                "fontFamily": "Inter, sans-serif"
             }
         },
-        "yaxis": [
-            {
-                "show": false,
-                "showAlways": false,
-                "showForNullSeries": true,
-                "opposite": false,
-                "reversed": false,
-                "logarithmic": false,
-                "forceNiceScale": false,
-                "floating": true,
-                "labels": {
-                    "show": true,
-                    "minWidth": 0,
-                    "maxWidth": 160,
-                    "offsetX": 0,
-                    "offsetY": 0,
-                    "rotate": 0,
-                    "padding": 20,
-                    "style": {
-                        "colors": [],
-                        "fontSize": "11px",
-                        "fontWeight": 400,
-                        "cssClass": ""
-                    }
-                },
-                "axisBorder": {
-                    "show": false,
-                    "color": "#e0e0e0",
-                    "width": 1,
-                    "offsetX": 0,
-                    "offsetY": 0
-                },
-                "axisTicks": {
-                    "show": false,
-                    "color": "#e0e0e0",
-                    "width": 6,
-                    "offsetX": 0,
-                    "offsetY": 0
-                },
-                "title": {
-                    "text": "",
-                    "rotate": -90,
-                    "offsetY": 0,
-                    "offsetX": 0,
-                    "style": {
-                        "fontSize": "11px",
-                        "fontWeight": 900,
-                        "cssClass": ""
-                    }
-                },
-                "tooltip": {
-                    "enabled": false,
-                    "offsetX": 0
-                },
-                "crosshairs": {
-                    "show": true,
-                    "position": "front",
-                    "stroke": {
-                        "color": "#b6b6b6",
-                        "width": 1,
-                        "dashArray": 0
-                    }
-                }
-            }
-        ],
-        "annotations": {
-            "yaxis": [],
-            "xaxis": [],
-            "points": []
+        "grid": {
+            "show": false
+        },
+        "yaxis": {
+            "show": false
         },
         "xaxis": {
-            "convertedCatToNumeric": true
+            "show": false
         }
     }
 
     chartPreDiabetes: any = {
         "series": [
             {
+                "name": "Pre-Diabetic Cases",
                 "data": [
-                    15,
-                    42,
-                    47,
-                    2,
-                    14,
-                    19,
-                    65,
-                    75,
-                    47,
-                    15,
-                    42,
-                    47,
-                    2,
-                    14,
-                    12
+                    15, 42, 47, 2, 14, 19, 65, 75, 47, 15, 42, 47, 2, 14, 12
                 ]
             }
         ],
         "chart": {
-            "type": "line",
-            "height": 50,
+            "type": "area",
+            "height": 60,
             "sparkline": {
                 "enabled": true
+            },
+            "animations": {
+                "enabled": true,
+                "easing": "easeinout",
+                "speed": 800
             }
         },
         "colors": [
-            "#5156be"
+            "#3b82f6"
         ],
+        "fill": {
+            "type": "gradient",
+            "gradient": {
+                "shade": "light",
+                "type": "vertical",
+                "shadeIntensity": 0.4,
+                "gradientToColors": ["#1e40af"],
+                "inverseColors": false,
+                "opacityFrom": 0.8,
+                "opacityTo": 0.2,
+                "stops": [0, 100]
+            }
+        },
         "stroke": {
             "curve": "smooth",
-            "width": 2
+            "width": 3
         },
         "tooltip": {
+            "theme": "dark",
             "fixed": {
                 "enabled": false
             },
@@ -381,84 +654,28 @@ export class DashboardComponent implements OnInit {
                 "show": false
             },
             "y": {
-                "title": {}
+                "title": {
+                    "formatter": function () {
+                        return "Cases: ";
+                    }
+                }
             },
             "marker": {
                 "show": false
+            },
+            "style": {
+                "fontSize": "12px",
+                "fontFamily": "Inter, sans-serif"
             }
         },
-        "yaxis": [
-            {
-                "show": false,
-                "showAlways": false,
-                "showForNullSeries": true,
-                "opposite": false,
-                "reversed": false,
-                "logarithmic": false,
-                "forceNiceScale": false,
-                "floating": true,
-                "labels": {
-                    "show": true,
-                    "minWidth": 0,
-                    "maxWidth": 160,
-                    "offsetX": 0,
-                    "offsetY": 0,
-                    "rotate": 0,
-                    "padding": 20,
-                    "style": {
-                        "colors": [],
-                        "fontSize": "11px",
-                        "fontWeight": 400,
-                        "cssClass": ""
-                    }
-                },
-                "axisBorder": {
-                    "show": false,
-                    "color": "#e0e0e0",
-                    "width": 1,
-                    "offsetX": 0,
-                    "offsetY": 0
-                },
-                "axisTicks": {
-                    "show": false,
-                    "color": "#e0e0e0",
-                    "width": 6,
-                    "offsetX": 0,
-                    "offsetY": 0
-                },
-                "title": {
-                    "text": "",
-                    "rotate": -90,
-                    "offsetY": 0,
-                    "offsetX": 0,
-                    "style": {
-                        "fontSize": "11px",
-                        "fontWeight": 900,
-                        "cssClass": ""
-                    }
-                },
-                "tooltip": {
-                    "enabled": false,
-                    "offsetX": 0
-                },
-                "crosshairs": {
-                    "show": true,
-                    "position": "front",
-                    "stroke": {
-                        "color": "#b6b6b6",
-                        "width": 1,
-                        "dashArray": 0
-                    }
-                }
-            }
-        ],
-        "annotations": {
-            "yaxis": [],
-            "xaxis": [],
-            "points": []
+        "grid": {
+            "show": false
+        },
+        "yaxis": {
+            "show": false
         },
         "xaxis": {
-            "convertedCatToNumeric": true
+            "show": false
         }
     }
 
@@ -713,180 +930,219 @@ export class DashboardComponent implements OnInit {
     }
 
     walletBalenceChart: any = {
-        series: [
-            35,
-            70,
-            15
-        ],
-        "chart": {
-            "width": 350,
-            "height": 350,
-            "type": "pie",
-            "labels": [
-                "DIABETIC",
-                "PREDIABETIC",
-                "CONTROLLED"
-            ],
-            "colors": [
-                "#FF0000",
-                "#FFA500",
-                "#008000"
-            ],
-            "stroke": {
-                "width": 0
-            },
-            "legend": {
-                "show": false
-            },
-            "responsive": [
-                {
-                    "breakpoint": 480,
-                    "options": {
-                        "chart": {
-                            "width": 200
-                        }
-                    }
-                }
-            ],
-            "yaxis": [
-                {
-                    "show": true,
-                    "showAlways": false,
-                    "showForNullSeries": true,
-                    "opposite": false,
-                    "reversed": false,
-                    "logarithmic": false,
-                    "forceNiceScale": false,
-                    "floating": false,
-                    "labels": {
-                        "show": true,
-                        "minWidth": 0,
-                        "maxWidth": 160,
-                        "offsetX": 0,
-                        "offsetY": 0,
-                        "rotate": 0,
-                        "padding": 20,
-                        "style": {
-                            "colors": [],
-                            "fontSize": "11px",
-                            "fontWeight": 400,
-                            "cssClass": ""
-                        }
-                    },
-                    "axisBorder": {
-                        "show": false,
-                        "color": "#e0e0e0",
-                        "width": 1,
-                        "offsetX": 0,
-                        "offsetY": 0
-                    },
-                    "axisTicks": {
-                        "show": false,
-                        "color": "#e0e0e0",
-                        "width": 6,
-                        "offsetX": 0,
-                        "offsetY": 0
-                    },
-                    "title": {
-                        "rotate": -90,
-                        "offsetY": 0,
-                        "offsetX": 0,
-                        "style": {
-                            "fontSize": "11px",
-                            "fontWeight": 900,
-                            "cssClass": ""
-                        }
-                    },
-                    "tooltip": {
-                        "enabled": false,
-                        "offsetX": 0
-                    },
-                    "crosshairs": {
-                        "show": true,
-                        "position": "front",
-                        "stroke": {
-                            "color": "#b6b6b6",
-                            "width": 1,
-                            "dashArray": 0
-                        }
-                    }
-                }
-            ],
-            "annotations": {
-                "yaxis": [],
-                "xaxis": [],
-                "points": []
-            },
-            "xaxis": {
-                "convertedCatToNumeric": false
+        series: [35, 70, 15],
+        chart: {
+            width: 350,
+            height: 350,
+            type: "pie",
+            background: 'transparent',
+            animations: {
+                enabled: true,
+                easing: 'easeinout',
+                speed: 800
             }
         },
-
+        labels: [
+            "DIABETIC",
+            "PREDIABETIC", 
+            "CONTROLLED"
+        ],
+        colors: [
+            "#fd79a8",
+            "#fdcb6e",
+            "#00b894"
+        ],
+        stroke: {
+            width: 3,
+            colors: ['#fff']
+        },
+        plotOptions: {
+            pie: {
+                expandOnClick: true,
+                donut: {
+                    size: '70%',
+                    labels: {
+                        show: true,
+                        total: {
+                            show: true,
+                            showAlways: false,
+                            label: 'Total',
+                            fontSize: '16px',
+                            fontWeight: 600,
+                            color: '#304758',
+                            formatter: function (w: any) {
+                                return w.globals.seriesTotals.reduce((a: any, b: any) => {
+                                    return a + b;
+                                }, 0) + '%';
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        dataLabels: {
+            enabled: true,
+            formatter: function (val: any) {
+                return val.toFixed(1) + "%";
+            },
+            style: {
+                fontSize: '13px',
+                fontWeight: 600,
+                colors: ['#fff']
+            },
+            dropShadow: {
+                enabled: true,
+                top: 1,
+                left: 1,
+                blur: 1,
+                opacity: 0.8
+            }
+        },
+        legend: {
+            show: true,
+            position: 'bottom',
+            fontSize: '13px',
+            fontWeight: 500,
+            labels: {
+                colors: '#8e8da4'
+            },
+            markers: {
+                width: 12,
+                height: 12,
+                radius: 6
+            },
+            itemMargin: {
+                horizontal: 10,
+                vertical: 5
+            }
+        },
+        tooltip: {
+            theme: 'dark',
+            style: {
+                fontSize: '12px',
+                fontFamily: 'Inter, sans-serif'
+            },
+            y: {
+                formatter: function (val: any) {
+                    return val + "%";
+                }
+            }
+        },
+        responsive: [
+            {
+                breakpoint: 480,
+                options: {
+                    chart: {
+                        width: 280
+                    },
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }
+        ]
     }
 
     pieChart: any = {
-        "tooltip": {
-            "trigger": "item",
-            "formatter": "{a} <br/>{b} : {c} ({d}%)"
-        },
-        "legend": {
-            "orient": "vertical",
-            "left": "left",
-            "data": [
-                "NORMAL",
-                "ELEVATED",
-                "HYPERTENSION STAGE1",
-                "HYPERTENSION STAGE2",
-                "HYPERTENSIVE CRISIS"
-            ],
-            "textStyle": {
-                "color": "#858d98"
+        backgroundColor: 'transparent',
+        tooltip: {
+            trigger: 'item',
+            formatter: '{a} <br/>{b}: {c} ({d}%)',
+            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+            borderColor: '#1e3a8a',
+            borderWidth: 1,
+            textStyle: {
+                color: '#fff',
+                fontFamily: 'Inter, sans-serif',
+                fontSize: 12
             }
         },
-        "color": [
-            "#fd625e",
-            "#2ab57d",
-            "#4ba6ef",
-            "#ffbf53",
-            "#5156be"
+        legend: {
+            orient: 'vertical',
+            left: 'left',
+            top: 'center',
+            data: [
+                'NORMAL',
+                'ELEVATED',
+                'HYPERTENSION STAGE1',
+                'HYPERTENSION STAGE2',
+                'HYPERTENSIVE CRISIS'
+            ],
+            textStyle: {
+                color: '#8e8da4',
+                fontSize: 12,
+                fontWeight: 500
+            },
+            icon: 'circle',
+            itemGap: 12,
+            itemWidth: 12,
+            itemHeight: 12
+        },
+        color: [
+            '#00b894',
+            '#fdcb6e',
+            '#fd79a8',
+            '#e17055',
+            '#6c5ce7'
         ],
         series: {
-            "name": "total tests",
-            "type": "pie",
-            "radius": "55%",
-            "center": [
-                "50%",
-                "60%"
-            ],
+            name: 'Blood Pressure',
+            type: 'pie',
+            radius: ['40%', '70%'],
+            center: ['65%', '50%'],
+            avoidLabelOverlap: false,
+            itemStyle: {
+                borderRadius: 8,
+                borderColor: '#fff',
+                borderWidth: 3,
+                shadowBlur: 10,
+                shadowOffsetX: 0,
+                shadowOffsetY: 4,
+                shadowColor: 'rgba(0, 0, 0, 0.1)'
+            },
+            label: {
+                show: false,
+                position: 'center'
+            },
+            emphasis: {
+                label: {
+                    show: true,
+                    fontSize: '16',
+                    fontWeight: 'bold',
+                    color: '#304758'
+                },
+                itemStyle: {
+                    shadowBlur: 15,
+                    shadowOffsetX: 0,
+                    shadowOffsetY: 8,
+                    shadowColor: 'rgba(0, 0, 0, 0.2)'
+                }
+            },
+            labelLine: {
+                show: false
+            },
             data: [
                 {
-                    "value": 335,
-                    "name": "NORMAL"
+                    value: 335,
+                    name: 'NORMAL'
                 },
                 {
-                    "value": 310,
-                    "name": "ELEVATED"
+                    value: 310,
+                    name: 'ELEVATED'
                 },
                 {
-                    "value": 234,
-                    "name": "HYPERTENSION STAGE1"
+                    value: 234,
+                    name: 'HYPERTENSION STAGE1'
                 },
                 {
-                    "value": 135,
-                    "name": "HYPERTENSION STAGE2"
+                    value: 135,
+                    name: 'HYPERTENSION STAGE2'
                 },
                 {
-                    "value": 1548,
-                    "name": "HYPERTENSIVE CRISIS"
+                    value: 1548,
+                    name: 'HYPERTENSIVE CRISIS'
                 }
-            ],
-            "itemStyle": {
-                "emphasis": {
-                    "shadowBlur": 10,
-                    "shadowOffsetX": 0,
-                    "shadowColor": "rgba(0, 0, 0, 0.5)"
-                }
-            }
+            ]
         }
     }
 

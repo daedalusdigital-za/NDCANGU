@@ -67,14 +67,15 @@
     margin-bottom: 1.5rem;
     
     .card-header {
-        background-color: #fff;
-        border-bottom: 1px solid #e3ebf0;
+        background: linear-gradient(135deg, #1e3a8a 0%, #1d4ed8 100%);
+        border: none;
+        color: white;
         padding: 1rem 1.25rem;
         
         .card-title {
             font-size: 1.1rem;
             font-weight: 600;
-            color: #495057;
+            color: white;
             margin-bottom: 0;
         }
     }

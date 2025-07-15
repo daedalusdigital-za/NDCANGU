@@ -187,14 +187,17 @@ textarea {
   }
   
   .card-header {
+    background: linear-gradient(135deg, #1e3a8a 0%, #1d4ed8 100%);
+    border: none;
+    color: white;
     padding: 16px 20px 12px;
-    border-bottom: 1px solid #f1f1f1;
   }
   
   .card-title {
     font-size: 16px;
     margin-bottom: 0;
     line-height: 1.4;
+    color: white;
   }
   
   .card-body {

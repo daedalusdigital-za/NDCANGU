@@ -1,0 +1,135 @@
+.report-config {
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.field-selection {
+  .available-fields, .selected-fields {
+    max-height: 300px;
+    overflow-y: auto;
+    border: 1px solid #dee2e6;
+    border-radius: 6px;
+    padding: 15px;
+    background-color: #fff;
+  }
+
+  .form-check {
+    margin-bottom: 10px;
+    
+    .form-check-input:checked {
+      background-color: #0d6efd;
+      border-color: #0d6efd;
+    }
+  }
+}
+
+.report-preview {
+  .table {
+    font-size: 14px;
+    
+    th {
+      background-color: #f8f9fa;
+      font-weight: 600;
+      border-bottom: 2px solid #dee2e6;
+      white-space: nowrap;
+    }
+    
+    td {
+      vertical-align: middle;
+      max-width: 200px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+}
+
+.report-summary {
+  .card {
+    border: 1px solid #e3e6f0;
+    transition: all 0.3s ease;
+    
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+  }
+}
+
+.filter-section {
+  background-color: #ffffff;
+  border: 1px solid #e3e6f0;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.btn-download {
+  background: linear-gradient(45deg, #28a745, #20c997);
+  border: none;
+  color: white;
+  transition: all 0.3s ease;
+  
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+  }
+  
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+.field-count {
+  background-color: #0d6efd;
+  color: white;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 40px 20px;
+  color: #6c757d;
+  
+  i {
+    font-size: 48px;
+    margin-bottom: 16px;
+    opacity: 0.5;
+  }
+}
+
+.card-header {
+  background: linear-gradient(135deg, #1e3a8a 0%, #1d4ed8 100%);
+  border: none;
+  color: white;
+  padding: 1rem 1.5rem;
+  
+  .card-title {
+    color: white;
+    font-weight: 600;
+  }
+  
+  .card-title-desc {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 14px;
+    margin-bottom: 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .report-preview .table {
+    font-size: 12px;
+  }
+  
+  .field-selection {
+    .available-fields, .selected-fields {
+      max-height: 200px;
+    }
+  }
+}

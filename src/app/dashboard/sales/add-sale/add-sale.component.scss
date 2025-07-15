@@ -8,13 +8,14 @@
 }
 
 .card-header {
-    background-color: #f8f9fa;
-    border-bottom: 1px solid #e9ecef;
+    background: linear-gradient(135deg, #1e3a8a 0%, #1d4ed8 100%);
+    border: none;
+    color: white;
     padding: 1rem 1.5rem;
 }
 
 .card-title {
-    color: #495057;
+    color: white;
     font-weight: 600;
 }
 
