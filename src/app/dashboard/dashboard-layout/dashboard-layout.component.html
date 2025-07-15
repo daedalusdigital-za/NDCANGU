@@ -178,7 +178,7 @@
                         <div class="user-status-indicator online"></div>
                     </div>
                     <div class="user-info d-none d-xl-block">
-                        <span class="user-name">{{ user ? user?.fullName : 'Administrator' }}</span>
+                        <span class="user-name">{{ user?.fullName || user?.firstName || user?.email || 'Administrator' }}</span>
                         <span class="user-role">System Admin</span>
                     </div>
                     <i class="fas fa-chevron-down dropdown-arrow d-none d-xl-block"></i>
@@ -189,8 +189,8 @@
                             <img src="assets/images/users/avatar-1.jpg" alt="User Avatar">
                         </div>
                         <div class="user-details">
-                            <h6>{{ user ? user?.fullName : 'Administrator' }}</h6>
-                            <span class="user-email">admin@ncdhealth.co.za</span>
+                            <h6>{{ user?.fullName || user?.firstName || user?.email || 'Administrator' }}</h6>
+                            <span class="user-email">{{ user?.email || 'admin@ncdhealth.co.za' }}</span>
                         </div>
                     </div>
                     <div class="user-menu-content">

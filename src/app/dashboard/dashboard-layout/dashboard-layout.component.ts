@@ -26,7 +26,20 @@ export class DashboardLayoutComponent implements OnInit, AfterViewInit, OnDestro
     this.globalService.selectedDistricts = this.districts;
     
     if (this.user) {
-      this.user.fullName = `${this.user.firstName} ${this.user.lastName}`;
+      // Create fullName safely, handling undefined values
+      const firstName = this.user.firstName || '';
+      const lastName = this.user.lastName || '';
+      
+      if (firstName && lastName) {
+        this.user.fullName = `${firstName} ${lastName}`;
+      } else if (firstName) {
+        this.user.fullName = firstName;
+      } else if (lastName) {
+        this.user.fullName = lastName;
+      } else {
+        this.user.fullName = this.user.email || 'Administrator';
+      }
+      
       if (this.user.role?.[0] == 'Admin') {
         this.isMenuShown = true;
       } else if (this.user.role?.[0] == 'Nurse') {
