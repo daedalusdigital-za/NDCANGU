@@ -4,9 +4,10 @@ import { AddStatsComponent } from './add-stats/add-stats.component';
 import { DashboardLayoutComponent } from './dashboard-layout/dashboard-layout.component';
 import { DashboardComponent } from './dashboard.component';
 import { ListFaqsComponent } from './list-faqs/list-faqs.component';
-import { ListReportsComponent } from './reports/list-reports/list-reports.component';
+import { ReportsComponent } from './reports.component';
 import { ListStatsComponent } from './list-stats/list-stats.component';
 import { ListTutorialsComponent } from './list-tutorials/list-tutorials.component';
+import { AuthDebugComponent } from './auth-debug.component';
 import { VerifyPhoneNumberComponent } from './verify-phone-number/verify-phone-number.component';
 
 const routes: Routes = [
@@ -27,11 +28,6 @@ const routes: Routes = [
         component: ListTutorialsComponent
       },
       {
-        path: 'reports',
-        component: ListReportsComponent
-      },
-
-      {
         path: 'stats',
         component: ListStatsComponent
       },
@@ -49,7 +45,11 @@ const routes: Routes = [
       },
       {
         path: 'reports',
-        loadChildren: () => import('./reports/reports.module').then(m => m.ReportsModule),
+        component: ReportsComponent,
+      },
+      {
+        path: 'auth-debug',
+        component: AuthDebugComponent,
       },
        {
         path: 'tests',

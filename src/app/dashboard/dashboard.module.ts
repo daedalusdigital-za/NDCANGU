@@ -6,7 +6,8 @@ import { DashboardComponent } from './dashboard.component';
 import { DashboardLayoutComponent } from './dashboard-layout/dashboard-layout.component';
 import { ListFaqsComponent } from './list-faqs/list-faqs.component';
 import { ListTutorialsComponent } from './list-tutorials/list-tutorials.component';
-import { ListReportsComponent } from './reports/list-reports/list-reports.component';
+import { ReportsComponent } from './reports.component';
+import { AuthDebugComponent } from './auth-debug.component';
 import { AddStatsComponent } from './add-stats/add-stats.component';
 import { ListStatsComponent } from './list-stats/list-stats.component';
 import { NgApexchartsModule } from 'ng-apexcharts';
@@ -24,7 +25,8 @@ import { VerifyPhoneNumberComponent } from './verify-phone-number/verify-phone-n
     DashboardLayoutComponent,
     ListFaqsComponent,
     ListTutorialsComponent,
-    ListReportsComponent,
+    ReportsComponent,
+    AuthDebugComponent,
     // AddReportComponent,
     AddStatsComponent,
     ListStatsComponent,

@@ -1,0 +1,251 @@
+<div class="page-content">
+    <div class="container-fluid">
+        <!-- Page Title -->
+        <div class="row">
+            <div class="col-12">
+                <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+                    <h4 class="mb-sm-0 font-size-18">Custom Reports</h4>
+                    <div class="page-title-right">
+                        <ol class="breadcrumb m-0">
+                            <li class="breadcrumb-item"><a href="javascript: void(0);">Dashboard</a></li>
+                            <li class="breadcrumb-item active">Custom Reports</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Report Configuration -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">Configure Report</h5>
+                    </div>
+                    <div class="card-body">
+                        <form #reportForm="ngForm">
+                            <div class="row">
+                                <!-- Report Type Selection -->
+                                <div class="col-md-4">
+                                    <div class="mb-3">
+                                        <label class="form-label">Report Type *</label>
+                                        <select class="form-select" 
+                                                [(ngModel)]="selectedReportType" 
+                                                name="reportType" 
+                                                required
+                                                (change)="onReportTypeChange()">
+                                            <option value="">Select Report Type</option>
+                                            <option value="sales">Sales Report</option>
+                                            <option value="training">Training Report</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <!-- Date Range -->
+                                <div class="col-md-4">
+                                    <div class="mb-3">
+                                        <label class="form-label">Date From</label>
+                                        <input type="date" 
+                                               class="form-control" 
+                                               [(ngModel)]="dateFrom" 
+                                               name="dateFrom">
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <div class="mb-3">
+                                        <label class="form-label">Date To</label>
+                                        <input type="date" 
+                                               class="form-control" 
+                                               [(ngModel)]="dateTo" 
+                                               name="dateTo">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Province Filter -->
+                            <div class="row" *ngIf="selectedReportType">
+                                <div class="col-md-4">
+                                    <div class="mb-3">
+                                        <label class="form-label">Province Filter</label>
+                                        <select class="form-select" 
+                                                [(ngModel)]="selectedProvince" 
+                                                name="province">
+                                            <option value="">All Provinces</option>
+                                            <option *ngFor="let province of provinces" [value]="province.code">
+                                                {{province.name}}
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <!-- Status Filter for Sales -->
+                                <div class="col-md-4" *ngIf="selectedReportType === 'sales'">
+                                    <div class="mb-3">
+                                        <label class="form-label">Status Filter</label>
+                                        <select class="form-select" 
+                                                [(ngModel)]="selectedStatus" 
+                                                name="status">
+                                            <option value="">All Status</option>
+                                            <option value="Pending">Pending</option>
+                                            <option value="Completed">Completed</option>
+                                            <option value="Cancelled">Cancelled</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <!-- Hospital Filter -->
+                                <div class="col-md-4">
+                                    <div class="mb-3">
+                                        <label class="form-label">Hospital Filter</label>
+                                        <select class="form-select" 
+                                                [(ngModel)]="selectedHospital" 
+                                                name="hospital">
+                                            <option value="">All Hospitals</option>
+                                            <option *ngFor="let hospital of filteredHospitals" [value]="hospital.code">
+                                                {{hospital.name}}
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Field Selection -->
+        <div class="row" *ngIf="selectedReportType">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">Select Fields to Include</h5>
+                        <p class="card-title-desc">Choose which fields to include in your report</p>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h6 class="mb-3">Available Fields</h6>
+                                <div class="border rounded p-3" style="max-height: 300px; overflow-y: auto;">
+                                    <div class="form-check mb-2" *ngFor="let field of availableFields">
+                                        <input class="form-check-input" 
+                                               type="checkbox" 
+                                               [id]="field.key"
+                                               [checked]="isFieldSelected(field.key)"
+                                               (change)="toggleField(field.key)">
+                                        <label class="form-check-label" [for]="field.key">
+                                            {{field.label}}
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="mt-3">
+                                    <button type="button" 
+                                            class="btn btn-outline-primary btn-sm me-2" 
+                                            (click)="selectAllFields()">
+                                        Select All
+                                    </button>
+                                    <button type="button" 
+                                            class="btn btn-outline-secondary btn-sm" 
+                                            (click)="clearAllFields()">
+                                        Clear All
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <h6 class="mb-3">Selected Fields ({{selectedFields.length}})</h6>
+                                <div class="border rounded p-3" style="max-height: 300px; overflow-y: auto;">
+                                    <div class="d-flex align-items-center mb-2" *ngFor="let field of getSelectedFieldsDetails()">
+                                        <span class="flex-grow-1">{{field.label}}</span>
+                                        <button type="button" 
+                                                class="btn btn-sm btn-outline-danger" 
+                                                (click)="removeField(field.key)">
+                                            <i class="dripicons-cross"></i>
+                                        </button>
+                                    </div>
+                                    <div *ngIf="selectedFields.length === 0" class="text-muted">
+                                        No fields selected
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Report Preview -->
+        <div class="row" *ngIf="selectedReportType && selectedFields.length > 0">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="card-title mb-0">Report Preview ({{filteredData.length}} records)</h5>
+                        <div>
+                            <button type="button" 
+                                    class="btn btn-outline-primary me-2" 
+                                    (click)="generatePreview()">
+                                <i class="dripicons-refresh me-1"></i>Refresh Preview
+                            </button>
+                            <button type="button" 
+                                    class="btn btn-success" 
+                                    (click)="downloadExcel()"
+                                    [disabled]="selectedFields.length === 0">
+                                <i class="dripicons-download me-1"></i>Download Excel
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th *ngFor="let field of getSelectedFieldsDetails()">
+                                            {{field.label}}
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let item of filteredData | slice:0:10">
+                                        <td *ngFor="let field of getSelectedFieldsDetails()">
+                                            {{getFieldValue(item, field.key)}}
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div *ngIf="filteredData.length > 10" class="text-muted mt-2">
+                            Showing first 10 records. Download Excel for complete data.
+                        </div>
+                        <div *ngIf="filteredData.length === 0" class="text-center py-4">
+                            <i class="dripicons-document-new text-muted" style="font-size: 48px;"></i>
+                            <p class="text-muted mt-2">No data found for the selected criteria</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Report Summary -->
+        <div class="row" *ngIf="selectedReportType && reportSummary">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">Report Summary</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-3" *ngFor="let summary of reportSummary">
+                                <div class="card bg-light">
+                                    <div class="card-body text-center">
+                                        <h5 class="card-title text-primary">{{summary.value}}</h5>
+                                        <p class="card-text">{{summary.label}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

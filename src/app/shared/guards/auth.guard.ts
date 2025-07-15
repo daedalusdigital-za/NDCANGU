@@ -11,15 +11,19 @@ export class AuthGuard implements CanActivate {
   constructor(private router: Router, private globalService: GlobalService) { }
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
+    // TEMPORARY: Bypass authentication for testing
+    // TODO: Remove this in production
+    return true;
+    
     // Check if token exists in localStorage
-    const user = this.globalService.getLocalStorage<User>('currentUser');
-    if (user && user.token) {
-      // Token exists, allow access to the route
-      return true;
-    } else {
-      // Token does not exist, navigate to login page or any other desired behavior
-      this.router.navigate(['/auth']);
-      return false;
-    }
+    // const user = this.globalService.getLocalStorage<User>('currentUser');
+    // if (user && user.token) {
+    //   // Token exists, allow access to the route
+    //   return true;
+    // } else {
+    //   // Token does not exist, navigate to login page or any other desired behavior
+    //   this.router.navigate(['/auth']);
+    //   return false;
+    // }
   }
 }

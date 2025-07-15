@@ -227,15 +227,9 @@
 
 
                      <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle arrow-none"  id="topnav-components" role="button">
-                            <i class="dripicons  dripicons-document-edit" data-feather="file-text"></i><span data-key="t-components"> Reports</span> <div class="arrow-down"></div>
+                        <a class="nav-link" routerLink="/dashboard/reports" id="topnav-reports" role="button">
+                            <i class="dripicons dripicons-document-edit" data-feather="file-text"></i><span data-key="t-reports"> Reports</span>
                         </a>
-                        <div class="dropdown-menu" aria-labelledby="topnav-components">
-                                    <div class="dropdown">
-                                       <a routerLink="/dashboard/reports" class="dropdown-item" data-key="t-calendar" *ngIf="!isNurseUser">View Reports</a>
-                                       <a routerLink="/dashboard/reports/add" class="dropdown-item" data-key="t-calendar" *ngIf="isMenuShown || isNurseUser">Create Reports</a>
-                                     </div>
-                       </div>
                     </li>
 
                     <li class="nav-item dropdown">
