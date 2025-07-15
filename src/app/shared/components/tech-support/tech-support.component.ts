@@ -78,6 +78,10 @@ export class TechSupportComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    // Ensure chat starts closed
+    this.isOpen = false;
+    this.isMinimized = false;
+    
     this.initializeChat();
     this.loadPreviousSession();
   }
@@ -126,9 +130,15 @@ export class TechSupportComponent implements OnInit, OnDestroy {
     this.isOpen = false;
     this.isMinimized = false;
     
+    // Clear any typing indicators
+    this.isTyping = false;
+    
     if (this.currentSession) {
       this.endSession();
     }
+    
+    // Optional: Clear the chat form
+    this.chatForm.get('message')?.setValue('');
   }
 
   startNewSession(): void {
@@ -390,11 +400,12 @@ export class TechSupportComponent implements OnInit, OnDestroy {
       .filter(key => key.startsWith('supportSession_'))
       .map(key => JSON.parse(localStorage.getItem(key) || '{}'));
     
-    // Load most recent active session
+    // Load most recent active session but don't auto-open
     const activeSession = savedSessions.find(session => session.status === 'active');
     if (activeSession) {
       this.currentSession = activeSession;
       this.messages = [...activeSession.messages];
+      // Don't auto-open chat, let user decide
     }
   }
 

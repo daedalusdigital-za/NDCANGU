@@ -79,14 +79,46 @@
   overflow: hidden;
   pointer-events: auto;
   
+  // Hide chat window by default
+  display: none;
+  opacity: 0;
+  transform: translateY(20px) scale(0.9);
+  transition: all 0.3s ease;
+  
+  // Show chat window when open
+  &.open {
+    display: block;
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  
+  // Minimized state
+  &.minimized {
+    height: 60px;
+    transform: translateY(0) scale(1);
+    
+    .chat-content,
+    .chat-input {
+      display: none;
+    }
+  }
+  
   @media (max-width: 768px) {
     width: 320px;
     height: 450px;
+    
+    &.minimized {
+      height: 60px;
+    }
   }
   
   @media (max-width: 480px) {
     width: 280px;
     height: 400px;
+    
+    &.minimized {
+      height: 60px;
+    }
   }
 }
 
@@ -112,12 +144,14 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      position: relative;
       
       i {
         font-size: 20px;
+        color: white;
       }
       
-      .status-dot {
+      .status-indicator {
         position: absolute;
         width: 12px;
         height: 12px;
@@ -219,6 +253,21 @@
       i {
         font-size: 14px;
         color: #6c757d;
+      }
+    }
+    
+    .agent-avatar-small {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: #007bff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      
+      i {
+        font-size: 14px;
+        color: white;
       }
     }
     

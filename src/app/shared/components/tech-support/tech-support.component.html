@@ -18,9 +18,7 @@
     <div class="chat-header">
       <div class="header-left">
         <div class="agent-avatar">
-          <img src="assets/images/support/agent-default.jpg" 
-               alt="Support Agent" 
-               onerror="this.src='assets/images/users/avatar-1.jpg'">
+          <i class="fas fa-headset"></i>
           <div class="status-indicator online"></div>
         </div>
         <div class="agent-info">
@@ -111,9 +109,7 @@
           <!-- Support Message -->
           <div class="support-message" *ngIf="message.sender === 'support' && message.type !== 'system'">
             <div class="agent-avatar-small">
-              <img src="assets/images/support/agent-default.jpg" 
-                   alt="Support" 
-                   onerror="this.src='assets/images/users/avatar-1.jpg'">
+              <i class="fas fa-robot"></i>
             </div>
             <div class="message-bubble support-bubble">
               <p>{{ message.message }}</p>
@@ -125,9 +121,7 @@
         <!-- Typing Indicator -->
         <div class="typing-indicator" *ngIf="isTyping">
           <div class="agent-avatar-small">
-            <img src="assets/images/support/agent-default.jpg" 
-                 alt="Support" 
-                 onerror="this.src='assets/images/users/avatar-1.jpg'">
+            <i class="fas fa-robot"></i>
           </div>
           <div class="typing-bubble">
             <div class="typing-dots">
