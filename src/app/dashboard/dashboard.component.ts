@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { GlobalService } from '../services/global/global.service';
+import { User } from '../shared/interfaces/common.interfaces';
 @Component({
     selector: 'app-dashboard',
     templateUrl: './dashboard.component.html',
@@ -890,14 +891,20 @@ export class DashboardComponent implements OnInit {
     }
 
 
-    userRole: string;
+    userRole: string = '';
     constructor(private globalService: GlobalService) { }
 
     ngOnInit(): void {
-        this.userRole = this.globalService.getLocalStorage('currentUser')?.role[0]
+        try {
+            const currentUser = this.globalService.getLocalStorage<User>('currentUser');
+            this.userRole = currentUser?.role?.[0] || 'Guest';
+        } catch (error) {
+            console.error('Error loading user data:', error);
+            this.userRole = 'Guest';
+        }
 
-        this.globalService.topMenuSubject.subscribe(
-            (x: any) => {
+        this.globalService.topMenuSubject.subscribe({
+            next: (x: any) => {
                 console.log(x);
 
                 this.isShown = false;
@@ -906,7 +913,11 @@ export class DashboardComponent implements OnInit {
                 setTimeout(() => {
                     this.isShown = true;
                 }, 500);
-            });
+            },
+            error: (error) => {
+                console.error('Error in topMenuSubject subscription:', error);
+            }
+        });
     }
 
 

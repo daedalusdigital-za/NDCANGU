@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+import { RouterModule } from '@angular/router';
 import { DynamicGridComponent } from './components/dynamic-grid/dynamic-grid.component';
 import { TableModule } from 'primeng/table';
 import { MultiSelectModule } from 'primeng/multiselect';
@@ -11,15 +12,21 @@ import { PaginatorModule } from 'primeng/paginator';
 import { ButtonModule } from "primeng/button";
 import { LottieModule } from 'ngx-lottie';
 
+// Import our services to ensure they're available app-wide
+import { ErrorHandlingService } from '../services/error-handling/error-handling.service';
+import { LoadingService } from '../services/loading/loading.service';
+
 export function playerFactory(): any {
     return import('lottie-web');
-  }
+}
+
 @NgModule({
     declarations: [
         DynamicGridComponent
     ],
     imports: [
         CommonModule,
+        RouterModule,
         MultiSelectModule,
         FormsModule,
         TableModule,
@@ -30,6 +37,23 @@ export function playerFactory(): any {
         ButtonModule,
         LottieModule.forRoot({ player: playerFactory })
     ],
-    exports: [DynamicGridComponent]
+    exports: [
+        DynamicGridComponent,
+        // Re-export PrimeNG modules for convenience
+        CommonModule,
+        RouterModule,
+        FormsModule,
+        TableModule,
+        MultiSelectModule,
+        CheckboxModule,
+        MenuModule,
+        ToolbarModule,
+        PaginatorModule,
+        ButtonModule
+    ],
+    providers: [
+        ErrorHandlingService,
+        LoadingService
+    ]
 })
 export class SharedModule { }

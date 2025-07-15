@@ -33,6 +33,7 @@ import { VerifyPhoneNumberComponent } from './verify-phone-number/verify-phone-n
   imports: [
     CommonModule,
     DashboardRoutingModule,
+    NgApexchartsModule,
     MultiSelectModule,
     FormsModule,
     TableModule,
@@ -40,8 +41,7 @@ import { VerifyPhoneNumberComponent } from './verify-phone-number/verify-phone-n
     SharedModule,
     NgxEchartsModule.forRoot({
       echarts: () => import('echarts')
-    }),
-    NgApexchartsModule
+    })
   ]
 })
 export class DashboardModule { }

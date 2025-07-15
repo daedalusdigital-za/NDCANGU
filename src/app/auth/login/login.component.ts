@@ -2,8 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth/auth.service';
 import { GlobalService } from '../../services/global/global.service';
+import { ErrorHandlingService } from '../../services/error-handling/error-handling.service';
 import { TermsComponent } from 'src/app/auth/terms/terms.component';
 import { DialogService } from 'primeng/dynamicdialog';
+import { User } from '../../shared/interfaces/common.interfaces';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-login',
@@ -12,41 +15,88 @@ import { DialogService } from 'primeng/dynamicdialog';
   providers: [DialogService],
 })
 export class LoginUserComponent implements OnInit {
-  user: any = {
+  user: { email: string; password: string } = {
     email: '',
     password: '',
-  }
+  };
 
   isPasswordHidden: boolean = true;
-  constructor(private authService: AuthService, private globalService: GlobalService,
-    private router: Router, private dialogService: DialogService) { }
+  isLoading: boolean = false;
+  isProduction: boolean = environment.production;
+
+  constructor(
+    private authService: AuthService, 
+    private globalService: GlobalService,
+    private router: Router, 
+    private dialogService: DialogService,
+    private errorHandling: ErrorHandlingService
+  ) { }
 
   ngOnInit(): void {}
 
-  loginUser() {    
+  loginUser(): void {
+    if (!this.validateForm()) {
+      return;
+    }
+
+    this.isLoading = true;
+    
     this.authService.login(this.user).subscribe({
-      next: (response: any) => {
-        console.log(response);
-        this.globalService.setLocalStorage('currentUser', response);
-        this.router.navigateByUrl('/dashboard')
+      next: (response) => {
+        this.isLoading = false;
+        if (response.success && response.data) {
+          this.globalService.setLocalStorage('currentUser', response.data);
+          this.errorHandling.showSuccess('Login successful!');
+          this.router.navigateByUrl('/dashboard');
+        } else {
+          this.errorHandling.handleError(response.message || 'Login failed');
+        }
       },
-      error: (err) => {
-        console.log(err);
+      error: (error) => {
+        this.isLoading = false;
+        console.error('Login error:', error);
+        
+        // Handle different types of errors
+        let errorMessage = 'Login failed. Please try again.';
+        
+        if (typeof error === 'string') {
+          errorMessage = error;
+        } else if (error?.message) {
+          errorMessage = error.message;
+        } else if (error?.error?.message) {
+          errorMessage = error.error.message;
+        }
+        
+        this.errorHandling.handleError(errorMessage, 'Login');
       }
-    })
+    });
   }
 
-  openTermsModal(){
-    console.log('openTermsModal');
+  private validateForm(): boolean {
+    if (!this.user.email || !this.user.password) {
+      this.errorHandling.showWarning('Please fill in all required fields');
+      return false;
+    }
 
+    if (!this.isValidEmail(this.user.email)) {
+      this.errorHandling.showWarning('Please enter a valid email address');
+      return false;
+    }
+
+    return true;
+  }
+
+  private isValidEmail(email: string): boolean {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  }
+
+  openTermsModal(): void {
     this.dialogService.open(TermsComponent, {
-      header: `Terms of Use`,
+      header: 'Terms of Use',
       width: '70%',
       contentStyle: {"max-height": "500px", "overflow": "auto"},
       baseZIndex: 10000,
-      // data: item.id
-  });
-    
+    });
   }
-
 }

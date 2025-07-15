@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { BaseService } from 'src/app/services/base/base.service';
 import { GlobalService } from 'src/app/services/global/global.service';
+import { User } from 'src/app/shared/interfaces/common.interfaces';
 
 @Component({
   selector: 'app-add-report',
@@ -56,7 +57,7 @@ export class AddReportComponent implements OnInit {
       this.report.gender = patient.gender ? patient.gender : '';
       this.report.province = patient.province ? patient.province : '';
       this.report.district = patient.district ? patient.district : '';
-      this.report.recordedBy = (this.globalService.getLocalStorage('currentUser'))?.id
+      this.report.recordedBy = (this.globalService.getLocalStorage<User>('currentUser'))?.id
     }
     // if (this.id) {
     //   console.log(window.history.state, window.history.state?.data);

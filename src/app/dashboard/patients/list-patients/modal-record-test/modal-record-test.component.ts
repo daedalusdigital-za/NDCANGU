@@ -4,6 +4,7 @@ import { ToastrService } from 'ngx-toastr';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { BaseService } from 'src/app/services/base/base.service';
 import { GlobalService } from 'src/app/services/global/global.service';
+import { User } from 'src/app/shared/interfaces/common.interfaces';
 
 @Component({
   selector: 'app-modal-record-test',
@@ -60,7 +61,7 @@ export class ModalRecordTestComponent implements OnInit {
       this.report.gender = patient.gender ? patient.gender : '';
       this.report.province = patient.province ? patient.province : '';
       this.report.district = patient.district ? patient.district : '';
-      this.report.recordedBy = (this.globalService.getLocalStorage('currentUser'))?.id
+      this.report.recordedBy = (this.globalService.getLocalStorage<User>('currentUser'))?.id
     }
   }
 

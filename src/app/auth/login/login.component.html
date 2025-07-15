@@ -2,6 +2,14 @@
     <div class="text-center">
         <h4 class="mb-0">Welcome</h4>
         <p class="text-muted mt-2">Sign in to continue to The NCD App.</p>
+        <div class="alert alert-info alert-dismissible fade show" role="alert" *ngIf="!isProduction">
+            <small>
+                <strong>Development Mode:</strong><br>
+                • Mock auth: Use <code>admin@test.com</code>, <code>demo@test.com</code>, or <code>test@test.com</code><br>
+                • Real API: Use <code>torr@test.com</code> with password <code>Test12345</code><br>
+                • API connects to: ngcanduapi.azurewebsites.net
+            </small>
+        </div>
     </div>
     <form #form="ngForm" ngNativeValidate class="needs-validation" (ngSubmit)="form.valid && loginUser()">
         <div class="mb-3">

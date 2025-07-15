@@ -7,6 +7,7 @@ import {
 } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { GlobalService } from 'src/app/services/global/global.service';
+import { User } from '../interfaces/common.interfaces';
 
 @Injectable()
 export class AuthTokenInterceptor implements HttpInterceptor {
@@ -23,7 +24,7 @@ export class AuthTokenInterceptor implements HttpInterceptor {
     //   }
 
     // Get the token from localStorage or any other source
-    const user = this.globalService.getLocalStorage('currentUser');
+    const user = this.globalService.getLocalStorage<User>('currentUser');
     // If token exists, append it to the request headers
     if (user && user.token) {
       request = request.clone({
