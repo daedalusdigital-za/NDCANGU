@@ -239,6 +239,22 @@
                     </li>
 
                     <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle arrow-none" id="topnav-sales" role="button">
+                            <i class="dripicons dripicons-basket" data-feather="shopping-cart"></i><span data-key="t-sales"> Sales</span> 
+                            <div class="arrow-down"></div>
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="topnav-sales">
+                            <div class="dropdown">
+                                <a routerLink="/dashboard/sales" class="dropdown-item" data-key="t-sales-dashboard">Sales Dashboard</a>
+                                <a routerLink="/dashboard/sales/add" class="dropdown-item" data-key="t-add-sale">New Sale</a>
+                                <a routerLink="/dashboard/sales/list" class="dropdown-item" data-key="t-list-sales">All Sales</a>
+                                <a routerLink="/dashboard/sales/products" class="dropdown-item" data-key="t-products">Products</a>
+                                <a routerLink="/dashboard/sales/reports" class="dropdown-item" data-key="t-sales-reports">Sales Reports</a>
+                            </div>
+                        </div>
+                    </li>
+
+                    <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle arrow-none" id="topnav-uielement" role="button">
                             <i class="dripicons   dripicons-monitor" data-feather="tool"></i>
                             <span data-key="t-elements"> Tools</span> 

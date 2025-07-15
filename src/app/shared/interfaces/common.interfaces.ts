@@ -47,3 +47,59 @@ export interface Report {
   createdAt: Date;
   type: 'statistical' | 'patient' | 'custom';
 }
+
+export interface Product {
+  id: string;
+  name: string;
+  description?: string;
+  price: number;
+  stock: number;
+  category: string;
+  sku?: string;
+  isActive: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface SaleItem {
+  id: string;
+  productId: string;
+  productName: string;
+  quantity: number;
+  price: number;
+  subtotal: number;
+}
+
+export interface Sale {
+  id: string;
+  customerName: string;
+  customerEmail?: string;
+  customerPhone: string;
+  items: SaleItem[];
+  totalAmount: number;
+  saleDate: Date;
+  paymentMethod: 'Cash' | 'Credit Card' | 'Debit Card' | 'Bank Transfer' | 'Mobile Payment';
+  status: 'Pending' | 'Completed' | 'Cancelled';
+  notes?: string;
+  createdBy: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface SalesReport {
+  id: string;
+  title: string;
+  dateRange: {
+    from: Date;
+    to: Date;
+  };
+  totalSales: number;
+  totalRevenue: number;
+  topProducts: Product[];
+  salesByStatus: {
+    completed: number;
+    pending: number;
+    cancelled: number;
+  };
+  createdAt: Date;
+}

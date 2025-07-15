@@ -1,0 +1,195 @@
+<div class="page-content">
+    <div class="container-fluid">
+        <!-- Page Title -->
+        <div class="row">
+            <div class="col-12">
+                <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+                    <h4 class="mb-sm-0 font-size-18">Sales Dashboard</h4>
+                    <div class="page-title-right">
+                        <ol class="breadcrumb m-0">
+                            <li class="breadcrumb-item"><a href="javascript: void(0);">Sales</a></li>
+                            <li class="breadcrumb-item active">Dashboard</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Statistics Cards -->
+        <div class="row">
+            <div class="col-xl-3 col-md-6">
+                <div class="card card-h-100">
+                    <div class="card-body">
+                        <div class="row align-items-center">
+                            <div class="col-6">
+                                <span class="text-muted mb-3 lh-1 d-block text-truncate">Total Sales</span>
+                                <h4 class="mb-3">
+                                    <span class="counter-value">{{totalSales}}</span>
+                                </h4>
+                            </div>
+                            <div class="col-6">
+                                <div class="text-end">
+                                    <i class="dripicons-basket text-primary display-4"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-xl-3 col-md-6">
+                <div class="card card-h-100">
+                    <div class="card-body">
+                        <div class="row align-items-center">
+                            <div class="col-6">
+                                <span class="text-muted mb-3 lh-1 d-block text-truncate">Monthly Revenue</span>
+                                <h4 class="mb-3">
+                                    R<span class="counter-value">{{monthlyRevenue | number}}</span>
+                                </h4>
+                            </div>
+                            <div class="col-6">
+                                <div class="text-end">
+                                    <i class="dripicons-money text-success display-4"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-xl-3 col-md-6">
+                <div class="card card-h-100">
+                    <div class="card-body">
+                        <div class="row align-items-center">
+                            <div class="col-6">
+                                <span class="text-muted mb-3 lh-1 d-block text-truncate">Total Products</span>
+                                <h4 class="mb-3">
+                                    <span class="counter-value">{{totalProducts}}</span>
+                                </h4>
+                            </div>
+                            <div class="col-6">
+                                <div class="text-end">
+                                    <i class="dripicons-box text-info display-4"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-xl-3 col-md-6">
+                <div class="card card-h-100">
+                    <div class="card-body">
+                        <div class="row align-items-center">
+                            <div class="col-6">
+                                <span class="text-muted mb-3 lh-1 d-block text-truncate">Pending Orders</span>
+                                <h4 class="mb-3">
+                                    <span class="counter-value">{{pendingOrders}}</span>
+                                </h4>
+                            </div>
+                            <div class="col-6">
+                                <div class="text-end">
+                                    <i class="dripicons-clock text-warning display-4"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Sales & Top Products -->
+        <div class="row">
+            <div class="col-xl-8">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title mb-0">Recent Sales</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Sale ID</th>
+                                        <th>Customer</th>
+                                        <th>Product</th>
+                                        <th>Amount</th>
+                                        <th>Date</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let sale of recentSales">
+                                        <td>{{sale.id}}</td>
+                                        <td>{{sale.customerName}}</td>
+                                        <td>{{sale.productName}}</td>
+                                        <td>R{{sale.amount | number}}</td>
+                                        <td>{{sale.date | date:'short'}}</td>
+                                        <td>
+                                            <span class="badge" 
+                                                  [class.badge-success]="sale.status === 'Completed'"
+                                                  [class.badge-warning]="sale.status === 'Pending'">
+                                                {{sale.status}}
+                                            </span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-xl-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title mb-0">Top Products</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="list-group list-group-flush">
+                            <div class="list-group-item" *ngFor="let product of topProducts">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h6 class="mb-1">{{product.name}}</h6>
+                                        <small class="text-muted">{{product.sales}} sales</small>
+                                    </div>
+                                    <div class="text-end">
+                                        <div class="text-primary">R{{product.revenue | number}}</div>
+                                        <small class="text-success">{{product.growth}}</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title mb-0">Quick Actions</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-flex gap-3 flex-wrap">
+                            <button class="btn btn-primary" routerLink="/dashboard/sales/add">
+                                <i class="dripicons-plus me-2"></i>New Sale
+                            </button>
+                            <button class="btn btn-success" routerLink="/dashboard/sales/products">
+                                <i class="dripicons-box me-2"></i>Manage Products
+                            </button>
+                            <button class="btn btn-info" routerLink="/dashboard/sales/list">
+                                <i class="dripicons-list me-2"></i>View All Sales
+                            </button>
+                            <button class="btn btn-warning" routerLink="/dashboard/sales/reports">
+                                <i class="dripicons-document me-2"></i>Sales Reports
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
