@@ -18,8 +18,15 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-body">
-                        <h4 class="card-title">All Trainers</h4>
-                        <p class="text-muted">Manage training staff and their details</p>
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <div>
+                                <h4 class="card-title mb-1">All Trainers</h4>
+                                <p class="text-muted mb-0">Manage training staff and their details</p>
+                            </div>
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addTrainerModal">
+                                <i class="fas fa-plus me-2"></i>Add Trainer
+                            </button>
+                        </div>
                         
                         <div class="table-responsive">
                             <table class="table table-striped">
@@ -34,37 +41,42 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>Dr. Thabo Mthembu</td>
-                                        <td>thabo.mthembu@health.gov.za</td>
-                                        <td>+27721234567</td>
-                                        <td>Diabetes Management</td>
-                                        <td><span class="badge bg-success">Active</span></td>
+                                    <tr *ngFor="let trainer of trainers; let i = index">
                                         <td>
-                                            <button class="btn btn-sm btn-outline-info">View</button>
-                                            <button class="btn btn-sm btn-outline-warning">Edit</button>
+                                            <div class="d-flex align-items-center">
+                                                <div class="avatar-sm me-3">
+                                                    <span class="avatar-title rounded-circle bg-primary text-white">
+                                                        {{ getInitials(trainer.name) }}
+                                                    </span>
+                                                </div>
+                                                <div>
+                                                    <h6 class="mb-0">{{ trainer.name }}</h6>
+                                                    <small class="text-muted">{{ trainer.qualification }}</small>
+                                                </div>
+                                            </div>
                                         </td>
-                                    </tr>
-                                    <tr>
-                                        <td>Dr. Nomsa Dlamini</td>
-                                        <td>nomsa.dlamini@health.gov.za</td>
-                                        <td>+27721234568</td>
-                                        <td>Hypertension Control</td>
-                                        <td><span class="badge bg-success">Active</span></td>
+                                        <td>{{ trainer.email }}</td>
+                                        <td>{{ trainer.phone }}</td>
                                         <td>
-                                            <button class="btn btn-sm btn-outline-info">View</button>
-                                            <button class="btn btn-sm btn-outline-warning">Edit</button>
+                                            <span class="badge bg-info">{{ trainer.specialization }}</span>
                                         </td>
-                                    </tr>
-                                    <tr>
-                                        <td>Dr. Sipho Ndaba</td>
-                                        <td>sipho.ndaba@health.gov.za</td>
-                                        <td>+27721234569</td>
-                                        <td>NCD Prevention</td>
-                                        <td><span class="badge bg-success">Active</span></td>
                                         <td>
-                                            <button class="btn btn-sm btn-outline-info">View</button>
-                                            <button class="btn btn-sm btn-outline-warning">Edit</button>
+                                            <span class="badge" [ngClass]="trainer.status === 'Active' ? 'bg-success' : 'bg-warning'">
+                                                {{ trainer.status }}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <div class="btn-group" role="group">
+                                                <button class="btn btn-sm btn-outline-info" (click)="viewTrainer(trainer)" title="View Details">
+                                                    <i class="fas fa-eye"></i>
+                                                </button>
+                                                <button class="btn btn-sm btn-outline-warning" (click)="editTrainer(trainer)" title="Edit">
+                                                    <i class="fas fa-edit"></i>
+                                                </button>
+                                                <button class="btn btn-sm btn-outline-danger" (click)="deleteTrainer(trainer, i)" title="Delete">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </div>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -72,6 +84,230 @@
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add Trainer Modal -->
+<div class="modal fade" id="addTrainerModal" tabindex="-1" aria-labelledby="addTrainerModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addTrainerModalLabel">
+                    <i class="fas fa-user-plus me-2"></i>Add New Trainer
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form [formGroup]="trainerForm" (ngSubmit)="onSubmit()">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="name" class="form-label">Full Name *</label>
+                                <input type="text" class="form-control" id="name" formControlName="name" 
+                                       placeholder="Enter trainer's full name" required>
+                                <div *ngIf="trainerForm.get('name')?.invalid && trainerForm.get('name')?.touched" class="text-danger">
+                                    <small>Name is required</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Email Address *</label>
+                                <input type="email" class="form-control" id="email" formControlName="email" 
+                                       placeholder="Enter email address" required>
+                                <div *ngIf="trainerForm.get('email')?.invalid && trainerForm.get('email')?.touched" class="text-danger">
+                                    <small>Valid email is required</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="phone" class="form-label">Phone Number *</label>
+                                <input type="tel" class="form-control" id="phone" formControlName="phone" 
+                                       placeholder="+27721234567" required>
+                                <div *ngIf="trainerForm.get('phone')?.invalid && trainerForm.get('phone')?.touched" class="text-danger">
+                                    <small>Phone number is required</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="specialization" class="form-label">Specialization *</label>
+                                <select class="form-select" id="specialization" formControlName="specialization" required>
+                                    <option value="">Select specialization</option>
+                                    <option value="Diabetes Management">Diabetes Management</option>
+                                    <option value="Hypertension Control">Hypertension Control</option>
+                                    <option value="NCD Prevention">NCD Prevention</option>
+                                    <option value="Cardiovascular Health">Cardiovascular Health</option>
+                                    <option value="Nutrition & Wellness">Nutrition & Wellness</option>
+                                    <option value="General Medicine">General Medicine</option>
+                                </select>
+                                <div *ngIf="trainerForm.get('specialization')?.invalid && trainerForm.get('specialization')?.touched" class="text-danger">
+                                    <small>Specialization is required</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="qualification" class="form-label">Qualification</label>
+                                <input type="text" class="form-control" id="qualification" formControlName="qualification" 
+                                       placeholder="e.g., MD, PhD, MSc">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="experience" class="form-label">Years of Experience</label>
+                                <input type="number" class="form-control" id="experience" formControlName="experience" 
+                                       placeholder="Years of experience" min="0">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="status" class="form-label">Status *</label>
+                                <select class="form-select" id="status" formControlName="status" required>
+                                    <option value="Active">Active</option>
+                                    <option value="Inactive">Inactive</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="location" class="form-label">Location</label>
+                                <input type="text" class="form-control" id="location" formControlName="location" 
+                                       placeholder="Work location/facility">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="bio" class="form-label">Bio/Notes</label>
+                        <textarea class="form-control" id="bio" formControlName="bio" rows="3" 
+                                  placeholder="Brief biography or additional notes"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" (click)="onSubmit()" [disabled]="trainerForm.invalid">
+                    <i class="fas fa-save me-2"></i>Add Trainer
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Trainer Modal -->
+<div class="modal fade" id="editTrainerModal" tabindex="-1" aria-labelledby="editTrainerModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editTrainerModalLabel">
+                    <i class="fas fa-user-edit me-2"></i>Edit Trainer
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form [formGroup]="trainerForm" (ngSubmit)="onUpdateSubmit()">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="editName" class="form-label">Full Name *</label>
+                                <input type="text" class="form-control" id="editName" formControlName="name" 
+                                       placeholder="Enter trainer's full name" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="editEmail" class="form-label">Email Address *</label>
+                                <input type="email" class="form-control" id="editEmail" formControlName="email" 
+                                       placeholder="Enter email address" required>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="editPhone" class="form-label">Phone Number *</label>
+                                <input type="tel" class="form-control" id="editPhone" formControlName="phone" 
+                                       placeholder="+27721234567" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="editSpecialization" class="form-label">Specialization *</label>
+                                <select class="form-select" id="editSpecialization" formControlName="specialization" required>
+                                    <option value="">Select specialization</option>
+                                    <option value="Diabetes Management">Diabetes Management</option>
+                                    <option value="Hypertension Control">Hypertension Control</option>
+                                    <option value="NCD Prevention">NCD Prevention</option>
+                                    <option value="Cardiovascular Health">Cardiovascular Health</option>
+                                    <option value="Nutrition & Wellness">Nutrition & Wellness</option>
+                                    <option value="General Medicine">General Medicine</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="editQualification" class="form-label">Qualification</label>
+                                <input type="text" class="form-control" id="editQualification" formControlName="qualification" 
+                                       placeholder="e.g., MD, PhD, MSc">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="editExperience" class="form-label">Years of Experience</label>
+                                <input type="number" class="form-control" id="editExperience" formControlName="experience" 
+                                       placeholder="Years of experience" min="0">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="editStatus" class="form-label">Status *</label>
+                                <select class="form-select" id="editStatus" formControlName="status" required>
+                                    <option value="Active">Active</option>
+                                    <option value="Inactive">Inactive</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="editLocation" class="form-label">Location</label>
+                                <input type="text" class="form-control" id="editLocation" formControlName="location" 
+                                       placeholder="Work location/facility">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="editBio" class="form-label">Bio/Notes</label>
+                        <textarea class="form-control" id="editBio" formControlName="bio" rows="3" 
+                                  placeholder="Brief biography or additional notes"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" (click)="onUpdateSubmit()" [disabled]="trainerForm.invalid">
+                    <i class="fas fa-save me-2"></i>Update Trainer
+                </button>
             </div>
         </div>
     </div>
