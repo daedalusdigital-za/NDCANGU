@@ -4,6 +4,7 @@ import { AuthService } from '../../services/auth/auth.service';
 import { GlobalService } from '../../services/global/global.service';
 import { ErrorHandlingService } from '../../services/error-handling/error-handling.service';
 import { TermsComponent } from 'src/app/auth/terms/terms.component';
+import { PrivacyPolicyComponent } from 'src/app/auth/privacy-policy/privacy-policy.component';
 import { DialogService } from 'primeng/dynamicdialog';
 import { User } from '../../shared/interfaces/common.interfaces';
 import { environment } from '../../../environments/environment';
@@ -23,6 +24,11 @@ export class LoginUserComponent implements OnInit {
   isPasswordHidden: boolean = true;
   isLoading: boolean = false;
   isProduction: boolean = environment.production;
+  
+  // Forgot Password Modal
+  showForgotPasswordModal: boolean = false;
+  forgotPasswordEmail: string = '';
+  isForgotPasswordLoading: boolean = false;
 
   constructor(
     private authService: AuthService, 
@@ -98,5 +104,42 @@ export class LoginUserComponent implements OnInit {
       contentStyle: {"max-height": "500px", "overflow": "auto"},
       baseZIndex: 10000,
     });
+  }
+
+  openPrivacyPolicyModal(): void {
+    this.dialogService.open(PrivacyPolicyComponent, {
+      header: 'Privacy Policy',
+      width: '70%',
+      contentStyle: {"max-height": "500px", "overflow": "auto"},
+      baseZIndex: 10000,
+    });
+  }
+
+  // Forgot Password Modal Methods
+  openForgotPasswordModal(): void {
+    this.showForgotPasswordModal = true;
+    this.forgotPasswordEmail = this.user.email || '';
+  }
+
+  closeForgotPasswordModal(): void {
+    this.showForgotPasswordModal = false;
+    this.forgotPasswordEmail = '';
+    this.isForgotPasswordLoading = false;
+  }
+
+  submitForgotPassword(): void {
+    if (!this.forgotPasswordEmail || !this.isValidEmail(this.forgotPasswordEmail)) {
+      this.errorHandling.showWarning('Please enter a valid email address');
+      return;
+    }
+
+    this.isForgotPasswordLoading = true;
+    
+    // Simulate API call - replace with actual service call
+    setTimeout(() => {
+      this.isForgotPasswordLoading = false;
+      this.errorHandling.showSuccess('Password reset instructions have been sent to your email address');
+      this.closeForgotPasswordModal();
+    }, 2000);
   }
 }

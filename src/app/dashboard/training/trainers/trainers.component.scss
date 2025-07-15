@@ -115,6 +115,119 @@
     }
 }
 
+// View Trainer Modal Styles
+.trainer-details {
+    .trainer-header {
+        border-bottom: 1px solid #e3ebf0;
+        padding-bottom: 1rem;
+        margin-bottom: 1.5rem;
+        
+        .trainer-avatar {
+            .avatar-lg {
+                width: 80px;
+                height: 80px;
+                display: inline-block;
+                
+                .avatar-title {
+                    width: 100%;
+                    height: 100%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-weight: 700;
+                    font-size: 2rem;
+                }
+            }
+        }
+        
+        .trainer-info {
+            h3 {
+                color: #2d3748;
+                font-weight: 600;
+            }
+        }
+    }
+    
+    .detail-item {
+        display: flex;
+        align-items: flex-start;
+        padding: 1rem;
+        background: #f8f9fa;
+        border-radius: 8px;
+        border: 1px solid #e3ebf0;
+        
+        .detail-icon {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: white;
+            border-radius: 8px;
+            margin-right: 1rem;
+            flex-shrink: 0;
+            
+            i {
+                font-size: 1.2rem;
+            }
+        }
+        
+        .detail-content {
+            flex: 1;
+            
+            .detail-label {
+                font-weight: 600;
+                color: #4a5568;
+                font-size: 0.875rem;
+                margin-bottom: 0.25rem;
+                display: block;
+            }
+            
+            .detail-value {
+                color: #2d3748;
+                font-size: 1rem;
+                margin: 0;
+                line-height: 1.4;
+            }
+        }
+    }
+    
+    .stat-card {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 1.5rem;
+        border-radius: 12px;
+        text-align: center;
+        margin-bottom: 1rem;
+        transition: transform 0.2s ease;
+        
+        &:hover {
+            transform: translateY(-2px);
+        }
+        
+        .stat-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            opacity: 0.8;
+        }
+        
+        .stat-content {
+            .stat-number {
+                font-size: 2.5rem;
+                font-weight: 700;
+                margin: 0;
+                line-height: 1;
+            }
+            
+            .stat-label {
+                font-size: 0.875rem;
+                margin: 0.25rem 0 0 0;
+                opacity: 0.9;
+            }
+        }
+    }
+}
+
 // Responsive improvements
 @media (max-width: 768px) {
     .table-responsive {
@@ -130,5 +243,40 @@
     
     .modal-dialog {
         margin: 0.5rem;
+    }
+    
+    .trainer-details {
+        .trainer-header {
+            flex-direction: column;
+            text-align: center;
+            
+            .trainer-avatar {
+                margin-bottom: 1rem;
+            }
+        }
+        
+        .detail-item {
+            padding: 0.75rem;
+            
+            .detail-icon {
+                width: 32px;
+                height: 32px;
+                margin-right: 0.75rem;
+                
+                i {
+                    font-size: 1rem;
+                }
+            }
+        }
+        
+        .stat-card {
+            padding: 1rem;
+            
+            .stat-content {
+                .stat-number {
+                    font-size: 2rem;
+                }
+            }
+        }
     }
 }

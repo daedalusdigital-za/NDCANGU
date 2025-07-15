@@ -9,6 +9,7 @@ import { FormsModule } from '@angular/forms';
 import { LockUserComponent } from '../components/lock-user/lock-user.component';
 import { VerifyPhoneNumberComponent } from './verify-phone-number/verify-phone-number.component';
 import { TermsComponent } from './terms/terms.component';
+import { PrivacyPolicyComponent } from './privacy-policy/privacy-policy.component';
 
 @NgModule({
   declarations: [
@@ -17,7 +18,8 @@ import { TermsComponent } from './terms/terms.component';
     RegisterComponent,
     AuthComponent,
     VerifyPhoneNumberComponent,
-    TermsComponent
+    TermsComponent,
+    PrivacyPolicyComponent
   ],
   imports: [
     CommonModule,

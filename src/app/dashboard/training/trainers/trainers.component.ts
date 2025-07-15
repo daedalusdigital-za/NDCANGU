@@ -27,6 +27,7 @@ export class TrainersComponent implements OnInit {
   
   trainerForm: FormGroup;
   trainers: Trainer[] = [];
+  selectedTrainer: Trainer | null = null;
   editingTrainer: Trainer | null = null;
   editingIndex: number = -1;
 
@@ -101,8 +102,24 @@ export class TrainersComponent implements OnInit {
 
   // View trainer details
   viewTrainer(trainer: Trainer): void {
-    this.toastr.info(`Viewing details for ${trainer.name}`, 'Trainer Details');
-    // Here you could implement a detailed view modal or navigation
+    this.selectedTrainer = trainer;
+    // Modal will be opened via Bootstrap data attributes
+  }
+
+  // Get trainer statistics (mock data for demo)
+  getTrainerStats() {
+    if (!this.selectedTrainer) {
+      return { totalTrainees: 0, completedSessions: 0, rating: 0 };
+    }
+    
+    // Mock statistics - in a real app, this would come from an API
+    const mockStats = {
+      totalTrainees: Math.floor(Math.random() * 50) + 10,
+      completedSessions: Math.floor(Math.random() * 100) + 20,
+      rating: (Math.random() * 2 + 3).toFixed(1) // Random rating between 3.0 and 5.0
+    };
+    
+    return mockStats;
   }
 
   // Edit trainer
