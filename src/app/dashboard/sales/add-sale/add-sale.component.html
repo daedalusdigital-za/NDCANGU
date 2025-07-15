@@ -61,11 +61,64 @@
                                 </div>
                                 <div class="col-md-6">
                                     <div class="mb-3">
+                                        <label class="form-label">Customer Address</label>
+                                        <input type="text" 
+                                               class="form-control" 
+                                               [(ngModel)]="sale.customerAddress" 
+                                               name="customerAddress" 
+                                               placeholder="Enter customer address">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">Province *</label>
+                                        <select class="form-select" 
+                                                [(ngModel)]="sale.province" 
+                                                name="province" 
+                                                required 
+                                                (change)="onProvinceChange()">
+                                            <option value="">Select Province</option>
+                                            <option *ngFor="let province of provinces" [value]="province.code">
+                                                {{province.name}}
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">Hospital/Clinic</label>
+                                        <select class="form-select" 
+                                                [(ngModel)]="sale.hospital" 
+                                                name="hospital" 
+                                                [disabled]="filteredHospitals.length === 0">
+                                            <option value="">Select Hospital</option>
+                                            <option *ngFor="let hospital of filteredHospitals" [value]="hospital.code">
+                                                {{hospital.name}}
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
                                         <label class="form-label">Sale Date</label>
                                         <input type="date" 
                                                class="form-control" 
                                                [(ngModel)]="sale.saleDate" 
                                                name="saleDate">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">Notes</label>
+                                        <textarea class="form-control" 
+                                                  [(ngModel)]="sale.notes" 
+                                                  name="notes" 
+                                                  rows="2" 
+                                                  placeholder="Additional notes"></textarea>
                                     </div>
                                 </div>
                             </div>
@@ -81,10 +134,11 @@
                         </div>
                         <div class="card-body">
                             <div class="mb-3">
-                                <label class="form-label">Payment Method</label>
-                                <select class="form-select" [(ngModel)]="sale.paymentMethod" name="paymentMethod">
-                                    <option *ngFor="let method of paymentMethods" [value]="method">{{method}}</option>
-                                </select>
+                                <label class="form-label">Total Quantity</label>
+                                <input type="number" 
+                                       class="form-control" 
+                                       [value]="sale.totalQuantity" 
+                                       readonly>
                             </div>
                             <div class="mb-3">
                                 <label class="form-label">Status</label>

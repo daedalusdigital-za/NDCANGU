@@ -1,10 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { DynamicGridComponent } from './components/dynamic-grid/dynamic-grid.component';
+import { TechSupportComponent } from './components/tech-support/tech-support.component';
 import { TableModule } from 'primeng/table';
 import { MultiSelectModule } from 'primeng/multiselect';
-import { FormsModule } from '@angular/forms';
 import { CheckboxModule } from 'primeng/checkbox';
 import { MenuModule } from 'primeng/menu';
 import { ToolbarModule } from 'primeng/toolbar';
@@ -22,13 +23,15 @@ export function playerFactory(): any {
 
 @NgModule({
     declarations: [
-        DynamicGridComponent
+        DynamicGridComponent,
+        TechSupportComponent
     ],
     imports: [
         CommonModule,
         RouterModule,
-        MultiSelectModule,
+        ReactiveFormsModule,
         FormsModule,
+        MultiSelectModule,
         TableModule,
         CheckboxModule,
         ToolbarModule,
@@ -39,6 +42,7 @@ export function playerFactory(): any {
     ],
     exports: [
         DynamicGridComponent,
+        TechSupportComponent,
         // Re-export PrimeNG modules for convenience
         CommonModule,
         RouterModule,

@@ -60,6 +60,10 @@ const routes: Routes = [
         loadChildren: () => import('./sales/sales.module').then(m => m.SalesModule),
       },
       {
+        path: 'training',
+        loadChildren: () => import('./training/training.module').then(m => m.TrainingModule),
+      },
+      {
         path: 'verify-phone-number',
         component: VerifyPhoneNumberComponent
       },

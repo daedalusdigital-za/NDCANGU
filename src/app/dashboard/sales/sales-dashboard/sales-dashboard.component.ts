@@ -30,37 +30,58 @@ export class SalesDashboardComponent implements OnInit {
   }
 
   private loadDashboardData(): void {
-    // Mock data - replace with actual API calls
+    // South African context - replace with actual API calls
     this.totalSales = 1250;
-    this.monthlyRevenue = 75000;
+    this.monthlyRevenue = 125000; // ZAR
     this.totalProducts = 45;
-    this.averageOrderValue = 850;
+    this.averageOrderValue = 890; // ZAR
     this.pendingOrders = 12;
     
     this.recentSales = [
       {
         id: 'SAL-001',
-        customerName: 'John Doe',
-        productName: 'Medical Equipment A',
+        customerName: 'Thabo Mthembu',
+        productName: 'Blood Pressure Monitor',
         amount: 1200,
         date: new Date(),
-        status: 'Completed'
+        status: 'Completed',
+        location: 'Chris Hani Baragwanath Hospital'
       },
       {
         id: 'SAL-002',
-        customerName: 'Jane Smith',
-        productName: 'Healthcare Supplies B',
+        customerName: 'Nomsa Dlamini',
+        productName: 'Glucose Test Strips',
         amount: 850,
         date: new Date(),
-        status: 'Pending'
+        status: 'Pending',
+        location: 'Groote Schuur Hospital'
       },
       {
         id: 'SAL-003',
-        customerName: 'Mike Johnson',
-        productName: 'Diagnostic Tool C',
+        customerName: 'Sipho Ndaba',
+        productName: 'Digital Thermometer',
         amount: 2100,
         date: new Date(),
-        status: 'Completed'
+        status: 'Completed',
+        location: 'Inkosi Albert Luthuli Hospital'
+      },
+      {
+        id: 'SAL-004',
+        customerName: 'Zanele Khumalo',
+        productName: 'Pulse Oximeter',
+        amount: 650,
+        date: new Date(),
+        status: 'Completed',
+        location: 'Tygerberg Hospital'
+      },
+      {
+        id: 'SAL-005',
+        customerName: 'Mandla Radebe',
+        productName: 'Stethoscope',
+        amount: 950,
+        date: new Date(),
+        status: 'Pending',
+        location: 'Charlotte Maxeke Hospital'
       }
     ];
     
@@ -68,20 +89,32 @@ export class SalesDashboardComponent implements OnInit {
       {
         name: 'Blood Pressure Monitor',
         sales: 125,
-        revenue: 25000,
+        revenue: 150000, // ZAR
         growth: '+12%'
       },
       {
         name: 'Glucose Test Strips',
         sales: 98,
-        revenue: 15000,
+        revenue: 27440, // ZAR
         growth: '+8%'
       },
       {
-        name: 'Thermometer Digital',
+        name: 'Digital Thermometer',
         sales: 87,
-        revenue: 12000,
+        revenue: 10875, // ZAR
         growth: '+15%'
+      },
+      {
+        name: 'Pulse Oximeter',
+        sales: 65,
+        revenue: 42250, // ZAR
+        growth: '+22%'
+      },
+      {
+        name: 'Stethoscope',
+        sales: 42,
+        revenue: 39900, // ZAR
+        growth: '+18%'
       }
     ];
   }

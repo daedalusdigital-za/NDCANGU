@@ -15,17 +15,254 @@
             </div>
         </div>
 
-        <!-- Coming Soon -->
+        <!-- Filters -->
         <div class="row">
             <div class="col-12">
                 <div class="card">
-                    <div class="card-body text-center py-5">
-                        <i class="dripicons-document display-1 text-muted"></i>
-                        <h3 class="mt-3">Sales Reports</h3>
-                        <p class="text-muted">Comprehensive sales reporting features are coming soon!</p>
-                        <button class="btn btn-primary" routerLink="/dashboard/sales">
-                            <i class="dripicons-arrow-left me-2"></i>Back to Sales
-                        </button>
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">Report Filters</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="mb-3">
+                                    <label class="form-label">Period</label>
+                                    <select class="form-select" [(ngModel)]="selectedPeriod" (change)="onPeriodChange()">
+                                        <option value="daily">Daily</option>
+                                        <option value="weekly">Weekly</option>
+                                        <option value="monthly">Monthly</option>
+                                        <option value="quarterly">Quarterly</option>
+                                        <option value="yearly">Yearly</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="mb-3">
+                                    <label class="form-label">Province</label>
+                                    <select class="form-select" [(ngModel)]="selectedProvince" (change)="onProvinceChange()">
+                                        <option value="">All Provinces</option>
+                                        <option *ngFor="let province of provinces" [value]="province.code">
+                                            {{province.name}}
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="mb-3">
+                                    <label class="form-label">From Date</label>
+                                    <input type="date" class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="mb-3">
+                                    <label class="form-label">To Date</label>
+                                    <input type="date" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <button class="btn btn-primary me-2">
+                                    <i class="dripicons-search me-2"></i>Generate Report
+                                </button>
+                                <button class="btn btn-success" (click)="exportReport()">
+                                    <i class="dripicons-download me-2"></i>Export Report
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Summary Cards -->
+        <div class="row">
+            <div class="col-xl-3 col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex">
+                            <div class="flex-1">
+                                <h6 class="text-muted fw-normal">Total Revenue</h6>
+                                <h3 class="mb-0">{{formatCurrency(totalRevenue)}}</h3>
+                            </div>
+                            <div class="align-self-center">
+                                <i class="dripicons-wallet text-primary h2"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex">
+                            <div class="flex-1">
+                                <h6 class="text-muted fw-normal">Total Orders</h6>
+                                <h3 class="mb-0">{{totalOrders}}</h3>
+                            </div>
+                            <div class="align-self-center">
+                                <i class="dripicons-cart text-success h2"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex">
+                            <div class="flex-1">
+                                <h6 class="text-muted fw-normal">Average Order Value</h6>
+                                <h3 class="mb-0">{{formatCurrency(averageOrderValue)}}</h3>
+                            </div>
+                            <div class="align-self-center">
+                                <i class="dripicons-graph-bar text-warning h2"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex">
+                            <div class="flex-1">
+                                <h6 class="text-muted fw-normal">Growth Rate</h6>
+                                <h3 class="mb-0 text-success">+12.5%</h3>
+                            </div>
+                            <div class="align-self-center">
+                                <i class="dripicons-graph-line text-info h2"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sales by Month -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">Monthly Sales Performance</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Month</th>
+                                        <th>Revenue</th>
+                                        <th>Orders</th>
+                                        <th>Top Province</th>
+                                        <th>Top Product</th>
+                                        <th>Growth</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let data of salesData">
+                                        <td>{{data.month}}</td>
+                                        <td>{{formatCurrency(data.revenue)}}</td>
+                                        <td>{{data.orders}}</td>
+                                        <td>
+                                            <span class="badge badge-soft-primary">
+                                                {{getProvinceName(data.province)}}
+                                            </span>
+                                        </td>
+                                        <td>{{data.topProduct}}</td>
+                                        <td>
+                                            <span class="text-success">
+                                                <i class="dripicons-arrow-up"></i>{{data.growth}}%
+                                            </span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Top Hospitals and Product Categories -->
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">Top Performing Hospitals</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Hospital</th>
+                                        <th>Province</th>
+                                        <th>Revenue</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let hospital of topHospitals">
+                                        <td>{{hospital.name}}</td>
+                                        <td>
+                                            <span class="badge badge-soft-info">
+                                                {{getProvinceName(hospital.province)}}
+                                            </span>
+                                        </td>
+                                        <td>{{formatCurrency(hospital.revenue)}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">Product Categories Performance</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Category</th>
+                                        <th>Revenue</th>
+                                        <th>Percentage</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let category of productCategories">
+                                        <td>{{category.name}}</td>
+                                        <td>{{formatCurrency(category.revenue)}}</td>
+                                        <td>
+                                            <div class="progress" style="height: 20px;">
+                                                <div class="progress-bar" [style.width.%]="category.percentage" 
+                                                     role="progressbar">
+                                                    {{category.percentage}}%
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Back Button -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-end">
+                            <button class="btn btn-outline-primary" routerLink="/dashboard/sales">
+                                <i class="dripicons-arrow-left me-2"></i>Back to Sales
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>

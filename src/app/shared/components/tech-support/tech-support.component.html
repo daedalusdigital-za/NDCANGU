@@ -1,0 +1,180 @@
+<!-- Floating Chat Button -->
+<div class="tech-support-container">
+  <!-- Chat Toggle Button -->
+  <div class="chat-toggle-button" 
+       [class.active]="isOpen" 
+       (click)="toggleChat()"
+       *ngIf="!isOpen">
+    <i class="dripicons-headset"></i>
+    <span class="chat-badge" *ngIf="currentSession?.status === 'active'">1</span>
+  </div>
+
+  <!-- Chat Window -->
+  <div class="chat-window" 
+       [class.open]="isOpen" 
+       [class.minimized]="isMinimized">
+    
+    <!-- Chat Header -->
+    <div class="chat-header">
+      <div class="header-left">
+        <div class="agent-avatar">
+          <img src="assets/images/support/agent-default.jpg" 
+               alt="Support Agent" 
+               onerror="this.src='assets/images/users/avatar-1.jpg'">
+          <div class="status-indicator online"></div>
+        </div>
+        <div class="agent-info">
+          <h6>NCD Tech Support</h6>
+          <span class="status-text">Online - Usually responds in minutes</span>
+        </div>
+      </div>
+      <div class="header-actions">
+        <button class="btn-header" 
+                (click)="minimizeChat()" 
+                *ngIf="!isMinimized"
+                title="Minimize">
+          <i class="dripicons-minus"></i>
+        </button>
+        <button class="btn-header" 
+                (click)="maximizeChat()" 
+                *ngIf="isMinimized"
+                title="Maximize">
+          <i class="dripicons-plus"></i>
+        </button>
+        <button class="btn-header" 
+                (click)="closeChat()" 
+                title="Close">
+          <i class="dripicons-cross"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Chat Content -->
+    <div class="chat-content" *ngIf="!isMinimized">
+      
+      <!-- Support Form (Initial) -->
+      <div class="support-form" *ngIf="!currentSession">
+        <div class="form-header">
+          <h6>How can we help you?</h6>
+          <p>Please select a category and describe your issue</p>
+        </div>
+        
+        <form [formGroup]="chatForm">
+          <div class="form-group">
+            <label>Category</label>
+            <select class="form-control" formControlName="category">
+              <option *ngFor="let category of supportCategories" 
+                      [value]="category.value">
+                {{ category.label }}
+              </option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label>Priority</label>
+            <select class="form-control" formControlName="priority">
+              <option *ngFor="let priority of priorityLevels" 
+                      [value]="priority.value">
+                {{ priority.label }}
+              </option>
+            </select>
+          </div>
+        </form>
+      </div>
+
+      <!-- Chat Messages -->
+      <div class="chat-messages" *ngIf="currentSession">
+        <div class="message-container" 
+             *ngFor="let message of messages; trackBy: trackByMessageId">
+          
+          <!-- System Message -->
+          <div class="system-message" *ngIf="message.type === 'system'">
+            <span class="system-text">{{ message.message }}</span>
+            <span class="message-time">{{ formatTimestamp(message.timestamp) }}</span>
+          </div>
+          
+          <!-- User Message -->
+          <div class="user-message" *ngIf="message.sender === 'user'">
+            <div class="message-bubble user-bubble">
+              <p>{{ message.message }}</p>
+              <div class="message-meta">
+                <span class="message-time">{{ formatTimestamp(message.timestamp) }}</span>
+                <i class="message-status" 
+                   [class.delivered]="message.status === 'delivered'"
+                   [class.read]="message.status === 'read'">
+                  <i class="dripicons-checkmark"></i>
+                </i>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Support Message -->
+          <div class="support-message" *ngIf="message.sender === 'support' && message.type !== 'system'">
+            <div class="agent-avatar-small">
+              <img src="assets/images/support/agent-default.jpg" 
+                   alt="Support" 
+                   onerror="this.src='assets/images/users/avatar-1.jpg'">
+            </div>
+            <div class="message-bubble support-bubble">
+              <p>{{ message.message }}</p>
+              <span class="message-time">{{ formatTimestamp(message.timestamp) }}</span>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Typing Indicator -->
+        <div class="typing-indicator" *ngIf="isTyping">
+          <div class="agent-avatar-small">
+            <img src="assets/images/support/agent-default.jpg" 
+                 alt="Support" 
+                 onerror="this.src='assets/images/users/avatar-1.jpg'">
+          </div>
+          <div class="typing-bubble">
+            <div class="typing-dots">
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Chat Input -->
+      <div class="chat-input">
+        <div class="input-actions">
+          <button class="btn-attachment" 
+                  (click)="fileInput.click()" 
+                  title="Attach file">
+            <i class="dripicons-paperclip"></i>
+          </button>
+          <input type="file" 
+                 #fileInput 
+                 (change)="onFileUpload($event)" 
+                 accept="image/*,.pdf,.txt"
+                 style="display: none;">
+        </div>
+        
+        <form [formGroup]="chatForm" (ngSubmit)="sendMessage()">
+          <div class="input-group">
+            <textarea class="form-control message-input" 
+                      formControlName="message"
+                      placeholder="Type your message..."
+                      rows="1"
+                      (keydown)="onEnterKey($event)"
+                      maxlength="500"></textarea>
+            <button type="submit" 
+                    class="btn-send" 
+                    [disabled]="!chatForm.valid">
+              <i class="dripicons-message"></i>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Overlay for mobile -->
+<div class="chat-overlay" 
+     *ngIf="isOpen" 
+     (click)="closeChat()"></div>

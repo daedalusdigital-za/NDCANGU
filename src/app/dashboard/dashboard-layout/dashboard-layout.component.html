@@ -255,15 +255,18 @@
                     </li>
 
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle arrow-none" id="topnav-uielement" role="button">
-                            <i class="dripicons   dripicons-monitor" data-feather="tool"></i>
-                            <span data-key="t-elements"> Tools</span> 
+                        <a class="nav-link dropdown-toggle arrow-none" id="topnav-training" role="button">
+                            <i class="dripicons dripicons-graduation" data-feather="book-open"></i>
+                            <span data-key="t-training"> Training</span> 
                             <div class="arrow-down"></div>
                         </a>
 
-                        <div class="dropdown-menu" aria-labelledby="topnav-table">
-                            <a routerLink="/dashboard/document/upload" class="dropdown-item" data-key="t-data-tables">Upload</a>
-                            <a routerLink="/two" class="dropdown-item" data-key="t-responsive-table">Statistics</a>
+                        <div class="dropdown-menu" aria-labelledby="topnav-training">
+                            <a routerLink="/dashboard/training/upload" class="dropdown-item" data-key="t-upload-training">Upload Training Register</a>
+                            <a routerLink="/dashboard/training/add" class="dropdown-item" data-key="t-add-training">Add Training Session</a>
+                            <a routerLink="/dashboard/training/list" class="dropdown-item" data-key="t-list-training">View Training Sessions</a>
+                            <a routerLink="/dashboard/training/trainers" class="dropdown-item" data-key="t-trainers">Manage Trainers</a>
+                            <a routerLink="/dashboard/training/reports" class="dropdown-item" data-key="t-training-reports">Training Reports</a>
                         </div>
                     </li>
 
@@ -318,6 +321,9 @@
         </div>
     </div> 
 </footer>
+
+<!-- Tech Support Chat Widget - Available on all pages -->
+<app-tech-support></app-tech-support>
 
 </div>
 

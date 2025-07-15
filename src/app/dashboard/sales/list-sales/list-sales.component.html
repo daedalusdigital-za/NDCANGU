@@ -106,8 +106,8 @@
                                         <th>Customer</th>
                                         <th>Phone</th>
                                         <th>Amount</th>
+                                        <th>Quantity</th>
                                         <th>Date</th>
-                                        <th>Payment</th>
                                         <th>Status</th>
                                         <th>Actions</th>
                                     </tr>
@@ -122,10 +122,10 @@
                                         <td>
                                             <strong>R{{sale.totalAmount | number}}</strong>
                                         </td>
-                                        <td>{{sale.saleDate | date:'short'}}</td>
                                         <td>
-                                            <span class="badge badge-info">{{sale.paymentMethod}}</span>
+                                            <span class="badge badge-secondary">{{sale.totalQuantity}}</span>
                                         </td>
+                                        <td>{{sale.saleDate | date:'short'}}</td>
                                         <td>
                                             <span class="badge" [class]="getStatusClass(sale.status)">
                                                 {{sale.status}}
