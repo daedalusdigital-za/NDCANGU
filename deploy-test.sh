@@ -26,7 +26,7 @@ if [ $? -ne 0 ]; then
 fi
 
 echo "🔨 Building Angular application for production..."
-npm run build --configuration production
+npm run build -- --configuration production
 
 if [ $? -ne 0 ]; then
     echo "❌ Build failed. Please check your Angular configuration"
