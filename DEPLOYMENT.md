@@ -6,7 +6,23 @@ This guide explains how to deploy the NDCANGU Angular application to Azure using
 
 - GitHub repository with Azure Web App configured
 - Azure App Service publish profile configured in GitHub Secrets
-- Node.js 16.x installed locally
+- Node.js 18.x installed locally (updated from 16.x)
+
+## Latest Updates (Privacy Policy & Modern UI)
+
+### Recent Features Added
+- ✅ Modern privacy policy popup component
+- ✅ Enhanced login page with blue gradient theme
+- ✅ Forgot password functionality
+- ✅ Improved terms of service popup
+- ✅ Responsive design optimizations
+- ✅ PrimeNG dialog integration
+
+### Deployment Improvements
+- ✅ Updated to Node.js 18.x for better performance
+- ✅ Optimized build process with npm ci
+- ✅ Fixed artifact path for Angular build output
+- ✅ Added local testing script (deploy-test.sh)
 
 ## Deployment Methods
 
