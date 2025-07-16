@@ -37,6 +37,9 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     needs: build
+    environment:
+      name: 'Production'
+      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
 
     steps:
       - name: Download artifact from build job
@@ -45,7 +48,7 @@ jobs:
           name: angular-app
 
       - name: 'Deploy to Azure Web App'
-        uses: azure/webapps-deploy@v2
+        uses: azure/webapps-deploy@v3
         id: deploy-to-webapp
         with:
           app-name: 'NdCanduAngular'

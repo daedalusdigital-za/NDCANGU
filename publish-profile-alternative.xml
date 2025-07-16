@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<publishData>
+  <publishProfile profileName="NdCanduAngular - Web Deploy" publishMethod="MSDeploy" publishUrl="ndcanduangular.scm.azurewebsites.net:443" msdeploysite="NdCanduAngular" userName="$NdCanduAngular" userPWD="qhzX7hw4fCdNPujqLlpEcWvZp18pPPgdeDmoQ0qD5T3sztleKmgkDzzKl3dt" destinationAppUrl="http://ndcanduangular.azurewebsites.net" SQLServerDBConnectionString="" mySQLDBConnectionString="" hostingProviderForumLink="" controlPanelLink="http://windows.azure.com" webSystem="WebSites">
+    <databases />
+  </publishProfile>
+  <publishProfile profileName="NdCanduAngular - FTP" publishMethod="FTP" publishUrl="ftp://waws-prod-blu-443.ftp.azurewebsites.windows.net/site/wwwroot" ftpPassiveMode="True" userName="NdCanduAngular\$NdCanduAngular" userPWD="qhzX7hw4fCdNPujqLlpEcWvZp18pPPgdeDmoQ0qD5T3sztleKmgkDzzKl3dt" destinationAppUrl="http://ndcanduangular.azurewebsites.net" SQLServerDBConnectionString="" mySQLDBConnectionString="" hostingProviderForumLink="" controlPanelLink="http://windows.azure.com" webSystem="WebSites">
+    <databases />
+  </publishProfile>
+</publishData>
