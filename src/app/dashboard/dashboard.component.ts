@@ -1207,6 +1207,529 @@ export class DashboardComponent implements OnInit {
 
     }
 
+    // HGT Meter Distribution by Province
+    hgtMeterChart: any = {
+        backgroundColor: 'transparent',
+        animationDuration: 2000,
+        animationEasing: 'elasticOut',
+        tooltip: {
+            trigger: 'item',
+            formatter: '{a} <br/>{b}: {c} ({d}%)',
+            backgroundColor: 'rgba(0, 0, 0, 0.85)',
+            borderColor: '#ff6b6b',
+            borderWidth: 2,
+            textStyle: {
+                color: '#fff',
+                fontFamily: 'Inter, sans-serif',
+                fontSize: 14,
+                fontWeight: 600
+            },
+            extraCssText: 'box-shadow: 0 0 20px rgba(255, 107, 107, 0.3);'
+        },
+        legend: {
+            orient: 'horizontal',
+            bottom: '5%',
+            left: 'center',
+            data: ['KZN', 'GP', 'LP', 'FS', 'MPU', 'EC'],
+            textStyle: {
+                color: '#333',
+                fontSize: 14,
+                fontWeight: 600
+            },
+            icon: 'circle',
+            itemGap: 20,
+            itemWidth: 14,
+            itemHeight: 14
+        },
+        color: [
+            {
+                type: 'linear',
+                x: 0, y: 0, x2: 0, y2: 1,
+                colorStops: [
+                    { offset: 0, color: '#ff6b6b' },
+                    { offset: 1, color: '#ee5a52' }
+                ]
+            },
+            {
+                type: 'linear',
+                x: 0, y: 0, x2: 0, y2: 1,
+                colorStops: [
+                    { offset: 0, color: '#4ecdc4' },
+                    { offset: 1, color: '#44a08d' }
+                ]
+            },
+            {
+                type: 'linear',
+                x: 0, y: 0, x2: 0, y2: 1,
+                colorStops: [
+                    { offset: 0, color: '#45b7d1' },
+                    { offset: 1, color: '#2980b9' }
+                ]
+            },
+            {
+                type: 'linear',
+                x: 0, y: 0, x2: 0, y2: 1,
+                colorStops: [
+                    { offset: 0, color: '#f9ca24' },
+                    { offset: 1, color: '#f0932b' }
+                ]
+            },
+            {
+                type: 'linear',
+                x: 0, y: 0, x2: 0, y2: 1,
+                colorStops: [
+                    { offset: 0, color: '#6c5ce7' },
+                    { offset: 1, color: '#5f3dc4' }
+                ]
+            },
+            {
+                type: 'linear',
+                x: 0, y: 0, x2: 0, y2: 1,
+                colorStops: [
+                    { offset: 0, color: '#fd79a8' },
+                    { offset: 1, color: '#e84393' }
+                ]
+            }
+        ],
+        series: {
+            name: 'HGT Meter',
+            type: 'pie',
+            radius: '70%',
+            center: ['50%', '45%'],
+            avoidLabelOverlap: false,
+            itemStyle: {
+                borderRadius: 6,
+                borderColor: '#fff',
+                borderWidth: 2,
+                shadowBlur: 8,
+                shadowOffsetX: 0,
+                shadowOffsetY: 2,
+                shadowColor: 'rgba(0, 0, 0, 0.1)'
+            },
+            label: {
+                show: true,
+                position: 'outside',
+                formatter: '{b}: {c}',
+                fontSize: 13,
+                fontWeight: 700,
+                color: '#333'
+            },
+            labelLine: {
+                show: true,
+                length: 10,
+                length2: 18,
+                smooth: true,
+                lineStyle: {
+                    width: 2
+                }
+            },
+            emphasis: {
+                itemStyle: {
+                    shadowBlur: 20,
+                    shadowOffsetX: 0,
+                    shadowColor: 'rgba(255, 107, 107, 0.6)',
+                    scale: 1.1
+                }
+            },
+            data: [
+                { value: 6018, name: 'KZN' },
+                { value: 7067, name: 'GP' },
+                { value: 3855, name: 'LP' },
+                { value: 26307, name: 'FS' },
+                { value: 1400, name: 'MPU' },
+                { value: 0, name: 'EC' }
+            ]
+        }
+    };
+
+    // HGT Strips Distribution by Province
+    hgtStripsChart: any = {
+        backgroundColor: 'transparent',
+        animationDuration: 2000,
+        animationEasing: 'elasticOut',
+        tooltip: {
+            trigger: 'item',
+            formatter: '{a} <br/>{b}: {c} ({d}%)',
+            backgroundColor: 'rgba(0, 0, 0, 0.85)',
+            borderColor: '#a8e6cf',
+            borderWidth: 2,
+            textStyle: {
+                color: '#fff',
+                fontFamily: 'Inter, sans-serif',
+                fontSize: 14,
+                fontWeight: 600
+            },
+            extraCssText: 'box-shadow: 0 0 20px rgba(168, 230, 207, 0.3);'
+        },
+        legend: {
+            orient: 'horizontal',
+            bottom: '5%',
+            left: 'center',
+            data: ['KZN', 'GP', 'LP', 'FS', 'MPU', 'EC'],
+            textStyle: {
+                color: '#333',
+                fontSize: 14,
+                fontWeight: 600
+            },
+            icon: 'circle',
+            itemGap: 20,
+            itemWidth: 14,
+            itemHeight: 14
+        },
+        color: [
+            {
+                type: 'linear',
+                x: 0, y: 0, x2: 0, y2: 1,
+                colorStops: [
+                    { offset: 0, color: '#a8e6cf' },
+                    { offset: 1, color: '#56ab2f' }
+                ]
+            },
+            {
+                type: 'linear',
+                x: 0, y: 0, x2: 0, y2: 1,
+                colorStops: [
+                    { offset: 0, color: '#ff8a80' },
+                    { offset: 1, color: '#ff5722' }
+                ]
+            },
+            {
+                type: 'linear',
+                x: 0, y: 0, x2: 0, y2: 1,
+                colorStops: [
+                    { offset: 0, color: '#81c784' },
+                    { offset: 1, color: '#4caf50' }
+                ]
+            },
+            {
+                type: 'linear',
+                x: 0, y: 0, x2: 0, y2: 1,
+                colorStops: [
+                    { offset: 0, color: '#ffb74d' },
+                    { offset: 1, color: '#ff9800' }
+                ]
+            },
+            {
+                type: 'linear',
+                x: 0, y: 0, x2: 0, y2: 1,
+                colorStops: [
+                    { offset: 0, color: '#ba68c8' },
+                    { offset: 1, color: '#9c27b0' }
+                ]
+            },
+            {
+                type: 'linear',
+                x: 0, y: 0, x2: 0, y2: 1,
+                colorStops: [
+                    { offset: 0, color: '#64b5f6' },
+                    { offset: 1, color: '#2196f3' }
+                ]
+            }
+        ],
+        series: {
+            name: 'HGT Strips',
+            type: 'pie',
+            radius: '70%',
+            center: ['50%', '45%'],
+            avoidLabelOverlap: false,
+            itemStyle: {
+                borderRadius: 6,
+                borderColor: '#fff',
+                borderWidth: 2,
+                shadowBlur: 8,
+                shadowOffsetX: 0,
+                shadowOffsetY: 2,
+                shadowColor: 'rgba(0, 0, 0, 0.1)'
+            },
+            label: {
+                show: true,
+                position: 'outside',
+                formatter: '{b}: {c}',
+                fontSize: 13,
+                fontWeight: 700,
+                color: '#333'
+            },
+            labelLine: {
+                show: true,
+                length: 10,
+                length2: 18,
+                smooth: true,
+                lineStyle: {
+                    width: 2
+                }
+            },
+            emphasis: {
+                itemStyle: {
+                    shadowBlur: 20,
+                    shadowOffsetX: 0,
+                    shadowColor: 'rgba(168, 230, 207, 0.6)',
+                    scale: 1.1
+                }
+            },
+            data: [
+                { value: 18335, name: 'KZN' },
+                { value: 61240, name: 'GP' },
+                { value: 50805, name: 'LP' },
+                { value: 940, name: 'FS' },
+                { value: 10000, name: 'MPU' },
+                { value: 0, name: 'EC' }
+            ]
+        }
+    };
+
+    // Total Stock Delivered Bar Chart
+    stockDeliveredChart: any = {
+        backgroundColor: 'transparent',
+        animationDuration: 2000,
+        animationEasing: 'elasticOut',
+        tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+                type: 'shadow',
+                shadowStyle: {
+                    color: 'rgba(0, 0, 0, 0.1)'
+                }
+            },
+            backgroundColor: 'rgba(0, 0, 0, 0.85)',
+            borderColor: '#4ecdc4',
+            borderWidth: 2,
+            textStyle: {
+                color: '#fff',
+                fontFamily: 'Inter, sans-serif',
+                fontSize: 14,
+                fontWeight: 600
+            },
+            extraCssText: 'box-shadow: 0 0 20px rgba(78, 205, 196, 0.3);'
+        },
+        legend: {
+            data: ['HB Meter', 'HB Strips', 'HB Solution', 'Glucose Meter', 'Glucose Strips', 'HBA1C Meter', 'HBA1C Strips'],
+            top: '5%',
+            textStyle: {
+                color: '#333',
+                fontSize: 13,
+                fontWeight: 600
+            },
+            icon: 'rect',
+            itemGap: 25,
+            itemWidth: 18,
+            itemHeight: 14
+        },
+        grid: {
+            left: '5%',
+            right: '5%',
+            bottom: '15%',
+            top: '20%',
+            containLabel: true
+        },
+        xAxis: {
+            type: 'category',
+            data: ['KZN', 'GP', 'FS', 'EC', 'LP', 'MPU', 'NC'],
+            axisLabel: {
+                color: '#333',
+                fontSize: 12,
+                fontWeight: 600,
+                rotate: 0
+            },
+            axisLine: {
+                lineStyle: {
+                    color: '#e0e0e0',
+                    width: 2
+                }
+            },
+            axisTick: {
+                show: false
+            }
+        },
+        yAxis: {
+            type: 'value',
+            axisLabel: {
+                color: '#666',
+                fontSize: 11,
+                formatter: function(value: number) {
+                    if (value >= 1000) {
+                        return (value / 1000).toFixed(0) + 'K';
+                    }
+                    return value.toString();
+                }
+            },
+            axisLine: {
+                show: false
+            },
+            axisTick: {
+                show: false
+            },
+            splitLine: {
+                lineStyle: {
+                    color: '#f0f0f0',
+                    type: 'dashed'
+                }
+            }
+        },
+        series: [
+            {
+                name: 'HB Meter',
+                type: 'bar',
+                stack: 'total',
+                data: [2, 502, 20, 0, 0, 14, 0],
+                itemStyle: {
+                    color: {
+                        type: 'linear',
+                        x: 0, y: 0, x2: 0, y2: 1,
+                        colorStops: [
+                            { offset: 0, color: '#ff6b6b' },
+                            { offset: 1, color: '#ee5a52' }
+                        ]
+                    },
+                    borderRadius: [2, 2, 0, 0]
+                },
+                emphasis: {
+                    itemStyle: {
+                        shadowBlur: 10,
+                        shadowColor: 'rgba(255, 107, 107, 0.5)'
+                    }
+                }
+            },
+            {
+                name: 'HB Strips',
+                type: 'bar',
+                stack: 'total',
+                data: [90, 7054, 300, 0, 0, 55, 0],
+                itemStyle: {
+                    color: {
+                        type: 'linear',
+                        x: 0, y: 0, x2: 0, y2: 1,
+                        colorStops: [
+                            { offset: 0, color: '#4ecdc4' },
+                            { offset: 1, color: '#44a08d' }
+                        ]
+                    },
+                    borderRadius: [2, 2, 0, 0]
+                },
+                emphasis: {
+                    itemStyle: {
+                        shadowBlur: 10,
+                        shadowColor: 'rgba(78, 205, 196, 0.5)'
+                    }
+                }
+            },
+            {
+                name: 'HB Solution',
+                type: 'bar',
+                stack: 'total',
+                data: [0, 1200, 0, 0, 0, 0, 0],
+                itemStyle: {
+                    color: {
+                        type: 'linear',
+                        x: 0, y: 0, x2: 0, y2: 1,
+                        colorStops: [
+                            { offset: 0, color: '#45b7d1' },
+                            { offset: 1, color: '#2980b9' }
+                        ]
+                    },
+                    borderRadius: [2, 2, 0, 0]
+                },
+                emphasis: {
+                    itemStyle: {
+                        shadowBlur: 10,
+                        shadowColor: 'rgba(69, 183, 209, 0.5)'
+                    }
+                }
+            },
+            {
+                name: 'Glucose Meter',
+                type: 'bar',
+                stack: 'total',
+                data: [3300, 7644, 6389, 100, 2710, 911, 100],
+                itemStyle: {
+                    color: {
+                        type: 'linear',
+                        x: 0, y: 0, x2: 0, y2: 1,
+                        colorStops: [
+                            { offset: 0, color: '#f9ca24' },
+                            { offset: 1, color: '#f0932b' }
+                        ]
+                    },
+                    borderRadius: [2, 2, 0, 0]
+                },
+                emphasis: {
+                    itemStyle: {
+                        shadowBlur: 10,
+                        shadowColor: 'rgba(249, 202, 36, 0.5)'
+                    }
+                }
+            },
+            {
+                name: 'Glucose Strips',
+                type: 'bar',
+                stack: 'total',
+                data: [30250, 44670, 13018, 399, 20300, 17920, 100],
+                itemStyle: {
+                    color: {
+                        type: 'linear',
+                        x: 0, y: 0, x2: 0, y2: 1,
+                        colorStops: [
+                            { offset: 0, color: '#6c5ce7' },
+                            { offset: 1, color: '#5f3dc4' }
+                        ]
+                    },
+                    borderRadius: [2, 2, 0, 0]
+                },
+                emphasis: {
+                    itemStyle: {
+                        shadowBlur: 10,
+                        shadowColor: 'rgba(108, 92, 231, 0.5)'
+                    }
+                }
+            },
+            {
+                name: 'HBA1C Meter',
+                type: 'bar',
+                stack: 'total',
+                data: [12, 1, 0, 0, 0, 0, 0],
+                itemStyle: {
+                    color: {
+                        type: 'linear',
+                        x: 0, y: 0, x2: 0, y2: 1,
+                        colorStops: [
+                            { offset: 0, color: '#fd79a8' },
+                            { offset: 1, color: '#e84393' }
+                        ]
+                    },
+                    borderRadius: [2, 2, 0, 0]
+                },
+                emphasis: {
+                    itemStyle: {
+                        shadowBlur: 10,
+                        shadowColor: 'rgba(253, 121, 168, 0.5)'
+                    }
+                }
+            },
+            {
+                name: 'HBA1C Strips',
+                type: 'bar',
+                stack: 'total',
+                data: [184, 4, 0, 0, 0, 0, 0],
+                itemStyle: {
+                    color: {
+                        type: 'linear',
+                        x: 0, y: 0, x2: 0, y2: 1,
+                        colorStops: [
+                            { offset: 0, color: '#00b894' },
+                            { offset: 1, color: '#00cec9' }
+                        ]
+                    },
+                    borderRadius: [2, 2, 0, 0]
+                },
+                emphasis: {
+                    itemStyle: {
+                        shadowBlur: 10,
+                        shadowColor: 'rgba(0, 184, 148, 0.5)'
+                    }
+                }
+            }
+        ]
+    };
+
     downloadExcel(){
        const jsonData: any[] = [
             { name: 'John Doe', age: 30, email: 'john@example.com' },
