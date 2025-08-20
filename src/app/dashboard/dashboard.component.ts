@@ -190,7 +190,21 @@ export class DashboardComponent implements OnInit {
         backgroundColor: 'transparent',
         tooltip: {
           trigger: 'item',
-          formatter: '{a} <br/>{b}: {c} ({d}%)',
+          formatter: function(params: any) {
+            if (params.seriesName === 'Training by Province' && params.name === 'KZN') {
+              return 'Trained By DYLAN GOVENDER <br/>' + params.name + ': ' + params.value + ' participants (' + params.percent + '%)';
+            }
+            if (params.seriesName === 'Training by Province' && params.name === 'LP') {
+              return 'Trained By LINDANI <br/>' + params.name + ': ' + params.value + ' participants (' + params.percent + '%)';
+            }
+            if (params.seriesName === 'Training by Province' && params.name === 'GP') {
+              return 'Trained By MASIXOLE <br/>' + params.name + ': ' + params.value + ' participants (' + params.percent + '%)';
+            }
+            if (params.seriesName === 'Training by Province' && params.name === 'MPU') {
+              return 'Trained By ZIBA <br/>' + params.name + ': ' + params.value + ' participants (' + params.percent + '%)';
+            }
+            return params.seriesName + ' <br/>' + params.name + ': ' + params.value + ' participants (' + params.percent + '%)';
+          },
           backgroundColor: 'rgba(0, 0, 0, 0.8)',
           borderColor: '#1e3a8a',
           borderWidth: 1,
@@ -204,9 +218,12 @@ export class DashboardComponent implements OnInit {
           bottom: '5%',
           left: 'center',
           data: [
-            'Borderline High',
-            'High',            
-            'Normal',
+            'KZN',
+            'MPU',
+            'GP',
+            'LP',
+            'Female',
+            'Male'
           ],
           textStyle: {
             color: '#8e8da4',
@@ -218,7 +235,7 @@ export class DashboardComponent implements OnInit {
         },
         series: [
           {
-            name: 'Gender',
+            name: 'Training by Gender',
             type: 'pie',
             selectedMode: 'single',
             radius: [0, '35%'],
@@ -242,52 +259,37 @@ export class DashboardComponent implements OnInit {
             },
             data: [
               { 
-                value: 1548, 
-                name: 'Male',
-                itemStyle: {
-                  color: {
-                    type: 'linear',
-                    x: 0, y: 0, x2: 0, y2: 1,
-                    colorStops: [
-                      { offset: 0, color: '#1e3a8a' },
-                      { offset: 1, color: '#1d4ed8' }
-                    ]
-                  }
-                }
-              },
-              { 
-                value: 775, 
+                value: 1146, 
                 name: 'Female',
                 itemStyle: {
                   color: {
                     type: 'linear',
                     x: 0, y: 0, x2: 0, y2: 1,
                     colorStops: [
-                      { offset: 0, color: '#3b82f6' },
-                      { offset: 1, color: '#1e40af' }
+                      { offset: 0, color: '#fd79a8' },
+                      { offset: 1, color: '#e84393' }
                     ]
                   }
                 }
               },
               { 
-                value: 300, 
-                name: 'Other', 
-                selected: true,
+                value: 194, 
+                name: 'Male',
                 itemStyle: {
                   color: {
                     type: 'linear',
                     x: 0, y: 0, x2: 0, y2: 1,
                     colorStops: [
-                      { offset: 0, color: '#60a5fa' },
-                      { offset: 1, color: '#2563eb' }
+                      { offset: 0, color: '#0984e3' },
+                      { offset: 1, color: '#2d3436' }
                     ]
                   }
                 }
-              },
+              }
             ]
           },
           {
-            name: 'Total Cholesterol',
+            name: 'Training by Province',
             type: 'pie',
             radius: ['50%', '75%'],
             center: ['50%', '45%'],
@@ -316,22 +318,36 @@ export class DashboardComponent implements OnInit {
             },
             data: [
               { 
-                value: 1048, 
-                name: 'Borderline High',
+                value: 898, 
+                name: 'KZN',
                 itemStyle: {
                   color: {
                     type: 'linear',
                     x: 0, y: 0, x2: 0, y2: 1,
                     colorStops: [
-                      { offset: 0, color: '#ffeaa7' },
-                      { offset: 1, color: '#fab1a0' }
+                      { offset: 0, color: '#4ecdc4' },
+                      { offset: 1, color: '#44a08d' }
                     ]
                   }
                 }
               },
               { 
-                value: 335, 
-                name: 'High',
+                value: 276, 
+                name: 'MPU',
+                itemStyle: {
+                  color: {
+                    type: 'linear',
+                    x: 0, y: 0, x2: 0, y2: 1,
+                    colorStops: [
+                      { offset: 0, color: '#6c5ce7' },
+                      { offset: 1, color: '#5f3dc4' }
+                    ]
+                  }
+                }
+              },
+              { 
+                value: 118, 
+                name: 'GP',
                 itemStyle: {
                   color: {
                     type: 'linear',
@@ -344,15 +360,15 @@ export class DashboardComponent implements OnInit {
                 }
               },
               { 
-                value: 310, 
-                name: 'Normal',
+                value: 48, 
+                name: 'LP',
                 itemStyle: {
                   color: {
                     type: 'linear',
                     x: 0, y: 0, x2: 0, y2: 1,
                     colorStops: [
-                      { offset: 0, color: '#00b894' },
-                      { offset: 1, color: '#00cec9' }
+                      { offset: 0, color: '#f9ca24' },
+                      { offset: 1, color: '#f0932b' }
                     ]
                   }
                 }

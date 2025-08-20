@@ -19,7 +19,7 @@ interface Trainer {
   name: string;
   email: string;
   phone: string;
-  specialization: string;
+  province: string;
   status: string;
 }
 
@@ -80,11 +80,12 @@ export class AddTrainingComponent implements OnInit {
   ];
 
   trainers: Trainer[] = [
-    { id: 1, name: 'Dr. Thabo Mthembu', email: 'thabo.mthembu@health.gov.za', phone: '+27721234567', specialization: 'Diabetes Management', status: 'Active' },
-    { id: 2, name: 'Dr. Nomsa Dlamini', email: 'nomsa.dlamini@health.gov.za', phone: '+27721234568', specialization: 'Hypertension Control', status: 'Active' },
-    { id: 3, name: 'Dr. Sipho Ndaba', email: 'sipho.ndaba@health.gov.za', phone: '+27721234569', specialization: 'NCD Prevention', status: 'Active' },
-    { id: 4, name: 'Dr. Zanele Khumalo', email: 'zanele.khumalo@health.gov.za', phone: '+27721234570', specialization: 'Cardiovascular Health', status: 'Active' },
-    { id: 5, name: 'Dr. Mandla Radebe', email: 'mandla.radebe@health.gov.za', phone: '+27721234571', specialization: 'Nutrition & Lifestyle', status: 'Active' }
+    { id: 1, name: 'ZIBA', email: 'ziba@Promedtechnologies.co.za', phone: '+27721234567', province: 'Gauteng', status: 'Active' },
+    { id: 2, name: 'LINDANI', email: 'lindani@Promedtechnologies.co.za', phone: '+27721234568', province: 'KwaZulu-Natal', status: 'Active' },
+    { id: 3, name: 'KEHOLIHLE', email: 'keholihle@Promedtechnologies.co.za', phone: '+27721234569', province: 'Western Cape', status: 'Active' },
+    { id: 4, name: 'SELBY', email: 'selby@Promedtechnologies.co.za', phone: '+27721234570', province: 'Eastern Cape', status: 'Active' },
+    { id: 5, name: 'MASI', email: 'masi@Promedtechnologies.co.za', phone: '+27721234571', province: 'Limpopo', status: 'Active' },
+    { id: 6, name: 'DYLAN', email: 'dylan@Promedtechnologies.co.za', phone: '+27721234572', province: 'Mpumalanga', status: 'Active' }
   ];
 
   filteredHospitals: Hospital[] = [];

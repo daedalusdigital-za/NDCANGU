@@ -174,7 +174,7 @@
                                             [class.is-invalid]="isFieldInvalid('trainer')">
                                         <option value="">Select trainer</option>
                                         <option *ngFor="let trainer of trainers" [value]="trainer.id">
-                                            {{ trainer.name }} - {{ trainer.specialization }}
+                                            {{ trainer.name }} - {{ trainer.province }}
                                         </option>
                                     </select>
                                     <div class="invalid-feedback" *ngIf="isFieldInvalid('trainer')">

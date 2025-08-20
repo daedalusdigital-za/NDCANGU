@@ -10,7 +10,7 @@ interface Trainer {
   name: string;
   email: string;
   phone: string;
-  specialization: string;
+  province: string;
   qualification: string;
   experience: number;
   status: string;
@@ -40,7 +40,7 @@ export class TrainersComponent implements OnInit {
       name: ['', [Validators.required, Validators.minLength(2)]],
       email: ['', [Validators.required, Validators.email]],
       phone: ['', [Validators.required, Validators.pattern(/^\+?[0-9]{10,15}$/)]],
-      specialization: ['', Validators.required],
+      province: ['', Validators.required],
       qualification: [''],
       experience: [0, [Validators.min(0)]],
       status: ['Active', Validators.required],
@@ -58,39 +58,75 @@ export class TrainersComponent implements OnInit {
     this.trainers = [
       {
         id: 1,
-        name: 'Dr. Thabo Mthembu',
-        email: 'thabo.mthembu@health.gov.za',
+        name: 'ZIBA',
+        email: 'ziba@Promedtechnologies.co.za',
         phone: '+27721234567',
-        specialization: 'Diabetes Management',
+        province: 'Gauteng',
         qualification: 'MD',
         experience: 8,
         status: 'Active',
-        location: 'Johannesburg General Hospital',
-        bio: 'Experienced diabetes specialist with focus on community health'
+        location: 'Johannesburg',
+        bio: 'Experienced medical trainer with focus on community health'
       },
       {
         id: 2,
-        name: 'Dr. Nomsa Dlamini',
-        email: 'nomsa.dlamini@health.gov.za',
+        name: 'LINDANI',
+        email: 'lindani@Promedtechnologies.co.za',
         phone: '+27721234568',
-        specialization: 'Hypertension Control',
+        province: 'KwaZulu-Natal',
         qualification: 'MD, PhD',
         experience: 12,
         status: 'Active',
-        location: 'Cape Town Medical Center',
-        bio: 'Cardiovascular health expert with research background'
+        location: 'Durban',
+        bio: 'Medical specialist with extensive training background'
       },
       {
         id: 3,
-        name: 'Dr. Sipho Ndaba',
-        email: 'sipho.ndaba@health.gov.za',
+        name: 'KEHOLIHLE',
+        email: 'keholihle@Promedtechnologies.co.za',
         phone: '+27721234569',
-        specialization: 'NCD Prevention',
+        province: 'Western Cape',
         qualification: 'MD, MSc',
         experience: 6,
         status: 'Active',
-        location: 'Durban Health District',
-        bio: 'Community health advocate specializing in NCD prevention'
+        location: 'Cape Town',
+        bio: 'Community health advocate specializing in medical training'
+      },
+      {
+        id: 4,
+        name: 'SELBY',
+        email: 'selby@Promedtechnologies.co.za',
+        phone: '+27721234570',
+        province: 'Eastern Cape',
+        qualification: 'MD',
+        experience: 10,
+        status: 'Active',
+        location: 'Port Elizabeth',
+        bio: 'Medical trainer with focus on rural health programs'
+      },
+      {
+        id: 5,
+        name: 'MASI',
+        email: 'masi@Promedtechnologies.co.za',
+        phone: '+27721234571',
+        province: 'Limpopo',
+        qualification: 'MD, MSc',
+        experience: 7,
+        status: 'Active',
+        location: 'Polokwane',
+        bio: 'Healthcare professional with training expertise'
+      },
+      {
+        id: 6,
+        name: 'DYLAN',
+        email: 'dylan@Promedtechnologies.co.za',
+        phone: '+27721234572',
+        province: 'Mpumalanga',
+        qualification: 'MD',
+        experience: 5,
+        status: 'Active',
+        location: 'Nelspruit',
+        bio: 'Medical professional specializing in training programs'
       }
     ];
   }
@@ -132,7 +168,7 @@ export class TrainersComponent implements OnInit {
       name: trainer.name,
       email: trainer.email,
       phone: trainer.phone,
-      specialization: trainer.specialization,
+      province: trainer.province,
       qualification: trainer.qualification,
       experience: trainer.experience,
       status: trainer.status,

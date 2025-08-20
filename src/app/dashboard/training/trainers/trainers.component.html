@@ -35,7 +35,7 @@
                                         <th>Name</th>
                                         <th>Email</th>
                                         <th>Phone</th>
-                                        <th>Specialization</th>
+                                        <th>Province</th>
                                         <th>Status</th>
                                         <th>Actions</th>
                                     </tr>
@@ -58,7 +58,7 @@
                                         <td>{{ trainer.email }}</td>
                                         <td>{{ trainer.phone }}</td>
                                         <td>
-                                            <span class="badge bg-info">{{ trainer.specialization }}</span>
+                                            <span class="badge bg-info">{{ trainer.province }}</span>
                                         </td>
                                         <td>
                                             <span class="badge" [ngClass]="trainer.status === 'Active' ? 'bg-success' : 'bg-warning'">
@@ -137,18 +137,21 @@
                         </div>
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label for="specialization" class="form-label">Specialization *</label>
-                                <select class="form-select" id="specialization" formControlName="specialization" required>
-                                    <option value="">Select specialization</option>
-                                    <option value="Diabetes Management">Diabetes Management</option>
-                                    <option value="Hypertension Control">Hypertension Control</option>
-                                    <option value="NCD Prevention">NCD Prevention</option>
-                                    <option value="Cardiovascular Health">Cardiovascular Health</option>
-                                    <option value="Nutrition & Wellness">Nutrition & Wellness</option>
-                                    <option value="General Medicine">General Medicine</option>
+                                <label for="province" class="form-label">Province *</label>
+                                <select class="form-select" id="province" formControlName="province" required>
+                                    <option value="">Select province</option>
+                                    <option value="Gauteng">Gauteng</option>
+                                    <option value="Western Cape">Western Cape</option>
+                                    <option value="KwaZulu-Natal">KwaZulu-Natal</option>
+                                    <option value="Eastern Cape">Eastern Cape</option>
+                                    <option value="Free State">Free State</option>
+                                    <option value="Limpopo">Limpopo</option>
+                                    <option value="Mpumalanga">Mpumalanga</option>
+                                    <option value="North West">North West</option>
+                                    <option value="Northern Cape">Northern Cape</option>
                                 </select>
-                                <div *ngIf="trainerForm.get('specialization')?.invalid && trainerForm.get('specialization')?.touched" class="text-danger">
-                                    <small>Specialization is required</small>
+                                <div *ngIf="trainerForm.get('province')?.invalid && trainerForm.get('province')?.touched" class="text-danger">
+                                    <small>Province is required</small>
                                 </div>
                             </div>
                         </div>
@@ -246,15 +249,18 @@
                         </div>
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label for="editSpecialization" class="form-label">Specialization *</label>
-                                <select class="form-select" id="editSpecialization" formControlName="specialization" required>
-                                    <option value="">Select specialization</option>
-                                    <option value="Diabetes Management">Diabetes Management</option>
-                                    <option value="Hypertension Control">Hypertension Control</option>
-                                    <option value="NCD Prevention">NCD Prevention</option>
-                                    <option value="Cardiovascular Health">Cardiovascular Health</option>
-                                    <option value="Nutrition & Wellness">Nutrition & Wellness</option>
-                                    <option value="General Medicine">General Medicine</option>
+                                <label for="editProvince" class="form-label">Province *</label>
+                                <select class="form-select" id="editProvince" formControlName="province" required>
+                                    <option value="">Select province</option>
+                                    <option value="Gauteng">Gauteng</option>
+                                    <option value="Western Cape">Western Cape</option>
+                                    <option value="KwaZulu-Natal">KwaZulu-Natal</option>
+                                    <option value="Eastern Cape">Eastern Cape</option>
+                                    <option value="Free State">Free State</option>
+                                    <option value="Limpopo">Limpopo</option>
+                                    <option value="Mpumalanga">Mpumalanga</option>
+                                    <option value="North West">North West</option>
+                                    <option value="Northern Cape">Northern Cape</option>
                                 </select>
                             </div>
                         </div>
@@ -373,12 +379,12 @@
                         <div class="col-md-6 mb-3">
                             <div class="detail-item">
                                 <div class="detail-icon">
-                                    <i class="fas fa-stethoscope text-info"></i>
+                                    <i class="fas fa-map-marker-alt text-info"></i>
                                 </div>
                                 <div class="detail-content">
-                                    <label class="detail-label">Specialization</label>
+                                    <label class="detail-label">Province</label>
                                     <p class="detail-value">
-                                        <span class="badge bg-info">{{ selectedTrainer.specialization }}</span>
+                                        <span class="badge bg-info">{{ selectedTrainer.province }}</span>
                                     </p>
                                 </div>
                             </div>
