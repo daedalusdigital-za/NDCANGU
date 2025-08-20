@@ -28,6 +28,7 @@ export class DashboardComponent implements OnInit {
           type: "bar",
           height: 380,
           background: 'transparent',
+          stacked: false,
           toolbar: {
             show: true,
             tools: {
@@ -1063,7 +1064,7 @@ export class DashboardComponent implements OnInit {
         backgroundColor: 'transparent',
         tooltip: {
             trigger: 'item',
-            formatter: '{a} <br/>{b}: {c} ({d}%)',
+            formatter: '{a} <br/>{b}: {c} participants ({d}%)',
             backgroundColor: 'rgba(0, 0, 0, 0.8)',
             borderColor: '#1e3a8a',
             borderWidth: 1,
@@ -1078,31 +1079,41 @@ export class DashboardComponent implements OnInit {
             left: 'left',
             top: 'center',
             data: [
-                'NORMAL',
-                'ELEVATED',
-                'HYPERTENSION STAGE1',
-                'HYPERTENSION STAGE2',
-                'HYPERTENSIVE CRISIS'
+                'EN (Enrolled Nurse)',
+                'ENA (Enrolled Nursing Assistant)',
+                'CNP (Community Nurse Practitioner)',
+                'CNS (Clinical Nurse Specialist)',
+                'PN (Professional Nurse)',
+                'O/T (Occupational Therapist)',
+                'C/G (Caregiver)',
+                'ADMIN (Administrator)',
+                'DATA CAPTURE',
+                'NURSE'
             ],
             textStyle: {
                 color: '#8e8da4',
-                fontSize: 12,
+                fontSize: 11,
                 fontWeight: 500
             },
             icon: 'circle',
-            itemGap: 12,
-            itemWidth: 12,
-            itemHeight: 12
+            itemGap: 8,
+            itemWidth: 10,
+            itemHeight: 10
         },
         color: [
             '#00b894',
             '#fdcb6e',
             '#fd79a8',
             '#e17055',
-            '#6c5ce7'
+            '#6c5ce7',
+            '#74b9ff',
+            '#a29bfe',
+            '#fd79a8',
+            '#00cec9',
+            '#e84393'
         ],
         series: {
-            name: 'Blood Pressure',
+            name: 'Training Participants',
             type: 'pie',
             radius: ['40%', '70%'],
             center: ['65%', '50%'],
@@ -1139,29 +1150,123 @@ export class DashboardComponent implements OnInit {
             },
             data: [
                 {
-                    value: 335,
-                    name: 'NORMAL'
+                    value: 134,
+                    name: 'EN (Enrolled Nurse)'
                 },
                 {
-                    value: 310,
-                    name: 'ELEVATED'
+                    value: 60,
+                    name: 'ENA (Enrolled Nursing Assistant)'
                 },
                 {
-                    value: 234,
-                    name: 'HYPERTENSION STAGE1'
+                    value: 35,
+                    name: 'CNP (Community Nurse Practitioner)'
                 },
                 {
-                    value: 135,
-                    name: 'HYPERTENSION STAGE2'
+                    value: 21,
+                    name: 'CNS (Clinical Nurse Specialist)'
                 },
                 {
-                    value: 1548,
-                    name: 'HYPERTENSIVE CRISIS'
+                    value: 16,
+                    name: 'PN (Professional Nurse)'
+                },
+                {
+                    value: 10,
+                    name: 'O/T (Occupational Therapist)'
+                },
+                {
+                    value: 8,
+                    name: 'C/G (Caregiver)'
+                },
+                {
+                    value: 8,
+                    name: 'ADMIN (Administrator)'
+                },
+                {
+                    value: 7,
+                    name: 'DATA CAPTURE'
+                },
+                {
+                    value: 7,
+                    name: 'NURSE'
                 }
             ]
         }
     }
 
+    // All occupation data
+    allOccupationData = [
+        { value: 134, name: 'EN (Enrolled Nurse)' },
+        { value: 60, name: 'ENA (Enrolled Nursing Assistant)' },
+        { value: 35, name: 'CNP (Community Nurse Practitioner)' },
+        { value: 21, name: 'CNS (Clinical Nurse Specialist)' },
+        { value: 16, name: 'PN (Professional Nurse)' },
+        { value: 10, name: 'O/T (Occupational Therapist)' },
+        { value: 8, name: 'C/G (Caregiver)' },
+        { value: 8, name: 'ADMIN (Administrator)' },
+        { value: 7, name: 'DATA CAPTURE' },
+        { value: 7, name: 'NURSE' }
+    ];
+
+    selectedOccupation: string = 'ALL';
+
+    // Method to handle occupation selection change
+    onOccupationChange(event: any) {
+        this.selectedOccupation = event.target.value;
+        this.updateOccupationChart();
+    }
+
+    // Method to update the occupation chart based on selected occupation
+    updateOccupationChart() {
+        this.isShown = false;
+        setTimeout(() => {
+            if (this.selectedOccupation === 'ALL') {
+                // Show all occupations
+                this.pieChart.series.data = this.allOccupationData;
+            } else {
+                // Show only selected occupation with its original color
+                const selectedData = this.allOccupationData.find(item => {
+                    const occupationKey = this.getOccupationKey(item.name);
+                    return occupationKey === this.selectedOccupation;
+                });
+                
+                if (selectedData) {
+                    // Find the index to get the correct color
+                    const originalIndex = this.allOccupationData.findIndex(item => {
+                        const occupationKey = this.getOccupationKey(item.name);
+                        return occupationKey === this.selectedOccupation;
+                    });
+                    
+                    // Create a copy with the original color
+                    const dataWithColor = {
+                        ...selectedData,
+                        itemStyle: {
+                            color: this.pieChart.color[originalIndex]
+                        }
+                    };
+                    
+                    this.pieChart.series.data = [dataWithColor];
+                }
+            }
+            this.isShown = true;
+        }, 300);
+    }
+
+    // Helper method to get occupation key from name
+    getOccupationKey(name: string): string {
+        const keyMap: { [key: string]: string } = {
+            'EN (Enrolled Nurse)': 'EN',
+            'ENA (Enrolled Nursing Assistant)': 'ENA',
+            'CNP (Community Nurse Practitioner)': 'CNP',
+            'CNS (Clinical Nurse Specialist)': 'CNS',
+            'PN (Professional Nurse)': 'PN',
+            'O/T (Occupational Therapist)': 'OT',
+            'C/G (Caregiver)': 'CG',
+            'ADMIN (Administrator)': 'ADMIN',
+            'DATA CAPTURE': 'DATA_CAPTURE',
+            'NURSE': 'NURSE'
+        };
+        return keyMap[name] || '';
+    }
 
     userRole: string = '';
     constructor(private globalService: GlobalService) { }
@@ -1174,6 +1279,9 @@ export class DashboardComponent implements OnInit {
             console.error('Error loading user data:', error);
             this.userRole = 'Guest';
         }
+
+        // Initialize occupation chart with all data
+        this.updateOccupationChart();
 
         this.globalService.topMenuSubject.subscribe({
             next: (x: any) => {
@@ -1196,29 +1304,8 @@ export class DashboardComponent implements OnInit {
     private chartChanged(val: any) {
         if (val == 1) {
             this.walletBalenceChart.series = [10, 50, 40];
-
-            this.pieChart.series.data = [
-                {
-                    "value": 335,
-                    "name": "NORMAL"
-                },
-                {
-                    "value": 310,
-                    "name": "ELEVATED"
-                },
-                {
-                    "value": 234,
-                    "name": "HYPERTENSION STAGE1"
-                },
-                {
-                    "value": 135,
-                    "name": "HYPERTENSION STAGE2"
-                },
-                {
-                    "value": 1548,
-                    "name": "HYPERTENSIVE CRISIS"
-                }
-            ];
+            // Use the current occupation filter
+            this.updateOccupationChart();
         }
 
     }
@@ -1585,7 +1672,6 @@ export class DashboardComponent implements OnInit {
             {
                 name: 'HB Meter',
                 type: 'bar',
-                stack: 'total',
                 data: [2, 502, 20, 0, 0, 14, 0],
                 itemStyle: {
                     color: {
@@ -1608,7 +1694,6 @@ export class DashboardComponent implements OnInit {
             {
                 name: 'HB Strips',
                 type: 'bar',
-                stack: 'total',
                 data: [90, 7054, 300, 0, 0, 55, 0],
                 itemStyle: {
                     color: {
@@ -1631,7 +1716,6 @@ export class DashboardComponent implements OnInit {
             {
                 name: 'HB Solution',
                 type: 'bar',
-                stack: 'total',
                 data: [0, 1200, 0, 0, 0, 0, 0],
                 itemStyle: {
                     color: {
@@ -1654,7 +1738,6 @@ export class DashboardComponent implements OnInit {
             {
                 name: 'Glucose Meter',
                 type: 'bar',
-                stack: 'total',
                 data: [3300, 7644, 6389, 100, 2710, 911, 100],
                 itemStyle: {
                     color: {
@@ -1677,7 +1760,6 @@ export class DashboardComponent implements OnInit {
             {
                 name: 'Glucose Strips',
                 type: 'bar',
-                stack: 'total',
                 data: [30250, 44670, 13018, 399, 20300, 17920, 100],
                 itemStyle: {
                     color: {
@@ -1700,7 +1782,6 @@ export class DashboardComponent implements OnInit {
             {
                 name: 'HBA1C Meter',
                 type: 'bar',
-                stack: 'total',
                 data: [12, 1, 0, 0, 0, 0, 0],
                 itemStyle: {
                     color: {
@@ -1723,7 +1804,6 @@ export class DashboardComponent implements OnInit {
             {
                 name: 'HBA1C Strips',
                 type: 'bar',
-                stack: 'total',
                 data: [184, 4, 0, 0, 0, 0, 0],
                 itemStyle: {
                     color: {
