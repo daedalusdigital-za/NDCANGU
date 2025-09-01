@@ -1,0 +1,88 @@
+<div class="page-content">
+  <div class="container-fluid">
+    <!-- start page title -->
+    <div class="row">
+      <div class="col-12">
+        <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+          <h4 class="mb-sm-0 font-size-18">Bid List</h4>
+          <div class="page-title-right">
+            <ol class="breadcrumb m-0">
+              <li class="breadcrumb-item"><a href="javascript: void(0);">Dashboard</a></li>
+              <li class="breadcrumb-item active">Bid List</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- end page title -->
+
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="card">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <h4 class="card-title mb-0">All Bids</h4>
+            <a routerLink="/dashboard/bid-management" class="btn btn-primary">
+              <i class="bx bx-plus me-1"></i>
+              Add New Bid
+            </a>
+          </div>
+          <div class="card-body">
+            <div class="table-responsive">
+              <table class="table table-hover mb-0">
+                <thead class="table-dark">
+                  <tr>
+                    <th>ID</th>
+                    <th>Tender Number</th>
+                    <th>Local Agent</th>
+                    <th>Principal</th>
+                    <th>Manufacturer</th>
+                    <th>Quoted Price</th>
+                    <th>Currency</th>
+                    <th>Status</th>
+                    <th>Acceptance Date</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let bid of mockBids">
+                    <td>{{ bid.id }}</td>
+                    <td>{{ bid.tenderNumber }}</td>
+                    <td>{{ bid.localAgent }}</td>
+                    <td>{{ bid.principal }}</td>
+                    <td>{{ bid.manufacturer }}</td>
+                    <td>{{ bid.quotedPrice | number:'1.2-2' }}</td>
+                    <td>{{ bid.currency }}</td>
+                    <td>
+                      <span class="badge bg-success" *ngIf="bid.bidStatus === 'Lowest Open'">{{ bid.bidStatus }}</span>
+                      <span class="badge bg-warning" *ngIf="bid.bidStatus === 'Pending Review'">{{ bid.bidStatus }}</span>
+                      <span class="badge bg-info" *ngIf="bid.bidStatus !== 'Lowest Open' && bid.bidStatus !== 'Pending Review'">{{ bid.bidStatus }}</span>
+                    </td>
+                    <td>{{ bid.acceptanceDate || 'N/A' }}</td>
+                    <td>
+                      <div class="btn-group" role="group">
+                        <button type="button" class="btn btn-sm btn-outline-primary" (click)="editBid(bid)">
+                          <i class="bx bx-edit"></i>
+                        </button>
+                        <button type="button" class="btn btn-sm btn-outline-danger" (click)="deleteBid(bid)">
+                          <i class="bx bx-trash"></i>
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              
+              <div *ngIf="mockBids.length === 0" class="text-center py-4">
+                <p class="text-muted">No bids found.</p>
+                <a routerLink="/dashboard/bid-management" class="btn btn-primary">
+                  <i class="bx bx-plus me-1"></i>
+                  Add Your First Bid
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

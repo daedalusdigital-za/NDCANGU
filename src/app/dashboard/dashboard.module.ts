@@ -1,5 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
 
 import { DashboardRoutingModule } from './dashboard-routing.module';
 import { DashboardComponent } from './dashboard.component';
@@ -15,6 +17,8 @@ import { ListStatsComponent } from './list-stats/list-stats.component';
 import { GuiGridModule } from '@generic-ui/ngx-grid';
 import { NgApexchartsModule } from 'ng-apexcharts';
 import { NgxEchartsModule } from 'ngx-echarts';
+import { BidManagementComponent } from './bid-management/bid-management.component';
+import { ListBidsComponent } from './list-bids/list-bids.component';
 
 
 @NgModule({
@@ -28,10 +32,15 @@ import { NgxEchartsModule } from 'ngx-echarts';
     ListReportsComponent,
     AddReportComponent,
     AddStatsComponent,
-    ListStatsComponent
+    ListStatsComponent,
+    BidManagementComponent,
+    ListBidsComponent
   ],
   imports: [
     CommonModule,
+    ReactiveFormsModule,
+    FormsModule,
+    HttpClientModule,
     GuiGridModule,
     DashboardRoutingModule,
     NgxEchartsModule.forRoot({

@@ -1,0 +1,275 @@
+<div class="page-content">
+  <div class="container-fluid">
+    <!-- start page title -->
+    <div class="row">
+      <div class="col-12">
+        <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+          <h4 class="mb-sm-0 font-size-18">Bid Management</h4>
+          <div class="page-title-right">
+            <ol class="breadcrumb m-0">
+              <li class="breadcrumb-item"><a href="javascript: void(0);">Dashboard</a></li>
+              <li class="breadcrumb-item active">Bid Management</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- end page title -->
+
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="card">
+          <div class="card-header">
+            <h4 class="card-title mb-0">Add New Bid</h4>
+          </div>
+          <div class="card-body">
+            <form [formGroup]="bidForm" (ngSubmit)="onSubmit()">
+              
+              <!-- Tender Selection -->
+              <div class="col-md-12 mb-3">
+                <label class="form-label">Select Tender/Item/Qty</label>
+                <div class="autocomplete-container" style="position: relative;">
+                  <input 
+                    type="text" 
+                    class="form-control" 
+                    formControlName="tenderItemQty"
+                    (input)="onTenderInputChange($event)"
+                    (blur)="hideSuggestions()"
+                    placeholder="Type to search tenders...">
+                  <input type="hidden" formControlName="tenderChildId">
+                  <input type="hidden" formControlName="tenderDetail">
+                  <input type="hidden" formControlName="manufacturerId">
+                  
+                  <div class="suggestion-box" 
+                       *ngIf="showTenderSuggestions" 
+                       style="position: absolute; top: 100%; left: 0; right: 0; background: white; border: 1px solid #ddd; border-top: none; max-height: 200px; overflow-y: auto; z-index: 1000;">
+                    <div 
+                      *ngFor="let tender of tenderSuggestions" 
+                      class="suggestion-item p-2 hover:bg-gray-100 cursor-pointer"
+                      style="border-bottom: 1px solid #eee;"
+                      (mousedown)="selectTender(tender)">
+                      {{ tender['tender-number'] }} | Due: {{ tender['due-date'] }} | 
+                      <span *ngIf="tender.tender_children && tender.tender_children[0]">
+                        Qty: {{ tender.tender_children[0].quantity }} | 
+                        Cat#: {{ tender.tender_children[0].part_catalogue?.['cat-number'] }} | 
+                        Desc: {{ tender.tender_children[0].part_catalogue?.description }}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Organization Fields Row -->
+              <div class="row mb-3">
+                <!-- Local Agent -->
+                <div class="col-md-4">
+                  <label class="form-label">Select Local Agent</label>
+                  <div class="autocomplete-container" style="position: relative;">
+                    <input 
+                      type="text" 
+                      class="form-control"
+                      formControlName="localAgent"
+                      (input)="onOrganizationInputChange($event, 'local-agent')"
+                      (blur)="hideSuggestions()"
+                      placeholder="Type to search local agents...">
+                    <input type="hidden" formControlName="localAgentId">
+                    
+                    <div class="suggestion-box" 
+                         *ngIf="showLocalAgentSuggestions" 
+                         style="position: absolute; top: 100%; left: 0; right: 0; background: white; border: 1px solid #ddd; border-top: none; max-height: 200px; overflow-y: auto; z-index: 1000;">
+                      <div 
+                        *ngFor="let org of organizationSuggestions" 
+                        class="suggestion-item p-2 hover:bg-gray-100 cursor-pointer"
+                        style="border-bottom: 1px solid #eee;"
+                        (mousedown)="selectOrganization(org)">
+                        {{ org['organization-name'] }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Principal -->
+                <div class="col-md-4">
+                  <label class="form-label">Select Principal</label>
+                  <div class="autocomplete-container" style="position: relative;">
+                    <input 
+                      type="text" 
+                      class="form-control"
+                      formControlName="principal"
+                      (input)="onOrganizationInputChange($event, 'principal')"
+                      (blur)="hideSuggestions()"
+                      placeholder="Type to search principals...">
+                    <input type="hidden" formControlName="principalId">
+                    
+                    <div class="suggestion-box" 
+                         *ngIf="showPrincipalSuggestions" 
+                         style="position: absolute; top: 100%; left: 0; right: 0; background: white; border: 1px solid #ddd; border-top: none; max-height: 200px; overflow-y: auto; z-index: 1000;">
+                      <div 
+                        *ngFor="let org of organizationSuggestions" 
+                        class="suggestion-item p-2 hover:bg-gray-100 cursor-pointer"
+                        style="border-bottom: 1px solid #eee;"
+                        (mousedown)="selectOrganization(org)">
+                        {{ org['organization-name'] }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Manufacturer -->
+                <div class="col-md-4">
+                  <label class="form-label">Select Manufacturer</label>
+                  <div class="autocomplete-container" style="position: relative;">
+                    <input 
+                      type="text" 
+                      class="form-control"
+                      formControlName="manufacturer"
+                      (input)="onOrganizationInputChange($event, 'manufacturer')"
+                      (blur)="hideSuggestions()"
+                      placeholder="Type to search manufacturers...">
+                    <input type="hidden" formControlName="manufacturerIdField">
+                    
+                    <div class="suggestion-box" 
+                         *ngIf="showManufacturerSuggestions" 
+                         style="position: absolute; top: 100%; left: 0; right: 0; background: white; border: 1px solid #ddd; border-top: none; max-height: 200px; overflow-y: auto; z-index: 1000;">
+                      <div 
+                        *ngFor="let org of organizationSuggestions" 
+                        class="suggestion-item p-2 hover:bg-gray-100 cursor-pointer"
+                        style="border-bottom: 1px solid #eee;"
+                        (mousedown)="selectOrganization(org)">
+                        {{ org['organization-name'] }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Currency / Cost / Suggested Row -->
+              <div class="row mb-3">
+                <div class="col-md-4">
+                  <label class="form-label">Select Currency</label>
+                  <select class="form-select" formControlName="currency">
+                    <option value="" disabled>Choose</option>
+                    <option *ngFor="let currency of currencies" [value]="currency.id">
+                      {{ currency.name }}
+                    </option>
+                  </select>
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label">Cost Price Per Unit</label>
+                  <input type="number" class="form-control" formControlName="costPrice" placeholder="Enter cost price">
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label">Suggested Price Per Unit</label>
+                  <input type="number" class="form-control" formControlName="suggestedPrice" placeholder="Enter suggested price">
+                </div>
+              </div>
+
+              <!-- Quoted / Validity / Extended Row -->
+              <div class="row mb-3">
+                <div class="col-md-4">
+                  <label class="form-label">Quoted Price Per Unit</label>
+                  <input type="number" class="form-control" formControlName="quotedPrice" placeholder="Enter quoted price">
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label">Select Quote Validity</label>
+                  <select class="form-select" formControlName="quoteValidity">
+                    <option value="" disabled>Choose</option>
+                    <option *ngFor="let validity of quoteValidityOptions" [value]="validity.value">
+                      {{ validity.label }}
+                    </option>
+                  </select>
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label">Extended To</label>
+                  <input type="date" class="form-control" formControlName="extendedTo">
+                </div>
+              </div>
+
+              <!-- Status / Acceptance / PO Row -->
+              <div class="row mb-3">
+                <div class="col-md-4">
+                  <label class="form-label">Bid Status</label>
+                  <select class="form-select" formControlName="bidStatus">
+                    <option value="" disabled>Choose</option>
+                    <option *ngFor="let status of bidStatuses" [value]="status.id">
+                      {{ status.name }}
+                    </option>
+                  </select>
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label">Acceptance Date</label>
+                  <input type="date" class="form-control" formControlName="acceptanceDate">
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label">Select PO #</label>
+                  <div class="autocomplete-container" style="position: relative;">
+                    <input 
+                      type="text" 
+                      class="form-control"
+                      formControlName="poNumber"
+                      (input)="onPoInputChange($event)"
+                      (blur)="hideSuggestions()"
+                      placeholder="Type to search PO numbers...">
+                    <input type="hidden" formControlName="orderId">
+                    
+                    <div class="suggestion-box" 
+                         *ngIf="showPoSuggestions" 
+                         style="position: absolute; top: 100%; left: 0; right: 0; background: white; border: 1px solid #ddd; border-top: none; max-height: 200px; overflow-y: auto; z-index: 1000;">
+                      <div 
+                        *ngFor="let po of poSuggestions" 
+                        class="suggestion-item p-2 hover:bg-gray-100 cursor-pointer"
+                        style="border-bottom: 1px solid #eee;"
+                        (mousedown)="selectPo(po)">
+                        {{ po.order_parent?.['purchase-order-number'] }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Amount / Amount PKR / Item Shipped Row -->
+              <div class="row mb-3">
+                <div class="col-md-4">
+                  <label class="form-label">Amount</label>
+                  <input type="number" class="form-control" formControlName="amount" placeholder="Enter amount">
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label">Amount PKR</label>
+                  <input type="number" class="form-control" formControlName="amountPkr" placeholder="Enter amount in PKR">
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label">Item Shipped</label>
+                  <select class="form-select" formControlName="itemShipped">
+                    <option value="" disabled>Choose</option>
+                    <option *ngFor="let shipped of itemShippedOptions" [value]="shipped.value">
+                      {{ shipped.label }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- Remarks -->
+              <div class="col-md-12 mb-3">
+                <label class="form-label">Remarks</label>
+                <textarea 
+                  class="form-control" 
+                  formControlName="remarks" 
+                  rows="3" 
+                  placeholder="Enter remarks..."></textarea>
+              </div>
+
+              <!-- Submit Button -->
+              <div class="d-flex justify-content-end">
+                <button type="submit" class="btn btn-primary" [disabled]="bidForm.invalid">
+                  <i class="bx bx-save me-1"></i>
+                  Submit Bid
+                </button>
+              </div>
+
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
