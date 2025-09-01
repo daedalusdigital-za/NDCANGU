@@ -10,6 +10,8 @@ import { ListReportsComponent } from './list-reports/list-reports.component';
 import { ListStatsComponent } from './list-stats/list-stats.component';
 import { ListTutorialsComponent } from './list-tutorials/list-tutorials.component';
 import { ListUsersComponent } from './list-users/list-users.component';
+import { BidManagementComponent } from './bid-management/bid-management.component';
+import { ListBidsComponent } from './list-bids/list-bids.component';
 
 const routes: Routes = [
   {
@@ -51,6 +53,14 @@ const routes: Routes = [
       {
         path: 'add-stats',
         component: AddStatsComponent
+      },
+      {
+        path: 'bid-management',
+        component: BidManagementComponent
+      },
+      {
+        path: 'list-bids',
+        component: ListBidsComponent
       },
       { path: '', redirectTo: 'home', pathMatch: 'full' }
     ]
