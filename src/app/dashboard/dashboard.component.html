@@ -25,7 +25,7 @@
                     <div class="card-header">
                         <div class="d-flex align-items-center">
                             <i class="fas fa-graduation-cap me-2"></i>
-                            <h2 class="card-title mb-0 h5">Total Training Conducted</h2>
+                            <h2 class="card-title mb-0 h5" style="color: white;">Total Training Conducted</h2>
                         </div>
                     </div>
                     <div class="card-body">
@@ -46,7 +46,7 @@
                         <div class="d-flex justify-content-between align-items-center flex-wrap">
                             <div class="d-flex align-items-center">
                                 <i class="fas fa-users me-2"></i>
-                                <h2 class="card-title mb-0 h5">Occupations of Training Participants</h2>
+                                <h2 class="card-title mb-0 h5" style="color: white;">Occupations of Training Participants</h2>
                             </div>
                             <select class="form-select form-select-sm" 
                                     [(ngModel)]="selectedOccupation"
@@ -84,7 +84,7 @@
                 <div class="card h-100 customize-card">
                     <div class="card-header">
                         <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
-                            <h2 class="card-title mb-0 h5">Stock Reports</h2>
+                            <h2 class="card-title mb-0 h5" style="color: white;">Stock Reports</h2>
                             <button class="btn btn-outline-primary btn-sm" 
                                     type="button"
                                     aria-label="Download all reports">
@@ -361,6 +361,177 @@
                 </div>
             </div>
         </div>
+        
+        <!-- National Total Medical Equipment Summary -->
+        <div class="row g-4 mt-4 mobile-mb-3">
+            <div class="col-12">
+                <div class="card customize-card shadow-sm">
+                    <div class="card-header bg-gradient-primary">
+                        <div class="d-flex justify-content-between align-items-center flex-wrap">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-chart-line me-3 text-white" style="font-size: 1.5rem;"></i>
+                                <h2 class="card-title mb-0 h4 text-white fw-bold">National Total - Medical Equipment Orders & Deliveries</h2>
+                            </div>
+                            <div class="d-flex gap-2">
+                                <span class="badge bg-light text-dark fs-6 px-3 py-2">
+                                    <i class="fas fa-percentage me-1"></i>
+                                    {{getDeliveryRate()}}% Delivery Rate
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <!-- Summary Statistics Row -->
+                        <div class="row mb-4">
+                            <div class="col-md-4">
+                                <div class="d-flex align-items-center p-3 bg-light rounded-3">
+                                    <div class="flex-shrink-0">
+                                        <div class="avatar-sm rounded-circle bg-primary d-flex align-items-center justify-content-center">
+                                            <i class="fas fa-shopping-cart text-white"></i>
+                                        </div>
+                                    </div>
+                                    <div class="flex-grow-1 ms-3">
+                                        <h6 class="mb-1 text-muted">Total Ordered</h6>
+                                        <h4 class="mb-0 text-primary fw-bold">{{formatNumber(getTotalOrdered())}}</h4>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="d-flex align-items-center p-3 bg-light rounded-3">
+                                    <div class="flex-shrink-0">
+                                        <div class="avatar-sm rounded-circle bg-success d-flex align-items-center justify-content-center">
+                                            <i class="fas fa-truck text-white"></i>
+                                        </div>
+                                    </div>
+                                    <div class="flex-grow-1 ms-3">
+                                        <h6 class="mb-1 text-muted">Total Delivered</h6>
+                                        <h4 class="mb-0 text-success fw-bold">{{formatNumber(getTotalDelivered())}}</h4>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="d-flex align-items-center p-3 bg-light rounded-3">
+                                    <div class="flex-shrink-0">
+                                        <div class="avatar-sm rounded-circle bg-info d-flex align-items-center justify-content-center">
+                                            <i class="fas fa-clock text-white"></i>
+                                        </div>
+                                    </div>
+                                    <div class="flex-grow-1 ms-3">
+                                        <h6 class="mb-1 text-muted">Pending</h6>
+                                        <h4 class="mb-0 text-warning fw-bold">{{formatNumber(getTotalOrdered() - getTotalDelivered())}}</h4>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Detailed Table -->
+                        <div class="table-responsive">
+                            <table class="table table-hover table-borderless mb-0">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th class="fw-bold">Medical Equipment</th>
+                                        <th class="text-center fw-bold">Total Ordered</th>
+                                        <th class="text-center fw-bold">Total Delivered</th>
+                                        <th class="text-center fw-bold">Pending</th>
+                                        <th class="text-center fw-bold">Delivery Rate</th>
+                                        <th class="text-center fw-bold">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let item of nationalTotalData; trackBy: trackByItem" 
+                                        class="align-middle"
+                                        [class.table-success]="getItemDeliveryRate(item) === 100"
+                                        [class.table-warning]="getItemDeliveryRate(item) >= 50 && getItemDeliveryRate(item) < 100"
+                                        [class.table-danger]="getItemDeliveryRate(item) < 50">
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <div class="flex-shrink-0 me-3">
+                                                    <div class="avatar-xs rounded-circle d-flex align-items-center justify-content-center"
+                                                         [class.bg-success]="getItemDeliveryRate(item) === 100"
+                                                         [class.bg-warning]="getItemDeliveryRate(item) >= 50 && getItemDeliveryRate(item) < 100"
+                                                         [class.bg-danger]="getItemDeliveryRate(item) < 50">
+                                                        <i class="fas fa-medical-kit text-white" style="font-size: 0.7rem;"></i>
+                                                    </div>
+                                                </div>
+                                                <div>
+                                                    <h6 class="mb-0 fw-semibold">{{item.item}}</h6>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="text-center">
+                                            <span class="fw-bold text-primary">{{formatNumber(item.totalOrdered)}}</span>
+                                        </td>
+                                        <td class="text-center">
+                                            <span class="fw-bold text-success">{{formatNumber(item.totalDelivered)}}</span>
+                                        </td>
+                                        <td class="text-center">
+                                            <span class="fw-bold text-warning">{{formatNumber(item.totalOrdered - item.totalDelivered)}}</span>
+                                        </td>
+                                        <td class="text-center">
+                                            <div class="d-flex align-items-center justify-content-center">
+                                                <div class="progress me-2" style="width: 60px; height: 8px;">
+                                                    <div class="progress-bar" 
+                                                         [class.bg-success]="getItemDeliveryRate(item) === 100"
+                                                         [class.bg-warning]="getItemDeliveryRate(item) >= 50 && getItemDeliveryRate(item) < 100"
+                                                         [class.bg-danger]="getItemDeliveryRate(item) < 50"
+                                                         [style.width.%]="getItemDeliveryRate(item)">
+                                                    </div>
+                                                </div>
+                                                <span class="fw-bold" 
+                                                      [class.text-success]="getItemDeliveryRate(item) === 100"
+                                                      [class.text-warning]="getItemDeliveryRate(item) >= 50 && getItemDeliveryRate(item) < 100"
+                                                      [class.text-danger]="getItemDeliveryRate(item) < 50">
+                                                    {{getItemDeliveryRate(item)}}%
+                                                </span>
+                                            </div>
+                                        </td>
+                                        <td class="text-center">
+                                            <span class="badge"
+                                                  [class.bg-success]="getItemDeliveryRate(item) === 100"
+                                                  [class.bg-warning]="getItemDeliveryRate(item) >= 50 && getItemDeliveryRate(item) < 100"
+                                                  [class.bg-danger]="getItemDeliveryRate(item) < 50">
+                                                <i class="fas fa-check-circle me-1" *ngIf="getItemDeliveryRate(item) === 100"></i>
+                                                <i class="fas fa-exclamation-triangle me-1" *ngIf="getItemDeliveryRate(item) >= 50 && getItemDeliveryRate(item) < 100"></i>
+                                                <i class="fas fa-times-circle me-1" *ngIf="getItemDeliveryRate(item) < 50"></i>
+                                                {{getItemDeliveryRate(item) === 100 ? 'Completed' : 
+                                                  getItemDeliveryRate(item) >= 50 ? 'In Progress' : 'Delayed'}}
+                                            </span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="row mt-4">
+                            <div class="col-12">
+                                <div class="d-flex justify-content-center gap-3 flex-wrap">
+                                    <button class="btn btn-primary" 
+                                            (click)="downloadExcel()"
+                                            type="button">
+                                        <i class="fas fa-file-excel me-2"></i>
+                                        Export to Excel
+                                    </button>
+                                    <button class="btn btn-outline-danger" 
+                                            (click)="downloadPdf()"
+                                            type="button">
+                                        <i class="fas fa-file-pdf me-2"></i>
+                                        Generate PDF Report
+                                    </button>
+                                    <button class="btn btn-outline-success" 
+                                            routerLink="/dashboard/sales/reports"
+                                            type="button">
+                                        <i class="fas fa-chart-bar me-2"></i>
+                                        View Detailed Sales Reports
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- end National Total row -->
         
     </div> <!-- container-fluid -->
 </div>

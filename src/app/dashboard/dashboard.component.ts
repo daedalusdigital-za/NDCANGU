@@ -1269,6 +1269,18 @@ export class DashboardComponent implements OnInit {
     }
 
     userRole: string = '';
+    
+    // National Total Sales Data
+    nationalTotalData = [
+        { item: 'GLUCOSE METER', totalOrdered: 32063, totalDelivered: 22917 },
+        { item: 'GLUCOSE STRIPS', totalOrdered: 182465, totalDelivered: 133547 },
+        { item: 'HB METER', totalOrdered: 504, totalDelivered: 504 },
+        { item: 'HB STRIPS', totalOrdered: 7499, totalDelivered: 7499 },
+        { item: 'HBA1C METERS', totalOrdered: 155, totalDelivered: 155 },
+        { item: 'HBA1C STRIPS', totalOrdered: 349, totalDelivered: 349 },
+        { item: 'MULTI-FUNCTIONAL METER', totalOrdered: 1, totalDelivered: 1 }
+    ];
+
     constructor(private globalService: GlobalService) { }
 
     ngOnInit(): void {
@@ -1843,5 +1855,32 @@ export class DashboardComponent implements OnInit {
             // Add more data here or fetch from API
           ];
           this.globalService.generatePDF(jsonData, new Date().getTime()+'_data');
+    }
+
+    // National Total calculation methods
+    getTotalOrdered(): number {
+        return this.nationalTotalData.reduce((sum, item) => sum + item.totalOrdered, 0);
+    }
+
+    getTotalDelivered(): number {
+        return this.nationalTotalData.reduce((sum, item) => sum + item.totalDelivered, 0);
+    }
+
+    getDeliveryRate(): number {
+        const ordered = this.getTotalOrdered();
+        const delivered = this.getTotalDelivered();
+        return ordered > 0 ? Math.round((delivered / ordered) * 100) : 0;
+    }
+
+    getItemDeliveryRate(item: any): number {
+        return item.totalOrdered > 0 ? Math.round((item.totalDelivered / item.totalOrdered) * 100) : 0;
+    }
+
+    formatNumber(num: number): string {
+        return num.toLocaleString();
+    }
+
+    trackByItem(index: number, item: any): string {
+        return item.item;
     }
 }

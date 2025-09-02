@@ -115,20 +115,43 @@
                                         <th>Product</th>
                                         <th>Amount</th>
                                         <th>Date</th>
+                                        <th>Delivery Rate</th>
                                         <th>Status</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr *ngFor="let sale of recentSales">
-                                        <td>{{sale.id}}</td>
+                                        <td><strong>{{sale.id}}</strong></td>
                                         <td>{{sale.customerName}}</td>
                                         <td>{{sale.productName}}</td>
-                                        <td>R{{sale.amount | number}}</td>
-                                        <td>{{sale.date | date:'short'}}</td>
+                                        <td><strong>{{formatNumber(sale.amount)}}</strong></td>
+                                        <td>{{sale.date | date:'MMM dd, yyyy'}}</td>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <div class="progress me-2" style="width: 60px; height: 6px;">
+                                                    <div class="progress-bar" 
+                                                         [class.bg-success]="sale.deliveryRate >= 80"
+                                                         [class.bg-warning]="sale.deliveryRate >= 50 && sale.deliveryRate < 80"
+                                                         [class.bg-danger]="sale.deliveryRate < 50"
+                                                         [style.width.%]="sale.deliveryRate">
+                                                    </div>
+                                                </div>
+                                                <span class="fw-bold" 
+                                                      [class.text-success]="sale.deliveryRate >= 80"
+                                                      [class.text-warning]="sale.deliveryRate >= 50 && sale.deliveryRate < 80"
+                                                      [class.text-danger]="sale.deliveryRate < 50">
+                                                    {{sale.deliveryRate}}%
+                                                </span>
+                                            </div>
+                                        </td>
                                         <td>
                                             <span class="badge" 
-                                                  [class.badge-success]="sale.status === 'Completed'"
-                                                  [class.badge-warning]="sale.status === 'Pending'">
+                                                  [class.bg-success]="sale.status === 'Completed'"
+                                                  [class.bg-warning]="sale.status === 'Pending' || sale.status === 'In Progress'"
+                                                  [class.bg-danger]="sale.status === 'Delayed'">
+                                                <i class="fas fa-check-circle me-1" *ngIf="sale.status === 'Completed'"></i>
+                                                <i class="fas fa-clock me-1" *ngIf="sale.status === 'Pending' || sale.status === 'In Progress'"></i>
+                                                <i class="fas fa-exclamation-triangle me-1" *ngIf="sale.status === 'Delayed'"></i>
                                                 {{sale.status}}
                                             </span>
                                         </td>
@@ -165,8 +188,194 @@
             </div>
         </div>
 
+        <!-- Provincial Breakdown Section -->
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header bg-gradient-info text-white">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h4 class="card-title mb-0 text-white">
+                                <i class="fas fa-map-marked-alt me-2"></i>
+                                Provincial Sales Breakdown
+                            </h4>
+                            <span class="badge bg-light text-dark">
+                                {{provincialData.length}} Provinces
+                            </span>
+                        </div>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="accordion" id="provincialAccordion">
+                            <div class="accordion-item" *ngFor="let province of provincialData; let i = index">
+                                <h2 class="accordion-header" [id]="'heading' + i">
+                                    <button class="accordion-button" 
+                                            [class.collapsed]="i !== 0"
+                                            type="button" 
+                                            data-bs-toggle="collapse" 
+                                            [attr.data-bs-target]="'#collapse' + i"
+                                            [attr.aria-expanded]="i === 0"
+                                            [attr.aria-controls]="'collapse' + i">
+                                        <div class="d-flex justify-content-between align-items-center w-100 me-3">
+                                            <div class="d-flex align-items-center">
+                                                <div class="avatar-sm rounded-circle me-3 d-flex align-items-center justify-content-center"
+                                                     [class.bg-success]="getProvinceDeliveryRate(province) >= 80"
+                                                     [class.bg-warning]="getProvinceDeliveryRate(province) >= 50 && getProvinceDeliveryRate(province) < 80"
+                                                     [class.bg-danger]="getProvinceDeliveryRate(province) < 50">
+                                                    <i class="fas fa-building text-white"></i>
+                                                </div>
+                                                <div>
+                                                    <h6 class="mb-0 fw-bold">{{province.province}}</h6>
+                                                    <small class="text-muted">{{getProvinceTotal(province, 'delivered') | number}} delivered</small>
+                                                </div>
+                                            </div>
+                                            <div class="text-end">
+                                                <div class="fw-bold text-primary mb-1">{{getProvinceDeliveryRate(province)}}%</div>
+                                                <div class="progress" style="width: 100px; height: 6px;">
+                                                    <div class="progress-bar" 
+                                                         [class.bg-success]="getProvinceDeliveryRate(province) >= 80"
+                                                         [class.bg-warning]="getProvinceDeliveryRate(province) >= 50 && getProvinceDeliveryRate(province) < 80"
+                                                         [class.bg-danger]="getProvinceDeliveryRate(province) < 50"
+                                                         [style.width.%]="getProvinceDeliveryRate(province)">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </button>
+                                </h2>
+                                <div [id]="'collapse' + i" 
+                                     class="accordion-collapse collapse"
+                                     [class.show]="i === 0"
+                                     [attr.aria-labelledby]="'heading' + i"
+                                     data-bs-parent="#provincialAccordion">
+                                    <div class="accordion-body">
+                                        <!-- Province Summary -->
+                                        <div class="row mb-3">
+                                            <div class="col-md-3">
+                                                <div class="text-center p-3 border rounded">
+                                                    <h5 class="text-primary mb-1">{{formatNumber(getProvinceTotal(province, 'ordered'))}}</h5>
+                                                    <small class="text-muted">Total Ordered</small>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="text-center p-3 border rounded">
+                                                    <h5 class="text-success mb-1">{{formatNumber(getProvinceTotal(province, 'delivered'))}}</h5>
+                                                    <small class="text-muted">Total Delivered</small>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="text-center p-3 border rounded">
+                                                    <h5 class="text-warning mb-1">{{formatNumber(getProvinceTotal(province, 'ordered') - getProvinceTotal(province, 'delivered'))}}</h5>
+                                                    <small class="text-muted">Pending</small>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="text-center p-3 border rounded">
+                                                    <h5 class="mb-1" 
+                                                        [class.text-success]="getProvinceDeliveryRate(province) >= 80"
+                                                        [class.text-warning]="getProvinceDeliveryRate(province) >= 50 && getProvinceDeliveryRate(province) < 80"
+                                                        [class.text-danger]="getProvinceDeliveryRate(province) < 50">
+                                                        {{getProvinceDeliveryRate(province)}}%
+                                                    </h5>
+                                                    <small class="text-muted">Delivery Rate</small>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Comments Section -->
+                                        <div class="row mb-3" *ngIf="hasComments(province)">
+                                            <div class="col-12">
+                                                <ng-container *ngFor="let item of province.data">
+                                                    <div class="alert alert-info" *ngIf="item.comment && item.comment.trim() !== ''">
+                                                        <strong>{{item.item}} Notes:</strong>
+                                                        <p class="mb-0 mt-1">{{item.comment}}</p>
+                                                    </div>
+                                                </ng-container>
+                                            </div>
+                                        </div>
+
+                                        <!-- Detailed Item Breakdown -->
+                                        <div class="table-responsive">
+                                            <table class="table table-sm table-borderless">
+                                                <thead class="table-light">
+                                                    <tr>
+                                                        <th>Equipment Type</th>
+                                                        <th class="text-center">Ordered</th>
+                                                        <th class="text-center">Delivered</th>
+                                                        <th class="text-center">Pending</th>
+                                                        <th class="text-center">Rate</th>
+                                                        <th class="text-center">Status</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr *ngFor="let item of province.data" 
+                                                        [class.table-success]="getItemDeliveryRate(item) === 100"
+                                                        [class.table-warning]="getItemDeliveryRate(item) >= 50 && getItemDeliveryRate(item) < 100 && item.ordered > 0"
+                                                        [class.table-danger]="getItemDeliveryRate(item) < 50 && item.ordered > 0">
+                                                        <td>
+                                                            <div class="d-flex align-items-center">
+                                                                <div class="avatar-xs rounded-circle me-2 d-flex align-items-center justify-content-center"
+                                                                     [class.bg-success]="getItemDeliveryRate(item) === 100"
+                                                                     [class.bg-warning]="getItemDeliveryRate(item) >= 50 && getItemDeliveryRate(item) < 100 && item.ordered > 0"
+                                                                     [class.bg-danger]="getItemDeliveryRate(item) < 50 && item.ordered > 0"
+                                                                     [class.bg-secondary]="item.ordered === 0">
+                                                                    <i class="fas fa-vial text-white" style="font-size: 0.6rem;"></i>
+                                                                </div>
+                                                                <span class="fw-medium">{{item.item}}</span>
+                                                            </div>
+                                                        </td>
+                                                        <td class="text-center">
+                                                            <span class="fw-bold text-primary">{{formatNumber(item.ordered)}}</span>
+                                                        </td>
+                                                        <td class="text-center">
+                                                            <span class="fw-bold text-success">{{formatNumber(item.delivered)}}</span>
+                                                        </td>
+                                                        <td class="text-center">
+                                                            <span class="fw-bold text-warning">{{formatNumber(item.ordered - item.delivered)}}</span>
+                                                        </td>
+                                                        <td class="text-center">
+                                                            <div class="d-flex align-items-center justify-content-center">
+                                                                <div class="progress me-2" style="width: 40px; height: 6px;" *ngIf="item.ordered > 0">
+                                                                    <div class="progress-bar" 
+                                                                         [class.bg-success]="getItemDeliveryRate(item) === 100"
+                                                                         [class.bg-warning]="getItemDeliveryRate(item) >= 50 && getItemDeliveryRate(item) < 100"
+                                                                         [class.bg-danger]="getItemDeliveryRate(item) < 50"
+                                                                         [style.width.%]="getItemDeliveryRate(item)">
+                                                                    </div>
+                                                                </div>
+                                                                <span class="fw-bold" 
+                                                                      [class.text-success]="getItemDeliveryRate(item) === 100"
+                                                                      [class.text-warning]="getItemDeliveryRate(item) >= 50 && getItemDeliveryRate(item) < 100 && item.ordered > 0"
+                                                                      [class.text-danger]="getItemDeliveryRate(item) < 50 && item.ordered > 0"
+                                                                      [class.text-muted]="item.ordered === 0">
+                                                                    {{item.ordered > 0 ? getItemDeliveryRate(item) + '%' : 'N/A'}}
+                                                                </span>
+                                                            </div>
+                                                        </td>
+                                                        <td class="text-center">
+                                                            <span class="badge badge-sm"
+                                                                  [class.bg-success]="getItemDeliveryRate(item) === 100"
+                                                                  [class.bg-warning]="getItemDeliveryRate(item) >= 50 && getItemDeliveryRate(item) < 100 && item.ordered > 0"
+                                                                  [class.bg-danger]="getItemDeliveryRate(item) < 50 && item.ordered > 0"
+                                                                  [class.bg-secondary]="item.ordered === 0">
+                                                                {{item.ordered === 0 ? 'No Orders' : 
+                                                                  getItemDeliveryRate(item) === 100 ? 'Complete' : 
+                                                                  getItemDeliveryRate(item) >= 50 ? 'In Progress' : 'Delayed'}}
+                                                            </span>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Quick Actions -->
-        <div class="row">
+        <div class="row mt-4">
             <div class="col-12">
                 <div class="card">
                     <div class="card-header">
