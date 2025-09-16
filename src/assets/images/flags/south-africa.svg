@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3 2">
+  <!-- Red horizontal stripe (top) -->
+  <rect x="0" y="0" width="3" height="0.333" fill="#de3831"/>
+  <!-- Blue horizontal stripe (bottom) -->
+  <rect x="0" y="1.667" width="3" height="0.333" fill="#002395"/>
+  <!-- White horizontal stripe (top center) -->
+  <rect x="1" y="0.333" width="2" height="0.167" fill="#ffffff"/>
+  <!-- White horizontal stripe (bottom center) -->
+  <rect x="1" y="1.5" width="2" height="0.167" fill="#ffffff"/>
+  <!-- Green horizontal stripe (center) -->
+  <rect x="1" y="0.667" width="2" height="0.667" fill="#007a4d"/>
+  
+  <!-- Green triangle from left -->
+  <polygon points="0,0 0,2 1,1" fill="#007a4d"/>
+  <!-- Yellow/Gold triangle (inside green) -->
+  <polygon points="0,0 1,1 0.5,0" fill="#ffb612"/>
+  <polygon points="0,2 1,1 0.5,2" fill="#ffb612"/>
+  <!-- Black triangle (Y-shape center) -->
+  <polygon points="0.5,0 1,1 0.75,0" fill="#000000"/>
+  <polygon points="0.5,2 1,1 0.75,2" fill="#000000"/>
+  <!-- Black horizontal center line -->
+  <rect x="0.75" y="0.9" width="0.25" height="0.2" fill="#000000"/>
+  
+  <!-- White outline triangles -->
+  <polygon points="0.75,0 1,1 0.85,0" fill="#ffffff"/>
+  <polygon points="0.75,2 1,1 0.85,2" fill="#ffffff"/>
+</svg>

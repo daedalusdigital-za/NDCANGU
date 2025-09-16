@@ -377,9 +377,9 @@
   }
 }
 
-// Province Selector
-.province-selector {
-  .province-btn {
+// Country Display (South Africa)
+.country-display {
+  .country-info {
     display: flex;
     align-items: center;
     gap: 0.75rem;
@@ -389,18 +389,9 @@
     background: rgba(255, 255, 255, 0.1);
     color: white;
     font-size: 0.9rem;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    cursor: pointer;
     backdrop-filter: blur(10px);
     
-    &:hover {
-      background: rgba(255, 255, 255, 0.15);
-      border-color: rgba(255, 255, 255, 0.3);
-      transform: translateY(-1px);
-      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
-    }
-    
-    .province-flag {
+    .country-flag {
       width: 24px;
       height: 18px;
       border-radius: 4px;
@@ -408,178 +399,10 @@
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
     
-    .province-name {
+    .country-name {
       font-weight: 600;
       font-size: 0.9rem;
-    }
-    
-    .dropdown-arrow {
-      font-size: 0.8rem;
-      opacity: 0.8;
-      transition: transform 0.3s ease;
-    }
-    
-    &[aria-expanded="true"] .dropdown-arrow {
-      transform: rotate(180deg);
-    }
-  }
-}
-
-.province-dropdown {
-  width: 380px;
-  border: none;
-  border-radius: 16px;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
-  padding: 1.5rem;
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(20px);
-  
-  .province-header {
-    margin-bottom: 1.5rem;
-    
-    h6 {
-      margin: 0;
-      font-weight: 700;
-      color: #1e3a8a;
-      font-size: 1.1rem;
-    }
-  }
-  
-  .province-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 0.75rem;
-    
-    .province-item {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 1rem;
-      border: 2px solid #e5e7eb;
-      border-radius: 12px;
-      text-decoration: none;
-      color: #374151;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      cursor: pointer;
-      position: relative;
-      
-      &::before {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: linear-gradient(135deg, #1e3a8a 0%, #1d4ed8 100%);
-        border-radius: 10px;
-        opacity: 0;
-        transition: opacity 0.3s ease;
-      }
-      
-      &:hover {
-        border-color: #1d4ed8;
-        transform: translateY(-2px);
-        box-shadow: 0 8px 20px rgba(29, 78, 216, 0.2);
-        color: white;
-        
-        &::before {
-          opacity: 1;
-        }
-        
-        img, span {
-          position: relative;
-          z-index: 10;
-        }
-      }
-      
-      img {
-        width: 32px;
-        height: 24px;
-        object-fit: cover;
-        border-radius: 4px;
-        margin-bottom: 0.75rem;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-      }
-      
-      span {
-        font-size: 0.85rem;
-        font-weight: 600;
-        text-align: center;
-        line-height: 1.3;
-      }
-    }
-  }
-}
-
-// District Selector
-.district-selector {
-  .district-btn {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.5rem 1rem;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 25px;
-    background: rgba(255, 255, 255, 0.1);
-    color: white;
-    font-size: 0.9rem;
-    transition: all 0.3s ease;
-    cursor: pointer;
-    
-    &:hover {
-      background: rgba(255, 255, 255, 0.2);
-      border-color: rgba(255, 255, 255, 0.3);
-    }
-    
-    .district-name {
-      font-weight: 500;
-    }
-    
-    .dropdown-arrow {
-      font-size: 0.8rem;
-      opacity: 0.7;
-    }
-  }
-}
-
-.district-dropdown {
-  width: 250px;
-  border: none;
-  border-radius: 12px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
-  padding: 1rem;
-  
-  .district-header {
-    margin-bottom: 1rem;
-    
-    h6 {
-      margin: 0;
-      font-weight: 600;
-      color: #333;
-    }
-  }
-  
-  .district-list {
-    max-height: 200px;
-    overflow-y: auto;
-    
-    .district-item {
-      display: block;
-      padding: 0.75rem;
-      border-radius: 6px;
-      text-decoration: none;
-      color: #333;
-      transition: all 0.2s ease;
-      cursor: pointer;
-      
-      &:hover {
-        background: #f8f9fa;
-        color: #007bff;
-      }
-      
-      span {
-        font-weight: 500;
-      }
+      white-space: nowrap;
     }
   }
 }
@@ -1292,14 +1115,11 @@
     }
   }
   
-  .province-selector,
-  .district-selector {
-    .province-btn,
-    .district-btn {
+  .country-display {
+    .country-info {
       padding: 0.5rem;
       
-      .province-name,
-      .district-name {
+      .country-name {
         display: none;
       }
     }

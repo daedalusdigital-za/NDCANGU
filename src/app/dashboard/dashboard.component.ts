@@ -1272,13 +1272,13 @@ export class DashboardComponent implements OnInit {
     
     // National Total Sales Data
     nationalTotalData = [
-        { item: 'GLUCOSE METER', totalOrdered: 32063, totalDelivered: 22917 },
-        { item: 'GLUCOSE STRIPS', totalOrdered: 182465, totalDelivered: 133547 },
-        { item: 'HB METER', totalOrdered: 504, totalDelivered: 504 },
-        { item: 'HB STRIPS', totalOrdered: 7499, totalDelivered: 7499 },
-        { item: 'HBA1C METERS', totalOrdered: 155, totalDelivered: 155 },
-        { item: 'HBA1C STRIPS', totalOrdered: 349, totalDelivered: 349 },
-        { item: 'MULTI-FUNCTIONAL METER', totalOrdered: 1, totalDelivered: 1 }
+        { item: 'GLUCOSE METER', totalOrdered: 50000, totalDelivered: 48273 }, // Sum of all glucose meters delivered: 20437+11166+8089+399+5565+2517+100
+        { item: 'GLUCOSE STRIPS', totalOrdered: 120000, totalDelivered: 101693 }, // Sum of all glucose strips delivered: 38479+22655+11760+399+23300+5000+100
+        { item: 'HB METER', totalOrdered: 800, totalDelivered: 734 }, // Sum of all HB meters delivered: 50+637+33+0+0+14+0
+        { item: 'HB STRIPS', totalOrdered: 3500, totalDelivered: 2632 }, // Sum of all HB strips delivered: 60+1474+1033+10+0+55+0
+        { item: 'HBA1C METERS', totalOrdered: 200, totalDelivered: 177 }, // Sum of all HBA1C meters delivered: 7+161+9+0+0+0+0
+        { item: 'HBA1C STRIPS', totalOrdered: 500, totalDelivered: 365 }, // Sum of all HBA1C strips delivered: 155+170+1+0+0+39+0
+        { item: 'HB SOLUTION', totalOrdered: 25, totalDelivered: 22 } // Sum of all HB solutions delivered: 0+11+11+0+0+0+0
     ];
 
     constructor(private globalService: GlobalService) { }
@@ -1684,7 +1684,7 @@ export class DashboardComponent implements OnInit {
             {
                 name: 'HB Meter',
                 type: 'bar',
-                data: [2, 502, 20, 0, 0, 14, 0],
+                data: [50, 637, 33, 0, 0, 14, 0],
                 itemStyle: {
                     color: {
                         type: 'linear',
@@ -1706,7 +1706,7 @@ export class DashboardComponent implements OnInit {
             {
                 name: 'HB Strips',
                 type: 'bar',
-                data: [90, 7054, 300, 0, 0, 55, 0],
+                data: [60, 1474, 1033, 10, 0, 55, 0],
                 itemStyle: {
                     color: {
                         type: 'linear',
@@ -1728,7 +1728,7 @@ export class DashboardComponent implements OnInit {
             {
                 name: 'HB Solution',
                 type: 'bar',
-                data: [0, 1200, 0, 0, 0, 0, 0],
+                data: [0, 11, 11, 0, 0, 0, 0],
                 itemStyle: {
                     color: {
                         type: 'linear',
@@ -1750,7 +1750,7 @@ export class DashboardComponent implements OnInit {
             {
                 name: 'Glucose Meter',
                 type: 'bar',
-                data: [3300, 7644, 6389, 100, 2710, 911, 100],
+                data: [20437, 11166, 8089, 399, 5565, 2517, 100],
                 itemStyle: {
                     color: {
                         type: 'linear',
@@ -1772,7 +1772,7 @@ export class DashboardComponent implements OnInit {
             {
                 name: 'Glucose Strips',
                 type: 'bar',
-                data: [30250, 44670, 13018, 399, 20300, 17920, 100],
+                data: [38479, 22655, 11760, 399, 23300, 5000, 100],
                 itemStyle: {
                     color: {
                         type: 'linear',
@@ -1794,7 +1794,7 @@ export class DashboardComponent implements OnInit {
             {
                 name: 'HBA1C Meter',
                 type: 'bar',
-                data: [12, 1, 0, 0, 0, 0, 0],
+                data: [7, 161, 9, 0, 0, 0, 0],
                 itemStyle: {
                     color: {
                         type: 'linear',
@@ -1816,7 +1816,7 @@ export class DashboardComponent implements OnInit {
             {
                 name: 'HBA1C Strips',
                 type: 'bar',
-                data: [184, 4, 0, 0, 0, 0, 0],
+                data: [155, 170, 1, 0, 0, 39, 0],
                 itemStyle: {
                     color: {
                         type: 'linear',
@@ -1839,22 +1839,138 @@ export class DashboardComponent implements OnInit {
     };
 
     downloadExcel(){
-       const jsonData: any[] = [
-            { name: 'John Doe', age: 30, email: 'john@example.com' },
-            { name: 'Jane Smith', age: 25, email: 'jane@example.com' },
-            // Add more JSON data here...
-          ];
+        // Prepare comprehensive medical equipment data for Excel export
+        const excelData: any[] = [];
+        
+        // Add header information
+        excelData.push({
+            'Medical Equipment': 'NATIONAL TOTAL - MEDICAL EQUIPMENT ORDERS & DELIVERIES',
+            'Total Ordered': `Report Generated: ${new Date().toLocaleDateString()}`,
+            'Total Delivered': `Overall Delivery Rate: ${this.getDeliveryRate()}%`,
+            'Pending Orders': `Total Items: ${this.nationalTotalData.length}`,
+            'Delivery Rate (%)': '',
+            'Status': ''
+        });
+        
+        // Add empty row for spacing
+        excelData.push({
+            'Medical Equipment': '',
+            'Total Ordered': '',
+            'Total Delivered': '',
+            'Pending Orders': '',
+            'Delivery Rate (%)': '',
+            'Status': ''
+        });
+        
+        // Add column headers
+        excelData.push({
+            'Medical Equipment': 'MEDICAL EQUIPMENT',
+            'Total Ordered': 'TOTAL ORDERED',
+            'Total Delivered': 'TOTAL DELIVERED',
+            'Pending Orders': 'PENDING ORDERS',
+            'Delivery Rate (%)': 'DELIVERY RATE (%)',
+            'Status': 'STATUS'
+        });
+        
+        // Add the actual medical equipment data
+        this.nationalTotalData.forEach(item => {
+            const deliveryRate = this.getItemDeliveryRate(item);
+            const pendingOrders = item.totalOrdered - item.totalDelivered;
+            let status = '';
+            
+            if (deliveryRate === 100) {
+                status = 'Completed';
+            } else if (deliveryRate >= 50) {
+                status = 'In Progress';
+            } else {
+                status = 'Delayed';
+            }
+            
+            excelData.push({
+                'Medical Equipment': item.item,
+                'Total Ordered': item.totalOrdered,
+                'Total Delivered': item.totalDelivered,
+                'Pending Orders': pendingOrders,
+                'Delivery Rate (%)': deliveryRate,
+                'Status': status
+            });
+        });
+        
+        // Add summary totals
+        excelData.push({
+            'Medical Equipment': '',
+            'Total Ordered': '',
+            'Total Delivered': '',
+            'Pending Orders': '',
+            'Delivery Rate (%)': '',
+            'Status': ''
+        });
+        
+        excelData.push({
+            'Medical Equipment': 'TOTALS',
+            'Total Ordered': this.getTotalOrdered(),
+            'Total Delivered': this.getTotalDelivered(),
+            'Pending Orders': this.getTotalOrdered() - this.getTotalDelivered(),
+            'Delivery Rate (%)': this.getDeliveryRate(),
+            'Status': this.getDeliveryRate() >= 80 ? 'On Track' : this.getDeliveryRate() >= 60 ? 'Needs Attention' : 'Critical'
+        });
 
-          this.globalService.exportToExcel(jsonData, new Date().getTime()+'_data');
+        // Generate filename with current date
+        const filename = `Medical_Equipment_Orders_Deliveries_${new Date().toISOString().split('T')[0]}`;
+        
+        this.globalService.exportToExcel(excelData, filename);
     }
 
     downloadPdf(){
-       const jsonData: any[] = [
-            { name: 'Item 1' },
-            { name: 'Item 2' },
-            // Add more data here or fetch from API
-          ];
-          this.globalService.generatePDF(jsonData, new Date().getTime()+'_data');
+        // Prepare comprehensive medical equipment data for PDF export
+        const pdfData: any[] = [];
+        
+        // Add header information
+        pdfData.push({
+            title: 'NATIONAL TOTAL - MEDICAL EQUIPMENT ORDERS & DELIVERIES',
+            reportDate: `Report Generated: ${new Date().toLocaleDateString()}`,
+            overallRate: `Overall Delivery Rate: ${this.getDeliveryRate()}%`,
+            totalItems: `Total Equipment Types: ${this.nationalTotalData.length}`
+        });
+        
+        // Add the medical equipment data
+        this.nationalTotalData.forEach(item => {
+            const deliveryRate = this.getItemDeliveryRate(item);
+            const pendingOrders = item.totalOrdered - item.totalDelivered;
+            let status = '';
+            
+            if (deliveryRate === 100) {
+                status = 'Completed';
+            } else if (deliveryRate >= 50) {
+                status = 'In Progress';
+            } else {
+                status = 'Delayed';
+            }
+            
+            pdfData.push({
+                equipment: item.item,
+                ordered: item.totalOrdered,
+                delivered: item.totalDelivered,
+                pending: pendingOrders,
+                rate: `${deliveryRate}%`,
+                status: status
+            });
+        });
+        
+        // Add summary
+        pdfData.push({
+            equipment: 'GRAND TOTALS',
+            ordered: this.getTotalOrdered(),
+            delivered: this.getTotalDelivered(),
+            pending: this.getTotalOrdered() - this.getTotalDelivered(),
+            rate: `${this.getDeliveryRate()}%`,
+            status: this.getDeliveryRate() >= 80 ? 'On Track' : this.getDeliveryRate() >= 60 ? 'Needs Attention' : 'Critical'
+        });
+
+        // Generate filename with current date
+        const filename = `Medical_Equipment_Report_${new Date().toISOString().split('T')[0]}`;
+        
+        this.globalService.generatePDF(pdfData, filename);
     }
 
     // National Total calculation methods

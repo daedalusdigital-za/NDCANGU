@@ -44,80 +44,11 @@
                 </div>
             </div>
 
-            <!-- Province Selector -->
-            <div class="province-selector dropdown">
-                <button type="button" class="province-btn" data-bs-toggle="dropdown">
-                    <img [src]="flagImg" alt="Province Flag" class="province-flag">
-                    <span class="province-name">{{ flagText }}</span>
-                    <i class="fas fa-chevron-down dropdown-arrow"></i>
-                </button>
-                <div class="dropdown-menu province-dropdown">
-                    <div class="province-header">
-                        <h6>Select Province</h6>
-                    </div>
-                    <div class="province-grid">
-                        <div class="province-group">
-                            <a class="province-item" (click)="changeFlagItem('assets/images/flags/spain.png', 'Gauteng')">
-                                <img src="assets/images/flags/spain.png" alt="Gauteng">
-                                <span>Gauteng</span>
-                            </a>
-                            <a class="province-item" (click)="changeFlagItem('assets/images/flags/germany.png', 'Northern Cape')">
-                                <img src="assets/images/flags/germany.png" alt="Northern Cape">
-                                <span>Northern Cape</span>
-                            </a>
-                            <a class="province-item" (click)="changeFlagItem('assets/images/flags/italy.png', 'KwaZulu-Natal')">
-                                <img src="assets/images/flags/italy.png" alt="KwaZulu-Natal">
-                                <span>KwaZulu-Natal</span>
-                            </a>
-                        </div>
-                        <div class="province-group">
-                            <a class="province-item" (click)="changeFlagItem('assets/images/flags/Mpumalanga.png', 'Mpumalanga')">
-                                <img src="assets/images/flags/Mpumalanga.png" alt="Mpumalanga">
-                                <span>Mpumalanga</span>
-                            </a>
-                            <a class="province-item" (click)="changeFlagItem('assets/images/flags/russia.png', 'Free State')">
-                                <img src="assets/images/flags/russia.png" alt="Free State">
-                                <span>Free State</span>
-                            </a>
-                            <a class="province-item" (click)="changeFlagItem('assets/images/flags/westen-cape.png', 'Western Cape')">
-                                <img src="assets/images/flags/westen-cape.png" alt="Western Cape">
-                                <span>Western Cape</span>
-                            </a>
-                        </div>
-                        <div class="province-group">
-                            <a class="province-item" (click)="changeFlagItem('assets/images/flags/limpopo.png', 'Limpopo')">
-                                <img src="assets/images/flags/limpopo.png" alt="Limpopo">
-                                <span>Limpopo</span>
-                            </a>
-                            <a class="province-item" (click)="changeFlagItem('assets/images/flags/Northen.png', 'North West')">
-                                <img src="assets/images/flags/Northen.png" alt="North West">
-                                <span>North West</span>
-                            </a>
-                            <a class="province-item" (click)="changeFlagItem('assets/images/flags/east.png', 'Eastern Cape')">
-                                <img src="assets/images/flags/east.png" alt="Eastern Cape">
-                                <span>Eastern Cape</span>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- District Selector -->
-            <div class="district-selector dropdown">
-                <button type="button" class="district-btn" data-bs-toggle="dropdown">
-                    <i class="fas fa-map-marker-alt"></i>
-                    <span class="district-name">{{ flagText }}</span>
-                    <i class="fas fa-chevron-down dropdown-arrow"></i>
-                </button>
-                <div class="dropdown-menu district-dropdown">
-                    <div class="district-header">
-                        <h6>Select District</h6>
-                    </div>
-                    <div class="district-list">
-                        <a *ngFor="let item of districts; let i = index" class="district-item" (click)="menuChanges(i)">
-                            <span>{{ item }}</span>
-                        </a>
-                    </div>
+            <!-- South Africa Display -->
+            <div class="country-display">
+                <div class="country-info">
+                    <img src="assets/images/flags/south-africa-final.svg" alt="South Africa Flag" class="country-flag">
+                    <span class="country-name">South Africa</span>
                 </div>
             </div>
 

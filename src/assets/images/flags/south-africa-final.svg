@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 600">
+  <!-- Define the flag proportions: 3:2 ratio, 900x600 -->
+  
+  <!-- Red horizontal band (top) -->
+  <rect x="0" y="0" width="900" height="120" fill="#DE3831"/>
+  
+  <!-- Blue horizontal band (bottom) -->
+  <rect x="0" y="480" width="900" height="120" fill="#002395"/>
+  
+  <!-- White horizontal bands -->
+  <rect x="360" y="120" width="540" height="60" fill="#FFFFFF"/>
+  <rect x="360" y="420" width="540" height="60" fill="#FFFFFF"/>
+  
+  <!-- Green horizontal band (center) -->
+  <rect x="360" y="240" width="540" height="120" fill="#007A4D"/>
+  
+  <!-- Green triangle (left side) -->
+  <polygon points="0,0 0,600 360,300" fill="#007A4D"/>
+  
+  <!-- Gold/Yellow Y-shaped pall -->
+  <polygon points="0,0 0,120 240,240 360,180 360,120 180,0" fill="#FFB612"/>
+  <polygon points="0,600 0,480 240,360 360,420 360,480 180,600" fill="#FFB612"/>
+  
+  <!-- Black Y-shaped pall (inner) -->
+  <polygon points="180,0 240,60 360,180 360,120 240,0" fill="#000000"/>
+  <polygon points="180,600 240,540 360,420 360,480 240,600" fill="#000000"/>
+  
+  <!-- White Y-shaped pall (inner outline) -->
+  <polygon points="240,0 270,30 360,180 360,120 300,0" fill="#FFFFFF"/>
+  <polygon points="240,600 270,570 360,420 360,480 300,600" fill="#FFFFFF"/>
+  
+  <!-- Black horizontal center line -->
+  <rect x="360" y="270" width="60" height="60" fill="#000000"/>
+</svg>
