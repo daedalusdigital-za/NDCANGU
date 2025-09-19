@@ -13,6 +13,20 @@ interface Product {
   lastRestocked: Date;
 }
 
+interface InventoryItem {
+  id: number;
+  itemNumber: string;
+  description: string;
+  location: string;
+  uom: string;
+  qtyOnHand: number;
+  qtyOnPO: number;
+  qtyOnSO: number;
+  stockAvailable: number;
+  totalCostForQOH: number;
+  unitCostForQOH: number;
+}
+
 @Component({
   selector: 'app-product-management',
   templateUrl: './product-management.component.html',
@@ -22,16 +36,20 @@ export class ProductManagementComponent implements OnInit {
 
   products: Product[] = [];
   filteredProducts: Product[] = [];
+  inventoryItems: InventoryItem[] = [];
+  filteredInventoryItems: InventoryItem[] = [];
   showAddForm: boolean = false;
   editingProduct: Product | null = null;
+  currentView: 'products' | 'inventory' = 'inventory';
   
   searchTerm: string = '';
   selectedCategory: string = 'All';
   selectedStatus: string = 'All';
   
   categories = [
-    'All', 'Diagnostic', 'Diabetes Care', 'Basic Care', 'Professional', 
-    'Respiratory', 'Circulation', 'Wound Care', 'Monitoring', 'Surgical'
+    'All', 'Hemoglobin Testing', 'Glucose Testing', 'HBA1C Testing', 
+    'Multiparameter Testing', 'Quality Control', 'Equipment Accessories', 
+    'Disposables', 'Medical Equipment'
   ];
   
   statuses = ['All', 'In Stock', 'Low Stock', 'Out of Stock'];
@@ -64,103 +82,284 @@ export class ProductManagementComponent implements OnInit {
   constructor(private toastr: ToastrService) { }
 
   ngOnInit(): void {
-    this.loadProducts();
+    this.loadInventoryData();
   }
 
   loadProducts(): void {
-    // South African medical products with ZAR pricing
-    this.products = [
+    // Generate products from NDOH inventory items
+    this.products = this.inventoryItems.map(item => ({
+      id: item.id,
+      name: `${item.itemNumber} - ${item.description}`,
+      category: this.getCategoryFromDescription(item.description),
+      price: item.unitCostForQOH,
+      stock: item.stockAvailable, // Use Stock Available instead of Qty on Hand
+      supplier: 'NDOH Supplier',
+      description: item.description,
+      status: this.getStatusFromStock(item.qtyOnHand), // Status based on Qty on Hand
+      lastRestocked: new Date('2024-01-15')
+    }));
+    
+    this.filteredProducts = [...this.products];
+  }
+
+  private getCategoryFromDescription(description: string): string {
+    if (description.includes('HEMOGLOBIN')) return 'Hemoglobin Testing';
+    if (description.includes('GLUCOSE')) return 'Glucose Testing';
+    if (description.includes('HBA1C')) return 'HBA1C Testing';
+    if (description.includes('MULTIPARAMETER')) return 'Multiparameter Testing';
+    if (description.includes('QUALITY CONTROL')) return 'Quality Control';
+    if (description.includes('BATTERY')) return 'Equipment Accessories';
+    if (description.includes('LANCET')) return 'Disposables';
+    return 'Medical Equipment';
+  }
+
+  private getStatusFromStock(stockAvailable: number): string {
+    if (stockAvailable <= 0) return 'Out of Stock';
+    if (stockAvailable < 100) return 'Low Stock';
+    return 'In Stock';
+  }
+
+  loadInventoryData(): void {
+    // Medical Equipment Inventory Data based on NDOH items
+    this.inventoryItems = [
       {
         id: 1,
-        name: 'Blood Pressure Monitor (Digital)',
-        category: 'Diagnostic',
-        price: 1200,
-        stock: 25,
-        supplier: 'Adcock Ingram Healthcare',
-        description: 'Automatic digital blood pressure monitor with memory function',
-        status: 'In Stock',
-        lastRestocked: new Date('2024-01-10')
+        itemNumber: 'NDOH35002',
+        description: 'HEMOGLOBIN METER - BIO AID HB METER',
+        location: 'KZN 1',
+        uom: 'Each',
+        qtyOnHand: 8406.00,
+        qtyOnPO: 400.00,
+        qtyOnSO: 0.00,
+        stockAvailable: 8806.00,
+        totalCostForQOH: 3079790.28,
+        unitCostForQOH: 366.38
       },
       {
         id: 2,
-        name: 'Glucose Test Strips (Box of 50)',
-        category: 'Diabetes Care',
-        price: 280,
-        stock: 8,
-        supplier: 'Pharma Dynamics',
-        description: 'Compatible with most glucose meters',
-        status: 'Low Stock',
-        lastRestocked: new Date('2024-01-05')
+        itemNumber: 'NDOH35003',
+        description: 'HEMOGLOBIN TEST STRIPS',
+        location: 'KZN 1',
+        uom: 'BOX',
+        qtyOnHand: 24442.00,
+        qtyOnPO: 1200.00,
+        qtyOnSO: 0.00,
+        stockAvailable: 25642.00,
+        totalCostForQOH: 3153751.26,
+        unitCostForQOH: 129.03
       },
       {
         id: 3,
-        name: 'Digital Thermometer',
-        category: 'Basic Care',
-        price: 125,
-        stock: 50,
-        supplier: 'Dis-Chem Pharmacies',
-        description: 'Fast and accurate digital thermometer',
-        status: 'In Stock',
-        lastRestocked: new Date('2024-01-12')
+        itemNumber: 'NDOH35013',
+        description: 'HEMOGLOBIN METER - BATTERY',
+        location: 'KZN 1',
+        uom: 'Each',
+        qtyOnHand: 0.00,
+        qtyOnPO: 0.00,
+        qtyOnSO: 0.00,
+        stockAvailable: 0.00,
+        totalCostForQOH: 0.00,
+        unitCostForQOH: 0.00
       },
       {
         id: 4,
-        name: 'Pulse Oximeter',
-        category: 'Monitoring',
-        price: 650,
-        stock: 0,
-        supplier: 'Fresenius Kabi',
-        description: 'Fingertip pulse oximeter with OLED display',
-        status: 'Out of Stock',
-        lastRestocked: new Date('2023-12-20')
+        itemNumber: 'NDOH35014',
+        description: 'HEMOGLOBIN METER - QUALITY CONTROL SOLUTIONS',
+        location: 'KZN 1',
+        uom: 'Each',
+        qtyOnHand: 0.00,
+        qtyOnPO: 0.00,
+        qtyOnSO: 0.00,
+        stockAvailable: 0.00,
+        totalCostForQOH: 0.00,
+        unitCostForQOH: 0.00
       },
       {
         id: 5,
-        name: 'Stethoscope (Dual Head)',
-        category: 'Professional',
-        price: 950,
-        stock: 15,
-        supplier: 'Alpha Pharm',
-        description: 'Professional dual-head stethoscope',
-        status: 'In Stock',
-        lastRestocked: new Date('2024-01-08')
+        itemNumber: 'NDOH35015',
+        description: 'HEMOGLOBIN METER - SINGLE USE DISPOSABLE LANCET',
+        location: 'KZN 1',
+        uom: 'Each',
+        qtyOnHand: 500.00,
+        qtyOnPO: 0.00,
+        qtyOnSO: 1300.00,
+        stockAvailable: -800.00,
+        totalCostForQOH: 0.00,
+        unitCostForQOH: 0.00
       },
       {
         id: 6,
-        name: 'Insulin Pen Needles (100 pack)',
-        category: 'Diabetes Care',
-        price: 95,
-        stock: 200,
-        supplier: 'Aspen Pharmacare',
-        description: 'Ultra-fine insulin pen needles',
-        status: 'In Stock',
-        lastRestocked: new Date('2024-01-15')
+        itemNumber: 'NDOH35016',
+        description: 'GLUCOSE METER - BATTERY',
+        location: 'KZN 1',
+        uom: 'Each',
+        qtyOnHand: 0.00,
+        qtyOnPO: 0.00,
+        qtyOnSO: 2930.00,
+        stockAvailable: -2930.00,
+        totalCostForQOH: 0.00,
+        unitCostForQOH: 0.00
       },
       {
         id: 7,
-        name: 'Wound Care Kit',
-        category: 'Wound Care',
-        price: 185,
-        stock: 3,
-        supplier: 'Bodene Healthcare',
-        description: 'Complete wound care and dressing kit',
-        status: 'Low Stock',
-        lastRestocked: new Date('2024-01-03')
+        itemNumber: 'NDOH35017',
+        description: 'GLUCOSE TEST STRIPS',
+        location: 'KZN 1',
+        uom: '50Pack',
+        qtyOnHand: 2321.00,
+        qtyOnPO: 0.00,
+        qtyOnSO: 136109.00,
+        stockAvailable: -133788.00,
+        totalCostForQOH: 197010.25,
+        unitCostForQOH: 84.88
       },
       {
         id: 8,
-        name: 'Nebulizer Machine',
-        category: 'Respiratory',
-        price: 1800,
-        stock: 12,
-        supplier: 'Clicks Group',
-        description: 'Portable nebulizer for respiratory treatments',
-        status: 'In Stock',
-        lastRestocked: new Date('2024-01-11')
+        itemNumber: 'NDOH35004',
+        description: 'GLUCOSE METER- BIO HERMES',
+        location: 'KZN 1',
+        uom: 'Each',
+        qtyOnHand: 7092.00,
+        qtyOnPO: 0.00,
+        qtyOnSO: 24880.00,
+        stockAvailable: -17788.00,
+        totalCostForQOH: 1059259.17,
+        unitCostForQOH: 149.36
+      },
+      {
+        id: 9,
+        itemNumber: 'NDOH35018',
+        description: 'GLOCOSE METER - QUALITY CONTROL SOLUTIONS',
+        location: 'KZN 1',
+        uom: 'Each',
+        qtyOnHand: 569.00,
+        qtyOnPO: 0.00,
+        qtyOnSO: 1480.00,
+        stockAvailable: -911.00,
+        totalCostForQOH: 0.00,
+        unitCostForQOH: 0.00
+      },
+      {
+        id: 10,
+        itemNumber: 'NDOH35006',
+        description: 'DUAL GLUCOSE & HBA1C METER- BIOHERMES',
+        location: 'KZN 1',
+        uom: 'Each',
+        qtyOnHand: 1483.00,
+        qtyOnPO: 0.00,
+        qtyOnSO: 0.00,
+        stockAvailable: 1483.00,
+        totalCostForQOH: 2863152.98,
+        unitCostForQOH: 1930.65
+      },
+      {
+        id: 11,
+        itemNumber: 'NDOH35034',
+        description: 'HBA1C TEST STRIPS',
+        location: 'KZN 1',
+        uom: '50Pack',
+        qtyOnHand: 1974.00,
+        qtyOnPO: 0.00,
+        qtyOnSO: 5.00,
+        stockAvailable: 1969.00,
+        totalCostForQOH: 1307458.10,
+        unitCostForQOH: 662.34
+      },
+      {
+        id: 12,
+        itemNumber: 'NDOH35005',
+        description: 'MULTIPARAMETER - TAIDOC',
+        location: 'KZN 1',
+        uom: 'Each',
+        qtyOnHand: 6971.00,
+        qtyOnPO: 0.00,
+        qtyOnSO: 0.00,
+        stockAvailable: 6971.00,
+        totalCostForQOH: 3407494.51,
+        unitCostForQOH: 488.81
+      },
+      {
+        id: 13,
+        itemNumber: 'NDOH35019',
+        description: 'MULTIPARAMETER - 50 KETONE TEST STRIPS VIAL',
+        location: 'KZN 1',
+        uom: '50Pack',
+        qtyOnHand: 2470.00,
+        qtyOnPO: 0.00,
+        qtyOnSO: 6000.00,
+        stockAvailable: -3530.00,
+        totalCostForQOH: 521053.29,
+        unitCostForQOH: 210.95
+      },
+      {
+        id: 14,
+        itemNumber: 'NDOH35020',
+        description: 'MULTIPARAMETER - 50 URIC ACID VIAL',
+        location: 'KZN 1',
+        uom: '50Pack',
+        qtyOnHand: 969.00,
+        qtyOnPO: 0.00,
+        qtyOnSO: 0.00,
+        stockAvailable: 969.00,
+        totalCostForQOH: 247133.76,
+        unitCostForQOH: 255.04
+      },
+      {
+        id: 15,
+        itemNumber: 'NDOH35021',
+        description: 'MULTIPARAMETER - 50 CHOLESTEROL VIAL',
+        location: 'KZN 1',
+        uom: '50Pack',
+        qtyOnHand: 2082.00,
+        qtyOnPO: 0.00,
+        qtyOnSO: 0.00,
+        stockAvailable: 2082.00,
+        totalCostForQOH: 1327399.92,
+        unitCostForQOH: 637.56
+      },
+      {
+        id: 16,
+        itemNumber: 'NDOH35022',
+        description: 'MULTIPARAMETER - 50 LACTATE VIAL',
+        location: 'KZN 1',
+        uom: '50Pack',
+        qtyOnHand: 970.00,
+        qtyOnPO: 0.00,
+        qtyOnSO: 0.00,
+        stockAvailable: 970.00,
+        totalCostForQOH: 787116.20,
+        unitCostForQOH: 811.46
+      },
+      {
+        id: 17,
+        itemNumber: 'NDOH35036',
+        description: 'DUAL GLUCOSE & HBA1C - QUALITY CONTROL SOLUTION HBA1C',
+        location: 'KZN 1',
+        uom: 'Each',
+        qtyOnHand: 0.00,
+        qtyOnPO: 0.00,
+        qtyOnSO: 19.00,
+        stockAvailable: -19.00,
+        totalCostForQOH: 0.00,
+        unitCostForQOH: 0.00
+      },
+      {
+        id: 18,
+        itemNumber: 'NDOH35037',
+        description: 'DUAL GLUCOSE & HBA1C - QUALITY CONTROL SOLUTIONS GLUCOSE',
+        location: 'KZN 1',
+        uom: 'Each',
+        qtyOnHand: 17000.00,
+        qtyOnPO: 0.00,
+        qtyOnSO: 0.00,
+        stockAvailable: 17000.00,
+        totalCostForQOH: 379440.00,
+        unitCostForQOH: 22.32
       }
     ];
     
-    this.filteredProducts = [...this.products];
+    this.filteredInventoryItems = [...this.inventoryItems];
+    this.loadProducts(); // Generate products from inventory data
   }
 
   applyFilters(): void {
@@ -248,5 +447,56 @@ export class ProductManagementComponent implements OnInit {
       status: 'In Stock',
       lastRestocked: new Date()
     };
+  }
+
+  // Inventory management methods
+  switchView(view: 'products' | 'inventory'): void {
+    this.currentView = view;
+  }
+
+  applyInventoryFilters(): void {
+    this.filteredInventoryItems = this.inventoryItems.filter(item => {
+      const matchesSearch = item.location.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+                           item.description.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+                           item.itemNumber.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+                           item.uom.toLowerCase().includes(this.searchTerm.toLowerCase());
+      
+      return matchesSearch;
+    });
+  }
+
+  getInventoryStatusClass(item: InventoryItem): string {
+    if (item.qtyOnHand <= 0) return 'badge-danger';
+    if (item.qtyOnHand < 100) return 'badge-warning';
+    return 'badge-success';
+  }
+
+  getInventoryStatusText(item: InventoryItem): string {
+    if (item.qtyOnHand <= 0) return 'Out of Stock';
+    if (item.qtyOnHand < 100) return 'Low Stock';
+    return 'In Stock';
+  }
+
+  formatCurrency(amount: number): string {
+    return new Intl.NumberFormat('en-ZA', {
+      style: 'currency',
+      currency: 'ZAR'
+    }).format(amount);
+  }
+
+  formatNumber(num: number): string {
+    return new Intl.NumberFormat('en-ZA').format(num);
+  }
+
+  getInStockCount(): number {
+    return this.inventoryItems.filter(item => item.qtyOnHand > 0).length;
+  }
+
+  getOutOfStockCount(): number {
+    return this.inventoryItems.filter(item => item.qtyOnHand <= 0).length;
+  }
+
+  getTotalInventoryValue(): number {
+    return this.inventoryItems.reduce((sum, item) => sum + item.totalCostForQOH, 0);
   }
 }
