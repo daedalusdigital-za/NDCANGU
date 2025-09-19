@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { GlobalService } from '../services/global/global.service';
+import { DeliveryDataService, ProvinceDeliveryTotals } from '../services/delivery-data.service';
 import { User } from '../shared/interfaces/common.interfaces';
 @Component({
     selector: 'app-dashboard',
@@ -1271,17 +1272,24 @@ export class DashboardComponent implements OnInit {
     userRole: string = '';
     
     // National Total Sales Data
+    // Delivery statistics from actual data
+    deliveryStatistics: any;
+    provinceDeliveryTotals: ProvinceDeliveryTotals[] = [];
+
     nationalTotalData = [
-        { item: 'GLUCOSE METER', totalOrdered: 50000, totalDelivered: 48273 }, // Sum of all glucose meters delivered: 20437+11166+8089+399+5565+2517+100
-        { item: 'GLUCOSE STRIPS', totalOrdered: 120000, totalDelivered: 101693 }, // Sum of all glucose strips delivered: 38479+22655+11760+399+23300+5000+100
-        { item: 'HB METER', totalOrdered: 800, totalDelivered: 734 }, // Sum of all HB meters delivered: 50+637+33+0+0+14+0
-        { item: 'HB STRIPS', totalOrdered: 3500, totalDelivered: 2632 }, // Sum of all HB strips delivered: 60+1474+1033+10+0+55+0
-        { item: 'HBA1C METERS', totalOrdered: 200, totalDelivered: 177 }, // Sum of all HBA1C meters delivered: 7+161+9+0+0+0+0
-        { item: 'HBA1C STRIPS', totalOrdered: 500, totalDelivered: 365 }, // Sum of all HBA1C strips delivered: 155+170+1+0+0+39+0
-        { item: 'HB SOLUTION', totalOrdered: 25, totalDelivered: 22 } // Sum of all HB solutions delivered: 0+11+11+0+0+0+0
+        { item: 'GLUCOSE METER', totalOrdered: 50000, totalDelivered: 48273 }, // Sum: 20437+11166+8089+399+5565+2517+100 = 48273
+        { item: 'GLUCOSE STRIPS', totalOrdered: 120000, totalDelivered: 101693 }, // Sum: 38479+22655+11760+399+23300+5000+100 = 101693
+        { item: 'HB METER', totalOrdered: 800, totalDelivered: 764 }, // Sum: 50+637+63+0+0+14+0 = 764
+        { item: 'HB STRIPS', totalOrdered: 3500, totalDelivered: 2752 }, // Sum: 60+1474+1103+0+0+55+0 = 2752
+        { item: 'HBA1C METERS', totalOrdered: 200, totalDelivered: 7 }, // Sum: 7+0+0+0+0+0+0 = 7 (dual glucose/HBA1C meters)
+        { item: 'HBA1C STRIPS', totalOrdered: 500, totalDelivered: 365 }, // Sum: 155+170+1+0+0+39+0 = 365
+        { item: 'HB SOLUTION', totalOrdered: 25, totalDelivered: 0 } // No HB solution in provided data
     ];
 
-    constructor(private globalService: GlobalService) { }
+    constructor(
+        private globalService: GlobalService,
+        private deliveryDataService: DeliveryDataService
+    ) { }
 
     ngOnInit(): void {
         try {
@@ -1291,6 +1299,9 @@ export class DashboardComponent implements OnInit {
             console.error('Error loading user data:', error);
             this.userRole = 'Guest';
         }
+
+        // Load delivery statistics and data
+        this.loadDeliveryData();
 
         // Initialize occupation chart with all data
         this.updateOccupationChart();
@@ -1684,7 +1695,7 @@ export class DashboardComponent implements OnInit {
             {
                 name: 'HB Meter',
                 type: 'bar',
-                data: [50, 637, 33, 0, 0, 14, 0],
+                data: [50, 637, 63, 0, 0, 14, 0], // KZN, GP, FS, EC, LP, MPU, NC
                 itemStyle: {
                     color: {
                         type: 'linear',
@@ -1706,7 +1717,7 @@ export class DashboardComponent implements OnInit {
             {
                 name: 'HB Strips',
                 type: 'bar',
-                data: [60, 1474, 1033, 10, 0, 55, 0],
+                data: [60, 1474, 1103, 0, 0, 55, 0], // KZN, GP, FS, EC, LP, MPU, NC
                 itemStyle: {
                     color: {
                         type: 'linear',
@@ -1728,7 +1739,7 @@ export class DashboardComponent implements OnInit {
             {
                 name: 'HB Solution',
                 type: 'bar',
-                data: [0, 11, 11, 0, 0, 0, 0],
+                data: [0, 0, 0, 0, 0, 0, 0], // No HB Solution in the provided data
                 itemStyle: {
                     color: {
                         type: 'linear',
@@ -1750,7 +1761,7 @@ export class DashboardComponent implements OnInit {
             {
                 name: 'Glucose Meter',
                 type: 'bar',
-                data: [20437, 11166, 8089, 399, 5565, 2517, 100],
+                data: [20437, 11166, 8089, 399, 5565, 2517, 100], // KZN, GP, FS, EC, LP, MPU, NC
                 itemStyle: {
                     color: {
                         type: 'linear',
@@ -1772,7 +1783,7 @@ export class DashboardComponent implements OnInit {
             {
                 name: 'Glucose Strips',
                 type: 'bar',
-                data: [38479, 22655, 11760, 399, 23300, 5000, 100],
+                data: [38479, 22655, 11760, 399, 23300, 5000, 100], // KZN, GP, FS, EC, LP, MPU, NC
                 itemStyle: {
                     color: {
                         type: 'linear',
@@ -1794,7 +1805,7 @@ export class DashboardComponent implements OnInit {
             {
                 name: 'HBA1C Meter',
                 type: 'bar',
-                data: [7, 161, 9, 0, 0, 0, 0],
+                data: [7, 0, 0, 0, 0, 0, 0], // Only KZN has dual meters (7 units)
                 itemStyle: {
                     color: {
                         type: 'linear',
@@ -1816,7 +1827,7 @@ export class DashboardComponent implements OnInit {
             {
                 name: 'HBA1C Strips',
                 type: 'bar',
-                data: [155, 170, 1, 0, 0, 39, 0],
+                data: [155, 170, 1, 0, 0, 39, 0], // KZN, GP, FS, EC, LP, MPU, NC
                 itemStyle: {
                     color: {
                         type: 'linear',
@@ -1998,5 +2009,73 @@ export class DashboardComponent implements OnInit {
 
     trackByItem(index: number, item: any): string {
         return item.item;
+    }
+
+    /**
+     * Load delivery data and statistics from the delivery data service
+     */
+    loadDeliveryData(): void {
+        try {
+            // Get delivery statistics
+            this.deliveryStatistics = this.deliveryDataService.getDeliveryStatistics();
+            
+            // Get province delivery totals
+            this.provinceDeliveryTotals = this.deliveryDataService.getProvinceDeliveryTotals();
+            
+            // Update national totals with real data
+            this.updateNationalTotalsFromDeliveryData();
+            
+            console.log('Delivery statistics loaded:', this.deliveryStatistics);
+            console.log('Province delivery totals:', this.provinceDeliveryTotals);
+        } catch (error) {
+            console.error('Error loading delivery data:', error);
+        }
+    }
+
+    /**
+     * Update national totals with calculated data from delivery records
+     */
+    updateNationalTotalsFromDeliveryData(): void {
+        const chartData = this.deliveryDataService.getChartDataByProvince();
+        
+        // Calculate totals from chart data
+        const glucoseMeterTotal = chartData.glucoseMeter.reduce((sum: number, val: number) => sum + val, 0);
+        const glucoseStripsTotal = chartData.glucoseStrips.reduce((sum: number, val: number) => sum + val, 0);
+        const hbMeterTotal = chartData.hbMeter.reduce((sum: number, val: number) => sum + val, 0);
+        const hbStripsTotal = chartData.hbStrips.reduce((sum: number, val: number) => sum + val, 0);
+        const hba1cMeterTotal = chartData.hba1cMeter.reduce((sum: number, val: number) => sum + val, 0);
+        const hba1cStripsTotal = chartData.hba1cStrips.reduce((sum: number, val: number) => sum + val, 0);
+
+        // Update national total data with calculated values
+        this.nationalTotalData = [
+            { item: 'GLUCOSE METER', totalOrdered: 50000, totalDelivered: glucoseMeterTotal },
+            { item: 'GLUCOSE STRIPS', totalOrdered: 120000, totalDelivered: glucoseStripsTotal },
+            { item: 'HB METER', totalOrdered: 800, totalDelivered: hbMeterTotal },
+            { item: 'HB STRIPS', totalOrdered: 3500, totalDelivered: hbStripsTotal },
+            { item: 'HBA1C METERS', totalOrdered: 200, totalDelivered: hba1cMeterTotal },
+            { item: 'HBA1C STRIPS', totalOrdered: 500, totalDelivered: hba1cStripsTotal },
+            { item: 'HB SOLUTION', totalOrdered: 25, totalDelivered: 0 }
+        ];
+    }
+
+    /**
+     * Get delivery records for a specific province
+     */
+    getProvinceDeliveryRecords(province: string): any[] {
+        return this.deliveryDataService.getDeliveryRecordsByProvince(province);
+    }
+
+    /**
+     * Get delivery records for a specific item type
+     */
+    getItemDeliveryRecords(itemDescription: string): any[] {
+        return this.deliveryDataService.getDeliveryRecordsByItem(itemDescription);
+    }
+
+    /**
+     * Export all delivery data to Excel format
+     */
+    exportDeliveryData(): any[] {
+        return this.deliveryDataService.exportDeliveryData();
     }
 }
