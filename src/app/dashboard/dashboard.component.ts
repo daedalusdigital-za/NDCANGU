@@ -2346,16 +2346,19 @@ export class DashboardComponent implements OnInit {
         // Prepare comprehensive medical equipment data for PDF export
         const pdfData: any[] = [];
         
-        // Add header information
-        pdfData.push({
-            title: 'NATIONAL TOTAL - MEDICAL EQUIPMENT ORDERS & DELIVERIES',
-            reportDate: `Report Generated: ${new Date().toLocaleDateString()}`,
-            overallRate: `Overall Delivery Rate: ${this.getDeliveryRate()}%`,
-            totalItems: `Total Equipment Types: ${this.nationalTotalData.length}`
-        });
+        // Add header information as formatted strings
+        pdfData.push('NATIONAL TOTAL - MEDICAL EQUIPMENT ORDERS & DELIVERIES');
+        pdfData.push(`Report Generated: ${new Date().toLocaleDateString()}`);
+        pdfData.push(`Overall Delivery Rate: ${this.getDeliveryRate()}%`);
+        pdfData.push(`Total Equipment Types: ${this.nationalTotalData.length}`);
+        pdfData.push(''); // Empty line for spacing
         
-        // Add the medical equipment data
-        this.nationalTotalData.forEach(item => {
+        // Add column headers
+        pdfData.push('MEDICAL EQUIPMENT DETAILS:');
+        pdfData.push('='.repeat(50)); // Separator line
+        
+        // Add the medical equipment data as formatted strings
+        this.nationalTotalData.forEach((item, index) => {
             const deliveryRate = this.getItemDeliveryRate(item);
             const pendingOrders = item.totalOrdered - item.totalDelivered;
             let status = '';
@@ -2368,30 +2371,27 @@ export class DashboardComponent implements OnInit {
                 status = 'Delayed';
             }
             
-            pdfData.push({
-                equipment: item.item,
-                ordered: item.totalOrdered,
-                delivered: item.totalDelivered,
-                pending: pendingOrders,
-                rate: `${deliveryRate}%`,
-                status: status
-            });
+            pdfData.push(`${index + 1}. ${item.item}`);
+            pdfData.push(`   Ordered: ${item.totalOrdered} | Delivered: ${item.totalDelivered} | Pending: ${pendingOrders}`);
+            pdfData.push(`   Delivery Rate: ${deliveryRate}% | Status: ${status}`);
+            pdfData.push(''); // Empty line for spacing
         });
         
         // Add summary
-        pdfData.push({
-            equipment: 'GRAND TOTALS',
-            ordered: this.getTotalOrdered(),
-            delivered: this.getTotalDelivered(),
-            pending: this.getTotalOrdered() - this.getTotalDelivered(),
-            rate: `${this.getDeliveryRate()}%`,
-            status: this.getDeliveryRate() >= 80 ? 'On Track' : this.getDeliveryRate() >= 60 ? 'Needs Attention' : 'Critical'
-        });
+        pdfData.push('='.repeat(50)); // Separator line
+        pdfData.push('GRAND TOTALS:');
+        pdfData.push(`Total Ordered: ${this.getTotalOrdered()}`);
+        pdfData.push(`Total Delivered: ${this.getTotalDelivered()}`);
+        pdfData.push(`Total Pending: ${this.getTotalOrdered() - this.getTotalDelivered()}`);
+        pdfData.push(`Overall Delivery Rate: ${this.getDeliveryRate()}%`);
+        const overallStatus = this.getDeliveryRate() >= 80 ? 'On Track' : this.getDeliveryRate() >= 60 ? 'Needs Attention' : 'Critical';
+        pdfData.push(`Overall Status: ${overallStatus}`);
 
         // Generate filename with current date
         const filename = `Medical_Equipment_Report_${new Date().toISOString().split('T')[0]}`;
+        const title = 'National Medical Equipment Orders & Deliveries Report';
         
-        this.globalService.generatePDF(pdfData, filename);
+        this.globalService.generatePDF(pdfData, filename, title);
     }
 
     // National Total calculation methods
