@@ -1932,6 +1932,416 @@ export class DashboardComponent implements OnInit {
         this.globalService.exportToExcel(excelData, filename);
     }
 
+    /**
+     * Export Total Stock Delivered by Province chart data to Excel
+     */
+    exportStockDeliveredToExcel() {
+        // Prepare stock delivered data for Excel export
+        const excelData: any[] = [];
+        
+        // Add header information
+        excelData.push({
+            'Province': 'TOTAL STOCK DELIVERED BY PROVINCE',
+            'HB Meter': `Report Generated: ${new Date().toLocaleDateString()}`,
+            'HB Strips': 'Healthcare Equipment Distribution Report',
+            'HB Solution': '',
+            'Glucose Meter': '',
+            'Glucose Strips': '',
+            'HBA1C Meter': '',
+            'HBA1C Strips': '',
+            'Total': ''
+        });
+        
+        // Add empty row for spacing
+        excelData.push({
+            'Province': '',
+            'HB Meter': '',
+            'HB Strips': '',
+            'HB Solution': '',
+            'Glucose Meter': '',
+            'Glucose Strips': '',
+            'HBA1C Meter': '',
+            'HBA1C Strips': '',
+            'Total': ''
+        });
+        
+        // Add column headers
+        excelData.push({
+            'Province': 'PROVINCE',
+            'HB Meter': 'HB METER',
+            'HB Strips': 'HB STRIPS',
+            'HB Solution': 'HB SOLUTION',
+            'Glucose Meter': 'GLUCOSE METER',
+            'Glucose Strips': 'GLUCOSE STRIPS',
+            'HBA1C Meter': 'HBA1C METER',
+            'HBA1C Strips': 'HBA1C STRIPS',
+            'Total': 'TOTAL'
+        });
+        
+        // Get the provinces and data from the chart
+        const provinces = this.stockDeliveredChart.xAxis.data; // ['KZN', 'GP', 'FS', 'EC', 'LP', 'MPU', 'NC']
+        const series = this.stockDeliveredChart.series;
+        
+        // Add data for each province
+        provinces.forEach((province: string, index: number) => {
+            const hbMeter = series[0].data[index] || 0;
+            const hbStrips = series[1].data[index] || 0;
+            const hbSolution = series[2].data[index] || 0;
+            const glucoseMeter = series[3].data[index] || 0;
+            const glucoseStrips = series[4].data[index] || 0;
+            const hba1cMeter = series[5].data[index] || 0;
+            const hba1cStrips = series[6].data[index] || 0;
+            
+            const total = hbMeter + hbStrips + hbSolution + glucoseMeter + glucoseStrips + hba1cMeter + hba1cStrips;
+            
+            excelData.push({
+                'Province': this.getProvinceFullName(province),
+                'HB Meter': hbMeter,
+                'HB Strips': hbStrips,
+                'HB Solution': hbSolution,
+                'Glucose Meter': glucoseMeter,
+                'Glucose Strips': glucoseStrips,
+                'HBA1C Meter': hba1cMeter,
+                'HBA1C Strips': hba1cStrips,
+                'Total': total
+            });
+        });
+        
+        // Add empty row for spacing
+        excelData.push({
+            'Province': '',
+            'HB Meter': '',
+            'HB Strips': '',
+            'HB Solution': '',
+            'Glucose Meter': '',
+            'Glucose Strips': '',
+            'HBA1C Meter': '',
+            'HBA1C Strips': '',
+            'Total': ''
+        });
+        
+        // Calculate and add totals
+        const totals = {
+            hbMeter: series[0].data.reduce((sum: number, val: number) => sum + val, 0),
+            hbStrips: series[1].data.reduce((sum: number, val: number) => sum + val, 0),
+            hbSolution: series[2].data.reduce((sum: number, val: number) => sum + val, 0),
+            glucoseMeter: series[3].data.reduce((sum: number, val: number) => sum + val, 0),
+            glucoseStrips: series[4].data.reduce((sum: number, val: number) => sum + val, 0),
+            hba1cMeter: series[5].data.reduce((sum: number, val: number) => sum + val, 0),
+            hba1cStrips: series[6].data.reduce((sum: number, val: number) => sum + val, 0)
+        };
+        
+        const grandTotal = Object.values(totals).reduce((sum: number, val: number) => sum + val, 0);
+        
+        excelData.push({
+            'Province': 'NATIONAL TOTALS',
+            'HB Meter': totals.hbMeter,
+            'HB Strips': totals.hbStrips,
+            'HB Solution': totals.hbSolution,
+            'Glucose Meter': totals.glucoseMeter,
+            'Glucose Strips': totals.glucoseStrips,
+            'HBA1C Meter': totals.hba1cMeter,
+            'HBA1C Strips': totals.hba1cStrips,
+            'Total': grandTotal
+        });
+
+        // Generate filename with current date
+        const filename = `Stock_Delivered_by_Province_${new Date().toISOString().split('T')[0]}`;
+        
+        this.globalService.exportToExcel(excelData, filename);
+    }
+
+    /**
+     * Get full province name from abbreviation
+     */
+    getProvinceFullName(abbreviation: string): string {
+        const provinceMap: { [key: string]: string } = {
+            'KZN': 'KwaZulu-Natal',
+            'GP': 'Gauteng',
+            'FS': 'Free State',
+            'EC': 'Eastern Cape',
+            'LP': 'Limpopo',
+            'MPU': 'Mpumalanga',
+            'NC': 'Northern Cape',
+            'WC': 'Western Cape',
+            'NW': 'North West'
+        };
+        
+        return provinceMap[abbreviation] || abbreviation;
+    }
+
+    /**
+     * Export HGT Strips Distribution by Province chart data to Excel
+     */
+    exportHgtStripsToExcel() {
+        // Prepare HGT Strips distribution data for Excel export
+        const excelData: any[] = [];
+        
+        // Add header information
+        excelData.push({
+            'Province': 'HGT STRIPS DISTRIBUTION BY PROVINCE',
+            'Units Distributed': `Report Generated: ${new Date().toLocaleDateString()}`,
+            'Percentage': 'Healthcare Glucose Test Strips Distribution Report',
+            'Status': `Total Distributed: 141,320 units`
+        });
+        
+        // Add empty row for spacing
+        excelData.push({
+            'Province': '',
+            'Units Distributed': '',
+            'Percentage': '',
+            'Status': ''
+        });
+        
+        // Add column headers
+        excelData.push({
+            'Province': 'PROVINCE',
+            'Units Distributed': 'UNITS DISTRIBUTED',
+            'Percentage': 'PERCENTAGE (%)',
+            'Status': 'DISTRIBUTION STATUS'
+        });
+        
+        // Get the data from the chart
+        const chartData = this.hgtStripsChart.series.data;
+        const totalUnits = chartData.reduce((sum: number, item: any) => sum + item.value, 0);
+        
+        // Add data for each province
+        chartData.forEach((item: any) => {
+            const percentage = totalUnits > 0 ? ((item.value / totalUnits) * 100).toFixed(1) : '0.0';
+            let status = '';
+            
+            if (item.value === 0) {
+                status = 'No Distribution';
+            } else if (item.value < 5000) {
+                status = 'Low Distribution';
+            } else if (item.value < 20000) {
+                status = 'Moderate Distribution';
+            } else if (item.value < 40000) {
+                status = 'High Distribution';
+            } else {
+                status = 'Very High Distribution';
+            }
+            
+            excelData.push({
+                'Province': this.getProvinceFullName(item.name),
+                'Units Distributed': item.value.toLocaleString(),
+                'Percentage': percentage + '%',
+                'Status': status
+            });
+        });
+        
+        // Add empty row for spacing
+        excelData.push({
+            'Province': '',
+            'Units Distributed': '',
+            'Percentage': '',
+            'Status': ''
+        });
+        
+        // Add summary statistics
+        const sortedData = [...chartData].sort((a: any, b: any) => b.value - a.value);
+        const highestProvince = sortedData[0];
+        const lowestProvince = sortedData.find((item: any) => item.value > 0) || sortedData[sortedData.length - 1];
+        const averageDistribution = Math.round(totalUnits / chartData.filter((item: any) => item.value > 0).length);
+        
+        excelData.push({
+            'Province': 'SUMMARY STATISTICS',
+            'Units Distributed': '',
+            'Percentage': '',
+            'Status': ''
+        });
+        
+        excelData.push({
+            'Province': 'Total Units Distributed',
+            'Units Distributed': totalUnits.toLocaleString(),
+            'Percentage': '100.0%',
+            'Status': 'Complete'
+        });
+        
+        excelData.push({
+            'Province': 'Highest Distribution',
+            'Units Distributed': highestProvince.value.toLocaleString(),
+            'Percentage': ((highestProvince.value / totalUnits) * 100).toFixed(1) + '%',
+            'Status': this.getProvinceFullName(highestProvince.name)
+        });
+        
+        excelData.push({
+            'Province': 'Lowest Distribution (Active)',
+            'Units Distributed': lowestProvince.value.toLocaleString(),
+            'Percentage': lowestProvince.value > 0 ? ((lowestProvince.value / totalUnits) * 100).toFixed(1) + '%' : '0.0%',
+            'Status': this.getProvinceFullName(lowestProvince.name)
+        });
+        
+        excelData.push({
+            'Province': 'Average Distribution',
+            'Units Distributed': averageDistribution.toLocaleString(),
+            'Percentage': ((averageDistribution / totalUnits) * 100).toFixed(1) + '%',
+            'Status': 'Per Active Province'
+        });
+        
+        excelData.push({
+            'Province': 'Provinces with Distribution',
+            'Units Distributed': chartData.filter((item: any) => item.value > 0).length.toString(),
+            'Percentage': '',
+            'Status': 'Out of ' + chartData.length + ' total'
+        });
+
+        // Generate filename with current date
+        const filename = `HGT_Strips_Distribution_by_Province_${new Date().toISOString().split('T')[0]}`;
+        
+        this.globalService.exportToExcel(excelData, filename);
+    }
+
+    /**
+     * Export HGT Meter Distribution by Province chart data to Excel
+     */
+    exportHgtMeterToExcel() {
+        // Prepare HGT Meter distribution data for Excel export
+        const excelData: any[] = [];
+        
+        // Add header information
+        excelData.push({
+            'Province': 'HGT METER DISTRIBUTION BY PROVINCE',
+            'Units Distributed': `Report Generated: ${new Date().toLocaleDateString()}`,
+            'Percentage': 'Healthcare Glucose Test Meter Distribution Report',
+            'Status': `Total Distributed: 44,647 units`
+        });
+        
+        // Add empty row for spacing
+        excelData.push({
+            'Province': '',
+            'Units Distributed': '',
+            'Percentage': '',
+            'Status': ''
+        });
+        
+        // Add column headers
+        excelData.push({
+            'Province': 'PROVINCE',
+            'Units Distributed': 'UNITS DISTRIBUTED',
+            'Percentage': 'PERCENTAGE (%)',
+            'Status': 'DISTRIBUTION STATUS'
+        });
+        
+        // Get the data from the chart
+        const chartData = this.hgtMeterChart.series.data;
+        const totalUnits = chartData.reduce((sum: number, item: any) => sum + item.value, 0);
+        
+        // Add data for each province
+        chartData.forEach((item: any) => {
+            const percentage = totalUnits > 0 ? ((item.value / totalUnits) * 100).toFixed(1) : '0.0';
+            let status = '';
+            
+            if (item.value === 0) {
+                status = 'No Distribution';
+            } else if (item.value < 2000) {
+                status = 'Low Distribution';
+            } else if (item.value < 5000) {
+                status = 'Moderate Distribution';
+            } else if (item.value < 10000) {
+                status = 'High Distribution';
+            } else {
+                status = 'Very High Distribution';
+            }
+            
+            excelData.push({
+                'Province': this.getProvinceFullName(item.name),
+                'Units Distributed': item.value.toLocaleString(),
+                'Percentage': percentage + '%',
+                'Status': status
+            });
+        });
+        
+        // Add empty row for spacing
+        excelData.push({
+            'Province': '',
+            'Units Distributed': '',
+            'Percentage': '',
+            'Status': ''
+        });
+        
+        // Add summary statistics
+        const sortedData = [...chartData].sort((a: any, b: any) => b.value - a.value);
+        const highestProvince = sortedData[0];
+        const lowestProvince = sortedData.find((item: any) => item.value > 0) || sortedData[sortedData.length - 1];
+        const averageDistribution = Math.round(totalUnits / chartData.filter((item: any) => item.value > 0).length);
+        const activeProvinces = chartData.filter((item: any) => item.value > 0).length;
+        
+        excelData.push({
+            'Province': 'SUMMARY STATISTICS',
+            'Units Distributed': '',
+            'Percentage': '',
+            'Status': ''
+        });
+        
+        excelData.push({
+            'Province': 'Total Units Distributed',
+            'Units Distributed': totalUnits.toLocaleString(),
+            'Percentage': '100.0%',
+            'Status': 'Complete'
+        });
+        
+        excelData.push({
+            'Province': 'Highest Distribution',
+            'Units Distributed': highestProvince.value.toLocaleString(),
+            'Percentage': ((highestProvince.value / totalUnits) * 100).toFixed(1) + '%',
+            'Status': this.getProvinceFullName(highestProvince.name)
+        });
+        
+        excelData.push({
+            'Province': 'Lowest Distribution (Active)',
+            'Units Distributed': lowestProvince.value.toLocaleString(),
+            'Percentage': lowestProvince.value > 0 ? ((lowestProvince.value / totalUnits) * 100).toFixed(1) + '%' : '0.0%',
+            'Status': this.getProvinceFullName(lowestProvince.name)
+        });
+        
+        excelData.push({
+            'Province': 'Average Distribution',
+            'Units Distributed': averageDistribution.toLocaleString(),
+            'Percentage': ((averageDistribution / totalUnits) * 100).toFixed(1) + '%',
+            'Status': 'Per Active Province'
+        });
+        
+        excelData.push({
+            'Province': 'Provinces with Distribution',
+            'Units Distributed': activeProvinces.toString(),
+            'Percentage': '',
+            'Status': 'Out of ' + chartData.length + ' total'
+        });
+        
+        // Add distribution analysis
+        excelData.push({
+            'Province': '',
+            'Units Distributed': '',
+            'Percentage': '',
+            'Status': ''
+        });
+        
+        excelData.push({
+            'Province': 'DISTRIBUTION ANALYSIS',
+            'Units Distributed': '',
+            'Percentage': '',
+            'Status': ''
+        });
+        
+        // Calculate distribution concentration
+        const top2Provinces = sortedData.slice(0, 2);
+        const top2Concentration = top2Provinces.reduce((sum: number, item: any) => sum + item.value, 0);
+        const concentrationPercentage = ((top2Concentration / totalUnits) * 100).toFixed(1);
+        
+        excelData.push({
+            'Province': 'Top 2 Provinces Concentration',
+            'Units Distributed': top2Concentration.toLocaleString(),
+            'Percentage': concentrationPercentage + '%',
+            'Status': `${this.getProvinceFullName(top2Provinces[0].name)} & ${this.getProvinceFullName(top2Provinces[1].name)}`
+        });
+
+        // Generate filename with current date
+        const filename = `HGT_Meter_Distribution_by_Province_${new Date().toISOString().split('T')[0]}`;
+        
+        this.globalService.exportToExcel(excelData, filename);
+    }
+
     downloadPdf(){
         // Prepare comprehensive medical equipment data for PDF export
         const pdfData: any[] = [];

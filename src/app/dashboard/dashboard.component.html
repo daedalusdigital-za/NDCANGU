@@ -294,12 +294,21 @@
             <div class="col-12 col-lg-6">
                 <div class="card card-h-100 customize-card" style="border-top: 4px solid #ff6b6b;">
                     <div class="card-header" style="background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%); color: white;">
-                        <div class="d-flex align-items-center">
-                            <i class="fas fa-thermometer-half me-3" style="font-size: 1.5rem;"></i>
-                            <h4 class="card-title mb-0" style="font-size: 1.3rem; font-weight: 700;">HGT Meter Distribution by Province</h4>
-                        </div>
-                        <div class="ms-auto">
-                            <small style="color: rgba(255, 255, 255, 0.9); font-size: 0.95rem; font-weight: 600;">Total: 44,647 units</small>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-thermometer-half me-3" style="font-size: 1.5rem;"></i>
+                                <h4 class="card-title mb-0" style="font-size: 1.3rem; font-weight: 700;">HGT Meter Distribution by Province</h4>
+                            </div>
+                            <div class="d-flex align-items-center gap-2">
+                                <small style="color: rgba(255, 255, 255, 0.9); font-size: 0.95rem; font-weight: 600;">Total: 44,647 units</small>
+                                <button class="btn btn-outline-light btn-sm" 
+                                        (click)="exportHgtMeterToExcel()"
+                                        title="Export to Excel"
+                                        aria-label="Export HGT Meter distribution data to Excel">
+                                    <i class="fas fa-file-excel me-1"></i>
+                                    <span class="d-none d-md-inline">Export</span>
+                                </button>
+                            </div>
                         </div>
                     </div>
                     <div class="card-body" style="background: linear-gradient(135deg, #ffeaa7 0%, #fab1a0 100%);">
@@ -317,12 +326,21 @@
             <div class="col-12 col-lg-6">
                 <div class="card card-h-100 customize-card" style="border-top: 4px solid #a8e6cf;">
                     <div class="card-header" style="background: linear-gradient(135deg, #a8e6cf 0%, #56ab2f 100%); color: white;">
-                        <div class="d-flex align-items-center">
-                            <i class="fas fa-prescription-bottle-alt me-3" style="font-size: 1.5rem;"></i>
-                            <h4 class="card-title mb-0" style="font-size: 1.3rem; font-weight: 700;">HGT Strips Distribution by Province</h4>
-                        </div>
-                        <div class="ms-auto">
-                            <small style="color: rgba(255, 255, 255, 0.9); font-size: 0.95rem; font-weight: 600;">Total: 141,320 units</small>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-prescription-bottle-alt me-3" style="font-size: 1.5rem;"></i>
+                                <h4 class="card-title mb-0" style="font-size: 1.3rem; font-weight: 700;">HGT Strips Distribution by Province</h4>
+                            </div>
+                            <div class="d-flex align-items-center gap-2">
+                                <small style="color: rgba(255, 255, 255, 0.9); font-size: 0.95rem; font-weight: 600;">Total: 141,320 units</small>
+                                <button class="btn btn-outline-light btn-sm" 
+                                        (click)="exportHgtStripsToExcel()"
+                                        title="Export to Excel"
+                                        aria-label="Export HGT Strips distribution data to Excel">
+                                    <i class="fas fa-file-excel me-1"></i>
+                                    <span class="d-none d-md-inline">Export</span>
+                                </button>
+                            </div>
                         </div>
                     </div>
                     <div class="card-body" style="background: linear-gradient(135deg, #dcedc1 0%, #b5fffc 100%);">
@@ -342,12 +360,21 @@
             <div class="col-12">
                 <div class="card card-h-100 customize-card" style="border-top: 4px solid #4ecdc4;">
                     <div class="card-header" style="background: linear-gradient(135deg, #4ecdc4 0%, #44a08d 100%); color: white;">
-                        <div class="d-flex align-items-center">
-                            <i class="fas fa-chart-bar me-3" style="font-size: 1.5rem;"></i>
-                            <h4 class="card-title mb-0" style="font-size: 1.3rem; font-weight: 700;">Total Stock Delivered by Province</h4>
-                        </div>
-                        <div class="ms-auto">
-                            <small style="color: rgba(255, 255, 255, 0.9); font-size: 0.95rem; font-weight: 600;">All Medical Equipment Categories</small>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-chart-bar me-3" style="font-size: 1.5rem;"></i>
+                                <h4 class="card-title mb-0" style="font-size: 1.3rem; font-weight: 700;">Total Stock Delivered by Province</h4>
+                            </div>
+                            <div class="d-flex align-items-center gap-2">
+                                <small style="color: rgba(255, 255, 255, 0.9); font-size: 0.95rem; font-weight: 600;">All Medical Equipment Categories</small>
+                                <button class="btn btn-outline-light btn-sm" 
+                                        (click)="exportStockDeliveredToExcel()"
+                                        title="Export to Excel"
+                                        aria-label="Export stock delivered data to Excel">
+                                    <i class="fas fa-file-excel me-1"></i>
+                                    <span class="d-none d-md-inline">Export</span>
+                                </button>
+                            </div>
                         </div>
                     </div>
                     <div class="card-body" style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);">

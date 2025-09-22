@@ -15,6 +15,32 @@ interface Trainer {
   bio: string;
 }
 
+interface TrainingRegister {
+  id: number;
+  sessionTitle: string;
+  trainer: string;
+  date: string;
+  venue: string;
+  participants: number;
+  duration: string;
+  status: string;
+  topic: string;
+  attendanceRate: number;
+  certificatesIssued: number;
+  registerFile?: string;
+}
+
+interface TrainingReport {
+  id: number;
+  reportType: string;
+  generatedDate: string;
+  status: string;
+  period: string;
+  totalSessions: number;
+  totalParticipants: number;
+  completionRate: number;
+}
+
 @Component({
   selector: 'app-training-reports',
   templateUrl: './training-reports.component.html',
@@ -23,7 +49,13 @@ interface Trainer {
 export class TrainingReportsComponent implements OnInit {
 
   trainers: Trainer[] = [];
+  trainingRegisters: TrainingRegister[] = [];
+  trainingReports: TrainingReport[] = [];
   activeTrainersCount: number = 0;
+  totalSessions: number = 0;
+  totalParticipants: number = 0;
+  averageAttendanceRate: number = 0;
+  selectedTab: string = 'registers';
 
   constructor(
     private router: Router,
@@ -32,6 +64,9 @@ export class TrainingReportsComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadTrainers();
+    this.loadTrainingRegisters();
+    this.loadTrainingReports();
+    this.calculateStatistics();
   }
 
   // Load trainers data and calculate active count
@@ -113,6 +148,177 @@ export class TrainingReportsComponent implements OnInit {
 
     // Calculate active trainers count
     this.activeTrainersCount = this.trainers.filter(trainer => trainer.status === 'Active').length;
+  }
+
+  // Load training registers data
+  loadTrainingRegisters(): void {
+    this.trainingRegisters = [
+      {
+        id: 1,
+        sessionTitle: 'Medical Equipment Operation Training',
+        trainer: 'ZIBA',
+        date: '2024-01-15',
+        venue: 'Johannesburg Medical Center',
+        participants: 25,
+        duration: '4 hours',
+        status: 'Completed',
+        topic: 'Medical Equipment',
+        attendanceRate: 96,
+        certificatesIssued: 24,
+        registerFile: 'register_001.pdf'
+      },
+      {
+        id: 2,
+        sessionTitle: 'Healthcare Safety Protocols',
+        trainer: 'LINDANI',
+        date: '2024-01-22',
+        venue: 'Durban Health Training Center',
+        participants: 30,
+        duration: '6 hours',
+        status: 'Completed',
+        topic: 'Safety Protocols',
+        attendanceRate: 93,
+        certificatesIssued: 28,
+        registerFile: 'register_002.pdf'
+      },
+      {
+        id: 3,
+        sessionTitle: 'Emergency Response Training',
+        trainer: 'KEHOLIHLE',
+        date: '2024-02-05',
+        venue: 'Cape Town Medical Institute',
+        participants: 28,
+        duration: '8 hours',
+        status: 'Completed',
+        topic: 'Emergency Response',
+        attendanceRate: 100,
+        certificatesIssued: 28,
+        registerFile: 'register_003.pdf'
+      },
+      {
+        id: 4,
+        sessionTitle: 'Patient Care Standards',
+        trainer: 'SELBY',
+        date: '2024-02-12',
+        venue: 'Port Elizabeth Health Hub',
+        participants: 22,
+        duration: '5 hours',
+        status: 'Completed',
+        topic: 'Patient Care',
+        attendanceRate: 91,
+        certificatesIssued: 20,
+        registerFile: 'register_004.pdf'
+      },
+      {
+        id: 5,
+        sessionTitle: 'Medical Device Maintenance',
+        trainer: 'MASI',
+        date: '2024-02-20',
+        venue: 'Polokwane Training Facility',
+        participants: 18,
+        duration: '6 hours',
+        status: 'In Progress',
+        topic: 'Device Maintenance',
+        attendanceRate: 89,
+        certificatesIssued: 0
+      },
+      {
+        id: 6,
+        sessionTitle: 'Healthcare Administration',
+        trainer: 'DYLAN',
+        date: '2024-03-01',
+        venue: 'Nelspruit Medical Center',
+        participants: 35,
+        duration: '4 hours',
+        status: 'Scheduled',
+        topic: 'Administration',
+        attendanceRate: 0,
+        certificatesIssued: 0
+      }
+    ];
+  }
+
+  // Load training reports data
+  loadTrainingReports(): void {
+    this.trainingReports = [
+      {
+        id: 1,
+        reportType: 'Monthly Training Summary',
+        generatedDate: '2024-01-31',
+        status: 'Ready',
+        period: 'January 2024',
+        totalSessions: 15,
+        totalParticipants: 375,
+        completionRate: 92
+      },
+      {
+        id: 2,
+        reportType: 'Quarterly Training Report',
+        generatedDate: '2024-03-31',
+        status: 'Processing',
+        period: 'Q1 2024',
+        totalSessions: 45,
+        totalParticipants: 1125,
+        completionRate: 89
+      },
+      {
+        id: 3,
+        reportType: 'Annual Training Overview',
+        generatedDate: '2023-12-31',
+        status: 'Ready',
+        period: '2023',
+        totalSessions: 169,
+        totalParticipants: 4225,
+        completionRate: 94
+      }
+    ];
+  }
+
+  // Calculate training statistics
+  calculateStatistics(): void {
+    const completedRegisters = this.trainingRegisters.filter(register => register.status === 'Completed');
+    this.totalSessions = this.trainingRegisters.length;
+    this.totalParticipants = this.trainingRegisters.reduce((sum, register) => sum + register.participants, 0);
+    
+    if (completedRegisters.length > 0) {
+      this.averageAttendanceRate = Math.round(
+        completedRegisters.reduce((sum, register) => sum + register.attendanceRate, 0) / completedRegisters.length
+      );
+    }
+  }
+
+  // Switch between tabs
+  selectTab(tab: string): void {
+    this.selectedTab = tab;
+  }
+
+  // View register details
+  viewRegister(register: TrainingRegister): void {
+    this.toastr.info(`Viewing register for: ${register.sessionTitle}`, 'Training Register');
+  }
+
+  // Download register file
+  downloadRegister(register: TrainingRegister): void {
+    if (register.registerFile) {
+      this.toastr.success(`Downloading ${register.registerFile}`, 'Download Started');
+    } else {
+      this.toastr.warning('No register file available', 'Download');
+    }
+  }
+
+  // Generate new report
+  generateReport(reportType: string): void {
+    this.toastr.info(`Generating ${reportType} report...`, 'Report Generation');
+  }
+
+  // View report details
+  viewReport(report: TrainingReport): void {
+    this.toastr.info(`Viewing ${report.reportType}`, 'Training Report');
+  }
+
+  // Download report
+  downloadReport(report: TrainingReport): void {
+    this.toastr.success(`Downloading ${report.reportType}`, 'Download Started');
   }
 
 }

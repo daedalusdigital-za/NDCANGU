@@ -10,7 +10,6 @@ import { ReportsComponent } from './reports.component';
 import { AuthDebugComponent } from './auth-debug.component';
 import { AddStatsComponent } from './add-stats/add-stats.component';
 import { ListStatsComponent } from './list-stats/list-stats.component';
-import { CalendarComponent } from './calendar/calendar.component';
 import { NgApexchartsModule } from 'ng-apexcharts';
 import { NgxEchartsModule } from 'ngx-echarts';
 import { TableModule } from 'primeng/table';
@@ -32,7 +31,6 @@ import { VerifyPhoneNumberComponent } from './verify-phone-number/verify-phone-n
     // AddReportComponent,
     AddStatsComponent,
     ListStatsComponent,
-    CalendarComponent,
     VerifyPhoneNumberComponent
   ],
   imports: [
