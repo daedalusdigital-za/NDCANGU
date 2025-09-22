@@ -1099,13 +1099,17 @@ export class DashboardComponent implements OnInit {
     provinceDeliveryTotals: ProvinceDeliveryTotals[] = [];
 
     nationalTotalData = [
-        { item: 'GLUCOSE METER', totalOrdered: 50000, totalDelivered: 48273 }, // Sum: 20437+11166+8089+399+5565+2517+100 = 48273
-        { item: 'GLUCOSE STRIPS', totalOrdered: 120000, totalDelivered: 101693 }, // Sum: 38479+22655+11760+399+23300+5000+100 = 101693
-        { item: 'HB METER', totalOrdered: 800, totalDelivered: 764 }, // Sum: 50+637+63+0+0+14+0 = 764
-        { item: 'HB STRIPS', totalOrdered: 3500, totalDelivered: 2752 }, // Sum: 60+1474+1103+0+0+55+0 = 2752
-        { item: 'HBA1C METERS', totalOrdered: 200, totalDelivered: 7 }, // Sum: 7+0+0+0+0+0+0 = 7 (dual glucose/HBA1C meters)
-        { item: 'HBA1C STRIPS', totalOrdered: 500, totalDelivered: 365 }, // Sum: 155+170+1+0+0+39+0 = 365
-        { item: 'HB SOLUTION', totalOrdered: 25, totalDelivered: 0 } // No HB solution in provided data
+        { item: 'GLUCOSE METER', totalOrdered: 70415, totalDelivered: 30486 }, // KZN:3864 + GT:8344 + FS:13958 + LP:2910 + MP:911 + NC:100 + EC:399 + NW:0 + WC:0
+        { item: 'GLUCOSE STRIPS', totalOrdered: 273248, totalDelivered: 133547 }, // KZN:34500 + GT:46810 + FS:13018 + LP:20800 + MP:17920 + NC:100 + EC:399 + NW:0 + WC:0
+        { item: 'HB METER', totalOrdered: 588, totalDelivered: 552 }, // KZN:2 + GT:502 + FS:20 + LP:0 + MP:14 + NC:0 + EC:0 + NW:0 + WC:0
+        { item: 'HB STRIPS', totalOrdered: 7499, totalDelivered: 7499 }, // KZN:90 + GT:7054 + FS:300 + LP:0 + MP:55 + NC:0 + EC:0 + NW:0 + WC:0
+        { item: 'HBA1C METERS', totalOrdered: 15, totalDelivered: 15 }, // KZN:14 + GT:1 + FS:0 + LP:0 + MP:0 + NC:0 + EC:0 + NW:0 + WC:0
+        { item: 'HBA1C STRIPS', totalOrdered: 199, totalDelivered: 199 }, // KZN:185 + GT:4 + FS:0 + LP:0 + MP:10 + NC:0 + EC:0 + NW:0 + WC:0
+        { item: 'HB SOLUTION', totalOrdered: 0, totalDelivered: 0 }, // No HB solution orders across all provinces
+        { item: 'GLUCOSE SOLUTIONS', totalOrdered: 1520, totalDelivered: 150 }, // Only Gauteng ordered: 1520, delivered: 150
+        { item: 'GLUCOSE BATTERY', totalOrdered: 1610, totalDelivered: 0 }, // Only Gauteng ordered: 1610, delivered: 0
+        { item: 'HB BATTERY', totalOrdered: 60, totalDelivered: 60 }, // GT:50 + MP:10
+        { item: 'MULTI-FUNCTIONAL METERS', totalOrdered: 1, totalDelivered: 1 } // Only Gauteng: 1 delivered
     ];
 
     constructor(
