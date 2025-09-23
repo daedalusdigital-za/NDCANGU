@@ -331,7 +331,7 @@ export class SalesDashboardComponent implements OnInit {
     this.totalSales = totalDelivered;
     this.pendingOrders = totalOrdered - totalDelivered;
     this.monthlyRevenue = totalDelivered * 180; // Average estimated price
-    this.totalProducts = 7;
+    this.totalProducts = 14; // Updated to match Product Management inventory count
     this.averageOrderValue = this.monthlyRevenue / totalDelivered;
   }
 
