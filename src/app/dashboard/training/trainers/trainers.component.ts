@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import { PopupPreviewService } from '../../../services/popup-preview/popup-preview.service';
 
 declare var bootstrap: any;
 
@@ -34,7 +35,8 @@ export class TrainersComponent implements OnInit {
   constructor(
     private router: Router,
     private toastr: ToastrService,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private popupPreviewService: PopupPreviewService
   ) {
     this.trainerForm = this.formBuilder.group({
       name: ['', [Validators.required, Validators.minLength(2)]],
@@ -138,8 +140,21 @@ export class TrainersComponent implements OnInit {
 
   // View trainer details
   viewTrainer(trainer: Trainer): void {
-    this.selectedTrainer = trainer;
-    // Modal will be opened via Bootstrap data attributes
+    const trainerData = {
+      title: trainer.name,
+      name: trainer.name,
+      email: trainer.email,
+      phone: trainer.phone,
+      province: trainer.province,
+      qualification: trainer.qualification,
+      experience: trainer.experience,
+      status: trainer.status,
+      location: trainer.location,
+      bio: trainer.bio,
+      description: `${trainer.name} is a ${trainer.qualification} with ${trainer.experience} years of experience, currently based in ${trainer.location}, ${trainer.province}. Status: ${trainer.status}.`
+    };
+    
+    this.popupPreviewService.showTrainerPreview(trainerData);
   }
 
   // Get trainer statistics (mock data for demo)

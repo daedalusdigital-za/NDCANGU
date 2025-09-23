@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import { PopupPreviewService } from '../../../services/popup-preview/popup-preview.service';
 
 interface Trainer {
   id: number;
@@ -59,7 +60,8 @@ export class TrainingReportsComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private popupPreviewService: PopupPreviewService
   ) { }
 
   ngOnInit(): void {
@@ -294,7 +296,21 @@ export class TrainingReportsComponent implements OnInit {
 
   // View register details
   viewRegister(register: TrainingRegister): void {
-    this.toastr.info(`Viewing register for: ${register.sessionTitle}`, 'Training Register');
+    const registerData = {
+      title: register.sessionTitle,
+      trainer: register.trainer,
+      date: register.date,
+      venue: register.venue,
+      participants: register.participants,
+      duration: register.duration,
+      status: register.status,
+      topic: register.topic,
+      attendanceRate: register.attendanceRate,
+      certificatesIssued: register.certificatesIssued,
+      description: `Training session "${register.sessionTitle}" conducted by ${register.trainer} on ${register.date}. This session was held at ${register.venue} with ${register.participants} participants.`
+    };
+    
+    this.popupPreviewService.showRegisterPreview(registerData);
   }
 
   // Download register file
@@ -313,7 +329,19 @@ export class TrainingReportsComponent implements OnInit {
 
   // View report details
   viewReport(report: TrainingReport): void {
-    this.toastr.info(`Viewing ${report.reportType}`, 'Training Report');
+    const reportData = {
+      title: `${report.reportType} - ${report.period}`,
+      type: report.reportType,
+      generatedDate: report.generatedDate,
+      status: report.status,
+      period: report.period,
+      totalSessions: report.totalSessions,
+      totalParticipants: report.totalParticipants,
+      completionRate: report.completionRate,
+      description: `This ${report.reportType.toLowerCase()} covers the period of ${report.period} and includes ${report.totalSessions} training sessions with ${report.totalParticipants} total participants, achieving a ${report.completionRate}% completion rate.`
+    };
+    
+    this.popupPreviewService.showReportPreview(reportData);
   }
 
   // Download report

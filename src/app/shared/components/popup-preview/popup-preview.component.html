@@ -1,0 +1,210 @@
+<!-- Popup Preview Modal -->
+<div class="popup-preview-overlay" 
+     [class.active]="showPreview" 
+     (click)="closePreview()"
+     *ngIf="previewData">
+  
+  <div class="popup-preview-modal" 
+       (click)="$event.stopPropagation()"
+       [class.animate-in]="showPreview">
+    
+    <!-- Header -->
+    <div class="preview-header">
+      <h4 class="preview-title">
+        <i class="fas fa-eye me-2"></i>
+        {{ previewData.title }}
+      </h4>
+      <button class="btn-close" 
+              (click)="closePreview()"
+              aria-label="Close"></button>
+    </div>
+
+    <!-- Content -->
+    <div class="preview-content">
+      
+      <!-- Register Preview -->
+      <div *ngIf="previewData.type === 'register'" class="register-preview">
+        <div class="row g-3">
+          <div class="col-md-6">
+            <div class="info-group">
+              <label class="info-label">Course Name:</label>
+              <p class="info-value">{{ previewData.content.courseName }}</p>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="info-group">
+              <label class="info-label">Date:</label>
+              <p class="info-value">{{ formatDate(previewData.content.date) }}</p>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="info-group">
+              <label class="info-label">Location:</label>
+              <p class="info-value">{{ previewData.content.location }}</p>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="info-group">
+              <label class="info-label">Participants:</label>
+              <p class="info-value">{{ previewData.content.participants }}</p>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="info-group">
+              <label class="info-label">Trainer:</label>
+              <p class="info-value">{{ previewData.content.trainer }}</p>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="info-group">
+              <label class="info-label">Status:</label>
+              <span [class]="getStatusBadgeClass(previewData.content.status)">
+                {{ previewData.content.status }}
+              </span>
+            </div>
+          </div>
+          <div class="col-12" *ngIf="previewData.content.notes">
+            <div class="info-group">
+              <label class="info-label">Notes:</label>
+              <p class="info-value">{{ previewData.content.notes }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Report Preview -->
+      <div *ngIf="previewData.type === 'report'" class="report-preview">
+        <div class="row g-3">
+          <div class="col-md-6">
+            <div class="info-group">
+              <label class="info-label">Report Title:</label>
+              <p class="info-value">{{ previewData.content.title }}</p>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="info-group">
+              <label class="info-label">Type:</label>
+              <p class="info-value">{{ previewData.content.type }}</p>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="info-group">
+              <label class="info-label">Period:</label>
+              <p class="info-value">{{ previewData.content.period }}</p>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="info-group">
+              <label class="info-label">Status:</label>
+              <span [class]="getStatusBadgeClass(previewData.content.status)">
+                {{ previewData.content.status }}
+              </span>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="info-group">
+              <label class="info-label">Generated Date:</label>
+              <p class="info-value">{{ formatDate(previewData.content.generatedDate) }}</p>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="info-group">
+              <label class="info-label">Records Count:</label>
+              <p class="info-value">{{ previewData.content.recordsCount || 'N/A' }}</p>
+            </div>
+          </div>
+          <div class="col-12" *ngIf="previewData.content.description">
+            <div class="info-group">
+              <label class="info-label">Description:</label>
+              <p class="info-value">{{ previewData.content.description }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Trainer Preview -->
+      <div *ngIf="previewData.type === 'trainer'" class="trainer-preview">
+        <div class="trainer-card">
+          <div class="row g-3">
+            <div class="col-md-4 text-center">
+              <div class="trainer-avatar">
+                <img [src]="previewData.content.avatar || '/assets/images/default-avatar.png'" 
+                     [alt]="previewData.content.name"
+                     class="rounded-circle"
+                     style="width: 100px; height: 100px; object-fit: cover;">
+              </div>
+              <h5 class="mt-2 mb-1">{{ previewData.content.name }}</h5>
+              <span [class]="getStatusBadgeClass(previewData.content.status)">
+                {{ previewData.content.status }}
+              </span>
+            </div>
+            <div class="col-md-8">
+              <div class="row g-2">
+                <div class="col-md-6">
+                  <div class="info-group">
+                    <label class="info-label">ID:</label>
+                    <p class="info-value">{{ previewData.content.id }}</p>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="info-group">
+                    <label class="info-label">Email:</label>
+                    <p class="info-value">{{ previewData.content.email }}</p>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="info-group">
+                    <label class="info-label">Phone:</label>
+                    <p class="info-value">{{ previewData.content.phone }}</p>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="info-group">
+                    <label class="info-label">Specialization:</label>
+                    <p class="info-value">{{ previewData.content.specialization }}</p>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="info-group">
+                    <label class="info-label">Experience:</label>
+                    <p class="info-value">{{ previewData.content.experience }} years</p>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="info-group">
+                    <label class="info-label">Certifications:</label>
+                    <p class="info-value">{{ previewData.content.certifications || 'N/A' }}</p>
+                  </div>
+                </div>
+                <div class="col-12" *ngIf="previewData.content.bio">
+                  <div class="info-group">
+                    <label class="info-label">Biography:</label>
+                    <p class="info-value">{{ previewData.content.bio }}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Generic Preview -->
+      <div *ngIf="previewData.type === 'generic'" class="generic-preview">
+        <pre>{{ previewData.content | json }}</pre>
+      </div>
+
+    </div>
+
+    <!-- Actions Footer -->
+    <div class="preview-actions" *ngIf="previewData.actions && previewData.actions.length > 0">
+      <button *ngFor="let action of previewData.actions"
+              class="btn"
+              [class]="'btn-' + (action.variant || 'primary')"
+              (click)="executeAction(action)">
+        <i [class]="action.icon + ' me-2'"></i>
+        {{ action.label }}
+      </button>
+    </div>
+
+  </div>
+</div>
