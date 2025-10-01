@@ -4,12 +4,38 @@
         <div class="row">
             <div class="col-12">
                 <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                    <h4 class="mb-sm-0 font-size-18">Orders Management</h4>
+                    <h4 class="mb-sm-0 font-size-18">Sales Management</h4>
                     <div class="page-title-right">
                         <ol class="breadcrumb m-0">
                             <li class="breadcrumb-item"><a href="javascript: void(0);">Sales</a></li>
-                            <li class="breadcrumb-item active">Orders List</li>
+                            <li class="breadcrumb-item active">Sales & Orders</li>
                         </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- View Mode Toggle -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="btn-group" role="group">
+                            <button type="button" 
+                                    class="btn" 
+                                    [class.btn-primary]="viewMode === 'sales'"
+                                    [class.btn-outline-primary]="viewMode !== 'sales'"
+                                    (click)="switchViewMode('sales')">
+                                <i class="fas fa-chart-line me-1"></i> Sales Records
+                            </button>
+                            <button type="button" 
+                                    class="btn"
+                                    [class.btn-primary]="viewMode === 'orders'"
+                                    [class.btn-outline-primary]="viewMode !== 'orders'"
+                                    (click)="switchViewMode('orders')">
+                                <i class="fas fa-shopping-cart me-1"></i> Order Records
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -20,7 +46,7 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-header">
-                        <h5 class="card-title mb-0">Search & Filter Orders</h5>
+                        <h5 class="card-title mb-0">Search & Filter {{viewMode === 'sales' ? 'Sales' : 'Orders'}}</h5>
                     </div>
                     <div class="card-body">
                         <div class="row">
@@ -31,7 +57,7 @@
                                            class="form-control" 
                                            [(ngModel)]="searchTerm"
                                            (input)="applyFilters()"
-                                           placeholder="Search by order number, customer, or item">
+                                           [placeholder]="viewMode === 'sales' ? 'Search by invoice, institution, or item' : 'Search by order number, customer, or item'">
                                 </div>
                             </div>
                             <div class="col-md-2">
@@ -54,12 +80,54 @@
                                     </select>
                                 </div>
                             </div>
+                            <!-- Customer filter (Orders only) -->
+                            <div class="col-md-2" *ngIf="viewMode === 'orders'">
+                                <div class="mb-3">
+                                    <label class="form-label">Customer</label>
+                                    <select class="form-select" 
+                                            [(ngModel)]="selectedCustomer"
+                                            (change)="applyFilters()">
+                                        <option *ngFor="let customer of customerOptions" [value]="customer">{{customer}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <!-- Institution filter (Sales only) -->
+                            <div class="col-md-2" *ngIf="viewMode === 'sales'">
+                                <div class="mb-3">
+                                    <label class="form-label">Institution</label>
+                                    <select class="form-select" 
+                                            [(ngModel)]="selectedInstitution"
+                                            (change)="applyFilters()">
+                                        <option *ngFor="let institution of institutionOptions" [value]="institution">{{institution}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <!-- Product Type filter (Sales only) -->
+                            <div class="col-md-2" *ngIf="viewMode === 'sales'">
+                                <div class="mb-3">
+                                    <label class="form-label">Product Type</label>
+                                    <select class="form-select" 
+                                            [(ngModel)]="selectedProductType"
+                                            (change)="applyFilters()">
+                                        <option *ngFor="let product of productTypeOptions" [value]="product">{{product}}</option>
+                                    </select>
+                                </div>
+                            </div>
                             <div class="col-md-2">
                                 <div class="mb-3">
                                     <label class="form-label">Date From</label>
                                     <input type="date" 
                                            class="form-control" 
                                            [(ngModel)]="dateFrom"
+                                           (change)="applyFilters()">
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="mb-3">
+                                    <label class="form-label">Date To</label>
+                                    <input type="date" 
+                                           class="form-control" 
+                                           [(ngModel)]="dateTo"
                                            (change)="applyFilters()">
                                 </div>
                             </div>
@@ -71,6 +139,11 @@
                                                 class="btn btn-secondary" 
                                                 (click)="clearFilters()">
                                             <i class="dripicons-refresh me-1"></i>Clear
+                                        </button>
+                                        <button type="button" 
+                                                class="btn btn-success" 
+                                                (click)="exportData()">
+                                            <i class="mdi mdi-download me-1"></i>Export
                                         </button>
                                         <button type="button" 
                                                 class="btn btn-success" 
