@@ -1,6 +1,20 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { PopupPreviewService, PreviewData } from '../../../services/popup-preview/popup-preview.service';
+import { PopupPreviewService } from '../../../services/popup-preview/popup-preview.service';
+
+export interface PreviewData {
+  title: string;
+  content: any;
+  type: 'register' | 'report' | 'trainer' | 'generic';
+  actions?: PreviewAction[];
+}
+
+export interface PreviewAction {
+  label: string;
+  icon: string;
+  action: () => void;
+  variant?: 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info';
+}
 
 @Component({
   selector: 'app-popup-preview',
@@ -16,13 +30,13 @@ export class PopupPreviewComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.subscriptions.push(
-      this.popupPreviewService.showPreview$.subscribe(show => {
+      this.popupPreviewService.showPreview$.subscribe((show: boolean) => {
         this.showPreview = show;
       })
     );
 
     this.subscriptions.push(
-      this.popupPreviewService.previewData$.subscribe(data => {
+      this.popupPreviewService.previewData$.subscribe((data: PreviewData | null) => {
         this.previewData = data;
       })
     );
@@ -36,7 +50,7 @@ export class PopupPreviewComponent implements OnInit, OnDestroy {
     this.popupPreviewService.hidePreview();
   }
 
-  executeAction(action: any): void {
+  executeAction(action: PreviewAction): void {
     action.action();
   }
 
