@@ -23,7 +23,7 @@ interface InventoryItem {
   qtyOnPO: number;
   qtyOnSO: number;
   stockAvailable: number;
-  totalCostForQOH: number;
+  totalCostForQOH?: number;
   unitCostForQOH: number;
 }
 
@@ -132,8 +132,7 @@ export class ProductManagementComponent implements OnInit {
         qtyOnPO: 400.00,
         qtyOnSO: 0.00,
         stockAvailable: 8806.00,
-        totalCostForQOH: 3079790.28,
-        unitCostForQOH: 366.38
+        unitCostForQOH: 455.04
       },
       {
         id: 2,
@@ -145,8 +144,7 @@ export class ProductManagementComponent implements OnInit {
         qtyOnPO: 1200.00,
         qtyOnSO: 0.00,
         stockAvailable: 25642.00,
-        totalCostForQOH: 3153751.26,
-        unitCostForQOH: 129.03
+        unitCostForQOH: 160.25
       },
       {
         id: 3,
@@ -158,8 +156,7 @@ export class ProductManagementComponent implements OnInit {
         qtyOnPO: 0.00,
         qtyOnSO: 0.00,
         stockAvailable: 0.00,
-        totalCostForQOH: 0.00,
-        unitCostForQOH: 0.00
+        unitCostForQOH: 10.53
       },
       {
         id: 4,
@@ -171,8 +168,7 @@ export class ProductManagementComponent implements OnInit {
         qtyOnPO: 0.00,
         qtyOnSO: 0.00,
         stockAvailable: 0.00,
-        totalCostForQOH: 0.00,
-        unitCostForQOH: 0.00
+        unitCostForQOH: 138.58
       },
       {
         id: 5,
@@ -184,8 +180,7 @@ export class ProductManagementComponent implements OnInit {
         qtyOnPO: 0.00,
         qtyOnSO: 1300.00,
         stockAvailable: -800.00,
-        totalCostForQOH: 0.00,
-        unitCostForQOH: 0.00
+        unitCostForQOH: 0.56
       },
       {
         id: 6,
@@ -197,8 +192,7 @@ export class ProductManagementComponent implements OnInit {
         qtyOnPO: 0.00,
         qtyOnSO: 2930.00,
         stockAvailable: -2930.00,
-        totalCostForQOH: 0.00,
-        unitCostForQOH: 0.00
+        unitCostForQOH: 8.31
       },
       {
         id: 7,
@@ -210,8 +204,7 @@ export class ProductManagementComponent implements OnInit {
         qtyOnPO: 0.00,
         qtyOnSO: 136109.00,
         stockAvailable: -133788.00,
-        totalCostForQOH: 197010.25,
-        unitCostForQOH: 84.88
+        unitCostForQOH: 51.57
       },
       {
         id: 8,
@@ -223,8 +216,7 @@ export class ProductManagementComponent implements OnInit {
         qtyOnPO: 0.00,
         qtyOnSO: 24880.00,
         stockAvailable: -17788.00,
-        totalCostForQOH: 1059259.17,
-        unitCostForQOH: 149.36
+        unitCostForQOH: 157.01
       },
       {
         id: 9,
@@ -236,8 +228,7 @@ export class ProductManagementComponent implements OnInit {
         qtyOnPO: 0.00,
         qtyOnSO: 1480.00,
         stockAvailable: -911.00,
-        totalCostForQOH: 0.00,
-        unitCostForQOH: 0.00
+        unitCostForQOH: 27.72
       },
       {
         id: 10,
@@ -249,8 +240,7 @@ export class ProductManagementComponent implements OnInit {
         qtyOnPO: 0.00,
         qtyOnSO: 0.00,
         stockAvailable: 1483.00,
-        totalCostForQOH: 2863152.98,
-        unitCostForQOH: 1930.65
+        unitCostForQOH: 2527.98
       },
       {
         id: 11,
@@ -262,8 +252,7 @@ export class ProductManagementComponent implements OnInit {
         qtyOnPO: 0.00,
         qtyOnSO: 5.00,
         stockAvailable: 1969.00,
-        totalCostForQOH: 1307458.10,
-        unitCostForQOH: 662.34
+        unitCostForQOH: 2028.26
       },
       {
         id: 12,
@@ -275,8 +264,7 @@ export class ProductManagementComponent implements OnInit {
         qtyOnPO: 0.00,
         qtyOnSO: 0.00,
         stockAvailable: 6971.00,
-        totalCostForQOH: 3407494.51,
-        unitCostForQOH: 488.81
+        unitCostForQOH: 607.10
       },
       {
         id: 13,
@@ -288,8 +276,7 @@ export class ProductManagementComponent implements OnInit {
         qtyOnPO: 0.00,
         qtyOnSO: 6000.00,
         stockAvailable: -3530.00,
-        totalCostForQOH: 521053.29,
-        unitCostForQOH: 210.95
+        unitCostForQOH: 460.78
       },
       {
         id: 14,
@@ -301,8 +288,7 @@ export class ProductManagementComponent implements OnInit {
         qtyOnPO: 0.00,
         qtyOnSO: 0.00,
         stockAvailable: 969.00,
-        totalCostForQOH: 247133.76,
-        unitCostForQOH: 255.04
+        unitCostForQOH: 316.75
       },
       {
         id: 15,
@@ -314,8 +300,7 @@ export class ProductManagementComponent implements OnInit {
         qtyOnPO: 0.00,
         qtyOnSO: 0.00,
         stockAvailable: 2082.00,
-        totalCostForQOH: 1327399.92,
-        unitCostForQOH: 637.56
+        unitCostForQOH: 791.85
       },
       {
         id: 16,
@@ -327,8 +312,7 @@ export class ProductManagementComponent implements OnInit {
         qtyOnPO: 0.00,
         qtyOnSO: 0.00,
         stockAvailable: 970.00,
-        totalCostForQOH: 787116.20,
-        unitCostForQOH: 811.46
+        unitCostForQOH: 1007.83
       },
       {
         id: 17,
@@ -340,8 +324,7 @@ export class ProductManagementComponent implements OnInit {
         qtyOnPO: 0.00,
         qtyOnSO: 19.00,
         stockAvailable: -19.00,
-        totalCostForQOH: 0.00,
-        unitCostForQOH: 0.00
+        unitCostForQOH: 166.29
       },
       {
         id: 18,
@@ -353,8 +336,7 @@ export class ProductManagementComponent implements OnInit {
         qtyOnPO: 0.00,
         qtyOnSO: 0.00,
         stockAvailable: 17000.00,
-        totalCostForQOH: 379440.00,
-        unitCostForQOH: 22.32
+        unitCostForQOH: 27.72
       }
     ];
     
@@ -497,6 +479,10 @@ export class ProductManagementComponent implements OnInit {
   }
 
   getTotalInventoryValue(): number {
-    return this.inventoryItems.reduce((sum, item) => sum + item.totalCostForQOH, 0);
+    return this.inventoryItems.reduce((sum, item) => sum + this.getTotalCostForQOH(item), 0);
+  }
+
+  getTotalCostForQOH(item: InventoryItem): number {
+    return item.qtyOnHand * item.unitCostForQOH;
   }
 }

@@ -116,7 +116,7 @@
                                                 {{ formatNumber(item.stockAvailable) }}
                                             </span>
                                         </td>
-                                        <td>{{ formatCurrency(item.totalCostForQOH) }}</td>
+                                        <td>{{ formatCurrency(getTotalCostForQOH(item)) }}</td>
                                         <td>{{ formatCurrency(item.unitCostForQOH) }}</td>
                                         <td>
                                             <span [class]="'badge ' + getInventoryStatusClass(item)">
