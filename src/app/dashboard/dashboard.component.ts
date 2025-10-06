@@ -1016,6 +1016,118 @@ export class DashboardComponent implements OnInit {
         }
     }
 
+    // Bar chart configuration for occupations
+    occupationBarChart: any = {
+        backgroundColor: 'transparent',
+        tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+                type: 'shadow'
+            },
+            formatter: '{b}: {c} participants',
+            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+            borderColor: '#1e3a8a',
+            borderWidth: 1,
+            textStyle: {
+                color: '#fff',
+                fontFamily: 'Inter, sans-serif',
+                fontSize: 12
+            }
+        },
+        grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '3%',
+            containLabel: true
+        },
+        xAxis: {
+            type: 'value',
+            axisLabel: {
+                color: '#8e8da4',
+                fontSize: 11
+            },
+            axisLine: {
+                lineStyle: {
+                    color: '#e5e7eb'
+                }
+            },
+            splitLine: {
+                lineStyle: {
+                    color: '#f3f4f6'
+                }
+            }
+        },
+        yAxis: {
+            type: 'category',
+            data: [
+                'NURSE',
+                'DATA CAPTURE',
+                'ADMIN (Administrator)',
+                'C/G (Caregiver)',
+                'O/T (Occupational Therapist)',
+                'PN (Professional Nurse)',
+                'CNS (Clinical Nurse Specialist)',
+                'CNP (Community Nurse Practitioner)',
+                'ENA (Enrolled Nursing Assistant)',
+                'EN (Enrolled Nurse)'
+            ],
+            axisLabel: {
+                color: '#8e8da4',
+                fontSize: 10,
+                fontWeight: 500
+            },
+            axisLine: {
+                lineStyle: {
+                    color: '#e5e7eb'
+                }
+            }
+        },
+        series: [
+            {
+                name: 'Training Participants',
+                type: 'bar',
+                data: [7, 7, 8, 8, 10, 16, 21, 35, 60, 134],
+                itemStyle: {
+                    color: function(params: any) {
+                        const colors = [
+                            '#e84393',
+                            '#00cec9',
+                            '#fd79a8',
+                            '#a29bfe',
+                            '#74b9ff',
+                            '#6c5ce7',
+                            '#e17055',
+                            '#fd79a8',
+                            '#fdcb6e',
+                            '#00b894'
+                        ];
+                        return colors[params.dataIndex];
+                    },
+                    borderRadius: [0, 4, 4, 0],
+                    shadowBlur: 4,
+                    shadowOffsetX: 2,
+                    shadowOffsetY: 2,
+                    shadowColor: 'rgba(0, 0, 0, 0.1)'
+                },
+                emphasis: {
+                    itemStyle: {
+                        shadowBlur: 8,
+                        shadowOffsetX: 0,
+                        shadowOffsetY: 4,
+                        shadowColor: 'rgba(0, 0, 0, 0.2)'
+                    }
+                },
+                label: {
+                    show: true,
+                    position: 'right',
+                    color: '#304758',
+                    fontSize: 11,
+                    fontWeight: 600
+                }
+            }
+        ]
+    }
+
     // All occupation data
     allOccupationData = [
         { value: 134, name: 'EN (Enrolled Nurse)' },
@@ -1044,30 +1156,29 @@ export class DashboardComponent implements OnInit {
         setTimeout(() => {
             if (this.selectedOccupation === 'ALL') {
                 // Show all occupations
-                this.pieChart.series.data = this.allOccupationData;
+                this.occupationBarChart.yAxis.data = [
+                    'NURSE',
+                    'DATA CAPTURE',
+                    'ADMIN (Administrator)',
+                    'C/G (Caregiver)',
+                    'O/T (Occupational Therapist)',
+                    'PN (Professional Nurse)',
+                    'CNS (Clinical Nurse Specialist)',
+                    'CNP (Community Nurse Practitioner)',
+                    'ENA (Enrolled Nursing Assistant)',
+                    'EN (Enrolled Nurse)'
+                ];
+                this.occupationBarChart.series[0].data = [7, 7, 8, 8, 10, 16, 21, 35, 60, 134];
             } else {
-                // Show only selected occupation with its original color
+                // Show only selected occupation
                 const selectedData = this.allOccupationData.find(item => {
                     const occupationKey = this.getOccupationKey(item.name);
                     return occupationKey === this.selectedOccupation;
                 });
                 
                 if (selectedData) {
-                    // Find the index to get the correct color
-                    const originalIndex = this.allOccupationData.findIndex(item => {
-                        const occupationKey = this.getOccupationKey(item.name);
-                        return occupationKey === this.selectedOccupation;
-                    });
-                    
-                    // Create a copy with the original color
-                    const dataWithColor = {
-                        ...selectedData,
-                        itemStyle: {
-                            color: this.pieChart.color[originalIndex]
-                        }
-                    };
-                    
-                    this.pieChart.series.data = [dataWithColor];
+                    this.occupationBarChart.yAxis.data = [selectedData.name];
+                    this.occupationBarChart.series[0].data = [selectedData.value];
                 }
             }
             this.isShown = true;
