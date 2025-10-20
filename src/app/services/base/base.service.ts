@@ -24,12 +24,32 @@ export class BaseService {
     );
   }
 
-  baseGet<T>(url: string): Observable<ApiResponse<T>> {
-    return this.http.get<ApiResponse<T>>(`${this.API_URL}${url}`, {
+  baseGet<T>(url: string): Observable<any> {
+    return this.http.get<any>(`${this.API_URL}${url}`, {
       headers: this.getHeaders()
     }).pipe(
       timeout(this.REQUEST_TIMEOUT),
-      map(response => this.handleResponse(response)),
+      map(response => {
+        console.log('BaseService - Raw response:', response);
+        console.log('BaseService - Response type:', typeof response);
+        console.log('BaseService - Is array:', Array.isArray(response));
+
+        // If it's an array (like GetUsers), return it directly
+        if (Array.isArray(response)) {
+          console.log('BaseService - Returning array directly');
+          return response;
+        }
+
+        // If it has the expected ApiResponse structure, handle accordingly
+        if (response && typeof response === 'object' && 'success' in response) {
+          console.log('BaseService - Has success property, handling as ApiResponse');
+          return this.handleResponse(response);
+        }
+
+        // Otherwise, wrap it in ApiResponse format
+        console.log('BaseService - Wrapping in ApiResponse format');
+        return this.handleResponse(response);
+      }),
       catchError(this.handleError)
     );
   }
@@ -71,7 +91,7 @@ export class BaseService {
         errors: response.errors
       };
     }
-    
+
     // If response is not in expected format, wrap it
     return {
       success: true,
@@ -82,7 +102,7 @@ export class BaseService {
 
   private handleError = (error: HttpErrorResponse): Observable<never> => {
     let errorMessage = 'An unexpected error occurred';
-    
+
     if (error.error instanceof ErrorEvent) {
       // Client-side error
       errorMessage = error.error.message;
@@ -111,7 +131,7 @@ export class BaseService {
           errorMessage = error.error?.message || `Error Code: ${error.status}`;
       }
     }
-    
+
     return throwError(() => new Error(errorMessage));
   };
 }

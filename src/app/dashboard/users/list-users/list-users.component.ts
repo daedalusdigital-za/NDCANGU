@@ -112,11 +112,32 @@ export class ListUsersComponent implements OnInit {
   }
 
   private getUsers() {
+    console.log('Making API call to:', 'User/GetUsers');
     this.baseService.baseGet('User/GetUsers').subscribe({
       next: (response: any) => {
-        this.source = response;
+        console.log('Component - API Response received:', response);
+        console.log('Component - Response type:', typeof response);
+        console.log('Component - Is array:', Array.isArray(response));
+
+        // The BaseService now handles the response format, so we can use it directly
+        if (Array.isArray(response)) {
+          this.source = response;
+          console.log('Component - Set source to array with length:', this.source.length);
+        } else if (response && response.data && Array.isArray(response.data)) {
+          this.source = response.data;
+          console.log('Component - Set source to response.data with length:', this.source.length);
+        } else {
+          console.log('Component - Unexpected response format:', response);
+          this.source = [];
+        }
+
+        console.log('Component - Final source:', this.source);
+      },
+      error: (error: any) => {
+        console.error('Component - API Error:', error);
+        this.source = [];
       }
-    })
+    });
   }
 
   edit(item: any) {
@@ -130,12 +151,21 @@ export class ListUsersComponent implements OnInit {
       header: 'Delete Confirmation',
       icon: 'pi pi-info-circle',
       accept: () => {
+        console.log('Deleting user with ID:', id);
         this.baseService.baseDelete(`User/Delete?id=${id}`).subscribe({
-          next: () => {
-            this.toastrService.info('Record Deleted!');
-            this.getUsers();
+          next: (response: any) => {
+            console.log('Delete response:', response);
+            this.toastrService.success('User deleted successfully!', 'Success');
+            this.getUsers(); // Refresh the list
+          },
+          error: (error: any) => {
+            console.error('Delete error:', error);
+            this.toastrService.error('Failed to delete user. Please try again.', 'Error');
           }
         })
+      },
+      reject: () => {
+        console.log('Delete cancelled by user');
       }
     });
   }

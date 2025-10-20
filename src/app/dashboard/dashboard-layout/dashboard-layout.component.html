@@ -188,15 +188,7 @@
                         </div>
                     </li>
 
-                    <!-- Calendar -->
-                    <li class="nav-item" role="none">
-                        <a class="nav-link" routerLink="/dashboard/calendar" routerLinkActive="active">
-                            <div class="nav-link-content">
-                                <i class="nav-icon fas fa-calendar-alt"></i>
-                                <span class="nav-text">Training Calendar</span>
-                            </div>
-                        </a>
-                    </li>
+
 
                     <!-- Reports -->
                     <li class="nav-item" role="none">
@@ -335,7 +327,7 @@
                 </div>
             </div>
         </div>
-    </div> 
+    </div>
 </footer>
 
 <!-- Tech Support Chat Widget - Available on all pages -->
@@ -354,47 +346,47 @@
                 </div>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            
+
             <div class="modal-body">
                 <!-- Search and Filter Section -->
                 <div class="notifications-controls">
                     <div class="search-section">
                         <div class="search-input-wrapper">
                             <i class="fas fa-search search-icon"></i>
-                            <input type="text" class="form-control search-input" placeholder="Search notifications..." 
+                            <input type="text" class="form-control search-input" placeholder="Search notifications..."
                                    [(ngModel)]="notificationSearchTerm" (input)="filterNotifications()">
                         </div>
                     </div>
-                    
+
                     <div class="filter-section">
                         <div class="filter-tabs">
-                            <button class="filter-tab" 
-                                    [class.active]="selectedNotificationFilter === 'all'" 
+                            <button class="filter-tab"
+                                    [class.active]="selectedNotificationFilter === 'all'"
                                     (click)="filterNotificationsByType('all')">
                                 All
                             </button>
-                            <button class="filter-tab" 
-                                    [class.active]="selectedNotificationFilter === 'unread'" 
+                            <button class="filter-tab"
+                                    [class.active]="selectedNotificationFilter === 'unread'"
                                     (click)="filterNotificationsByType('unread')">
                                 Unread
                             </button>
-                            <button class="filter-tab" 
-                                    [class.active]="selectedNotificationFilter === 'success'" 
+                            <button class="filter-tab"
+                                    [class.active]="selectedNotificationFilter === 'success'"
                                     (click)="filterNotificationsByType('success')">
                                 Success
                             </button>
-                            <button class="filter-tab" 
-                                    [class.active]="selectedNotificationFilter === 'warning'" 
+                            <button class="filter-tab"
+                                    [class.active]="selectedNotificationFilter === 'warning'"
                                     (click)="filterNotificationsByType('warning')">
                                 Warning
                             </button>
-                            <button class="filter-tab" 
-                                    [class.active]="selectedNotificationFilter === 'info'" 
+                            <button class="filter-tab"
+                                    [class.active]="selectedNotificationFilter === 'info'"
                                     (click)="filterNotificationsByType('info')">
                                 Info
                             </button>
                         </div>
-                        
+
                         <div class="bulk-actions">
                             <button class="btn btn-outline-primary btn-sm" (click)="markAllAsRead()">
                                 <i class="fas fa-check-double me-1"></i>Mark All Read
@@ -405,23 +397,23 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- Notifications List -->
                 <div class="notifications-list">
-                    <div class="notification-item-large" 
-                         *ngFor="let notification of filteredNotifications" 
+                    <div class="notification-item-large"
+                         *ngFor="let notification of filteredNotifications"
                          [class.unread]="!notification.read"
                          [class.read]="notification.read">
-                        
+
                         <div class="notification-checkbox">
-                            <input type="checkbox" [checked]="notification.selected" 
+                            <input type="checkbox" [checked]="notification.selected"
                                    (change)="toggleNotificationSelection(notification)">
                         </div>
-                        
+
                         <div class="notification-icon-large" [ngClass]="notification.type">
                             <i [class]="getNotificationIcon(notification.type)"></i>
                         </div>
-                        
+
                         <div class="notification-content-large">
                             <div class="notification-header">
                                 <h6 class="notification-title">{{ notification.title }}</h6>
@@ -430,9 +422,9 @@
                                     <span class="notification-category">{{ notification.category }}</span>
                                 </div>
                             </div>
-                            
+
                             <p class="notification-message">{{ notification.message }}</p>
-                            
+
                             <div class="notification-actions" *ngIf="notification.hasActions">
                                 <button class="btn btn-sm btn-primary" (click)="handleNotificationAction(notification, 'primary')">
                                     {{ notification.primaryAction }}
@@ -442,20 +434,20 @@
                                 </button>
                             </div>
                         </div>
-                        
+
                         <div class="notification-controls">
-                            <button class="btn btn-sm btn-outline-primary" 
-                                    (click)="markAsRead(notification)" 
+                            <button class="btn btn-sm btn-outline-primary"
+                                    (click)="markAsRead(notification)"
                                     *ngIf="!notification.read">
                                 <i class="fas fa-check"></i>
                             </button>
-                            <button class="btn btn-sm btn-outline-danger" 
+                            <button class="btn btn-sm btn-outline-danger"
                                     (click)="deleteNotification(notification)">
                                 <i class="fas fa-trash"></i>
                             </button>
                         </div>
                     </div>
-                    
+
                     <!-- Empty State -->
                     <div class="empty-notifications" *ngIf="filteredNotifications.length === 0">
                         <div class="empty-icon">
@@ -465,15 +457,15 @@
                         <p>{{ getEmptyStateMessage() }}</p>
                     </div>
                 </div>
-                
+
                 <!-- Pagination -->
                 <div class="notifications-pagination" *ngIf="filteredNotifications.length > 0">
                     <div class="pagination-info">
-                        Showing {{ (currentPage - 1) * itemsPerPage + 1 }} - 
-                        {{ Math.min(currentPage * itemsPerPage, filteredNotifications.length) }} 
+                        Showing {{ (currentPage - 1) * itemsPerPage + 1 }} -
+                        {{ Math.min(currentPage * itemsPerPage, filteredNotifications.length) }}
                         of {{ filteredNotifications.length }} notifications
                     </div>
-                    
+
                     <nav>
                         <ul class="pagination pagination-sm">
                             <li class="page-item" [class.disabled]="currentPage === 1">
@@ -481,14 +473,14 @@
                                     <i class="fas fa-chevron-left"></i>
                                 </a>
                             </li>
-                            
-                            <li class="page-item" *ngFor="let page of getPageNumbers()" 
+
+                            <li class="page-item" *ngFor="let page of getPageNumbers()"
                                 [class.active]="page === currentPage">
                                 <a class="page-link" href="#" (click)="goToPage(page); $event.preventDefault()">
                                     {{ page }}
                                 </a>
                             </li>
-                            
+
                             <li class="page-item" [class.disabled]="currentPage === totalPages">
                                 <a class="page-link" href="#" (click)="goToPage(currentPage + 1); $event.preventDefault()">
                                     <i class="fas fa-chevron-right"></i>
@@ -498,7 +490,7 @@
                     </nav>
                 </div>
             </div>
-            
+
             <div class="modal-footer">
                 <div class="selected-actions" *ngIf="getSelectedNotifications().length > 0">
                     <span class="selected-count">{{ getSelectedNotifications().length }} selected</span>
@@ -509,7 +501,7 @@
                         <i class="fas fa-trash me-1"></i>Delete
                     </button>
                 </div>
-                
+
                 <div class="modal-footer-actions">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     <button type="button" class="btn btn-primary" (click)="refreshNotifications()">
