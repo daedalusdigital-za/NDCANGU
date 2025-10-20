@@ -4,8 +4,6 @@ import { CommonModule } from '@angular/common';
 import { DashboardRoutingModule } from './dashboard-routing.module';
 import { DashboardComponent } from './dashboard.component';
 import { DashboardLayoutComponent } from './dashboard-layout/dashboard-layout.component';
-import { ListFaqsComponent } from './list-faqs/list-faqs.component';
-import { ListTutorialsComponent } from './list-tutorials/list-tutorials.component';
 import { ReportsComponent } from './reports.component';
 import { AuthDebugComponent } from './auth-debug.component';
 import { AddStatsComponent } from './add-stats/add-stats.component';
@@ -24,8 +22,6 @@ import { VerifyPhoneNumberComponent } from './verify-phone-number/verify-phone-n
   declarations: [
     DashboardComponent,
     DashboardLayoutComponent,
-    ListFaqsComponent,
-    ListTutorialsComponent,
     ReportsComponent,
     AuthDebugComponent,
     // AddReportComponent,
