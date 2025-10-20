@@ -1,1 +1,101 @@
 /* Product Management Component Styles */
+
+.badge-soft-info {
+  background-color: rgba(116, 185, 255, 0.1);
+  color: #74b9ff;
+}
+
+.border-left-success {
+  border-left: 4px solid #28a745 !important;
+}
+
+.border-left-info {
+  border-left: 4px solid #17a2b8 !important;
+}
+
+.border-left-warning {
+  border-left: 4px solid #ffc107 !important;
+}
+
+.border-left-primary {
+  border-left: 4px solid #007bff !important;
+}
+
+.mini-stat-icon {
+  .avatar-title {
+    background-color: rgba(116, 185, 255, 0.2);
+  }
+}
+
+.table {
+  th {
+    font-weight: 600;
+    color: #495057;
+    border-top: none;
+  }
+  
+  td {
+    vertical-align: middle;
+  }
+}
+
+.card {
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+  border: 1px solid rgba(0, 0, 0, 0.125);
+}
+
+.btn-group .btn {
+  margin-right: 0;
+}
+
+.avatar-xs {
+  height: 2.5rem;
+  width: 2.5rem;
+}
+
+.avatar-title {
+  align-items: center;
+  background-color: #74b9ff;
+  color: #fff;
+  display: flex;
+  font-weight: 500;
+  height: 100%;
+  justify-content: center;
+  width: 100%;
+}
+
+.bg-soft-primary {
+  background-color: rgba(116, 185, 255, 0.1) !important;
+}
+
+.text-primary {
+  color: #74b9ff !important;
+}
+
+.badge-success {
+  background-color: #28a745;
+  color: white;
+}
+
+.badge-warning {
+  background-color: #ffc107;
+  color: #212529;
+}
+
+.badge-danger {
+  background-color: #dc3545;
+  color: white;
+}
+
+.table-responsive {
+  border-radius: 0.375rem;
+}
+
+.page-title-box {
+  margin-bottom: 1.5rem;
+}
+
+.card-header {
+  background-color: rgba(0, 0, 0, 0.03);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+}

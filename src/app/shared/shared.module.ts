@@ -4,6 +4,7 @@ import { RouterModule } from '@angular/router';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { DynamicGridComponent } from './components/dynamic-grid/dynamic-grid.component';
 import { TechSupportComponent } from './components/tech-support/tech-support.component';
+import { PopupPreviewComponent } from './components/popup-preview/popup-preview.component';
 import { TableModule } from 'primeng/table';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { CheckboxModule } from 'primeng/checkbox';
@@ -16,6 +17,7 @@ import { LottieModule } from 'ngx-lottie';
 // Import our services to ensure they're available app-wide
 import { ErrorHandlingService } from '../services/error-handling/error-handling.service';
 import { LoadingService } from '../services/loading/loading.service';
+import { PopupPreviewService } from '../services/popup-preview/popup-preview.service';
 
 export function playerFactory(): any {
     return import('lottie-web');
@@ -24,7 +26,8 @@ export function playerFactory(): any {
 @NgModule({
     declarations: [
         DynamicGridComponent,
-        TechSupportComponent
+        TechSupportComponent,
+        PopupPreviewComponent
     ],
     imports: [
         CommonModule,
@@ -43,6 +46,7 @@ export function playerFactory(): any {
     exports: [
         DynamicGridComponent,
         TechSupportComponent,
+        PopupPreviewComponent,
         // Re-export PrimeNG modules for convenience
         CommonModule,
         RouterModule,
@@ -57,7 +61,8 @@ export function playerFactory(): any {
     ],
     providers: [
         ErrorHandlingService,
-        LoadingService
+        LoadingService,
+        PopupPreviewService
     ]
 })
 export class SharedModule { }

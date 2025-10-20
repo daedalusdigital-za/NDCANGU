@@ -3,85 +3,228 @@
         <div class="row">
             <div class="col-12">
                 <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                    <h4 class="mb-sm-0 font-size-18">Training Reports</h4>
+                    <h4 class="mb-sm-0 font-size-18">Training Reports & Registers</h4>
                     <div class="page-title-right">
                         <ol class="breadcrumb m-0">
                             <li class="breadcrumb-item"><a href="javascript: void(0);">Training</a></li>
-                            <li class="breadcrumb-item active">Training Reports</li>
+                            <li class="breadcrumb-item active">Reports & Registers</li>
                         </ol>
                     </div>
                 </div>
             </div>
         </div>
 
+        <!-- Statistics Cards -->
         <div class="row">
+            <div class="col-md-3">
+                <div class="card bg-primary text-white">
+                    <div class="card-body">
+                        <h5 class="card-title">Total Training Sessions</h5>
+                        <h2>{{ totalSessions }}</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card bg-success text-white">
+                    <div class="card-body">
+                        <h5 class="card-title">Total Participants</h5>
+                        <h2>{{ totalParticipants }}</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card bg-warning text-white">
+                    <div class="card-body">
+                        <h5 class="card-title">Active Trainers</h5>
+                        <h2>{{ activeTrainersCount }}</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card bg-info text-white">
+                    <div class="card-body">
+                        <h5 class="card-title">Avg. Attendance</h5>
+                        <h2>{{ averageAttendanceRate }}%</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab Navigation -->
+        <div class="row mt-4">
             <div class="col-12">
                 <div class="card">
                     <div class="card-body">
-                        <h4 class="card-title">Training Reports</h4>
-                        <p class="text-muted">Generate and view training reports</p>
-                        
-                        <div class="row">
-                            <div class="col-md-4">
-                                <div class="card bg-primary text-white">
-                                    <div class="card-body">
-                                        <h5 class="card-title">Total Training Sessions</h5>
-                                        <h2>169</h2>
-                                    </div>
-                                </div>
+                        <ul class="nav nav-tabs" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <a class="nav-link" 
+                                   [class.active]="selectedTab === 'registers'"
+                                   (click)="selectTab('registers')"
+                                   href="javascript:void(0)">
+                                    <i class="fas fa-clipboard-list me-2"></i>Training Registers
+                                </a>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <a class="nav-link" 
+                                   [class.active]="selectedTab === 'reports'"
+                                   (click)="selectTab('reports')"
+                                   href="javascript:void(0)">
+                                    <i class="fas fa-chart-bar me-2"></i>Training Reports
+                                </a>
+                            </li>
+                        </ul>
+
+                        <!-- Training Registers Tab -->
+                        <div class="tab-content mt-3" *ngIf="selectedTab === 'registers'">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h5 class="card-title mb-0">Training Session Registers</h5>
+                                <button class="btn btn-primary">
+                                    <i class="fas fa-plus me-2"></i>Add New Register
+                                </button>
                             </div>
-                            <div class="col-md-4">
-                                <div class="card bg-success text-white">
-                                    <div class="card-body">
-                                        <h5 class="card-title">Total Participants</h5>
-                                        <h2>1,340</h2>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="card bg-warning text-white">
-                                    <div class="card-body">
-                                        <h5 class="card-title">Active Trainers</h5>
-                                        <h2>{{ activeTrainersCount }}</h2>
-                                    </div>
-                                </div>
+                            
+                            <div class="table-responsive">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Session Title</th>
+                                            <th>Trainer</th>
+                                            <th>Date</th>
+                                            <th>Venue</th>
+                                            <th>Participants</th>
+                                            <th>Duration</th>
+                                            <th>Attendance Rate</th>
+                                            <th>Status</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let register of trainingRegisters">
+                                            <td>
+                                                <strong>{{ register.sessionTitle }}</strong>
+                                                <br>
+                                                <small class="text-muted">{{ register.topic }}</small>
+                                            </td>
+                                            <td>{{ register.trainer }}</td>
+                                            <td>{{ register.date | date:'dd/MM/yyyy' }}</td>
+                                            <td>{{ register.venue }}</td>
+                                            <td>
+                                                {{ register.participants }}
+                                                <br>
+                                                <small class="text-muted" *ngIf="register.certificatesIssued > 0">
+                                                    {{ register.certificatesIssued }} certificates issued
+                                                </small>
+                                            </td>
+                                            <td>{{ register.duration }}</td>
+                                            <td>
+                                                <span class="badge" 
+                                                      [class.bg-success]="register.attendanceRate >= 90"
+                                                      [class.bg-warning]="register.attendanceRate >= 70 && register.attendanceRate < 90"
+                                                      [class.bg-danger]="register.attendanceRate < 70 && register.attendanceRate > 0"
+                                                      [class.bg-secondary]="register.attendanceRate === 0">
+                                                    {{ register.attendanceRate > 0 ? register.attendanceRate + '%' : 'N/A' }}
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <span class="badge" 
+                                                      [class.bg-success]="register.status === 'Completed'"
+                                                      [class.bg-primary]="register.status === 'In Progress'"
+                                                      [class.bg-secondary]="register.status === 'Scheduled'">
+                                                    {{ register.status }}
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <div class="btn-group" role="group">
+                                                    <button class="btn btn-sm btn-outline-info" 
+                                                            (click)="viewRegister(register)"
+                                                            title="View Details">
+                                                        <i class="fas fa-eye"></i>
+                                                    </button>
+                                                    <button class="btn btn-sm btn-outline-primary" 
+                                                            (click)="downloadRegister(register)"
+                                                            [disabled]="!register.registerFile"
+                                                            title="Download Register">
+                                                        <i class="fas fa-download"></i>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
 
-                        <div class="row mt-4">
-                            <div class="col-12">
-                                <div class="table-responsive">
-                                    <table class="table table-striped">
-                                        <thead>
-                                            <tr>
-                                                <th>Report Type</th>
-                                                <th>Generated Date</th>
-                                                <th>Status</th>
-                                                <th>Actions</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td>Monthly Training Summary</td>
-                                                <td>2024-01-31</td>
-                                                <td><span class="badge bg-success">Ready</span></td>
-                                                <td>
-                                                    <button class="btn btn-sm btn-outline-info">View</button>
-                                                    <button class="btn btn-sm btn-outline-primary">Download</button>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>Quarterly Training Report</td>
-                                                <td>2024-03-31</td>
-                                                <td><span class="badge bg-warning">Processing</span></td>
-                                                <td>
-                                                    <button class="btn btn-sm btn-outline-info">View</button>
-                                                    <button class="btn btn-sm btn-outline-primary">Download</button>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
+                        <!-- Training Reports Tab -->
+                        <div class="tab-content mt-3" *ngIf="selectedTab === 'reports'">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h5 class="card-title mb-0">Training Reports</h5>
+                                <div class="btn-group">
+                                    <button class="btn btn-success" (click)="generateReport('Monthly')">
+                                        <i class="fas fa-plus me-2"></i>Generate Monthly Report
+                                    </button>
+                                    <button class="btn btn-info" (click)="generateReport('Quarterly')">
+                                        <i class="fas fa-plus me-2"></i>Generate Quarterly Report
+                                    </button>
                                 </div>
+                            </div>
+                            
+                            <div class="table-responsive">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Report Type</th>
+                                            <th>Period</th>
+                                            <th>Generated Date</th>
+                                            <th>Sessions</th>
+                                            <th>Participants</th>
+                                            <th>Completion Rate</th>
+                                            <th>Status</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let report of trainingReports">
+                                            <td>
+                                                <strong>{{ report.reportType }}</strong>
+                                            </td>
+                                            <td>{{ report.period }}</td>
+                                            <td>{{ report.generatedDate | date:'dd/MM/yyyy' }}</td>
+                                            <td>{{ report.totalSessions }}</td>
+                                            <td>{{ report.totalParticipants }}</td>
+                                            <td>
+                                                <span class="badge" 
+                                                      [class.bg-success]="report.completionRate >= 90"
+                                                      [class.bg-warning]="report.completionRate >= 70 && report.completionRate < 90"
+                                                      [class.bg-danger]="report.completionRate < 70">
+                                                    {{ report.completionRate }}%
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <span class="badge" 
+                                                      [class.bg-success]="report.status === 'Ready'"
+                                                      [class.bg-warning]="report.status === 'Processing'"
+                                                      [class.bg-secondary]="report.status === 'Draft'">
+                                                    {{ report.status }}
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <div class="btn-group" role="group">
+                                                    <button class="btn btn-sm btn-outline-info" 
+                                                            (click)="viewReport(report)"
+                                                            title="View Report">
+                                                        <i class="fas fa-eye"></i>
+                                                    </button>
+                                                    <button class="btn btn-sm btn-outline-primary" 
+                                                            (click)="downloadReport(report)"
+                                                            [disabled]="report.status !== 'Ready'"
+                                                            title="Download Report">
+                                                        <i class="fas fa-download"></i>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
@@ -90,3 +233,6 @@
         </div>
     </div>
 </div>
+
+<!-- Popup Preview Component -->
+<app-popup-preview></app-popup-preview>

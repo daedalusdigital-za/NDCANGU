@@ -40,7 +40,7 @@
             </div>
 
             <!-- Occupations of Training Participants Card -->
-            <div class="col-12 col-lg-4">
+            <div class="col-12 col-lg-8">
                 <div class="card card-h-100 customize-card">
                     <div class="card-header">
                         <div class="d-flex justify-content-between align-items-center flex-wrap">
@@ -70,221 +70,15 @@
                     <div class="card-body" *ngIf="isShown">
                         <div class="chart-container" 
                              echarts 
-                             [options]="pieChart"
+                             [options]="occupationBarChart"
                              style="height: 400px;"
                              class="e-charts"
-                             aria-label="Training participants occupations pie chart">
+                             aria-label="Training participants occupations bar chart">
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Reports Card -->
-            <div class="col-12 col-lg-4">
-                <div class="card h-100 customize-card">
-                    <div class="card-header">
-                        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
-                            <h2 class="card-title mb-0 h5" style="color: white;">Stock Reports</h2>
-                            <button class="btn btn-outline-primary btn-sm" 
-                                    type="button"
-                                    aria-label="Download all reports">
-                                <i class="mdi mdi-download me-1" aria-hidden="true"></i>
-                                <span class="d-none d-sm-inline">Download All</span>
-                                <span class="d-sm-none">All</span>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="card-body p-3">
-                        <div class="list-group list-group-flush">
-                            <!-- KwaZulu-Natal -->
-                            <div class="list-group-item border-0 px-0 mb-3">
-                                <div class="d-flex justify-content-between align-items-start">
-                                    <div class="flex-grow-1">
-                                        <h6 class="mb-1 text-primary fw-bold">KwaZulu-Natal</h6>
-                                        <small class="text-muted">#KZN-001</small>
-                                    </div>
-                                    <div class="d-flex flex-column flex-sm-row gap-1">
-                                        <a href="assets/institutionalReport2023.xls" 
-                                           class="btn btn-link text-success btn-sm p-1"
-                                           (click)="downloadExcel()"
-                                           aria-label="Download KwaZulu-Natal stock report as Excel">
-                                            <i class="fas fa-file-excel me-1" aria-hidden="true"></i>
-                                            <span class="d-none d-md-inline">Excel</span>
-                                        </a>
-                                        <button class="btn btn-link text-danger btn-sm p-1" 
-                                                (click)="downloadPdf()"
-                                                aria-label="Download KwaZulu-Natal stock report as PDF">
-                                            <i class="fas fa-file-pdf me-1" aria-hidden="true"></i>
-                                            <span class="d-none d-md-inline">PDF</span>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <!-- Gauteng -->
-                            <div class="list-group-item border-0 px-0 mb-3">
-                                <div class="d-flex justify-content-between align-items-start">
-                                    <div class="flex-grow-1">
-                                        <h6 class="mb-1 text-primary fw-bold">Gauteng</h6>
-                                        <small class="text-muted">#GP-002</small>
-                                    </div>
-                                    <div class="d-flex flex-column flex-sm-row gap-1">
-                                        <a href="assets/institutionalReport2023.xls" 
-                                           class="btn btn-link text-success btn-sm p-1"
-                                           (click)="downloadExcel()"
-                                           aria-label="Download Gauteng stock report as Excel">
-                                            <i class="fas fa-file-excel me-1" aria-hidden="true"></i>
-                                            <span class="d-none d-md-inline">Excel</span>
-                                        </a>
-                                        <button class="btn btn-link text-danger btn-sm p-1" 
-                                                (click)="downloadPdf()"
-                                                aria-label="Download Gauteng stock report as PDF">
-                                            <i class="fas fa-file-pdf me-1" aria-hidden="true"></i>
-                                            <span class="d-none d-md-inline">PDF</span>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Free State -->
-                            <div class="list-group-item border-0 px-0 mb-3">
-                                <div class="d-flex justify-content-between align-items-start">
-                                    <div class="flex-grow-1">
-                                        <h6 class="mb-1 text-primary fw-bold">Free State</h6>
-                                        <small class="text-muted">#FS-003</small>
-                                    </div>
-                                    <div class="d-flex flex-column flex-sm-row gap-1">
-                                        <a href="assets/institutionalReport2023.xls" 
-                                           class="btn btn-link text-success btn-sm p-1"
-                                           (click)="downloadExcel()"
-                                           aria-label="Download Free State stock report as Excel">
-                                            <i class="fas fa-file-excel me-1" aria-hidden="true"></i>
-                                            <span class="d-none d-md-inline">Excel</span>
-                                        </a>
-                                        <button class="btn btn-link text-danger btn-sm p-1" 
-                                                (click)="downloadPdf()"
-                                                aria-label="Download Free State stock report as PDF">
-                                            <i class="fas fa-file-pdf me-1" aria-hidden="true"></i>
-                                            <span class="d-none d-md-inline">PDF</span>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Mpumalanga -->
-                            <div class="list-group-item border-0 px-0 mb-3">
-                                <div class="d-flex justify-content-between align-items-start">
-                                    <div class="flex-grow-1">
-                                        <h6 class="mb-1 text-primary fw-bold">Mpumalanga</h6>
-                                        <small class="text-muted">#MP-004</small>
-                                    </div>
-                                    <div class="d-flex flex-column flex-sm-row gap-1">
-                                        <a href="assets/institutionalReport2023.xls" 
-                                           class="btn btn-link text-success btn-sm p-1"
-                                           (click)="downloadExcel()"
-                                           aria-label="Download Mpumalanga stock report as Excel">
-                                            <i class="fas fa-file-excel me-1" aria-hidden="true"></i>
-                                            <span class="d-none d-md-inline">Excel</span>
-                                        </a>
-                                        <button class="btn btn-link text-danger btn-sm p-1" 
-                                                (click)="downloadPdf()"
-                                                aria-label="Download Mpumalanga stock report as PDF">
-                                            <i class="fas fa-file-pdf me-1" aria-hidden="true"></i>
-                                            <span class="d-none d-md-inline">PDF</span>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Limpopo -->
-                            <div class="list-group-item border-0 px-0 mb-3">
-                                <div class="d-flex justify-content-between align-items-start">
-                                    <div class="flex-grow-1">
-                                        <h6 class="mb-1 text-primary fw-bold">Limpopo</h6>
-                                        <small class="text-muted">#LP-005</small>
-                                    </div>
-                                    <div class="d-flex flex-column flex-sm-row gap-1">
-                                        <a href="assets/institutionalReport2023.xls" 
-                                           class="btn btn-link text-success btn-sm p-1"
-                                           (click)="downloadExcel()"
-                                           aria-label="Download Limpopo stock report as Excel">
-                                            <i class="fas fa-file-excel me-1" aria-hidden="true"></i>
-                                            <span class="d-none d-md-inline">Excel</span>
-                                        </a>
-                                        <button class="btn btn-link text-danger btn-sm p-1" 
-                                                (click)="downloadPdf()"
-                                                aria-label="Download Limpopo stock report as PDF">
-                                            <i class="fas fa-file-pdf me-1" aria-hidden="true"></i>
-                                            <span class="d-none d-md-inline">PDF</span>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Northern Cape -->
-                            <div class="list-group-item border-0 px-0 mb-3">
-                                <div class="d-flex justify-content-between align-items-start">
-                                    <div class="flex-grow-1">
-                                        <h6 class="mb-1 text-primary fw-bold">Northern Cape</h6>
-                                        <small class="text-muted">#NC-006</small>
-                                    </div>
-                                    <div class="d-flex flex-column flex-sm-row gap-1">
-                                        <a href="assets/institutionalReport2023.xls" 
-                                           class="btn btn-link text-success btn-sm p-1"
-                                           (click)="downloadExcel()"
-                                           aria-label="Download Northern Cape stock report as Excel">
-                                            <i class="fas fa-file-excel me-1" aria-hidden="true"></i>
-                                            <span class="d-none d-md-inline">Excel</span>
-                                        </a>
-                                        <button class="btn btn-link text-danger btn-sm p-1" 
-                                                (click)="downloadPdf()"
-                                                aria-label="Download Northern Cape stock report as PDF">
-                                            <i class="fas fa-file-pdf me-1" aria-hidden="true"></i>
-                                            <span class="d-none d-md-inline">PDF</span>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-              </div>
-
-
-        </div>
-        <!-- end row -->
-
-        <div class="row g-4 mt-2">
-            <div class="col-xl-12">
-                <div class="card card-h-100 customize-card">
-                    <div class="card-header">
-                        <div class="d-flex align-items-center">
-                            <i class="fas fa-chart-bar me-2"></i>
-                            <h4 class="card-title mb-0">Glucose Levels by Province</h4>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <div class="chart-wrapper">
-                            <apx-chart
-                                [series]="columnChartOptions.series"
-                                [chart]="columnChartOptions.chart"
-                                [dataLabels]="columnChartOptions.dataLabels"
-                                [plotOptions]="columnChartOptions.plotOptions"
-                                [yaxis]="columnChartOptions.yaxis"
-                                [legend]="columnChartOptions.legend"
-                                [fill]="columnChartOptions.fill"
-                                [stroke]="columnChartOptions.stroke"
-                                [tooltip]="columnChartOptions.tooltip"
-                                [xaxis]="columnChartOptions.xaxis"
-                                [colors]="columnChartOptions.colors"
-                                [grid]="columnChartOptions.grid">
-                            </apx-chart>
-                        </div>
-                    </div>
-                </div>
-                <!-- end card -->
-            </div>
-            <!-- end col -->
         </div>
         <!-- end row -->
         
@@ -294,12 +88,21 @@
             <div class="col-12 col-lg-6">
                 <div class="card card-h-100 customize-card" style="border-top: 4px solid #ff6b6b;">
                     <div class="card-header" style="background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%); color: white;">
-                        <div class="d-flex align-items-center">
-                            <i class="fas fa-thermometer-half me-3" style="font-size: 1.5rem;"></i>
-                            <h4 class="card-title mb-0" style="font-size: 1.3rem; font-weight: 700;">HGT Meter Distribution by Province</h4>
-                        </div>
-                        <div class="ms-auto">
-                            <small style="color: rgba(255, 255, 255, 0.9); font-size: 0.95rem; font-weight: 600;">Total: 44,647 units</small>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-thermometer-half me-3" style="font-size: 1.5rem;"></i>
+                                <h4 class="card-title mb-0" style="font-size: 1.3rem; font-weight: 700;">HGT Meter Distribution by Province</h4>
+                            </div>
+                            <div class="d-flex align-items-center gap-2">
+                                <small style="color: rgba(255, 255, 255, 0.9); font-size: 0.95rem; font-weight: 600;">Total: 44,647 units</small>
+                                <button class="btn btn-outline-light btn-sm" 
+                                        (click)="exportHgtMeterToExcel()"
+                                        title="Export to Excel"
+                                        aria-label="Export HGT Meter distribution data to Excel">
+                                    <i class="fas fa-file-excel me-1"></i>
+                                    <span class="d-none d-md-inline">Export</span>
+                                </button>
+                            </div>
                         </div>
                     </div>
                     <div class="card-body" style="background: linear-gradient(135deg, #ffeaa7 0%, #fab1a0 100%);">
@@ -317,12 +120,21 @@
             <div class="col-12 col-lg-6">
                 <div class="card card-h-100 customize-card" style="border-top: 4px solid #a8e6cf;">
                     <div class="card-header" style="background: linear-gradient(135deg, #a8e6cf 0%, #56ab2f 100%); color: white;">
-                        <div class="d-flex align-items-center">
-                            <i class="fas fa-prescription-bottle-alt me-3" style="font-size: 1.5rem;"></i>
-                            <h4 class="card-title mb-0" style="font-size: 1.3rem; font-weight: 700;">HGT Strips Distribution by Province</h4>
-                        </div>
-                        <div class="ms-auto">
-                            <small style="color: rgba(255, 255, 255, 0.9); font-size: 0.95rem; font-weight: 600;">Total: 141,320 units</small>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-prescription-bottle-alt me-3" style="font-size: 1.5rem;"></i>
+                                <h4 class="card-title mb-0" style="font-size: 1.3rem; font-weight: 700;">HGT Strips Distribution by Province</h4>
+                            </div>
+                            <div class="d-flex align-items-center gap-2">
+                                <small style="color: rgba(255, 255, 255, 0.9); font-size: 0.95rem; font-weight: 600;">Total: 141,320 units</small>
+                                <button class="btn btn-outline-light btn-sm" 
+                                        (click)="exportHgtStripsToExcel()"
+                                        title="Export to Excel"
+                                        aria-label="Export HGT Strips distribution data to Excel">
+                                    <i class="fas fa-file-excel me-1"></i>
+                                    <span class="d-none d-md-inline">Export</span>
+                                </button>
+                            </div>
                         </div>
                     </div>
                     <div class="card-body" style="background: linear-gradient(135deg, #dcedc1 0%, #b5fffc 100%);">
@@ -342,12 +154,21 @@
             <div class="col-12">
                 <div class="card card-h-100 customize-card" style="border-top: 4px solid #4ecdc4;">
                     <div class="card-header" style="background: linear-gradient(135deg, #4ecdc4 0%, #44a08d 100%); color: white;">
-                        <div class="d-flex align-items-center">
-                            <i class="fas fa-chart-bar me-3" style="font-size: 1.5rem;"></i>
-                            <h4 class="card-title mb-0" style="font-size: 1.3rem; font-weight: 700;">Total Stock Delivered by Province</h4>
-                        </div>
-                        <div class="ms-auto">
-                            <small style="color: rgba(255, 255, 255, 0.9); font-size: 0.95rem; font-weight: 600;">All Medical Equipment Categories</small>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-chart-bar me-3" style="font-size: 1.5rem;"></i>
+                                <h4 class="card-title mb-0" style="font-size: 1.3rem; font-weight: 700;">Total Stock Delivered by Province</h4>
+                            </div>
+                            <div class="d-flex align-items-center gap-2">
+                                <small style="color: rgba(255, 255, 255, 0.9); font-size: 0.95rem; font-weight: 600;">All Medical Equipment Categories</small>
+                                <button class="btn btn-outline-light btn-sm" 
+                                        (click)="exportStockDeliveredToExcel()"
+                                        title="Export to Excel"
+                                        aria-label="Export stock delivered data to Excel">
+                                    <i class="fas fa-file-excel me-1"></i>
+                                    <span class="d-none d-md-inline">Export</span>
+                                </button>
+                            </div>
                         </div>
                     </div>
                     <div class="card-body" style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);">

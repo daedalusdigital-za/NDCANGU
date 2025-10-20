@@ -10,7 +10,6 @@ import { ListTutorialsComponent } from './list-tutorials/list-tutorials.componen
 import { AuthDebugComponent } from './auth-debug.component';
 import { VerifyPhoneNumberComponent } from './verify-phone-number/verify-phone-number.component';
 
-
 const routes: Routes = [
   {
     path: '',
@@ -40,7 +39,6 @@ const routes: Routes = [
         path: 'users',
         loadChildren: () => import('./users/users.module').then(m => m.UsersModule),
       },
-
       {
         path: 'reports',
         component: ReportsComponent,
