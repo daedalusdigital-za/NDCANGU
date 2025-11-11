@@ -118,15 +118,7 @@ export class MedicalHistoryComponent implements OnInit {
       },
     },
     
-    {
-      header: 'Next Appointment',
-      field: 'nextAppointmentDate',
-      visible: false,
-      isFilter: false,
-      getValue: function(item: any) {
-        return item[this.field]
-      },
-    },
+    // Next appointment column removed - appointment endpoints not available in production API
     {
       header: 'Recomendations',
       field: 'recomendations',

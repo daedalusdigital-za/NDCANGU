@@ -71,7 +71,8 @@ export class DashboardLayoutComponent implements OnInit, AfterViewInit, OnDestro
         this.isNurseUser = true;
       }
 
-      this.districts = this.globalService.getDistricts(this.flagText);
+      // Location services removed - districts no longer available
+      this.districts = [];
       this.pdflink = `assets/pdfs/${this.flagText}.pdf`;
     }
   }
@@ -136,10 +137,12 @@ export class DashboardLayoutComponent implements OnInit, AfterViewInit, OnDestro
     this.flagImg = img;
     this.flagText = text;
     this.pdflink = `assets/pdfs/${text}.pdf`;
-    this.districts = this.globalService.getDistricts(text);
+    
+    // Location services removed - districts no longer available
+    this.districts = [];
+    this.globalService.selectedDistricts = this.districts;
     
     this.globalService.selectedProvince = this.flagText;
-    this.globalService.selectedDistricts = this.districts;
     
     // Add animation feedback
     this.showNotification(`Province changed to ${text}`, 'success');
@@ -258,16 +261,7 @@ export class DashboardLayoutComponent implements OnInit, AfterViewInit, OnDestro
         selected: false,
         category: 'System'
       },
-      {
-        id: '6',
-        type: 'info',
-        title: 'Patient Appointment',
-        message: 'New appointment scheduled for tomorrow at 10:00 AM with Dr. Smith',
-        timestamp: new Date(Date.now() - 8 * 60 * 60 * 1000), // 8 hours ago
-        read: true,
-        selected: false,
-        category: 'Appointments'
-      },
+      // Appointment notifications removed - appointment endpoints not available in production API
       {
         id: '7',
         type: 'warning',

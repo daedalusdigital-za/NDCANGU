@@ -39,7 +39,7 @@ export class ModalRecordTestComponent implements OnInit {
     symptoms: '',
     remidies: null,
     gender: '',
-    nextAppointmentDate: new Date().toISOString(),
+    // nextAppointmentDate removed - appointment endpoints not available in production API
     isMedicated: null,
     isDeleted: null,
   }
@@ -81,7 +81,7 @@ export class ModalRecordTestComponent implements OnInit {
       bloodPressue: this.report.bloodPressue,
       hbA1C: this.report.HBA1C,
       totalColestorl: this.report.totalColestorl,
-      nextAppointmentDate: this.report.nextAppointmentDate
+      // nextAppointmentDate removed - appointment endpoints not available in production API
     };
 
     this.baseService.basePost(`MedicalHistory/Add`, payload).subscribe({

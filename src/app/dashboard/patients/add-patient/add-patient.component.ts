@@ -67,7 +67,8 @@ export class AddPatientComponent implements OnInit {
   provinceChange(text: string){
     console.log(text);
     
-    this.districts = this.globalService.getDistricts(text)
+    // Location services removed - districts no longer available
+    this.districts = [];
   }
 
   getAge(dateString?: any) {

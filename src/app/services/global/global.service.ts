@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
 import jsPDF from 'jspdf';
-import { Subject } from 'rxjs';
+import { Subject, Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import * as XLSX from 'xlsx';
+import { DatabaseService } from '../data/database.service';
 
 interface LocationData {
   provinces: string[];
@@ -61,7 +63,7 @@ export class GlobalService {
     }
   };
 
-  constructor() { }
+  constructor(private databaseService: DatabaseService) { }
 
   /**
    * Get item from localStorage with type safety
@@ -115,31 +117,8 @@ export class GlobalService {
   }
 
   /**
-   * Get districts for a given province
+   * Location functions removed - no longer needed
    */
-  getDistricts(provinceName: string): string[] {
-    if (!provinceName || typeof provinceName !== 'string') {
-      return [];
-    }
-    return this.locationData.districts[provinceName] || [];
-  }
-
-  /**
-   * Get institutions for a given province
-   */
-  getInstitution(provinceName: string): string[] {
-    if (!provinceName || typeof provinceName !== 'string') {
-      return [];
-    }
-    return this.locationData.institutions[provinceName] || [];
-  }
-
-  /**
-   * Get all provinces
-   */
-  getProvinces(): string[] {
-    return this.locationData.provinces;
-  }
 
   /**
    * Export JSON data to Excel file with improved error handling
