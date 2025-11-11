@@ -42,9 +42,11 @@
                                                     <input type="text" required class="form-control"
                                                         id="basicpill-firstname-input" name="firstName"
                                                         [(ngModel)]="user.firstName"
-                                                        [ngClass]="{'is-invalid': form.controls['firstName'].touched && form.controls['firstName'].invalid }"
+                                                        [ngClass]="{'is-invalid': form.controls['firstName']?.touched && form.controls['firstName']?.invalid }"
                                                         placeholder="Enter Your First Name">
-                                                        
+                                                    <div class="invalid-feedback" *ngIf="form.controls['firstName']?.touched && form.controls['firstName']?.invalid">
+                                                        First name is required
+                                                    </div>
                                                 </div>
                                             </div>
                                             <div class="col-lg-6">
@@ -54,7 +56,10 @@
                                                     <input type="text" required="true" class="form-control"
                                                         id="basicpill-lastname-input" [(ngModel)]="user.lastName"
                                                         name="lastName" placeholder="Enter Your Last Name"
-                                                        [ngClass]="{'is-invalid': form.controls['lastName'].touched && form.controls['lastName'].invalid }">
+                                                        [ngClass]="{'is-invalid': form.controls['lastName']?.touched && form.controls['lastName']?.invalid }">
+                                                    <div class="invalid-feedback" *ngIf="form.controls['lastName']?.touched && form.controls['lastName']?.invalid">
+                                                        Last name is required
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -68,7 +73,10 @@
                                                         id="basicpill-phoneno-input" name="phoneNumber"
                                                         [(ngModel)]="user.phoneNumber"
                                                         placeholder="Enter your Phone No."
-                                                        [class.is-invalid]="form.submitted && form.controls['phoneNumber'].invalid">
+                                                        [class.is-invalid]="form.submitted && form.controls['phoneNumber']?.invalid">
+                                                    <div class="invalid-feedback" *ngIf="form.controls['phoneNumber']?.touched && form.controls['phoneNumber']?.invalid">
+                                                        Phone number is required
+                                                    </div>
                                                 </div>
                                             </div>
                                             <div class="col-lg-6">
@@ -77,7 +85,11 @@
                                                     <input type="email" required="true" class="form-control"
                                                         id="basicpill-email-input" name="email" [(ngModel)]="user.email"
                                                         placeholder="Enter your email"
-                                                        [class.is-invalid]="form.submitted && form.controls['email'].invalid">
+                                                        [class.is-invalid]="form.submitted && form.controls['email']?.invalid">
+                                                    <div class="invalid-feedback" *ngIf="form.controls['email']?.touched && form.controls['email']?.invalid">
+                                                        <span *ngIf="form.controls['email']?.errors?.['required']">Email is required</span>
+                                                        <span *ngIf="form.controls['email']?.errors?.['email']">Please enter a valid email</span>
+                                                    </div>
                                                 </div>
                                             </div>
 
@@ -90,9 +102,12 @@
                                                     <label for="basicpill-address-input"
                                                         class="form-label">Password</label>
                                                     <input type="password" required="true" class="form-control"
-                                                        id="basicpill-email-input" name="password"
-                                                        [(ngModel)]="user.password" placeholder="Enter password" 
-                                                        [class.is-invalid]="form.submitted && form.controls['password'].invalid">
+                                                        id="basicpill-password-input" name="password"
+                                                        [(ngModel)]="user.password" placeholder="Enter password"
+                                                        [class.is-invalid]="form.submitted && form.controls['password']?.invalid">
+                                                    <div class="invalid-feedback" *ngIf="form.controls['password']?.touched && form.controls['password']?.invalid">
+                                                        Password is required
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -168,7 +183,11 @@
                                         <ul class="pager wizard twitter-bs-wizard-pager-link">
                                             <li class="next">
                                                 <button class="btn btn-primary w-100 waves-effect waves-light"
-                                                    type="submit">Save <i class="bx bx-chevron-right ms-1"></i></button>
+                                                    type="submit" [disabled]="isLoading || !form.valid">
+                                                    <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                                                    {{isLoading ? 'Saving...' : 'Save'}}
+                                                    <i class="bx bx-chevron-right ms-1" *ngIf="!isLoading"></i>
+                                                </button>
                                             </li>
                                         </ul>
                                     </form>

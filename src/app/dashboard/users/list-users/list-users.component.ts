@@ -124,7 +124,7 @@ export class ListUsersComponent implements OnInit {
         this.source = this.getMockUsers();
         this.toastrService.info('Using demo user data (API unavailable)');
       }
-    })
+    });
   }
 
   private getMockUsers() {
@@ -188,12 +188,21 @@ export class ListUsersComponent implements OnInit {
       header: 'Delete Confirmation',
       icon: 'pi pi-info-circle',
       accept: () => {
+        console.log('Deleting user with ID:', id);
         this.baseService.baseDelete(`User/Delete?id=${id}`).subscribe({
-          next: () => {
-            this.toastrService.info('Record Deleted!');
-            this.getUsers();
+          next: (response: any) => {
+            console.log('Delete response:', response);
+            this.toastrService.success('User deleted successfully!', 'Success');
+            this.getUsers(); // Refresh the list
+          },
+          error: (error: any) => {
+            console.error('Delete error:', error);
+            this.toastrService.error('Failed to delete user. Please try again.', 'Error');
           }
         })
+      },
+      reject: () => {
+        console.log('Delete cancelled by user');
       }
     });
   }

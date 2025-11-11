@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Token Test</title>
+</head>
+<body>
+    <h1>NDCANGU Token Test</h1>
+    <button onclick="setToken()">Set Token in LocalStorage</button>
+    <button onclick="getToken()">Get Token from LocalStorage</button>
+    <button onclick="clearToken()">Clear Token</button>
+    <div id="output"></div>
+
+    <script>
+        const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJJZCI6IjkiLCJVc2VybmFtZSI6IndlbGNvbWVraW5nQG91dGxvb2suY29tIiwiRmlyc3ROYW1lIjoid2VsY29tZSIsIkxhc3ROYW1lIjoiTWFsYW1sZWxhIiwiRW1haWwiOiJ3ZWxjb21la2luZ0BvdXRsb29rLmNvbSIsImp0aSI6IjZhOWU1NjJhLTY1ZmYtNDBjMS05Yzk2LWU4MWIwYWEyYjIxZCIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IkFkbWluIiwiZXhwIjoxNzYxMDM2MzUxLCJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjYxOTU1IiwiYXVkIjoiaHR0cDovL2xvY2FsaG9zdDo0MjAwIn0.MzlPENhnuJ1vUd5vLpQ1SUCl4jIwuyUnqZUDgsYgEJY";
+
+        const user = {
+            id: "9",
+            email: "welcomeking@outlook.com",
+            phoneNumber: "0645210558",
+            fullName: "welcome Malamlela",
+            role: ["Admin"],
+            token: token
+        };
+
+        function setToken() {
+            localStorage.setItem('currentUser', JSON.stringify(user));
+            document.getElementById('output').innerHTML = '<p style="color: green;">Token set in localStorage!</p>';
+        }
+
+        function getToken() {
+            const storedUser = localStorage.getItem('currentUser');
+            if (storedUser) {
+                const parsed = JSON.parse(storedUser);
+                document.getElementById('output').innerHTML = '<pre>' + JSON.stringify(parsed, null, 2) + '</pre>';
+            } else {
+                document.getElementById('output').innerHTML = '<p style="color: red;">No token found in localStorage</p>';
+            }
+        }
+
+        function clearToken() {
+            localStorage.removeItem('currentUser');
+            document.getElementById('output').innerHTML = '<p style="color: orange;">Token cleared from localStorage</p>';
+        }
+    </script>
+</body>
+</html>

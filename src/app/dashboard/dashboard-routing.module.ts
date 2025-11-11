@@ -3,10 +3,8 @@ import { RouterModule, Routes } from '@angular/router';
 import { AddStatsComponent } from './add-stats/add-stats.component';
 import { DashboardLayoutComponent } from './dashboard-layout/dashboard-layout.component';
 import { DashboardComponent } from './dashboard.component';
-import { ListFaqsComponent } from './list-faqs/list-faqs.component';
 import { ReportsComponent } from './reports.component';
 import { ListStatsComponent } from './list-stats/list-stats.component';
-import { ListTutorialsComponent } from './list-tutorials/list-tutorials.component';
 import { AuthDebugComponent } from './auth-debug.component';
 import { VerifyPhoneNumberComponent } from './verify-phone-number/verify-phone-number.component';
 
@@ -18,14 +16,6 @@ const routes: Routes = [
       {
         path: 'home',
         component: DashboardComponent
-      },
-      {
-        path: 'faqs',
-        component: ListFaqsComponent
-      },
-      {
-        path: 'tutorials',
-        component: ListTutorialsComponent
       },
       {
         path: 'stats',

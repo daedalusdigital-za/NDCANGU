@@ -47,9 +47,20 @@ export class DynamicGridComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
+    console.log('Dynamic Grid - ngOnInit');
+    console.log('Columns:', this.columns);
+    console.log('Data:', this.data);
+    console.log('Data length:', this.data?.length || 0);
+
     this._selectedColumns = this.columns.filter((col: any) => col?.visible !== false);
     this.exportColumns = this.columns.map(col => ({ title: col.header, dataKey: col.field }));
     this.exportPdfColumns = this.columns.map(col => col.header);
+  }
+
+  ngOnChanges(): void {
+    console.log('Dynamic Grid - ngOnChanges');
+    console.log('Data changed:', this.data);
+    console.log('Data length:', this.data?.length || 0);
   }
 
 
