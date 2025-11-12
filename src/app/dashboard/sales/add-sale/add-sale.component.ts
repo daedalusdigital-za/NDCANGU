@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import { DatabaseService } from '../../../services/data/database.service';
 
 interface Province {
   name: string;
@@ -21,19 +22,47 @@ interface Hospital {
 export class AddSaleComponent implements OnInit {
 
   sale: any = {
-    customerName: '',
-    customerEmail: '',
-    customerPhone: '',
-    customerAddress: '',
+    saleNumber: '',
+    saleDate: new Date().toISOString(),
     province: '',
     hospital: '',
-    products: [],
-    totalAmount: 0,
-    totalQuantity: 0,
-    saleDate: new Date(),
-    status: 'Pending',
-    notes: ''
+    customerContactName: '',
+    customerContactEmail: '',
+    customerContactPhone: '',
+    paymentMethod: 1, // Default to first payment method
+    paymentStatus: 1, // Default to first payment status
+    deliveryStatus: 1, // Default to first delivery status
+    deliveryDate: '',
+    notes: '',
+    salesPerson: '',
+    discount: 0,
+    invoiceNumber: '',
+    saleItems: [],
+    totalAmount: 0
   };
+
+  // Enum options based on schema (numeric values)
+  paymentMethods = [
+    { value: 1, label: 'Cash' },
+    { value: 2, label: 'Card' },
+    { value: 3, label: 'Bank Transfer' },
+    { value: 4, label: 'Credit' },
+    { value: 5, label: 'Cheque' }
+  ];
+
+  paymentStatusOptions = [
+    { value: 1, label: 'Pending' },
+    { value: 2, label: 'Paid' },
+    { value: 3, label: 'Overdue' },
+    { value: 4, label: 'Cancelled' }
+  ];
+
+  deliveryStatusOptions = [
+    { value: 1, label: 'Pending' },
+    { value: 2, label: 'In Transit' },
+    { value: 3, label: 'Delivered' },
+    { value: 4, label: 'Cancelled' }
+  ];
 
   provinces: Province[] = [
     { name: 'Gauteng', code: 'GP' },
@@ -86,14 +115,25 @@ export class AddSaleComponent implements OnInit {
   filteredHospitals: Hospital[] = [];
   selectedProduct: any = null;
   quantity: number = 1;
+  unitPrice: number = 0;
+  isSubmitting = false;
   
   constructor(
     private router: Router,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private databaseService: DatabaseService
   ) { }
 
   ngOnInit(): void {
     this.loadProducts();
+    this.generateSaleNumber();
+  }
+
+  generateSaleNumber(): void {
+    // Generate a unique sale number
+    const date = new Date();
+    const timestamp = date.getTime();
+    this.sale.saleNumber = `SALE-${timestamp.toString().slice(-8)}`;
   }
 
   loadProducts(): void {
@@ -120,86 +160,176 @@ export class AddSaleComponent implements OnInit {
   }
 
   addProductToSale(): void {
-    if (this.selectedProduct && this.quantity > 0) {
+    if (this.selectedProduct && this.quantity > 0 && this.unitPrice > 0) {
       if (this.quantity > this.selectedProduct.stock) {
         this.toastr.error('Quantity exceeds available stock', 'Error');
         return;
       }
 
-      const existingProduct = this.sale.products.find((p: any) => p.id === this.selectedProduct.id);
+      const existingItemIndex = this.sale.saleItems.findIndex((item: any) => item.productId === this.selectedProduct.id);
       
-      if (existingProduct) {
-        existingProduct.quantity += this.quantity;
-        existingProduct.subtotal = existingProduct.quantity * existingProduct.price;
+      if (existingItemIndex !== -1) {
+        // Update existing item
+        this.sale.saleItems[existingItemIndex].quantity += this.quantity;
+        this.sale.saleItems[existingItemIndex].unitPrice = this.unitPrice;
       } else {
-        this.sale.products.push({
-          id: this.selectedProduct.id,
-          name: this.selectedProduct.name,
-          price: this.selectedProduct.price,
+        // Add new item according to schema
+        this.sale.saleItems.push({
+          id: 0, // Will be set by backend
+          productId: this.selectedProduct.id,
+          productName: this.selectedProduct.name,
           quantity: this.quantity,
-          subtotal: this.selectedProduct.price * this.quantity
+          unitPrice: this.unitPrice
         });
       }
 
       this.calculateTotal();
       this.selectedProduct = null;
       this.quantity = 1;
+      this.unitPrice = 0;
       this.toastr.success('Product added to sale', 'Success');
     }
   }
 
   removeProductFromSale(productId: number): void {
-    this.sale.products = this.sale.products.filter((p: any) => p.id !== productId);
+    this.sale.saleItems = this.sale.saleItems.filter((item: any) => item.productId !== productId);
     this.calculateTotal();
     this.toastr.info('Product removed from sale', 'Info');
   }
 
   calculateTotal(): void {
-    this.sale.totalAmount = this.sale.products.reduce((total: number, product: any) => {
-      return total + product.subtotal;
+    this.sale.totalAmount = this.sale.saleItems.reduce((total: number, item: any) => {
+      return total + (item.quantity * item.unitPrice);
     }, 0);
-    
-    this.sale.totalQuantity = this.sale.products.reduce((total: number, product: any) => {
-      return total + product.quantity;
-    }, 0);
+
+    // Apply discount if any
+    if (this.sale.discount > 0) {
+      this.sale.totalAmount -= (this.sale.totalAmount * this.sale.discount / 100);
+    }
+  }
+
+  onProductSelect(): void {
+    if (this.selectedProduct) {
+      this.unitPrice = this.selectedProduct.price;
+    }
   }
 
   saveSale(): void {
     if (this.validateSale()) {
-      // Here you would typically save to backend
-      console.log('Saving sale:', this.sale);
-      this.toastr.success('Sale saved successfully', 'Success');
-      this.router.navigate(['/dashboard/sales/list']);
+      this.isSubmitting = true;
+      
+      // Format the sale data according to the exact API schema
+      const saleData = {
+        saleNumber: this.sale.saleNumber,
+        saleDate: this.formatDateForAPI(this.sale.saleDate),
+        province: this.sale.province,
+        hospital: this.sale.hospital,
+        customerContactName: this.sale.customerContactName,
+        customerContactEmail: this.sale.customerContactEmail || '',
+        customerContactPhone: this.sale.customerContactPhone || '',
+        paymentMethod: parseInt(this.sale.paymentMethod),
+        paymentStatus: parseInt(this.sale.paymentStatus),
+        deliveryStatus: parseInt(this.sale.deliveryStatus),
+        deliveryDate: this.sale.deliveryDate ? this.formatDateForAPI(this.sale.deliveryDate) : '',
+        notes: this.sale.notes || '',
+        salesPerson: this.sale.salesPerson || '',
+        discount: parseFloat(this.sale.discount) || 0,
+        invoiceNumber: this.sale.invoiceNumber || '',
+        saleItems: this.sale.saleItems.map((item: any) => ({
+          id: 0, // Backend will assign
+          productId: item.productId,
+          productName: item.productName,
+          quantity: item.quantity,
+          unitPrice: item.unitPrice
+        }))
+      };
+
+      console.log('Sale data payload:', saleData);
+
+      // Try to save using DatabaseService
+      this.saveSaleToAPI(saleData);
     }
+  }
+
+  private saveSaleToAPI(saleData: any): void {
+    // Use DatabaseService to save the sale
+    this.databaseService.createSale(saleData).subscribe({
+      next: (response) => {
+        this.isSubmitting = false;
+        console.log('Sale saved successfully:', response);
+        this.toastr.success('Sale saved successfully!', 'Success');
+        this.router.navigate(['/dashboard/sales/list']);
+      },
+      error: (error) => {
+        this.isSubmitting = false;
+        console.error('Error saving sale via API:', error);
+        
+        // Fallback: Save to local storage
+        this.saveToLocalStorage(saleData);
+        this.toastr.success('Sale saved locally (API unavailable)', 'Success');
+        this.router.navigate(['/dashboard/sales/list']);
+      }
+    });
+  }
+
+  private saveToLocalStorage(saleData: any): void {
+    try {
+      const existingSales = JSON.parse(localStorage.getItem('sales') || '[]');
+      const saleWithId = {
+        ...saleData,
+        id: Date.now(),
+        createdAt: new Date().toISOString()
+      };
+      existingSales.push(saleWithId);
+      localStorage.setItem('sales', JSON.stringify(existingSales));
+      console.log('Sale saved to localStorage:', saleWithId);
+    } catch (error) {
+      console.error('Error saving to localStorage:', error);
+      this.toastr.error('Failed to save sale', 'Error');
+    }
+  }
+
+  // Helper method to format date for API (ISO format)
+  private formatDateForAPI(dateValue: any): string {
+    if (!dateValue) return '';
+    const date = new Date(dateValue);
+    return date.toISOString();
   }
 
   resetForm(): void {
     this.sale = {
-      customerName: '',
-      customerEmail: '',
-      customerPhone: '',
-      customerAddress: '',
+      saleNumber: '',
+      saleDate: new Date().toISOString(),
       province: '',
       hospital: '',
-      products: [],
-      totalAmount: 0,
-      totalQuantity: 0,
-      saleDate: new Date(),
-      status: 'Pending',
-      notes: ''
+      customerContactName: '',
+      customerContactEmail: '',
+      customerContactPhone: '',
+      paymentMethod: 1,
+      paymentStatus: 1,
+      deliveryStatus: 1,
+      deliveryDate: '',
+      notes: '',
+      salesPerson: '',
+      discount: 0,
+      invoiceNumber: '',
+      saleItems: [],
+      totalAmount: 0
     };
     this.selectedProduct = null;
     this.quantity = 1;
+    this.unitPrice = 0;
     this.filteredHospitals = [];
+    this.generateSaleNumber();
   }
 
   private validateSale(): boolean {
-    if (!this.sale.customerName.trim()) {
+    if (!this.sale.customerContactName.trim()) {
       this.toastr.error('Customer name is required', 'Validation Error');
       return false;
     }
 
-    if (!this.sale.customerPhone.trim()) {
+    if (!this.sale.customerContactPhone.trim()) {
       this.toastr.error('Customer phone is required', 'Validation Error');
       return false;
     }
@@ -209,7 +339,7 @@ export class AddSaleComponent implements OnInit {
       return false;
     }
 
-    if (this.sale.products.length === 0) {
+    if (this.sale.saleItems.length === 0) {
       this.toastr.error('At least one product must be added to the sale', 'Validation Error');
       return false;
     }

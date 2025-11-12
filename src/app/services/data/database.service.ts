@@ -130,16 +130,16 @@ interface InventoryItem {
 interface Sale {
   id: number;
   saleNumber: string;
-  saleDate: string;
+  saleDate: string; // ISO date string
   province: string;
   hospital: string;
   customerContactName: string;
   customerContactEmail?: string;
   customerContactPhone?: string;
-  paymentMethod: string; // Changed to string for consistency
-  paymentStatus: string; // Changed to string for consistency
-  deliveryStatus: string; // Changed to string for consistency
-  deliveryDate?: string;
+  paymentMethod: number; // Numeric enum value
+  paymentStatus: number; // Numeric enum value
+  deliveryStatus: number; // Numeric enum value
+  deliveryDate?: string; // ISO date string
   notes?: string;
   salesPerson?: string;
   discount: number;
@@ -149,10 +149,11 @@ interface Sale {
 }
 
 interface SaleItem {
-  inventoryItemId: number;
+  id: number;
+  productId: number;
+  productName: string;
   quantity: number;
   unitPrice: number;
-  totalPrice: number;
 }
 
 interface User {
@@ -1273,44 +1274,44 @@ export class DatabaseService {
       {
         id: 1,
         saleNumber: 'SALE-2024-001',
-        saleDate: '2024-10-01',
+        saleDate: '2024-10-01T00:00:00.000Z',
         province: 'Western Cape',
         hospital: 'Tygerberg Hospital',
         customerContactName: 'Dr. Susan Williams',
         customerContactEmail: 'susan.williams@tygerberg.gov.za',
         customerContactPhone: '+27-21-938-5555',
-        paymentMethod: 'EFT',
-        paymentStatus: 'Paid',
-        deliveryStatus: 'Delivered',
-        deliveryDate: '2024-10-03',
+        paymentMethod: 3, // Bank Transfer
+        paymentStatus: 2, // Paid
+        deliveryStatus: 3, // Delivered
+        deliveryDate: '2024-10-03T00:00:00.000Z',
         notes: 'Urgent delivery for diabetes clinic',
         salesPerson: 'John Marketing',
         discount: 5.00,
         invoiceNumber: 'INV-2024-001',
         saleItems: [
-          { inventoryItemId: 1, quantity: 10, unitPrice: 45.50, totalPrice: 455.00 },
-          { inventoryItemId: 2, quantity: 2, unitPrice: 320.00, totalPrice: 640.00 }
+          { id: 1, productId: 1, productName: 'Glucose Test Strips', quantity: 10, unitPrice: 45.50 },
+          { id: 2, productId: 2, productName: 'Blood Pressure Monitor', quantity: 2, unitPrice: 320.00 }
         ],
         totalAmount: 1095.00
       },
       {
         id: 2,
         saleNumber: 'SALE-2024-002',
-        saleDate: '2024-10-02',
+        saleDate: '2024-10-02T00:00:00.000Z',
         province: 'Gauteng',
         hospital: 'Charlotte Maxeke Hospital',
         customerContactName: 'Sr. Patricia Mthembu',
         customerContactEmail: 'patricia.mthembu@cmjah.ac.za',
         customerContactPhone: '+27-11-488-5000',
-        paymentMethod: 'Card',
-        paymentStatus: 'Paid',
-        deliveryStatus: 'In Transit',
-        deliveryDate: '2024-10-05',
+        paymentMethod: 2, // Card
+        paymentStatus: 2, // Paid
+        deliveryStatus: 2, // In Transit
+        deliveryDate: '2024-10-05T00:00:00.000Z',
         salesPerson: 'Sarah Sales',
         discount: 0.00,
         invoiceNumber: 'INV-2024-002',
         saleItems: [
-          { inventoryItemId: 3, quantity: 20, unitPrice: 12.75, totalPrice: 255.00 }
+          { id: 3, productId: 3, productName: 'Digital Thermometer', quantity: 20, unitPrice: 12.75 }
         ],
         totalAmount: 255.00
       }
