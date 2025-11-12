@@ -324,15 +324,29 @@ export class DatabaseService {
   // LOCATION CONTROLLER (6 endpoints)
   // =============================================
 
-  // Location functions removed - getProvinces no longer needed
+  /**
+   * Get all provinces
+   * Using fallback data for provinces
+   */
+  getProvinces(): Observable<Province[]> {
+    return of(this.getFallbackProvinces());
+  }
 
-  // getDistricts function removed - no longer needed
+  /**
+   * Get districts by province
+   * Using fallback data for districts
+   */
+  getDistricts(): Observable<District[]> {
+    return of(this.getFallbackDistricts());
+  }
 
-  // getHospitals function removed - no longer needed
-
-  // getHospitalsByProvince function removed - no longer needed
-
-  // getClinics function removed - no longer needed
+  /**
+   * Get hospitals/health facilities
+   * Using fallback data for hospitals
+   */
+  getHospitals(): Observable<HealthFacility[]> {
+    return of(this.getFallbackHealthFacilities());
+  }
 
   // getClinicsByProvince function removed - no longer needed
 
@@ -1103,81 +1117,68 @@ export class DatabaseService {
     return [
       {
         id: 1,
-        name: 'Dr. Sipho Mthembu',
-        email: 'sipho.mthembu@health.gov.za',
+        name: 'DYLAN GOVENDER',
+        email: 'dylan.govender@promedtechnologies.co.za',
         phone: '+27-82-456-7890',
         province: 'KwaZulu-Natal',
         provinceId: 5,
-        qualification: 'MBChB, MMed (Family Medicine)',
-        experience: 15,
+        qualification: 'Medical Trainer, NCD Specialist',
+        experience: 8,
         status: 'Active',
         location: 'Durban',
-        bio: 'Senior family physician specializing in diabetes and hypertension management in rural communities'
+        bio: 'Experienced medical trainer specializing in non-communicable disease management and community health programs'
       },
       {
         id: 2,
-        name: 'Dr. Nomsa Mogale',
-        email: 'nomsa.mogale@health.gov.za',
+        name: 'LINDANI',
+        email: 'lindani@promedtechnologies.co.za',
         phone: '+27-83-567-8901',
-        province: 'Limpopo',
-        provinceId: 9,
-        qualification: 'MBChB, MMed (Internal Medicine), MPH',
-        experience: 12,
+        province: 'Gauteng',
+        provinceId: 7,
+        qualification: 'Healthcare Educator, Diabetes Management',
+        experience: 6,
         status: 'Active',
-        location: 'Polokwane',
-        bio: 'Internal medicine specialist and public health expert focusing on non-communicable diseases'
+        location: 'Johannesburg',
+        bio: 'Healthcare educator with expertise in diabetes management and preventive care training'
       },
       {
         id: 3,
-        name: 'Sr. Lerato Ngobeni',
-        email: 'lerato.ngobeni@health.gov.za',
+        name: 'MASIXOLE',
+        email: 'masixole@promedtechnologies.co.za',
         phone: '+27-84-678-9012',
-        province: 'Mpumalanga',
-        provinceId: 8,
-        qualification: 'BSc Nursing, Advanced Diabetes Management Certificate',
-        experience: 18,
+        province: 'Eastern Cape',
+        provinceId: 2,
+        qualification: 'Clinical Trainer, Hypertension Specialist',
+        experience: 10,
         status: 'Active',
-        location: 'Nelspruit',
-        bio: 'Senior clinical nursing specialist with extensive experience in diabetes education and community health'
+        location: 'East London',
+        bio: 'Clinical trainer specializing in hypertension management and cardiovascular health education'
       },
       {
         id: 4,
-        name: 'Dr. Thabo Mahlangu',
-        email: 'thabo.mahlangu@health.gov.za',
+        name: 'SELBY',
+        email: 'selby@promedtechnologies.co.za',
         phone: '+27-85-789-0123',
-        province: 'Gauteng',
-        provinceId: 7,
-        qualification: 'MBChB, Dip PEC (SA), Cert Diabetes Care',
-        experience: 10,
+        province: 'Western Cape',
+        provinceId: 1,
+        qualification: 'Medical Education Specialist',
+        experience: 12,
         status: 'Active',
-        location: 'Johannesburg',
-        bio: 'Primary healthcare physician with expertise in preventive care and community health initiatives'
+        location: 'Cape Town',
+        bio: 'Medical education specialist with extensive experience in community health worker training'
       },
       {
         id: 5,
-        name: 'Dr. Zanele Dlamini',
-        email: 'zanele.dlamini@health.gov.za',
+        name: 'ZIBA MTHETHWA',
+        email: 'ziba.mthethwa@promedtechnologies.co.za',
         phone: '+27-86-890-1234',
-        province: 'Eastern Cape',
-        provinceId: 2,
-        qualification: 'MBChB, MPH',
-        experience: 8,
+        province: 'Limpopo',
+        provinceId: 9,
+        qualification: 'Public Health Trainer, NCD Prevention',
+        experience: 15,
         status: 'Active',
-        location: 'East London',
-        bio: 'Public health physician focusing on community health and disease prevention programs'
-      },
-      {
-        id: 6,
-        name: 'Pharmacist Mandla Sithole',
-        email: 'mandla.sithole@health.gov.za',
-        phone: '+27-87-901-2345',
-        province: 'Free State',
-        provinceId: 4,
-        qualification: 'BPharm, MSc Clinical Pharmacy',
-        experience: 12,
-        status: 'Active',
-        location: 'Bloemfontein',
-        bio: 'Clinical pharmacist specializing in medication management for chronic conditions'
+        location: 'Polokwane',
+        bio: 'Public health trainer focusing on non-communicable disease prevention and rural health initiatives'
       }
     ];
   }
@@ -1213,7 +1214,7 @@ export class DatabaseService {
         hospital: 'Inkosi Albert Luthuli Central Hospital',
         venue: 'Medical Training Center',
         trainerId: 1,
-        trainerName: 'Dr. Sipho Mthembu',
+        trainerName: 'DYLAN GOVENDER',
         numberOfParticipants: 42,
         targetAudience: 'Nurses and junior doctors',
         objectives: 'Improve diabetes care quality and patient outcomes',
@@ -1252,8 +1253,8 @@ export class DatabaseService {
         province: 'Gauteng',
         hospital: 'Chris Hani Baragwanath Academic Hospital',
         venue: 'Medical Education Centre',
-        trainerId: 3,
-        trainerName: 'Dr. Thabo Mahlangu',
+        trainerId: 2,
+        trainerName: 'LINDANI',
         numberOfParticipants: 55,
         targetAudience: 'Community health workers and nurses',
         objectives: 'Standardize hypertension screening across facilities',
@@ -1292,8 +1293,8 @@ export class DatabaseService {
         province: 'KwaZulu-Natal',
         hospital: 'Inkosi Albert Luthuli Central Hospital',
         venue: 'Auditorium B',
-        trainerId: 2,
-        trainerName: 'Prof. Nomsa Mogale',
+        trainerId: 5,
+        trainerName: 'ZIBA MTHETHWA',
         numberOfParticipants: 38,
         targetAudience: 'Senior clinical staff',
         objectives: 'Update knowledge on latest NCD treatment protocols',

@@ -71,15 +71,22 @@ export class AddTrainingComponent implements OnInit {
     this.loadProvinces();
     this.loadTrainers();
     
-    this.trainingForm.get('province')?.valueChanges.subscribe(provinceId => {
-      this.filterHospitals(provinceId);
+    this.trainingForm.get('province')?.valueChanges.subscribe(provinceCode => {
+      this.filterHospitals(provinceCode);
     });
   }
 
   loadProvinces(): void {
-    // Province functionality removed
-    this.provinces = [];
-    console.log('Province loading disabled');
+    this.databaseService.getProvinces().subscribe({
+      next: (provinces: any[]) => {
+        this.provinces = provinces;
+        console.log('Loaded provinces:', provinces);
+      },
+      error: (error: any) => {
+        console.error('Error loading provinces:', error);
+        this.toastr.error('Failed to load provinces', 'Error');
+      }
+    });
   }
 
   loadTrainers(): void {
@@ -95,23 +102,55 @@ export class AddTrainingComponent implements OnInit {
     });
   }
 
-  filterHospitals(provinceId: number): void {
-    if (!provinceId) {
+  filterHospitals(provinceCode: string): void {
+    if (!provinceCode) {
       this.filteredHospitals = [];
       return;
     }
     
-    // For now, we'll use a simple fallback list since hospital endpoints aren't available
-    // This should be replaced with DatabaseService call when hospital endpoints are ready
-    this.filteredHospitals = [
-      { id: 1, name: 'Chris Hani Baragwanath Hospital', provinceId: 1 },
-      { id: 2, name: 'Charlotte Maxeke Hospital', provinceId: 1 },
-      { id: 3, name: 'Inkosi Albert Luthuli Hospital', provinceId: 2 },
-      { id: 4, name: 'King Edward VIII Hospital', provinceId: 2 },
-      { id: 5, name: 'Groote Schuur Hospital', provinceId: 4 },
-      { id: 6, name: 'Tygerberg Hospital', provinceId: 4 }
-    ].filter(hospital => hospital.provinceId === provinceId);
+    // Map province codes to hospitals - this should eventually use DatabaseService
+    const hospitalsByProvince: { [key: string]: any[] } = {
+      'WC': [
+        { id: 1, name: 'Groote Schuur Hospital', code: 'GSH001' },
+        { id: 2, name: 'Tygerberg Hospital', code: 'TBH001' }
+      ],
+      'GP': [
+        { id: 3, name: 'Chris Hani Baragwanath Hospital', code: 'CHB001' },
+        { id: 4, name: 'Charlotte Maxeke Hospital', code: 'CMJAH001' }
+      ],
+      'KZN': [
+        { id: 5, name: 'Inkosi Albert Luthuli Central Hospital', code: 'IALCH001' },
+        { id: 6, name: 'King Edward VIII Hospital', code: 'KEH001' }
+      ],
+      'EC': [
+        { id: 7, name: 'Frere Hospital', code: 'FRH001' },
+        { id: 8, name: 'Livingstone Hospital', code: 'LH001' }
+      ],
+      'FS': [
+        { id: 9, name: 'Universitas Academic Hospital', code: 'UAH001' },
+        { id: 10, name: 'Pelonomi Hospital', code: 'PEL001' }
+      ],
+      'LP': [
+        { id: 11, name: 'Polokwane Hospital', code: 'POL001' },
+        { id: 12, name: 'Mankweng Hospital', code: 'MAN001' }
+      ],
+      'MP': [
+        { id: 13, name: 'Rob Ferreira Hospital', code: 'RFH001' },
+        { id: 14, name: 'Themba Hospital', code: 'THM001' }
+      ],
+      'NW': [
+        { id: 15, name: 'Klerksdorp Hospital', code: 'KLK001' },
+        { id: 16, name: 'Mafikeng Provincial Hospital', code: 'MAF001' }
+      ],
+      'NC': [
+        { id: 17, name: 'Kimberley Hospital', code: 'KIM001' },
+        { id: 18, name: 'Upington Hospital', code: 'UPI001' }
+      ]
+    };
     
+    this.filteredHospitals = hospitalsByProvince[provinceCode] || [];
+    
+    // Clear hospital selection when province changes
     this.trainingForm.get('hospital')?.setValue('');
   }
 

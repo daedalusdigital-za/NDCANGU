@@ -16,16 +16,16 @@ export class DashboardComponent implements OnInit {
           trigger: 'item',
           formatter: function(params: any) {
             if (params.seriesName === 'Training by Province' && params.name === 'KZN') {
-              return 'Trained By SIPHO MTHEMBU <br/>' + params.name + ': ' + params.value + ' participants (' + params.percent + '%)';
+              return 'Trained By DYLAN GOVENDER <br/>' + params.name + ': ' + params.value + ' participants (' + params.percent + '%)';
             }
             if (params.seriesName === 'Training by Province' && params.name === 'LP') {
-              return 'Trained By NOMSA MOGALE <br/>' + params.name + ': ' + params.value + ' participants (' + params.percent + '%)';
+              return 'Trained By ZIBA MTHETHWA <br/>' + params.name + ': ' + params.value + ' participants (' + params.percent + '%)';
             }
             if (params.seriesName === 'Training by Province' && params.name === 'GP') {
-              return 'Trained By THABO MAHLANGU <br/>' + params.name + ': ' + params.value + ' participants (' + params.percent + '%)';
+              return 'Trained By LINDANI <br/>' + params.name + ': ' + params.value + ' participants (' + params.percent + '%)';
             }
             if (params.seriesName === 'Training by Province' && params.name === 'MPU') {
-              return 'Trained By LERATO NGOBENI <br/>' + params.name + ': ' + params.value + ' participants (' + params.percent + '%)';
+              return 'Trained By MASIXOLE <br/>' + params.name + ': ' + params.value + ' participants (' + params.percent + '%)';
             }
             return params.seriesName + ' <br/>' + params.name + ': ' + params.value + ' participants (' + params.percent + '%)';
           },
