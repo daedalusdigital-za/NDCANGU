@@ -32,6 +32,15 @@ export class AddTrainingComponent implements OnInit {
     'Community Health Training'
   ];
 
+  // Status options based on schema (numeric values)
+  statusOptions = [
+    { value: 1, label: 'Planned' },
+    { value: 2, label: 'Scheduled' },
+    { value: 3, label: 'In Progress' },
+    { value: 4, label: 'Completed' },
+    { value: 5, label: 'Cancelled' }
+  ];
+
   constructor(
     private fb: FormBuilder,
     private router: Router,
@@ -49,12 +58,12 @@ export class AddTrainingComponent implements OnInit {
       province: ['', Validators.required],
       hospital: ['', Validators.required],
       venue: ['', Validators.required],
-      trainer: ['', Validators.required],
-      numberOfParticipants: ['', [Validators.required, Validators.min(1), Validators.max(100)]],
+      trainerId: ['', Validators.required],
+      numberOfParticipants: ['', [Validators.required, Validators.min(1), Validators.max(500)]],
       targetAudience: ['', Validators.required],
       objectives: [''],
       materials: [''],
-      status: ['Planned', Validators.required]
+      status: [1, Validators.required] // Default to 1 (Planned)
     });
   }
 
@@ -112,25 +121,31 @@ export class AddTrainingComponent implements OnInit {
       
       const formData = this.trainingForm.value;
       
-      // Convert form data to training session format
+      // Convert form data to match the exact API schema
       const trainingSession = {
         trainingName: formData.trainingName,
-        description: formData.description || '',
         trainingType: formData.trainingType,
-        startDate: formData.startDate,
-        endDate: formData.endDate,
-        startTime: formData.startTime,
-        endTime: formData.endTime,
-        provinceId: formData.province,
-        facilityId: formData.hospital,
+        description: formData.description || '',
+        startDate: this.formatDateForAPI(formData.startDate),
+        endDate: this.formatDateForAPI(formData.endDate),
+        startTime: {
+          ticks: this.convertTimeToTicks(formData.startTime)
+        },
+        endTime: {
+          ticks: this.convertTimeToTicks(formData.endTime)
+        },
+        province: formData.province,
+        hospital: formData.hospital,
         venue: formData.venue,
-        trainerId: formData.trainer,
-        numberOfParticipants: formData.numberOfParticipants,
+        trainerId: parseInt(formData.trainerId),
+        numberOfParticipants: parseInt(formData.numberOfParticipants),
         targetAudience: formData.targetAudience,
         objectives: formData.objectives || '',
         materials: formData.materials || '',
-        status: formData.status || 'Planned'
+        status: parseInt(formData.status)
       };
+
+      console.log('Training session payload:', trainingSession);
 
       // Try to save using API, fall back to local storage if needed
       this.saveTrainingSession(trainingSession);
@@ -188,8 +203,31 @@ export class AddTrainingComponent implements OnInit {
 
   private resetForm(): void {
     this.trainingForm.reset();
-    this.trainingForm.get('status')?.setValue('Planned');
+    this.trainingForm.get('status')?.setValue(1); // Reset to Planned
     this.filteredHospitals = [];
+  }
+
+  // Helper method to format date for API (ISO format)
+  private formatDateForAPI(dateString: string): string {
+    if (!dateString) return '';
+    const date = new Date(dateString);
+    return date.toISOString();
+  }
+
+  // Helper method to convert time string to ticks
+  private convertTimeToTicks(timeString: string): number {
+    if (!timeString) return 0;
+    
+    const [hours, minutes] = timeString.split(':').map(Number);
+    // Convert to ticks (100 nanoseconds since midnight)
+    // 1 tick = 100 nanoseconds
+    // 1 millisecond = 10,000 ticks
+    // 1 second = 10,000,000 ticks
+    // 1 minute = 600,000,000 ticks
+    // 1 hour = 36,000,000,000 ticks
+    
+    const totalTicks = (hours * 36000000000) + (minutes * 600000000);
+    return totalTicks;
   }
 
   private markFormGroupTouched(): void {

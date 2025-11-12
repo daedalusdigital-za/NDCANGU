@@ -83,10 +83,14 @@ interface TrainingSession {
   trainingName: string;
   trainingType: string;
   description?: string;
-  startDate: string;
-  endDate: string;
-  startTime: string;
-  endTime: string;
+  startDate: string; // ISO date string
+  endDate: string; // ISO date string
+  startTime: {
+    ticks: number;
+  };
+  endTime: {
+    ticks: number;
+  };
   province: string;
   hospital: string;
   venue: string;
@@ -95,7 +99,7 @@ interface TrainingSession {
   targetAudience: string;
   objectives?: string;
   materials?: string;
-  status: string; // Changed from number to string for consistency
+  status: number; // Numeric status as per schema
   createdAt?: string;
   updatedAt?: string;
 }
@@ -453,7 +457,7 @@ export class DatabaseService {
    * Get training sessions by status
    * GET /api/Training/GetByStatus
    */
-  getTrainingSessionsByStatus(status: string): Observable<TrainingSession[]> {
+  getTrainingSessionsByStatus(status: number): Observable<TrainingSession[]> {
     return this.http.get<TrainingSession[]>(`${this.API_URL}Training/GetByStatus?status=${status}`, { headers: this.getAuthHeaders() })
       .pipe(
         catchError(() => of(this.getFallbackTrainingSessions().filter(t => t.status === status)))
@@ -1151,10 +1155,10 @@ export class DatabaseService {
         trainingName: 'Diabetes Management Workshop',
         trainingType: 'Clinical Skills',
         description: 'Comprehensive training on diabetes management protocols',
-        startDate: '2024-10-15',
-        endDate: '2024-10-17',
-        startTime: '09:00:00',
-        endTime: '16:00:00',
+        startDate: '2024-10-15T00:00:00.000Z',
+        endDate: '2024-10-17T00:00:00.000Z',
+        startTime: { ticks: 324000000000 }, // 09:00:00 in ticks
+        endTime: { ticks: 576000000000 }, // 16:00:00 in ticks
         province: 'Western Cape',
         hospital: 'Groote Schuur Hospital',
         venue: 'Conference Room A',
@@ -1163,17 +1167,17 @@ export class DatabaseService {
         targetAudience: 'Nurses and junior doctors',
         objectives: 'Improve diabetes care quality and patient outcomes',
         materials: 'Glucometers, testing strips, educational materials',
-        status: 'Scheduled'
+        status: 2 // Scheduled
       },
       {
         id: 2,
         trainingName: 'Hypertension Screening Training',
         trainingType: 'Preventive Care',
         description: 'Training on proper blood pressure measurement and screening protocols',
-        startDate: '2024-10-20',
-        endDate: '2024-10-21',
-        startTime: '08:30:00',
-        endTime: '17:00:00',
+        startDate: '2024-10-20T00:00:00.000Z',
+        endDate: '2024-10-21T00:00:00.000Z',
+        startTime: { ticks: 306000000000 }, // 08:30:00 in ticks
+        endTime: { ticks: 612000000000 }, // 17:00:00 in ticks
         province: 'Gauteng',
         hospital: 'Chris Hani Baragwanath Hospital',
         venue: 'Training Center Hall',
@@ -1182,17 +1186,17 @@ export class DatabaseService {
         targetAudience: 'Community health workers and nurses',
         objectives: 'Standardize hypertension screening across facilities',
         materials: 'BP monitors, stethoscopes, training mannequins',
-        status: 'In Progress'
+        status: 3 // In Progress
       },
       {
         id: 3,
         trainingName: 'NCD Management Update',
         trainingType: 'Continuing Education',
         description: 'Latest guidelines for non-communicable disease management',
-        startDate: '2024-10-25',
-        endDate: '2024-10-26',
-        startTime: '09:00:00',
-        endTime: '15:30:00',
+        startDate: '2024-10-25T00:00:00.000Z',
+        endDate: '2024-10-26T00:00:00.000Z',
+        startTime: { ticks: 324000000000 }, // 09:00:00 in ticks
+        endTime: { ticks: 558000000000 }, // 15:30:00 in ticks
         province: 'KwaZulu-Natal',
         hospital: 'Inkosi Albert Luthuli Central Hospital',
         venue: 'Auditorium B',
@@ -1201,7 +1205,7 @@ export class DatabaseService {
         targetAudience: 'Senior clinical staff',
         objectives: 'Update knowledge on latest NCD treatment protocols',
         materials: 'Clinical guidelines, case studies, assessment tools',
-        status: 'Scheduled'
+        status: 2 // Scheduled
       }
     ];
   }

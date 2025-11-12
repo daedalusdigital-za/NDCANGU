@@ -167,18 +167,18 @@
 
                                 <!-- Trainer -->
                                 <div class="col-md-6 mb-3">
-                                    <label for="trainer" class="form-label">Trainer <span class="text-danger">*</span></label>
-                                    <select id="trainer"
+                                    <label for="trainerId" class="form-label">Trainer <span class="text-danger">*</span></label>
+                                    <select id="trainerId"
                                             class="form-select"
-                                            formControlName="trainer"
-                                            [class.is-invalid]="isFieldInvalid('trainer')">
+                                            formControlName="trainerId"
+                                            [class.is-invalid]="isFieldInvalid('trainerId')">
                                         <option value="">Select trainer</option>
                                         <option *ngFor="let trainer of trainers" [value]="trainer.id">
                                             {{ trainer.name }} - {{ trainer.province }}
                                         </option>
                                     </select>
-                                    <div class="invalid-feedback" *ngIf="isFieldInvalid('trainer')">
-                                        {{ getFieldErrorMessage('trainer') }}
+                                    <div class="invalid-feedback" *ngIf="isFieldInvalid('trainerId')">
+                                        {{ getFieldErrorMessage('trainerId') }}
                                     </div>
                                 </div>
 
@@ -192,7 +192,7 @@
                                            [class.is-invalid]="isFieldInvalid('numberOfParticipants')"
                                            placeholder="Enter number of participants"
                                            min="1"
-                                           max="100">
+                                           max="500">
                                     <div class="invalid-feedback" *ngIf="isFieldInvalid('numberOfParticipants')">
                                         {{ getFieldErrorMessage('numberOfParticipants') }}
                                     </div>
@@ -227,11 +227,9 @@
                                             class="form-select"
                                             formControlName="status"
                                             [class.is-invalid]="isFieldInvalid('status')">
-                                        <option value="Planned">Planned</option>
-                                        <option value="Scheduled">Scheduled</option>
-                                        <option value="In Progress">In Progress</option>
-                                        <option value="Completed">Completed</option>
-                                        <option value="Cancelled">Cancelled</option>
+                                        <option *ngFor="let status of statusOptions" [value]="status.value">
+                                            {{ status.label }}
+                                        </option>
                                     </select>
                                     <div class="invalid-feedback" *ngIf="isFieldInvalid('status')">
                                         {{ getFieldErrorMessage('status') }}
