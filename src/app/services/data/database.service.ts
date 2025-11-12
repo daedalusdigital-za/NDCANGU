@@ -87,19 +87,52 @@ interface TrainingSession {
   endDate: string; // ISO date string
   startTime: {
     ticks: number;
+    days?: number;
+    hours?: number;
+    milliseconds?: number;
+    microseconds?: number;
+    nanoseconds?: number;
+    minutes?: number;
+    seconds?: number;
+    totalDays?: number;
+    totalHours?: number;
+    totalMilliseconds?: number;
+    totalMicroseconds?: number;
+    totalNanoseconds?: number;
+    totalMinutes?: number;
+    totalSeconds?: number;
   };
   endTime: {
     ticks: number;
+    days?: number;
+    hours?: number;
+    milliseconds?: number;
+    microseconds?: number;
+    nanoseconds?: number;
+    minutes?: number;
+    seconds?: number;
+    totalDays?: number;
+    totalHours?: number;
+    totalMilliseconds?: number;
+    totalMicroseconds?: number;
+    totalNanoseconds?: number;
+    totalMinutes?: number;
+    totalSeconds?: number;
   };
   province: string;
   hospital: string;
   venue: string;
   trainerId: number;
+  trainerName?: string; // Added field from API
   numberOfParticipants: number;
   targetAudience: string;
   objectives?: string;
   materials?: string;
   status: number; // Numeric status as per schema
+  statusText?: string; // Added field from API
+  dateCreated?: string; // Added field from API
+  lastUpdated?: string; // Added field from API
+  createdByUserName?: string; // Added field from API
   createdAt?: string;
   updatedAt?: string;
 }
@@ -1158,17 +1191,38 @@ export class DatabaseService {
         description: 'Comprehensive training on diabetes management protocols',
         startDate: '2024-10-15T00:00:00.000Z',
         endDate: '2024-10-17T00:00:00.000Z',
-        startTime: { ticks: 324000000000 }, // 09:00:00 in ticks
-        endTime: { ticks: 576000000000 }, // 16:00:00 in ticks
+        startTime: { 
+          ticks: 324000000000, // 09:00:00 in ticks
+          hours: 9,
+          minutes: 0,
+          seconds: 0,
+          totalHours: 9,
+          totalMinutes: 540,
+          totalSeconds: 32400
+        },
+        endTime: { 
+          ticks: 576000000000, // 16:00:00 in ticks
+          hours: 16,
+          minutes: 0,
+          seconds: 0,
+          totalHours: 16,
+          totalMinutes: 960,
+          totalSeconds: 57600
+        },
         province: 'Western Cape',
         hospital: 'Groote Schuur Hospital',
         venue: 'Conference Room A',
         trainerId: 1,
+        trainerName: 'Dr. Sarah Wilson',
         numberOfParticipants: 25,
         targetAudience: 'Nurses and junior doctors',
         objectives: 'Improve diabetes care quality and patient outcomes',
         materials: 'Glucometers, testing strips, educational materials',
-        status: 2 // Scheduled
+        status: 2, // Scheduled
+        statusText: 'Scheduled',
+        dateCreated: '2024-09-15T10:00:00.000Z',
+        lastUpdated: '2024-10-01T14:30:00.000Z',
+        createdByUserName: 'Admin User'
       },
       {
         id: 2,
@@ -1177,17 +1231,38 @@ export class DatabaseService {
         description: 'Training on proper blood pressure measurement and screening protocols',
         startDate: '2024-10-20T00:00:00.000Z',
         endDate: '2024-10-21T00:00:00.000Z',
-        startTime: { ticks: 306000000000 }, // 08:30:00 in ticks
-        endTime: { ticks: 612000000000 }, // 17:00:00 in ticks
+        startTime: { 
+          ticks: 306000000000, // 08:30:00 in ticks
+          hours: 8,
+          minutes: 30,
+          seconds: 0,
+          totalHours: 8.5,
+          totalMinutes: 510,
+          totalSeconds: 30600
+        },
+        endTime: { 
+          ticks: 612000000000, // 17:00:00 in ticks
+          hours: 17,
+          minutes: 0,
+          seconds: 0,
+          totalHours: 17,
+          totalMinutes: 1020,
+          totalSeconds: 61200
+        },
         province: 'Gauteng',
         hospital: 'Chris Hani Baragwanath Hospital',
         venue: 'Training Center Hall',
         trainerId: 3,
+        trainerName: 'Dr. Michael Johnson',
         numberOfParticipants: 40,
         targetAudience: 'Community health workers and nurses',
         objectives: 'Standardize hypertension screening across facilities',
         materials: 'BP monitors, stethoscopes, training mannequins',
-        status: 3 // In Progress
+        status: 3, // In Progress
+        statusText: 'In Progress',
+        dateCreated: '2024-09-20T09:15:00.000Z',
+        lastUpdated: '2024-10-18T16:45:00.000Z',
+        createdByUserName: 'Training Coordinator'
       },
       {
         id: 3,
@@ -1196,17 +1271,38 @@ export class DatabaseService {
         description: 'Latest guidelines for non-communicable disease management',
         startDate: '2024-10-25T00:00:00.000Z',
         endDate: '2024-10-26T00:00:00.000Z',
-        startTime: { ticks: 324000000000 }, // 09:00:00 in ticks
-        endTime: { ticks: 558000000000 }, // 15:30:00 in ticks
+        startTime: { 
+          ticks: 324000000000, // 09:00:00 in ticks
+          hours: 9,
+          minutes: 0,
+          seconds: 0,
+          totalHours: 9,
+          totalMinutes: 540,
+          totalSeconds: 32400
+        },
+        endTime: { 
+          ticks: 558000000000, // 15:30:00 in ticks
+          hours: 15,
+          minutes: 30,
+          seconds: 0,
+          totalHours: 15.5,
+          totalMinutes: 930,
+          totalSeconds: 55800
+        },
         province: 'KwaZulu-Natal',
         hospital: 'Inkosi Albert Luthuli Central Hospital',
         venue: 'Auditorium B',
         trainerId: 2,
+        trainerName: 'Prof. Lisa Thompson',
         numberOfParticipants: 35,
         targetAudience: 'Senior clinical staff',
         objectives: 'Update knowledge on latest NCD treatment protocols',
         materials: 'Clinical guidelines, case studies, assessment tools',
-        status: 2 // Scheduled
+        status: 4, // Completed
+        statusText: 'Completed',
+        dateCreated: '2024-09-10T11:20:00.000Z',
+        lastUpdated: '2024-10-26T17:00:00.000Z',
+        createdByUserName: 'Head of Training'
       }
     ];
   }
