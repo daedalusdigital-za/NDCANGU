@@ -23,53 +23,53 @@ export class SalesReportsComponent implements OnInit {
   // Report data with South African context
   salesData = [
     {
-      month: 'January 2024',
-      revenue: 1250000,
-      orders: 245,
+      month: 'September 2024',
+      revenue: 1850000,
+      orders: 325,
       province: 'GP',
-      topProduct: 'Surgical Masks',
-      growth: 12.5
+      topProduct: 'Glucose Meters',
+      growth: 18.5
     },
     {
-      month: 'February 2024',
-      revenue: 1450000,
-      orders: 289,
-      province: 'WC',
-      topProduct: 'Hand Sanitizer',
-      growth: 15.2
-    },
-    {
-      month: 'March 2024',
-      revenue: 1380000,
-      orders: 267,
+      month: 'October 2024',
+      revenue: 2150000,
+      orders: 378,
       province: 'KZN',
-      topProduct: 'PPE Kits',
-      growth: 8.7
+      topProduct: 'HbA1c Test Strips',
+      growth: 22.1
+    },
+    {
+      month: 'November 2024',
+      revenue: 1980000,
+      orders: 348,
+      province: 'MP',
+      topProduct: 'Blood Pressure Monitors',
+      growth: 15.8
     }
   ];
 
   // Top performing hospitals
   topHospitals = [
-    { name: 'Charlotte Maxeke Johannesburg Academic Hospital', province: 'GP', revenue: 450000 },
-    { name: 'Groote Schuur Hospital', province: 'WC', revenue: 380000 },
-    { name: 'Inkosi Albert Luthuli Central Hospital', province: 'KZN', revenue: 320000 },
-    { name: 'Universitas Academic Hospital', province: 'FS', revenue: 290000 },
-    { name: 'Steve Biko Academic Hospital', province: 'GP', revenue: 275000 }
+    { name: 'Chris Hani Baragwanath Academic Hospital', province: 'GP', revenue: 520000 },
+    { name: 'Inkosi Albert Luthuli Central Hospital', province: 'KZN', revenue: 485000 },
+    { name: 'Steve Biko Academic Hospital', province: 'GP', revenue: 445000 },
+    { name: 'Universitas Academic Hospital', province: 'FS', revenue: 390000 },
+    { name: 'Polokwane Provincial Hospital', province: 'LP', revenue: 365000 }
   ];
 
   // Product categories performance
   productCategories = [
-    { name: 'Medical Supplies', revenue: 2450000, percentage: 35 },
-    { name: 'Pharmaceuticals', revenue: 2100000, percentage: 30 },
-    { name: 'Surgical Equipment', revenue: 1750000, percentage: 25 },
-    { name: 'Diagnostic Tools', revenue: 700000, percentage: 10 }
+    { name: 'Diabetes Care Equipment', revenue: 3200000, percentage: 40 },
+    { name: 'Hypertension Monitoring', revenue: 2100000, percentage: 26 },
+    { name: 'Laboratory Equipment', revenue: 1800000, percentage: 23 },
+    { name: 'General Medical Supplies', revenue: 900000, percentage: 11 }
   ];
 
   selectedPeriod = 'monthly';
   selectedProvince = '';
-  totalRevenue = 5250000;
-  totalOrders = 1847;
-  averageOrderValue = 2844;
+  totalRevenue = 8000000;
+  totalOrders = 2051;
+  averageOrderValue = 3900;
 
   constructor() { }
 

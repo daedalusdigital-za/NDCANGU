@@ -16,16 +16,16 @@ export class DashboardComponent implements OnInit {
           trigger: 'item',
           formatter: function(params: any) {
             if (params.seriesName === 'Training by Province' && params.name === 'KZN') {
-              return 'Trained By DYLAN GOVENDER <br/>' + params.name + ': ' + params.value + ' participants (' + params.percent + '%)';
+              return 'Trained By SIPHO MTHEMBU <br/>' + params.name + ': ' + params.value + ' participants (' + params.percent + '%)';
             }
             if (params.seriesName === 'Training by Province' && params.name === 'LP') {
-              return 'Trained By LINDANI <br/>' + params.name + ': ' + params.value + ' participants (' + params.percent + '%)';
+              return 'Trained By NOMSA MOGALE <br/>' + params.name + ': ' + params.value + ' participants (' + params.percent + '%)';
             }
             if (params.seriesName === 'Training by Province' && params.name === 'GP') {
-              return 'Trained By MASIXOLE <br/>' + params.name + ': ' + params.value + ' participants (' + params.percent + '%)';
+              return 'Trained By THABO MAHLANGU <br/>' + params.name + ': ' + params.value + ' participants (' + params.percent + '%)';
             }
             if (params.seriesName === 'Training by Province' && params.name === 'MPU') {
-              return 'Trained By ZIBA <br/>' + params.name + ': ' + params.value + ' participants (' + params.percent + '%)';
+              return 'Trained By LERATO NGOBENI <br/>' + params.name + ': ' + params.value + ' participants (' + params.percent + '%)';
             }
             return params.seriesName + ' <br/>' + params.name + ': ' + params.value + ' participants (' + params.percent + '%)';
           },
@@ -83,7 +83,7 @@ export class DashboardComponent implements OnInit {
             },
             data: [
               { 
-                value: 1146, 
+                value: 1840, 
                 name: 'Female',
                 itemStyle: {
                   color: {
@@ -97,7 +97,7 @@ export class DashboardComponent implements OnInit {
                 }
               },
               { 
-                value: 194, 
+                value: 485, 
                 name: 'Male',
                 itemStyle: {
                   color: {
@@ -142,7 +142,7 @@ export class DashboardComponent implements OnInit {
             },
             data: [
               { 
-                value: 898, 
+                value: 1285, 
                 name: 'KZN',
                 itemStyle: {
                   color: {
@@ -156,7 +156,7 @@ export class DashboardComponent implements OnInit {
                 }
               },
               { 
-                value: 276, 
+                value: 640, 
                 name: 'MPU',
                 itemStyle: {
                   color: {
@@ -170,7 +170,7 @@ export class DashboardComponent implements OnInit {
                 }
               },
               { 
-                value: 118, 
+                value: 285, 
                 name: 'GP',
                 itemStyle: {
                   color: {
@@ -184,7 +184,7 @@ export class DashboardComponent implements OnInit {
                 }
               },
               { 
-                value: 48, 
+                value: 115, 
                 name: 'LP',
                 itemStyle: {
                   color: {
@@ -207,11 +207,11 @@ export class DashboardComponent implements OnInit {
         series: [
             {
               name: "Pending Tests",
-              data: [44, 55, 41, 37, 22, 43, 21]
+              data: [52, 68, 45, 42, 38, 51]
             },
             {
               name: "Tests Completed",
-              data: [53, 32, 33, 52, 13, 43, 32]
+              data: [67, 41, 38, 58, 28, 49]
             },
           ],
           chart: {
@@ -278,7 +278,7 @@ export class DashboardComponent implements OnInit {
             }
           },
           xaxis: {
-            categories: [2018, 2019, 2020, 2021, 2022, 2023],
+            categories: [2019, 2020, 2021, 2022, 2023, 2024],
             labels: {
               formatter: (val: any) => {
                 return val + "K";
@@ -973,43 +973,43 @@ export class DashboardComponent implements OnInit {
             },
             data: [
                 {
-                    value: 134,
+                    value: 185,
                     name: 'EN (Enrolled Nurse)'
                 },
                 {
-                    value: 60,
+                    value: 92,
                     name: 'ENA (Enrolled Nursing Assistant)'
                 },
                 {
-                    value: 35,
+                    value: 58,
                     name: 'CNP (Community Nurse Practitioner)'
                 },
                 {
-                    value: 21,
+                    value: 34,
                     name: 'CNS (Clinical Nurse Specialist)'
                 },
                 {
-                    value: 16,
+                    value: 28,
                     name: 'PN (Professional Nurse)'
                 },
                 {
-                    value: 10,
+                    value: 15,
                     name: 'O/T (Occupational Therapist)'
                 },
                 {
-                    value: 8,
+                    value: 12,
                     name: 'C/G (Caregiver)'
                 },
                 {
-                    value: 8,
+                    value: 12,
                     name: 'ADMIN (Administrator)'
                 },
                 {
-                    value: 7,
+                    value: 10,
                     name: 'DATA CAPTURE'
                 },
                 {
-                    value: 7,
+                    value: 9,
                     name: 'NURSE'
                 }
             ]
@@ -1086,7 +1086,7 @@ export class DashboardComponent implements OnInit {
             {
                 name: 'Training Participants',
                 type: 'bar',
-                data: [7, 7, 8, 8, 10, 16, 21, 35, 60, 134],
+                data: [9, 10, 12, 12, 15, 28, 34, 58, 92, 185],
                 itemStyle: {
                     color: function(params: any) {
                         const colors = [
@@ -1130,16 +1130,16 @@ export class DashboardComponent implements OnInit {
 
     // All occupation data
     allOccupationData = [
-        { value: 134, name: 'EN (Enrolled Nurse)' },
-        { value: 60, name: 'ENA (Enrolled Nursing Assistant)' },
-        { value: 35, name: 'CNP (Community Nurse Practitioner)' },
-        { value: 21, name: 'CNS (Clinical Nurse Specialist)' },
-        { value: 16, name: 'PN (Professional Nurse)' },
-        { value: 10, name: 'O/T (Occupational Therapist)' },
-        { value: 8, name: 'C/G (Caregiver)' },
-        { value: 8, name: 'ADMIN (Administrator)' },
-        { value: 7, name: 'DATA CAPTURE' },
-        { value: 7, name: 'NURSE' }
+        { value: 185, name: 'EN (Enrolled Nurse)' },
+        { value: 92, name: 'ENA (Enrolled Nursing Assistant)' },
+        { value: 58, name: 'CNP (Community Nurse Practitioner)' },
+        { value: 34, name: 'CNS (Clinical Nurse Specialist)' },
+        { value: 28, name: 'PN (Professional Nurse)' },
+        { value: 15, name: 'O/T (Occupational Therapist)' },
+        { value: 12, name: 'C/G (Caregiver)' },
+        { value: 12, name: 'ADMIN (Administrator)' },
+        { value: 10, name: 'DATA CAPTURE' },
+        { value: 9, name: 'NURSE' }
     ];
 
     selectedOccupation: string = 'ALL';
@@ -1168,7 +1168,7 @@ export class DashboardComponent implements OnInit {
                     'ENA (Enrolled Nursing Assistant)',
                     'EN (Enrolled Nurse)'
                 ];
-                this.occupationBarChart.series[0].data = [7, 7, 8, 8, 10, 16, 21, 35, 60, 134];
+                this.occupationBarChart.series[0].data = [9, 10, 12, 12, 15, 28, 34, 58, 92, 185];
             } else {
                 // Show only selected occupation
                 const selectedData = this.allOccupationData.find(item => {
