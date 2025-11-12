@@ -59,7 +59,6 @@
               "src/assets/libs/choices.js/public/assets/scripts/choices.min.js",
               "src/assets/libs/admin-resources/jquery.vectormap/jquery-jvectormap-1.2.2.min.js",
               "src/assets/libs/admin-resources/jquery.vectormap/maps/jquery-jvectormap-world-mill-en.js"
-            
             ]
           },
           "configurations": {
@@ -148,10 +147,17 @@
               "src/assets/libs/pace-js/pace.min.js",
               "src/assets/libs/apexcharts/apexcharts.min.js",
               "src/assets/libs/choices.js/public/assets/scripts/choices.min.js",
-              
               "src/assets/libs/admin-resources/jquery.vectormap/jquery-jvectormap-1.2.2.min.js",
               "src/assets/libs/admin-resources/jquery.vectormap/maps/jquery-jvectormap-world-mill-en.js"
-              
+            ]
+          }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": [
+              "src/**/*.ts",
+              "src/**/*.html"
             ]
           }
         }
@@ -159,6 +165,9 @@
     }
   },
   "cli": {
-    "analytics": false
+    "analytics": false,
+    "schematicCollections": [
+      "angular-eslint"
+    ]
   }
 }
