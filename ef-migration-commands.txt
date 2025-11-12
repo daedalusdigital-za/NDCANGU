@@ -1,0 +1,48 @@
+// Entity Framework Migration Commands
+// Run these commands in the Package Manager Console or terminal
+
+// 1. Add a new migration
+Add-Migration AddCreatedByUpdatedByToTrainer
+
+// OR using .NET CLI:
+// dotnet ef migrations add AddCreatedByUpdatedByToTrainer
+
+// 2. Update the database
+Update-Database
+
+// OR using .NET CLI:
+// dotnet ef database update
+
+// 3. If the migration is auto-generated incorrectly, you can manually edit it:
+/*
+public partial class AddCreatedByUpdatedByToTrainer : Migration
+{
+    protected override void Up(MigrationBuilder migrationBuilder)
+    {
+        migrationBuilder.AddColumn<string>(
+            name: "CreatedBy",
+            table: "Trainers",
+            type: "nvarchar(100)",
+            maxLength: 100,
+            nullable: true);
+
+        migrationBuilder.AddColumn<string>(
+            name: "UpdatedBy", 
+            table: "Trainers",
+            type: "nvarchar(100)",
+            maxLength: 100,
+            nullable: true);
+    }
+
+    protected override void Down(MigrationBuilder migrationBuilder)
+    {
+        migrationBuilder.DropColumn(
+            name: "CreatedBy",
+            table: "Trainers");
+
+        migrationBuilder.DropColumn(
+            name: "UpdatedBy",
+            table: "Trainers");
+    }
+}
+*/

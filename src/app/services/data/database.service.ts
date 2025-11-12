@@ -365,7 +365,15 @@ export class DatabaseService {
 
     return this.http.get<Trainer[]>(`${this.API_URL}Trainer/GetAll`, { headers: this.getAuthHeaders() })
       .pipe(
-        catchError(() => of(this.getFallbackTrainers()))
+        catchError((error) => {
+          console.warn('Trainer API error - falling back to local data:', error?.error?.message || error?.message || 'Unknown error');
+          // Check if it's the specific database schema error
+          if (error?.error?.message?.includes('Invalid column name') || 
+              error?.status === 500) {
+            console.warn('Database schema issue detected - using fallback trainers');
+          }
+          return of(this.getFallbackTrainers());
+        })
       );
   }
 
