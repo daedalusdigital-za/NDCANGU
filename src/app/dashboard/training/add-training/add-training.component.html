@@ -28,7 +28,7 @@
                                 <!-- Training Name -->
                                 <div class="col-md-6 mb-3">
                                     <label for="trainingName" class="form-label">Training Name <span class="text-danger">*</span></label>
-                                    <input type="text" 
+                                    <input type="text"
                                            id="trainingName"
                                            class="form-control"
                                            formControlName="trainingName"
@@ -124,7 +124,7 @@
                                             formControlName="province"
                                             [class.is-invalid]="isFieldInvalid('province')">
                                         <option value="">Select province</option>
-                                        <option *ngFor="let province of provinces" [value]="province.code">
+                                        <option *ngFor="let province of provinces" [value]="province.name">
                                             {{ province.name }}
                                         </option>
                                     </select>
@@ -142,7 +142,7 @@
                                             [class.is-invalid]="isFieldInvalid('hospital')"
                                             [disabled]="filteredHospitals.length === 0">
                                         <option value="">Select hospital</option>
-                                        <option *ngFor="let hospital of filteredHospitals" [value]="hospital.code">
+                                        <option *ngFor="let hospital of filteredHospitals" [value]="hospital.name">
                                             {{ hospital.name }}
                                         </option>
                                     </select>
@@ -261,19 +261,19 @@
                             <div class="row">
                                 <div class="col-12">
                                     <div class="d-flex justify-content-end gap-2">
-                                        <button type="button" 
+                                        <button type="button"
                                                 class="btn btn-outline-secondary"
                                                 (click)="onCancel()"
                                                 [disabled]="isSubmitting">
                                             <i class="dripicons-cross me-2"></i>Cancel
                                         </button>
-                                        <button type="button" 
+                                        <button type="button"
                                                 class="btn btn-outline-warning"
                                                 (click)="onReset()"
                                                 [disabled]="isSubmitting">
                                             <i class="dripicons-refresh me-2"></i>Reset
                                         </button>
-                                        <button type="submit" 
+                                        <button type="submit"
                                                 class="btn btn-primary"
                                                 [disabled]="isSubmitting">
                                             <i class="dripicons-checkmark me-2"></i>

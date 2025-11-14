@@ -86,6 +86,32 @@ export class ListUsersComponent implements OnInit {
     },
   },
   {
+    header: 'Reset Password',
+    field: 'Reset Password',
+    isAction: true,
+    isFilter: false,
+    isSortable: false,
+    onClick: (item: any) => {
+      this.confirmResetPassword(item);
+    },
+    getValue: function () {
+      return this.field
+    },
+  },
+  {
+    header: 'Change Password',
+    field: 'Change Password',
+    isAction: true,
+    isFilter: false,
+    isSortable: false,
+    onClick: (item: any) => {
+      this.openChangePasswordModal(item);
+    },
+    getValue: function () {
+      return this.field
+    },
+  },
+  {
     header: 'Delete',
     field: 'Delete',
     isAction: true,
@@ -100,6 +126,9 @@ export class ListUsersComponent implements OnInit {
   },
   ];
 
+  // Password management
+  showPasswordModal = false;
+  selectedUser: any = null;
 
   constructor(
     private baseService: BaseService,
@@ -205,6 +234,55 @@ export class ListUsersComponent implements OnInit {
         console.log('Delete cancelled by user');
       }
     });
+  }
+
+  confirmResetPassword(user: any) {
+    this.confirmationService.confirm({
+      message: `Are you sure you want to reset the password for ${user.firstName} ${user.lastName}? The password will be reset to the default: 654724135`,
+      header: 'Reset Password Confirmation',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        this.resetPassword(user.id);
+      },
+      reject: () => {
+        console.log('Password reset cancelled');
+      }
+    });
+  }
+
+  private resetPassword(userId: string) {
+    this.baseService.basePost(`User/ResetPassword?userId=${userId}`, {}).subscribe({
+      next: (response: any) => {
+        console.log('Password reset response:', response);
+        this.toastrService.success(
+          'Password has been reset to: 654724135',
+          'Password Reset Successful',
+          { timeOut: 10000 }
+        );
+      },
+      error: (error: any) => {
+        console.error('Password reset error:', error);
+        this.toastrService.error(
+          error.error?.message || 'Failed to reset password. Please try again.',
+          'Error'
+        );
+      }
+    });
+  }
+
+  openChangePasswordModal(user: any) {
+    this.selectedUser = user;
+    this.showPasswordModal = true;
+  }
+
+  closePasswordModal() {
+    this.showPasswordModal = false;
+    this.selectedUser = null;
+  }
+
+  onPasswordChangeSuccess() {
+    this.toastrService.success('Password changed successfully!');
+    this.closePasswordModal();
   }
 
 }

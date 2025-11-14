@@ -59,4 +59,14 @@
     </div> <!-- container-fluid -->
 </div>
 
+<!-- Change Password Modal -->
+<app-change-password-modal
+    *ngIf="selectedUser"
+    [userId]="selectedUser.id"
+    [userName]="selectedUser.firstName + ' ' + selectedUser.lastName"
+    [isVisible]="showPasswordModal"
+    (modalClose)="closePasswordModal()"
+    (passwordChangeSuccess)="onPasswordChangeSuccess()">
+</app-change-password-modal>
+
 <p-confirmDialog [style]="{width: '50vw'}" [baseZIndex]="10000" rejectButtonStyleClass="p-button-text"></p-confirmDialog>

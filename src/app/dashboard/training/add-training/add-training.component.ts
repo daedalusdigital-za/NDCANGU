@@ -14,7 +14,7 @@ import { map } from 'rxjs/operators';
 export class AddTrainingComponent implements OnInit {
   trainingForm: FormGroup;
   isSubmitting = false;
-  
+
   provinces: any[] = [];
   hospitals: any[] = [];
   trainers: any[] = [];
@@ -32,13 +32,12 @@ export class AddTrainingComponent implements OnInit {
     'Community Health Training'
   ];
 
-  // Status options based on schema (numeric values)
+  // Status options based on API schema
   statusOptions = [
-    { value: 1, label: 'Planned' },
-    { value: 2, label: 'Scheduled' },
-    { value: 3, label: 'In Progress' },
-    { value: 4, label: 'Completed' },
-    { value: 5, label: 'Cancelled' }
+    { value: 0, label: 'Scheduled' },
+    { value: 1, label: 'In Progress' },
+    { value: 2, label: 'Completed' },
+    { value: 3, label: 'Cancelled' }
   ];
 
   constructor(
@@ -63,16 +62,16 @@ export class AddTrainingComponent implements OnInit {
       targetAudience: ['', Validators.required],
       objectives: [''],
       materials: [''],
-      status: [1, Validators.required] // Default to 1 (Planned)
+      status: [0, Validators.required] // Default to 0 (Scheduled)
     });
   }
 
   ngOnInit(): void {
     this.loadProvinces();
     this.loadTrainers();
-    
-    this.trainingForm.get('province')?.valueChanges.subscribe(provinceCode => {
-      this.filterHospitals(provinceCode);
+
+    this.trainingForm.get('province')?.valueChanges.subscribe(provinceName => {
+      this.filterHospitals(provinceName);
     });
   }
 
@@ -102,54 +101,54 @@ export class AddTrainingComponent implements OnInit {
     });
   }
 
-  filterHospitals(provinceCode: string): void {
-    if (!provinceCode) {
+  filterHospitals(provinceName: string): void {
+    if (!provinceName) {
       this.filteredHospitals = [];
       return;
     }
-    
-    // Map province codes to hospitals - this should eventually use DatabaseService
+
+    // Map province names to hospitals - this should eventually use DatabaseService
     const hospitalsByProvince: { [key: string]: any[] } = {
-      'WC': [
+      'Western Cape': [
         { id: 1, name: 'Groote Schuur Hospital', code: 'GSH001' },
         { id: 2, name: 'Tygerberg Hospital', code: 'TBH001' }
       ],
-      'GP': [
+      'Gauteng': [
         { id: 3, name: 'Chris Hani Baragwanath Hospital', code: 'CHB001' },
         { id: 4, name: 'Charlotte Maxeke Hospital', code: 'CMJAH001' }
       ],
-      'KZN': [
+      'KwaZulu-Natal': [
         { id: 5, name: 'Inkosi Albert Luthuli Central Hospital', code: 'IALCH001' },
         { id: 6, name: 'King Edward VIII Hospital', code: 'KEH001' }
       ],
-      'EC': [
+      'Eastern Cape': [
         { id: 7, name: 'Frere Hospital', code: 'FRH001' },
         { id: 8, name: 'Livingstone Hospital', code: 'LH001' }
       ],
-      'FS': [
+      'Free State': [
         { id: 9, name: 'Universitas Academic Hospital', code: 'UAH001' },
         { id: 10, name: 'Pelonomi Hospital', code: 'PEL001' }
       ],
-      'LP': [
+      'Limpopo': [
         { id: 11, name: 'Polokwane Hospital', code: 'POL001' },
         { id: 12, name: 'Mankweng Hospital', code: 'MAN001' }
       ],
-      'MP': [
+      'Mpumalanga': [
         { id: 13, name: 'Rob Ferreira Hospital', code: 'RFH001' },
         { id: 14, name: 'Themba Hospital', code: 'THM001' }
       ],
-      'NW': [
+      'North West': [
         { id: 15, name: 'Klerksdorp Hospital', code: 'KLK001' },
         { id: 16, name: 'Mafikeng Provincial Hospital', code: 'MAF001' }
       ],
-      'NC': [
+      'Northern Cape': [
         { id: 17, name: 'Kimberley Hospital', code: 'KIM001' },
         { id: 18, name: 'Upington Hospital', code: 'UPI001' }
       ]
     };
-    
-    this.filteredHospitals = hospitalsByProvince[provinceCode] || [];
-    
+
+    this.filteredHospitals = hospitalsByProvince[provinceName] || [];
+
     // Clear hospital selection when province changes
     this.trainingForm.get('hospital')?.setValue('');
   }
@@ -157,9 +156,9 @@ export class AddTrainingComponent implements OnInit {
   onSubmit(): void {
     if (this.trainingForm.valid) {
       this.isSubmitting = true;
-      
+
       const formData = this.trainingForm.value;
-      
+
       // Convert form data to match the exact API schema
       const trainingSession = {
         trainingName: formData.trainingName,
@@ -167,12 +166,8 @@ export class AddTrainingComponent implements OnInit {
         description: formData.description || '',
         startDate: this.formatDateForAPI(formData.startDate),
         endDate: this.formatDateForAPI(formData.endDate),
-        startTime: {
-          ticks: this.convertTimeToTicks(formData.startTime)
-        },
-        endTime: {
-          ticks: this.convertTimeToTicks(formData.endTime)
-        },
+        startTime: this.formatTimeForAPI(formData.startTime),
+        endTime: this.formatTimeForAPI(formData.endTime),
         province: formData.province,
         hospital: formData.hospital,
         venue: formData.venue,
@@ -206,7 +201,7 @@ export class AddTrainingComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error creating training session via API:', error);
-        
+
         // Fallback: Save to local storage for development
         this.saveToLocalStorage(trainingData);
         this.toastr.success('Training session saved locally (API unavailable)', 'Success');
@@ -221,7 +216,7 @@ export class AddTrainingComponent implements OnInit {
     try {
       // Get existing sessions or create empty array
       const existingSessions = JSON.parse(localStorage.getItem('trainingSessions') || '[]');
-      
+
       // Add new session with generated ID
       const sessionWithId = {
         ...trainingData,
@@ -229,10 +224,10 @@ export class AddTrainingComponent implements OnInit {
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString()
       };
-      
+
       existingSessions.push(sessionWithId);
       localStorage.setItem('trainingSessions', JSON.stringify(existingSessions));
-      
+
       console.log('Training session saved to localStorage:', sessionWithId);
     } catch (error) {
       console.error('Error saving to localStorage:', error);
@@ -242,7 +237,7 @@ export class AddTrainingComponent implements OnInit {
 
   private resetForm(): void {
     this.trainingForm.reset();
-    this.trainingForm.get('status')?.setValue(1); // Reset to Planned
+    this.trainingForm.get('status')?.setValue(0); // Reset to Scheduled
     this.filteredHospitals = [];
   }
 
@@ -253,20 +248,17 @@ export class AddTrainingComponent implements OnInit {
     return date.toISOString();
   }
 
-  // Helper method to convert time string to ticks
-  private convertTimeToTicks(timeString: string): number {
-    if (!timeString) return 0;
-    
-    const [hours, minutes] = timeString.split(':').map(Number);
-    // Convert to ticks (100 nanoseconds since midnight)
-    // 1 tick = 100 nanoseconds
-    // 1 millisecond = 10,000 ticks
-    // 1 second = 10,000,000 ticks
-    // 1 minute = 600,000,000 ticks
-    // 1 hour = 36,000,000,000 ticks
-    
-    const totalTicks = (hours * 36000000000) + (minutes * 600000000);
-    return totalTicks;
+  // Helper method to format time for API (HH:mm:ss format)
+  private formatTimeForAPI(timeString: string): string {
+    if (!timeString) return '00:00:00';
+
+    // If time is already in HH:mm format, add seconds
+    if (timeString.length === 5) {
+      return `${timeString}:00`;
+    }
+
+    // If time is already in HH:mm:ss format, return as-is
+    return timeString;
   }
 
   private markFormGroupTouched(): void {

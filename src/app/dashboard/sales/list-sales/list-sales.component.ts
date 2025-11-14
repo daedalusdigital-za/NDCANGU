@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { OrderDataService, OrderRecord, SalesRecord } from '../../../services/order-data.service';
+import { DatabaseService } from '../../../services/data/database.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-list-sales',
@@ -13,10 +15,13 @@ export class ListSalesComponent implements OnInit {
   filteredOrders: OrderRecord[] = [];
   salesRecords: SalesRecord[] = [];
   filteredSalesRecords: SalesRecord[] = [];
-  
+
   // View mode toggle
   viewMode: 'orders' | 'sales' = 'sales'; // Default to sales
-  
+
+  // Loading state
+  isLoading: boolean = false;
+
   // Filter properties for orders
   searchTerm: string = '';
   selectedStatus: string = 'All';
@@ -24,19 +29,23 @@ export class ListSalesComponent implements OnInit {
   selectedCustomer: string = 'All';
   dateFrom: Date | null = null;
   dateTo: Date | null = null;
-  
+
   // Additional filter properties for sales
   selectedInstitution: string = 'All';
   selectedProductType: string = 'All';
-  
+
   // Filter options
   statusOptions: string[] = ['All'];
   provinceOptions: string[] = ['All'];
   customerOptions: string[] = ['All'];
   institutionOptions: string[] = ['All'];
   productTypeOptions: string[] = ['All'];
-  
-  constructor(private orderDataService: OrderDataService) { }
+
+  constructor(
+    private orderDataService: OrderDataService,
+    private databaseService: DatabaseService,
+    private toastr: ToastrService
+  ) { }
 
   ngOnInit(): void {
     this.loadOrders();
@@ -45,13 +54,58 @@ export class ListSalesComponent implements OnInit {
   }
 
   loadOrders(): void {
-    this.orders = this.orderDataService.getAllOrderRecords();
-    this.filteredOrders = [...this.orders];
+    this.isLoading = true;
+
+    // Load from database API
+    this.databaseService.getSales().subscribe({
+      next: (sales) => {
+        console.log(`✅ Loaded ${sales.length} sales from database`);
+
+        // Convert Sale format to OrderRecord format for display
+        this.orders = sales.map(sale => this.convertSaleToOrder(sale));
+        this.filteredOrders = [...this.orders];
+        this.isLoading = false;
+
+        // Show success message if data loaded
+        if (sales.length > 0) {
+          this.toastr.success(`Loaded ${sales.length} orders from database`, 'Data Loaded');
+        }
+      },
+      error: (error) => {
+        console.warn('⚠️ API unavailable, using fallback data:', error);
+
+        // Fallback to hardcoded data if API fails
+        this.orders = this.orderDataService.getAllOrderRecords();
+        this.filteredOrders = [...this.orders];
+        this.isLoading = false;
+
+        this.toastr.info('Using cached order data (API unavailable)', 'Offline Mode');
+      }
+    });
   }
 
   loadSalesRecords(): void {
-    this.salesRecords = this.orderDataService.getAllSalesRecords();
-    this.filteredSalesRecords = [...this.salesRecords];
+    this.isLoading = true;
+
+    // Load from database API
+    this.databaseService.getSales().subscribe({
+      next: (sales) => {
+        console.log(`✅ Loaded ${sales.length} sales records from database`);
+
+        // Convert Sale format to SalesRecord format for display
+        this.salesRecords = sales.map(sale => this.convertSaleToSalesRecord(sale));
+        this.filteredSalesRecords = [...this.salesRecords];
+        this.isLoading = false;
+      },
+      error: (error) => {
+        console.warn('⚠️ API unavailable, using fallback data:', error);
+
+        // Fallback to hardcoded data if API fails
+        this.salesRecords = this.orderDataService.getAllSalesRecords();
+        this.filteredSalesRecords = [...this.salesRecords];
+        this.isLoading = false;
+      }
+    });
   }
 
   loadFilterOptions(): void {
@@ -59,11 +113,11 @@ export class ListSalesComponent implements OnInit {
     this.statusOptions = ['All', ...this.orderDataService.getUniqueStatuses()];
     this.provinceOptions = ['All', ...this.orderDataService.getUniqueProvinces()];
     this.customerOptions = ['All', ...this.orderDataService.getUniqueCustomers()];
-    
+
     // Sales filter options
     this.institutionOptions = ['All', ...this.orderDataService.getUniqueInstitutions()];
     this.productTypeOptions = ['All', ...this.orderDataService.getUniqueProductTypes()];
-    
+
     // Merge province options from both
     const salesProvinces = this.orderDataService.getUniqueSalesProvinces();
     const allProvinces = [...new Set([...this.provinceOptions.slice(1), ...salesProvinces])];
@@ -109,7 +163,7 @@ export class ListSalesComponent implements OnInit {
     this.selectedProductType = 'All';
     this.dateFrom = null;
     this.dateTo = null;
-    
+
     if (this.viewMode === 'orders') {
       this.filteredOrders = [...this.orders];
     } else {
@@ -127,7 +181,8 @@ export class ListSalesComponent implements OnInit {
     }
   }
 
-  viewOrderDetails(order: OrderRecord): void {
+  viewOrderDetails(
+    order: OrderRecord): void {
     console.log('Viewing order details:', order);
   }
 
@@ -147,13 +202,13 @@ export class ListSalesComponent implements OnInit {
 
   private downloadCSV(data: any[], filename: string): void {
     if (data.length === 0) return;
-    
+
     const headers = Object.keys(data[0]);
     const csvContent = [
       headers.join(','),
       ...data.map(row => headers.map(header => `"${row[header]}"`).join(','))
     ].join('\n');
-    
+
     const blob = new Blob([csvContent], { type: 'text/csv' });
     const url = window.URL.createObjectURL(blob);
     const link = document.createElement('a');
@@ -255,6 +310,71 @@ export class ListSalesComponent implements OnInit {
     } else {
       const exportData = this.orderDataService.exportSalesData();
       this.downloadCSV(exportData, 'sales-export.xlsx');
+    }
+  }
+
+  /**
+   * Convert Sale API format to OrderRecord display format
+   */
+  private convertSaleToOrder(sale: any): OrderRecord {
+    const firstItem = sale.saleItems && sale.saleItems.length > 0 ? sale.saleItems[0] : null;
+
+    return {
+      orderNumber: sale.saleNumber || '',
+      orderDate: this.formatDateForDisplay(sale.saleDate),
+      customerName: sale.hospital || '',
+      province: sale.province || '',
+      poNumber: sale.invoiceNumber || '',
+      itemDescription: firstItem?.productName || '',
+      qtyBackOrder: firstItem?.quantity || 0,
+      unitPrice: firstItem?.unitPrice || 0,
+      status: this.mapDeliveryStatus(sale.deliveryStatus),
+      totalValue: sale.totalAmount || (firstItem?.quantity * firstItem?.unitPrice) || 0
+    };
+  }
+
+  /**
+   * Convert Sale API format to SalesRecord display format
+   */
+  private convertSaleToSalesRecord(sale: any): SalesRecord {
+    const firstItem = sale.saleItems && sale.saleItems.length > 0 ? sale.saleItems[0] : null;
+
+    return {
+      institution: sale.hospital || '',
+      province: sale.province || '',
+      itemDescription: firstItem?.productName || '',
+      date: this.formatDateForDisplay(sale.saleDate),
+      invoiceNumber: sale.invoiceNumber || sale.saleNumber || '',
+      quantity: firstItem?.quantity || 0,
+      salesAmount: sale.totalAmount || (firstItem?.quantity * firstItem?.unitPrice) || 0,
+      status: this.mapDeliveryStatus(sale.deliveryStatus)
+    };
+  }
+
+  /**
+   * Format ISO date to display format (YYYY/MM/DD)
+   */
+  private formatDateForDisplay(isoDate: string): string {
+    if (!isoDate) return '';
+    const date = new Date(isoDate);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}/${month}/${day}`;
+  }
+
+  /**
+   * Map delivery status enum to display text
+   * API: 0=Pending, 1=Processing, 2=Shipped, 3=Delivered, 4=Cancelled
+   */
+  private mapDeliveryStatus(status: number): string {
+    switch (status) {
+      case 0: return 'Not delivered';
+      case 1: return 'Processing';
+      case 2: return 'Shipped';
+      case 3: return 'Delivered';
+      case 4: return 'Cancelled';
+      default: return 'Pending';
     }
   }
 }
