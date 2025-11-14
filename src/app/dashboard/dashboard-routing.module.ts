@@ -5,7 +5,6 @@ import { DashboardLayoutComponent } from './dashboard-layout/dashboard-layout.co
 import { DashboardComponent } from './dashboard.component';
 import { ReportsComponent } from './reports.component';
 import { ListStatsComponent } from './list-stats/list-stats.component';
-import { AuthDebugComponent } from './auth-debug.component';
 import { VerifyPhoneNumberComponent } from './verify-phone-number/verify-phone-number.component';
 
 const routes: Routes = [
@@ -32,10 +31,6 @@ const routes: Routes = [
       {
         path: 'reports',
         component: ReportsComponent,
-      },
-      {
-        path: 'auth-debug',
-        component: AuthDebugComponent,
       },
        {
         path: 'tests',
