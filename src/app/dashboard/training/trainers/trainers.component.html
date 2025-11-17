@@ -27,7 +27,7 @@
                                 <i class="fas fa-plus me-2"></i>Add Trainer
                             </button>
                         </div>
-                        
+
                         <div class="table-responsive">
                             <table class="table table-striped">
                                 <thead>
@@ -105,7 +105,7 @@
                         <div class="col-md-6">
                             <div class="mb-3">
                                 <label for="name" class="form-label">Full Name *</label>
-                                <input type="text" class="form-control" id="name" formControlName="name" 
+                                <input type="text" class="form-control" id="name" formControlName="name"
                                        placeholder="Enter trainer's full name" required>
                                 <div *ngIf="trainerForm.get('name')?.invalid && trainerForm.get('name')?.touched" class="text-danger">
                                     <small>Name is required</small>
@@ -115,7 +115,7 @@
                         <div class="col-md-6">
                             <div class="mb-3">
                                 <label for="email" class="form-label">Email Address *</label>
-                                <input type="email" class="form-control" id="email" formControlName="email" 
+                                <input type="email" class="form-control" id="email" formControlName="email"
                                        placeholder="Enter email address" required>
                                 <div *ngIf="trainerForm.get('email')?.invalid && trainerForm.get('email')?.touched" class="text-danger">
                                     <small>Valid email is required</small>
@@ -123,12 +123,12 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="row">
                         <div class="col-md-6">
                             <div class="mb-3">
                                 <label for="phone" class="form-label">Phone Number *</label>
-                                <input type="tel" class="form-control" id="phone" formControlName="phone" 
+                                <input type="tel" class="form-control" id="phone" formControlName="phone"
                                        placeholder="+27721234567" required>
                                 <div *ngIf="trainerForm.get('phone')?.invalid && trainerForm.get('phone')?.touched" class="text-danger">
                                     <small>Phone number is required</small>
@@ -156,24 +156,7 @@
                             </div>
                         </div>
                     </div>
-                    
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="qualification" class="form-label">Qualification</label>
-                                <input type="text" class="form-control" id="qualification" formControlName="qualification" 
-                                       placeholder="e.g., MD, PhD, MSc">
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="experience" class="form-label">Years of Experience</label>
-                                <input type="number" class="form-control" id="experience" formControlName="experience" 
-                                       placeholder="Years of experience" min="0">
-                            </div>
-                        </div>
-                    </div>
-                    
+
                     <div class="row">
                         <div class="col-md-6">
                             <div class="mb-3">
@@ -186,17 +169,14 @@
                         </div>
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label for="location" class="form-label">Location</label>
-                                <input type="text" class="form-control" id="location" formControlName="location" 
-                                       placeholder="Work location/facility">
+                                <label for="location" class="form-label">Location *</label>
+                                <input type="text" class="form-control" id="location" formControlName="location"
+                                       placeholder="Work location/facility" required>
+                                <div *ngIf="trainerForm.get('location')?.invalid && trainerForm.get('location')?.touched" class="text-danger">
+                                    <small>Location is required</small>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    
-                    <div class="mb-3">
-                        <label for="bio" class="form-label">Bio/Notes</label>
-                        <textarea class="form-control" id="bio" formControlName="bio" rows="3" 
-                                  placeholder="Brief biography or additional notes"></textarea>
                     </div>
                 </form>
             </div>
@@ -226,24 +206,24 @@
                         <div class="col-md-6">
                             <div class="mb-3">
                                 <label for="editName" class="form-label">Full Name *</label>
-                                <input type="text" class="form-control" id="editName" formControlName="name" 
+                                <input type="text" class="form-control" id="editName" formControlName="name"
                                        placeholder="Enter trainer's full name" required>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="mb-3">
                                 <label for="editEmail" class="form-label">Email Address *</label>
-                                <input type="email" class="form-control" id="editEmail" formControlName="email" 
+                                <input type="email" class="form-control" id="editEmail" formControlName="email"
                                        placeholder="Enter email address" required>
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="row">
                         <div class="col-md-6">
                             <div class="mb-3">
                                 <label for="editPhone" class="form-label">Phone Number *</label>
-                                <input type="tel" class="form-control" id="editPhone" formControlName="phone" 
+                                <input type="tel" class="form-control" id="editPhone" formControlName="phone"
                                        placeholder="+27721234567" required>
                             </div>
                         </div>
@@ -265,24 +245,7 @@
                             </div>
                         </div>
                     </div>
-                    
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="editQualification" class="form-label">Qualification</label>
-                                <input type="text" class="form-control" id="editQualification" formControlName="qualification" 
-                                       placeholder="e.g., MD, PhD, MSc">
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="editExperience" class="form-label">Years of Experience</label>
-                                <input type="number" class="form-control" id="editExperience" formControlName="experience" 
-                                       placeholder="Years of experience" min="0">
-                            </div>
-                        </div>
-                    </div>
-                    
+
                     <div class="row">
                         <div class="col-md-6">
                             <div class="mb-3">
@@ -295,17 +258,11 @@
                         </div>
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label for="editLocation" class="form-label">Location</label>
-                                <input type="text" class="form-control" id="editLocation" formControlName="location" 
-                                       placeholder="Work location/facility">
+                                <label for="editLocation" class="form-label">Location *</label>
+                                <input type="text" class="form-control" id="editLocation" formControlName="location"
+                                       placeholder="Work location/facility" required>
                             </div>
                         </div>
-                    </div>
-                    
-                    <div class="mb-3">
-                        <label for="editBio" class="form-label">Bio/Notes</label>
-                        <textarea class="form-control" id="editBio" formControlName="bio" rows="3" 
-                                  placeholder="Brief biography or additional notes"></textarea>
                     </div>
                 </form>
             </div>

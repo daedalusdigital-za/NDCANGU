@@ -9,15 +9,25 @@ declare var bootstrap: any;
 
 interface Trainer {
   id: number;
+  // Personal Information
   name: string;
   email: string;
   phone: string;
-  province: string;
-  qualification: string;
-  experience: number;
-  status: string;
+  // Location
+  provinceId: number;
+  province?: string; // Display name from provinces array
   location: string;
-  bio: string;
+  // Status
+  status: string; // Active/Inactive
+  // Optional fields
+  qualification?: string;
+  experience?: number;
+  bio?: string;
+  // Audit fields
+  createdAt?: string;
+  updatedAt?: string;
+  createdBy?: string;
+  updatedBy?: string;
 }
 
 @Component({
@@ -26,12 +36,25 @@ interface Trainer {
   styleUrls: ['./trainers.component.scss']
 })
 export class TrainersComponent implements OnInit {
-  
+
   trainerForm: FormGroup;
   trainers: Trainer[] = [];
   selectedTrainer: Trainer | null = null;
   editingTrainer: Trainer | null = null;
   editingIndex: number = -1;
+
+  // Province list matching database
+  provinces = [
+    { id: 1, name: 'Gauteng' },
+    { id: 2, name: 'KwaZulu-Natal' },
+    { id: 3, name: 'Eastern Cape' },
+    { id: 4, name: 'Western Cape' },
+    { id: 5, name: 'Limpopo' },
+    { id: 6, name: 'Mpumalanga' },
+    { id: 7, name: 'North West' },
+    { id: 8, name: 'Free State' },
+    { id: 9, name: 'Northern Cape' }
+  ];
 
   constructor(
     private router: Router,
@@ -44,12 +67,9 @@ export class TrainersComponent implements OnInit {
       name: ['', [Validators.required, Validators.minLength(2)]],
       email: ['', [Validators.required, Validators.email]],
       phone: ['', [Validators.required, Validators.pattern(/^\+?[0-9]{10,15}$/)]],
-      province: ['', Validators.required],
-      qualification: [''],
-      experience: [0, [Validators.min(0)]],
-      status: ['Active', Validators.required],
-      location: [''],
-      bio: ['']
+      provinceId: ['', Validators.required],
+      location: ['', Validators.required],
+      status: ['Active', Validators.required]
     });
   }
 
@@ -61,19 +81,15 @@ export class TrainersComponent implements OnInit {
   loadTrainers(): void {
     this.databaseService.getTrainersWithFallback().subscribe({
       next: (trainers) => {
-        // Map database trainers to component format (provinces removed)
+        // Map database trainers with province names
         this.trainers = trainers.map(trainer => {
+          const province = this.provinces.find(p => p.id === trainer.provinceId);
           return {
-            id: trainer.id,
-            name: trainer.name,
-            email: trainer.email,
-            phone: trainer.phone,
-            province: 'Not Available', // Province functionality removed
+            ...trainer,
+            province: province?.name || 'Unknown',
             qualification: trainer.qualification || '',
-            experience: trainer.experience,
-            status: trainer.status,
-            location: trainer.location || '',
-            bio: trainer.bio || ''
+            experience: trainer.experience || 0,
+            location: trainer.location || ''
           };
         });
       },
@@ -82,6 +98,12 @@ export class TrainersComponent implements OnInit {
         this.toastr.error('Error loading trainers data', 'Error');
       }
     });
+  }
+
+  // Get province name by ID
+  getProvinceName(provinceId: number): string {
+    const province = this.provinces.find(p => p.id === provinceId);
+    return province?.name || 'Unknown';
   }
 
   // Get initials for avatar
@@ -104,7 +126,7 @@ export class TrainersComponent implements OnInit {
       bio: trainer.bio,
       description: `${trainer.name} is a ${trainer.qualification} with ${trainer.experience} years of experience, currently based in ${trainer.location}, ${trainer.province}. Status: ${trainer.status}.`
     };
-    
+
     this.popupPreviewService.showTrainerPreview(trainerData);
   }
 
@@ -113,14 +135,14 @@ export class TrainersComponent implements OnInit {
     if (!this.selectedTrainer) {
       return { totalTrainees: 0, completedSessions: 0, rating: 0 };
     }
-    
+
     // Mock statistics - in a real app, this would come from an API
     const mockStats = {
       totalTrainees: Math.floor(Math.random() * 50) + 10,
       completedSessions: Math.floor(Math.random() * 100) + 20,
       rating: (Math.random() * 2 + 3).toFixed(1) // Random rating between 3.0 and 5.0
     };
-    
+
     return mockStats;
   }
 
@@ -128,18 +150,15 @@ export class TrainersComponent implements OnInit {
   editTrainer(trainer: Trainer): void {
     this.editingTrainer = { ...trainer };
     this.editingIndex = this.trainers.findIndex(t => t.id === trainer.id);
-    
+
     // Populate form with trainer data
     this.trainerForm.patchValue({
       name: trainer.name,
       email: trainer.email,
       phone: trainer.phone,
-      province: trainer.province,
-      qualification: trainer.qualification,
-      experience: trainer.experience,
-      status: trainer.status,
+      provinceId: trainer.provinceId,
       location: trainer.location,
-      bio: trainer.bio
+      status: trainer.status
     });
 
     // Show edit modal
@@ -150,7 +169,7 @@ export class TrainersComponent implements OnInit {
   // Delete trainer
   deleteTrainer(trainer: Trainer, index: number): void {
     const confirmDelete = confirm(`Are you sure you want to delete trainer "${trainer.name}"?`);
-    
+
     if (confirmDelete) {
       this.trainers.splice(index, 1);
       this.toastr.success(`${trainer.name} has been removed from the system`, 'Trainer Deleted');
@@ -160,18 +179,29 @@ export class TrainersComponent implements OnInit {
   // Submit new trainer
   onSubmit(): void {
     if (this.trainerForm.valid) {
+      const formValue = this.trainerForm.value;
+      const province = this.getProvinceName(formValue.provinceId);
+
       const newTrainer: Trainer = {
         id: this.getNextId(),
-        ...this.trainerForm.value
+        name: formValue.name,
+        email: formValue.email,
+        phone: formValue.phone,
+        provinceId: formValue.provinceId,
+        province: province,
+        location: formValue.location,
+        status: formValue.status,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
       };
 
       this.trainers.push(newTrainer);
       this.toastr.success(`${newTrainer.name} has been added successfully`, 'Trainer Added');
-      
+
       // Reset form and close modal
       this.trainerForm.reset();
       this.trainerForm.patchValue({ status: 'Active' });
-      
+
       const modal = bootstrap.Modal.getInstance(document.getElementById('addTrainerModal'));
       modal?.hide();
     } else {
@@ -183,20 +213,30 @@ export class TrainersComponent implements OnInit {
   // Update trainer
   onUpdateSubmit(): void {
     if (this.trainerForm.valid && this.editingIndex !== -1) {
+      const formValue = this.trainerForm.value;
+      const province = this.getProvinceName(formValue.provinceId);
+
       const updatedTrainer: Trainer = {
-        id: this.editingTrainer!.id,
-        ...this.trainerForm.value
+        ...this.editingTrainer!,
+        name: formValue.name,
+        email: formValue.email,
+        phone: formValue.phone,
+        provinceId: formValue.provinceId,
+        province: province,
+        location: formValue.location,
+        status: formValue.status,
+        updatedAt: new Date().toISOString()
       };
 
       this.trainers[this.editingIndex] = updatedTrainer;
       this.toastr.success(`${updatedTrainer.name} has been updated successfully`, 'Trainer Updated');
-      
+
       // Reset form and close modal
       this.trainerForm.reset();
       this.trainerForm.patchValue({ status: 'Active' });
       this.editingTrainer = null;
       this.editingIndex = -1;
-      
+
       const modal = bootstrap.Modal.getInstance(document.getElementById('editTrainerModal'));
       modal?.hide();
     } else {

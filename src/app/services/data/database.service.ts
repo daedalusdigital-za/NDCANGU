@@ -64,18 +64,25 @@ interface HealthFacility {
 
 interface Trainer {
   id: number;
+  // Personal Information
   name: string;
   email: string;
   phone: string;
-  province: string;
-  provinceId?: number; // For backward compatibility
+  // Location
+  provinceId: number;
+  province?: string; // For display purposes
+  location: string;
+  // Status
+  status: string; // Active/Inactive
+  // Optional fields (for backward compatibility)
   qualification?: string;
-  experience: number;
-  status: string; // Changed from number to string for compatibility
-  location?: string;
+  experience?: number;
   bio?: string;
+  // Audit fields
   createdAt?: string;
   updatedAt?: string;
+  createdBy?: string;
+  updatedBy?: string;
 }
 
 interface TrainingSession {

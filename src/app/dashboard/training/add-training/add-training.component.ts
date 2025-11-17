@@ -20,16 +20,8 @@ export class AddTrainingComponent implements OnInit {
   trainers: any[] = [];
   filteredHospitals: any[] = [];
   trainingTypes = [
-    'NCD Prevention Workshop',
-    'Diabetes Management Course',
-    'Hypertension Control Training',
-    'Cardiovascular Health Training',
-    'Nutrition & Lifestyle Training',
-    'Mental Health Awareness',
-    'Cancer Prevention Training',
-    'Respiratory Health Training',
-    'Kidney Health Training',
-    'Community Health Training'
+    'NDC Training workshop',
+    'Virtual training'
   ];
 
   // Status options based on API schema
@@ -49,19 +41,11 @@ export class AddTrainingComponent implements OnInit {
     this.trainingForm = this.fb.group({
       trainingName: ['', [Validators.required, Validators.minLength(3)]],
       trainingType: ['', Validators.required],
-      description: [''],
-      startDate: ['', Validators.required],
-      endDate: ['', Validators.required],
-      startTime: ['', Validators.required],
-      endTime: ['', Validators.required],
+      trainingDate: ['', Validators.required],
       province: ['', Validators.required],
-      hospital: ['', Validators.required],
       venue: ['', Validators.required],
       trainerId: ['', Validators.required],
-      numberOfParticipants: ['', [Validators.required, Validators.min(1), Validators.max(500)]],
       targetAudience: ['', Validators.required],
-      objectives: [''],
-      materials: [''],
       status: [0, Validators.required] // Default to 0 (Scheduled)
     });
   }
