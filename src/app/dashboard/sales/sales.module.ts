@@ -10,6 +10,7 @@ import { AddSaleComponent } from './add-sale/add-sale.component';
 import { ListSalesComponent } from './list-sales/list-sales.component';
 import { SalesReportsComponent } from './sales-reports/sales-reports.component';
 import { ProductManagementComponent } from './product-management/product-management.component';
+import { EditSaleModalComponent } from './edit-sale-modal/edit-sale-modal.component';
 
 // PrimeNG imports
 import { TableModule } from 'primeng/table';
@@ -30,7 +31,8 @@ import { TooltipModule } from 'primeng/tooltip';
     AddSaleComponent,
     ListSalesComponent,
     SalesReportsComponent,
-    ProductManagementComponent
+    ProductManagementComponent,
+    EditSaleModalComponent
   ],
   imports: [
     CommonModule,

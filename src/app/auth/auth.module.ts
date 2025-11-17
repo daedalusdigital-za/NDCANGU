@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 
 import { AuthRoutingModule } from './auth-routing.module';
 import { LoginUserComponent } from './login/login.component';
-import { RegisterComponent } from './register/register.component';
 import { AuthComponent } from './auth.component';
 import { FormsModule } from '@angular/forms';
 import { LockUserComponent } from '../components/lock-user/lock-user.component';
@@ -15,7 +14,6 @@ import { PrivacyPolicyComponent } from './privacy-policy/privacy-policy.componen
   declarations: [
     LoginUserComponent,
     LockUserComponent,
-    RegisterComponent,
     AuthComponent,
     VerifyPhoneNumberComponent,
     TermsComponent,

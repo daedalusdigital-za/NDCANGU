@@ -1,0 +1,142 @@
+<div class="modal" [class.show]="isVisible" [style.display]="isVisible ? 'block' : 'none'" tabindex="-1">
+  <div class="modal-backdrop" [class.show]="isVisible" (click)="closeModal()"></div>
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Edit Sale</h5>
+        <button type="button" class="btn-close" (click)="closeModal()"></button>
+      </div>
+
+      <div class="modal-body">
+        <div *ngIf="isLoading" class="text-center py-4">
+          <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
+        </div>
+
+        <form #saleForm="ngForm" (ngSubmit)="onSubmit(saleForm)" *ngIf="!isLoading">
+          <div class="row">
+            <!-- Sale Number -->
+            <div class="col-md-6 mb-3">
+              <label for="saleNumber" class="form-label">Sale/Order Number</label>
+              <input
+                type="text"
+                class="form-control"
+                id="saleNumber"
+                name="saleNumber"
+                [(ngModel)]="sale.saleNumber"
+                required
+                [class.is-invalid]="saleForm.submitted && saleForm.controls['saleNumber']?.invalid">
+              <div class="invalid-feedback">Sale number is required</div>
+            </div>
+
+            <!-- Sale Date -->
+            <div class="col-md-6 mb-3">
+              <label for="saleDate" class="form-label">Sale Date</label>
+              <input
+                type="date"
+                class="form-control"
+                id="saleDate"
+                name="saleDate"
+                [(ngModel)]="sale.saleDate"
+                required
+                [class.is-invalid]="saleForm.submitted && saleForm.controls['saleDate']?.invalid">
+              <div class="invalid-feedback">Sale date is required</div>
+            </div>
+
+            <!-- Hospital/Customer -->
+            <div class="col-md-6 mb-3">
+              <label for="hospital" class="form-label">Hospital/Customer</label>
+              <input
+                type="text"
+                class="form-control"
+                id="hospital"
+                name="hospital"
+                [(ngModel)]="sale.hospital"
+                required
+                [class.is-invalid]="saleForm.submitted && saleForm.controls['hospital']?.invalid">
+              <div class="invalid-feedback">Hospital/Customer is required</div>
+            </div>
+
+            <!-- Province -->
+            <div class="col-md-6 mb-3">
+              <label for="province" class="form-label">Province</label>
+              <select
+                class="form-select"
+                id="province"
+                name="province"
+                [(ngModel)]="sale.province"
+                required
+                [class.is-invalid]="saleForm.submitted && saleForm.controls['province']?.invalid">
+                <option value="">Select Province</option>
+                <option *ngFor="let prov of provinces" [value]="prov">{{prov}}</option>
+              </select>
+              <div class="invalid-feedback">Province is required</div>
+            </div>
+
+            <!-- Invoice Number -->
+            <div class="col-md-6 mb-3">
+              <label for="invoiceNumber" class="form-label">Invoice/PO Number</label>
+              <input
+                type="text"
+                class="form-control"
+                id="invoiceNumber"
+                name="invoiceNumber"
+                [(ngModel)]="sale.invoiceNumber"
+                required
+                [class.is-invalid]="saleForm.submitted && saleForm.controls['invoiceNumber']?.invalid">
+              <div class="invalid-feedback">Invoice number is required</div>
+            </div>
+
+            <!-- Total Amount -->
+            <div class="col-md-6 mb-3">
+              <label for="totalAmount" class="form-label">Total Amount (ZAR)</label>
+              <input
+                type="number"
+                class="form-control"
+                id="totalAmount"
+                name="totalAmount"
+                [(ngModel)]="sale.totalAmount"
+                required
+                min="0"
+                step="0.01"
+                [class.is-invalid]="saleForm.submitted && saleForm.controls['totalAmount']?.invalid">
+              <div class="invalid-feedback">Total amount is required</div>
+            </div>
+
+            <!-- Delivery Status -->
+            <div class="col-md-12 mb-3">
+              <label for="deliveryStatus" class="form-label">Delivery Status</label>
+              <select
+                class="form-select"
+                id="deliveryStatus"
+                name="deliveryStatus"
+                [(ngModel)]="sale.deliveryStatus"
+                required
+                [class.is-invalid]="saleForm.submitted && saleForm.controls['deliveryStatus']?.invalid">
+                <option *ngFor="let status of statusOptions" [value]="status.value">
+                  {{status.label}}
+                </option>
+              </select>
+              <div class="invalid-feedback">Delivery status is required</div>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="closeModal()" [disabled]="isLoading">
+          Cancel
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          (click)="onSubmit(saleForm)"
+          [disabled]="isLoading || saleForm.invalid">
+          <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-2"></span>
+          Save Changes
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -24,16 +24,19 @@ export class LoginUserComponent implements OnInit {
   isPasswordHidden: boolean = true;
   isLoading: boolean = false;
   isProduction: boolean = environment.production;
-  
+
   // Forgot Password Modal
   showForgotPasswordModal: boolean = false;
   forgotPasswordEmail: string = '';
   isForgotPasswordLoading: boolean = false;
 
+  // Contact Admin Modal
+  showContactAdminModal: boolean = false;
+
   constructor(
-    private authService: AuthService, 
+    private authService: AuthService,
     private globalService: GlobalService,
-    private router: Router, 
+    private router: Router,
     private dialogService: DialogService,
     private errorHandling: ErrorHandlingService
   ) { }
@@ -46,7 +49,7 @@ export class LoginUserComponent implements OnInit {
     }
 
     this.isLoading = true;
-    
+
     this.authService.login(this.user).subscribe({
       next: (response) => {
         this.isLoading = false;
@@ -61,10 +64,10 @@ export class LoginUserComponent implements OnInit {
       error: (error) => {
         this.isLoading = false;
         console.error('Login error:', error);
-        
+
         // Handle different types of errors
         let errorMessage = 'Login failed. Please try again.';
-        
+
         if (typeof error === 'string') {
           errorMessage = error;
         } else if (error?.message) {
@@ -72,7 +75,7 @@ export class LoginUserComponent implements OnInit {
         } else if (error?.error?.message) {
           errorMessage = error.error.message;
         }
-        
+
         this.errorHandling.handleError(errorMessage, 'Login');
       }
     });
@@ -134,12 +137,21 @@ export class LoginUserComponent implements OnInit {
     }
 
     this.isForgotPasswordLoading = true;
-    
+
     // Simulate API call - replace with actual service call
     setTimeout(() => {
       this.isForgotPasswordLoading = false;
       this.errorHandling.showSuccess('Password reset instructions have been sent to your email address');
       this.closeForgotPasswordModal();
     }, 2000);
+  }
+
+  // Contact Admin Modal Methods
+  openContactAdminModal(): void {
+    this.showContactAdminModal = true;
+  }
+
+  closeContactAdminModal(): void {
+    this.showContactAdminModal = false;
   }
 }

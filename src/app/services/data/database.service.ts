@@ -5,14 +5,14 @@ import { catchError, map } from 'rxjs/operators';
 
 /**
  * NDCANGU Medical Management API - Database Service
- * 
+ *
  * Comprehensive service for interacting with the NDCANGU API
  * Base URL: https://ngcanduapi.azurewebsites.net
  * Total Endpoints: 80+ endpoints across 11 controllers
- * 
+ *
  * Controllers:
  * - Auth Controller (4 endpoints)
- * - Location Controller (6 endpoints) 
+ * - Location Controller (6 endpoints)
  * - Trainer Controller (8 endpoints)
  * - Training Controller (8 endpoints)
  * - Inventory Controller (10 endpoints)
@@ -20,7 +20,7 @@ import { catchError, map } from 'rxjs/operators';
  * - Dashboard Controller (7 endpoints)
  * - User Management (25 endpoints)
  * - Medical System (30+ endpoints)
- * 
+ *
  * Last Updated: October 7, 2025
  */
 
@@ -234,7 +234,7 @@ interface LoginResponse {
 export class DatabaseService {
   // API Base URL for production - Login endpoint working!
   private readonly API_URL = 'https://ngcanduapi.azurewebsites.net/api/';
-  
+
   // Flag to force fallback data during API endpoint testing
   private readonly FORCE_FALLBACK_MODE = false;
 
@@ -248,7 +248,7 @@ export class DatabaseService {
   // =============================================
   // AUTHENTICATION CONTROLLER (4 endpoints)
   // =============================================
-  
+
   /**
    * User login
    * POST /api/Auth/login
@@ -368,7 +368,7 @@ export class DatabaseService {
         catchError((error) => {
           console.warn('Trainer API error - falling back to local data:', error?.error?.message || error?.message || 'Unknown error');
           // Check if it's the specific database schema error
-          if (error?.error?.message?.includes('Invalid column name') || 
+          if (error?.error?.message?.includes('Invalid column name') ||
               error?.status === 500) {
             console.warn('Database schema issue detected - using fallback trainers');
           }
@@ -663,6 +663,15 @@ export class DatabaseService {
   // =============================================
   // SALES CONTROLLER (11 endpoints)
   // =============================================
+
+  /**
+   * Add new sale
+   * POST /api/Sales/Add
+   */
+  addSale(sale: any): Observable<any> {
+    return this.http.post<any>(`${this.API_URL}Sales/Add`, sale, { headers: this.getAuthHeaders() })
+      .pipe(catchError(this.handleError));
+  }
 
   /**
    * Get all sales
@@ -1004,12 +1013,12 @@ export class DatabaseService {
    */
   private handleError = (error: HttpErrorResponse): Observable<never> => {
     console.error('API Error:', error);
-    
+
     if (error.status === 401) {
       // Unauthorized - token expired or invalid
       this.logout();
     }
-    
+
     return throwError(() => error);
   };
 
@@ -1048,11 +1057,11 @@ export class DatabaseService {
 
   private getFallbackHealthFacilities(): HealthFacility[] {
     return [
-      { 
-        id: 1, 
-        name: 'Groote Schuur Hospital', 
+      {
+        id: 1,
+        name: 'Groote Schuur Hospital',
         code: 'GSH001',
-        provinceId: 1, 
+        provinceId: 1,
         districtId: 1,
         facilityType: 'Hospital',
         level: 'Tertiary',
@@ -1062,11 +1071,11 @@ export class DatabaseService {
         status: 'Active',
         capacity: 950
       },
-      { 
-        id: 2, 
-        name: 'Tygerberg Hospital', 
+      {
+        id: 2,
+        name: 'Tygerberg Hospital',
         code: 'TBH001',
-        provinceId: 1, 
+        provinceId: 1,
         districtId: 1,
         facilityType: 'Hospital',
         level: 'Tertiary',
@@ -1076,11 +1085,11 @@ export class DatabaseService {
         status: 'Active',
         capacity: 1384
       },
-      { 
-        id: 3, 
-        name: 'Chris Hani Baragwanath Hospital', 
+      {
+        id: 3,
+        name: 'Chris Hani Baragwanath Hospital',
         code: 'CHB001',
-        provinceId: 7, 
+        provinceId: 7,
         districtId: undefined,
         facilityType: 'Hospital',
         level: 'Tertiary',
@@ -1090,11 +1099,11 @@ export class DatabaseService {
         status: 'Active',
         capacity: 3200
       },
-      { 
-        id: 4, 
-        name: 'Charlotte Maxeke Johannesburg Academic Hospital', 
+      {
+        id: 4,
+        name: 'Charlotte Maxeke Johannesburg Academic Hospital',
         code: 'CMJAH001',
-        provinceId: 7, 
+        provinceId: 7,
         districtId: undefined,
         facilityType: 'Hospital',
         level: 'Tertiary',
@@ -1104,11 +1113,11 @@ export class DatabaseService {
         status: 'Active',
         capacity: 1088
       },
-      { 
-        id: 5, 
-        name: 'Inkosi Albert Luthuli Central Hospital', 
+      {
+        id: 5,
+        name: 'Inkosi Albert Luthuli Central Hospital',
         code: 'IALCH001',
-        provinceId: 5, 
+        provinceId: 5,
         districtId: undefined,
         facilityType: 'Hospital',
         level: 'Tertiary',
@@ -1200,7 +1209,7 @@ export class DatabaseService {
         description: 'Advanced training on diabetes care protocols and patient management',
         startDate: '2025-01-15T00:00:00.000Z',
         endDate: '2025-01-17T00:00:00.000Z',
-        startTime: { 
+        startTime: {
           ticks: 324000000000, // 09:00:00 in ticks
           hours: 9,
           minutes: 0,
@@ -1209,7 +1218,7 @@ export class DatabaseService {
           totalMinutes: 540,
           totalSeconds: 32400
         },
-        endTime: { 
+        endTime: {
           ticks: 576000000000, // 16:00:00 in ticks
           hours: 16,
           minutes: 0,
@@ -1240,7 +1249,7 @@ export class DatabaseService {
         description: 'Advanced training on blood pressure management and cardiovascular risk reduction',
         startDate: '2025-01-20T00:00:00.000Z',
         endDate: '2025-01-21T00:00:00.000Z',
-        startTime: { 
+        startTime: {
           ticks: 306000000000, // 08:30:00 in ticks
           hours: 8,
           minutes: 30,
@@ -1249,7 +1258,7 @@ export class DatabaseService {
           totalMinutes: 510,
           totalSeconds: 30600
         },
-        endTime: { 
+        endTime: {
           ticks: 612000000000, // 17:00:00 in ticks
           hours: 17,
           minutes: 0,
@@ -1280,7 +1289,7 @@ export class DatabaseService {
         description: 'Latest evidence-based approaches to non-communicable disease management',
         startDate: '2025-02-05T00:00:00.000Z',
         endDate: '2025-02-06T00:00:00.000Z',
-        startTime: { 
+        startTime: {
           ticks: 324000000000, // 09:00:00 in ticks
           hours: 9,
           minutes: 0,
@@ -1289,7 +1298,7 @@ export class DatabaseService {
           totalMinutes: 540,
           totalSeconds: 32400
         },
-        endTime: { 
+        endTime: {
           ticks: 558000000000, // 15:30:00 in ticks
           hours: 15,
           minutes: 30,

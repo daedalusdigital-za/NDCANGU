@@ -22,6 +22,10 @@ export class ListSalesComponent implements OnInit {
   // Loading state
   isLoading: boolean = false;
 
+  // Edit modal state
+  showEditModal: boolean = false;
+  selectedSaleForEdit: any = null;
+
   // Filter properties for orders
   searchTerm: string = '';
   selectedStatus: string = 'All';
@@ -91,9 +95,11 @@ export class ListSalesComponent implements OnInit {
     this.databaseService.getSales().subscribe({
       next: (sales) => {
         console.log(`✅ Loaded ${sales.length} sales records from database`);
+        console.log('📦 Raw sales data from API:', JSON.stringify(sales, null, 2));
 
         // Convert Sale format to SalesRecord format for display
         this.salesRecords = sales.map(sale => this.convertSaleToSalesRecord(sale));
+        console.log('📊 Converted sales records:', this.salesRecords);
         this.filteredSalesRecords = [...this.salesRecords];
         this.isLoading = false;
       },
@@ -232,6 +238,21 @@ export class ListSalesComponent implements OnInit {
 
   editOrder(order: OrderRecord): void {
     console.log('Editing order:', order);
+    this.selectedSaleForEdit = order;
+    this.showEditModal = true;
+  }
+
+  closeEditModal(): void {
+    this.showEditModal = false;
+    this.selectedSaleForEdit = null;
+  }
+
+  onSaleUpdateSuccess(): void {
+    this.toastr.success('Sale updated successfully!', 'Success');
+    this.closeEditModal();
+    // Reload data
+    this.loadOrders();
+    this.loadSalesRecords();
   }
 
   deleteOrder(order: OrderRecord): void {

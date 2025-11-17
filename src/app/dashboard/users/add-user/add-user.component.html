@@ -42,9 +42,9 @@
                                                     <input type="text" required class="form-control"
                                                         id="basicpill-firstname-input" name="firstName"
                                                         [(ngModel)]="user.firstName"
-                                                        [ngClass]="{'is-invalid': form.controls['firstName']?.touched && form.controls['firstName']?.invalid }"
+                                                        [ngClass]="{'is-invalid': form.controls['firstName'].touched && form.controls['firstName'].invalid }"
                                                         placeholder="Enter Your First Name">
-                                                    <div class="invalid-feedback" *ngIf="form.controls['firstName']?.touched && form.controls['firstName']?.invalid">
+                                                    <div class="invalid-feedback" *ngIf="form.controls['firstName'].touched && form.controls['firstName'].invalid">
                                                         First name is required
                                                     </div>
                                                 </div>
@@ -56,8 +56,8 @@
                                                     <input type="text" required="true" class="form-control"
                                                         id="basicpill-lastname-input" [(ngModel)]="user.lastName"
                                                         name="lastName" placeholder="Enter Your Last Name"
-                                                        [ngClass]="{'is-invalid': form.controls['lastName']?.touched && form.controls['lastName']?.invalid }">
-                                                    <div class="invalid-feedback" *ngIf="form.controls['lastName']?.touched && form.controls['lastName']?.invalid">
+                                                        [ngClass]="{'is-invalid': form.controls['lastName'].touched && form.controls['lastName'].invalid }">
+                                                    <div class="invalid-feedback" *ngIf="form.controls['lastName'].touched && form.controls['lastName'].invalid">
                                                         Last name is required
                                                     </div>
                                                 </div>
@@ -69,11 +69,11 @@
                                                 <div class="mb-3">
                                                     <label for="basicpill-phoneno-input"
                                                         class="form-label">Phone</label>
-                                                    <input type="text" required="true" class="form-control"
+                                                    <input type="text" required class="form-control"
                                                         id="basicpill-phoneno-input" name="phoneNumber"
                                                         [(ngModel)]="user.phoneNumber"
-                                                        placeholder="Enter your Phone No."
-                                                        [class.is-invalid]="form.submitted && form.controls['phoneNumber']?.invalid">
+                                                        placeholder="Enter your phone number"
+                                                        [class.is-invalid]="form.submitted && form.controls['phoneNumber'].invalid">
                                                     <div class="invalid-feedback" *ngIf="form.controls['phoneNumber']?.touched && form.controls['phoneNumber']?.invalid">
                                                         Phone number is required
                                                     </div>
@@ -82,10 +82,10 @@
                                             <div class="col-lg-6">
                                                 <div class="mb-3">
                                                     <label for="basicpill-email-input" class="form-label">Email</label>
-                                                    <input type="email" required="true" class="form-control"
+                                                    <input type="email" required class="form-control"
                                                         id="basicpill-email-input" name="email" [(ngModel)]="user.email"
-                                                        placeholder="Enter your email"
-                                                        [class.is-invalid]="form.submitted && form.controls['email']?.invalid">
+                                                        placeholder="Enter your Email Id"
+                                                        [class.is-invalid]="form.submitted && form.controls['email'].invalid">
                                                     <div class="invalid-feedback" *ngIf="form.controls['email']?.touched && form.controls['email']?.invalid">
                                                         <span *ngIf="form.controls['email']?.errors?.['required']">Email is required</span>
                                                         <span *ngIf="form.controls['email']?.errors?.['email']">Please enter a valid email</span>
@@ -104,8 +104,8 @@
                                                     <input type="password" required="true" class="form-control"
                                                         id="basicpill-password-input" name="password"
                                                         [(ngModel)]="user.password" placeholder="Enter password"
-                                                        [class.is-invalid]="form.submitted && form.controls['password']?.invalid">
-                                                    <div class="invalid-feedback" *ngIf="form.controls['password']?.touched && form.controls['password']?.invalid">
+                                                        [class.is-invalid]="form.submitted && form.controls['password'].invalid">
+                                                    <div class="invalid-feedback" *ngIf="form.controls['password'].touched && form.controls['password'].invalid">
                                                         Password is required
                                                     </div>
                                                 </div>

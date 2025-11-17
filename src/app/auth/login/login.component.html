@@ -15,11 +15,11 @@
                 <div class="input-icon">
                     <i class="fas fa-envelope"></i>
                 </div>
-                <input 
-                    type="email" 
-                    required="true" 
-                    class="form-control modern-input" 
-                    name="email" 
+                <input
+                    type="email"
+                    required="true"
+                    class="form-control modern-input"
+                    name="email"
                     [(ngModel)]="user.email"
                     placeholder="Enter your email address"
                     [class.has-value]="user.email">
@@ -33,18 +33,18 @@
                 <div class="input-icon">
                     <i class="fas fa-lock"></i>
                 </div>
-                <input 
-                    [type]="isPasswordHidden ? 'password' : 'text'" 
-                    required="true" 
-                    class="form-control modern-input" 
-                    name="password" 
+                <input
+                    [type]="isPasswordHidden ? 'password' : 'text'"
+                    required="true"
+                    class="form-control modern-input"
+                    name="password"
                     [(ngModel)]="user.password"
                     placeholder="Enter your password"
                     [class.has-value]="user.password">
                 <label class="floating-label">Password</label>
-                <button 
-                    type="button" 
-                    class="password-toggle" 
+                <button
+                    type="button"
+                    class="password-toggle"
                     (click)="isPasswordHidden = !isPasswordHidden"
                     [title]="isPasswordHidden ? 'Show password' : 'Hide password'">
                     <i [class]="isPasswordHidden ? 'fas fa-eye' : 'fas fa-eye-slash'"></i>
@@ -72,9 +72,9 @@
 
         <!-- Login Button -->
         <div class="login-button-wrapper">
-            <button 
-                type="submit" 
-                class="btn modern-login-btn" 
+            <button
+                type="submit"
+                class="btn modern-login-btn"
                 [disabled]="isLoading"
                 [class.loading]="isLoading">
                 <span class="button-content" *ngIf="!isLoading">
@@ -105,14 +105,74 @@
             </button>
         </div>
 
-        <!-- Register Link -->
+        <!-- Contact Admin Link -->
         <div class="register-link">
             <p class="register-text">
-                Don't have an account? 
-                <a class="register-link-text" routerLink="/auth/register">Create Account</a>
+                Don't have an account?
+                <a class="register-link-text" (click)="openContactAdminModal()">Contact Admin</a>
             </p>
         </div>
     </form>
+</div>
+
+<!-- Contact Admin Modal -->
+<div class="modal-overlay" *ngIf="showContactAdminModal" (click)="closeContactAdminModal()">
+    <div class="forgot-password-modal" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+            <h3 class="modal-title">
+                <i class="fas fa-user-shield"></i>
+                Contact Admin
+            </h3>
+            <button type="button" class="modal-close" (click)="closeContactAdminModal()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+
+        <div class="modal-body">
+            <p class="modal-description">
+                To create an account, please contact one of our administrators:
+            </p>
+
+            <div class="admin-contacts">
+                <div class="contact-item">
+                    <div class="contact-icon">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                    <div class="contact-details">
+                        <a href="mailto:Welcome@promedtechnologies.co.za" class="contact-email">
+                            Welcome@promedtechnologies.co.za
+                        </a>
+                    </div>
+                </div>
+
+                <div class="contact-item">
+                    <div class="contact-icon">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                    <div class="contact-details">
+                        <a href="mailto:IT@promedtechnologies.co.za" class="contact-email">
+                            IT@promedtechnologies.co.za
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="contact-note">
+                <i class="fas fa-info-circle"></i>
+                <p>Our team will assist you with account creation and setup.</p>
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <button
+                type="button"
+                class="btn modern-login-btn"
+                (click)="closeContactAdminModal()">
+                <i class="fas fa-check"></i>
+                Got It
+            </button>
+        </div>
+    </div>
 </div>
 
 <!-- Forgot Password Modal -->
@@ -124,20 +184,20 @@
                 <i class="fas fa-times"></i>
             </button>
         </div>
-        
+
         <div class="modal-body">
             <p class="modal-description">
                 Enter your email address and we'll send you instructions to reset your password.
             </p>
-            
+
             <div class="form-group">
                 <div class="input-wrapper">
                     <div class="input-icon">
                         <i class="fas fa-envelope"></i>
                     </div>
-                    <input 
-                        type="email" 
-                        class="form-control modern-input" 
+                    <input
+                        type="email"
+                        class="form-control modern-input"
                         [(ngModel)]="forgotPasswordEmail"
                         placeholder="Enter your email address"
                         [class.has-value]="forgotPasswordEmail">
@@ -145,18 +205,18 @@
                 </div>
             </div>
         </div>
-        
+
         <div class="modal-footer">
-            <button 
-                type="button" 
-                class="btn btn-secondary" 
+            <button
+                type="button"
+                class="btn btn-secondary"
                 (click)="closeForgotPasswordModal()"
                 [disabled]="isForgotPasswordLoading">
                 Cancel
             </button>
-            <button 
-                type="button" 
-                class="btn modern-login-btn" 
+            <button
+                type="button"
+                class="btn modern-login-btn"
                 (click)="submitForgotPassword()"
                 [disabled]="isForgotPasswordLoading">
                 <span *ngIf="!isForgotPasswordLoading">

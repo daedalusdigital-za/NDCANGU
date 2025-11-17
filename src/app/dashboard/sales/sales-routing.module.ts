@@ -25,6 +25,10 @@ const routes: Routes = [
         component: AddSaleComponent
       },
       {
+        path: 'edit/:id',
+        component: AddSaleComponent
+      },
+      {
         path: 'list',
         component: ListSalesComponent
       },

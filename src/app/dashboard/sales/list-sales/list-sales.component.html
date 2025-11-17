@@ -21,14 +21,14 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="btn-group" role="group">
-                            <button type="button" 
-                                    class="btn" 
+                            <button type="button"
+                                    class="btn"
                                     [class.btn-primary]="viewMode === 'sales'"
                                     [class.btn-outline-primary]="viewMode !== 'sales'"
                                     (click)="switchViewMode('sales')">
                                 <i class="fas fa-chart-line me-1"></i> Sales Records
                             </button>
-                            <button type="button" 
+                            <button type="button"
                                     class="btn"
                                     [class.btn-primary]="viewMode === 'orders'"
                                     [class.btn-outline-primary]="viewMode !== 'orders'"
@@ -53,8 +53,8 @@
                             <div class="col-md-3">
                                 <div class="mb-3">
                                     <label class="form-label">Search</label>
-                                    <input type="text" 
-                                           class="form-control" 
+                                    <input type="text"
+                                           class="form-control"
                                            [(ngModel)]="searchTerm"
                                            (input)="applyFilters()"
                                            [placeholder]="viewMode === 'sales' ? 'Search by invoice, institution, or item' : 'Search by order number, customer, or item'">
@@ -63,7 +63,7 @@
                             <div class="col-md-2">
                                 <div class="mb-3">
                                     <label class="form-label">Province</label>
-                                    <select class="form-select" 
+                                    <select class="form-select"
                                             [(ngModel)]="selectedProvince"
                                             (change)="applyFilters()">
                                         <option *ngFor="let province of provinceOptions" [value]="province">{{province}}</option>
@@ -73,7 +73,7 @@
                             <div class="col-md-2">
                                 <div class="mb-3">
                                     <label class="form-label">Status</label>
-                                    <select class="form-select" 
+                                    <select class="form-select"
                                             [(ngModel)]="selectedStatus"
                                             (change)="applyFilters()">
                                         <option *ngFor="let status of statusOptions" [value]="status">{{status}}</option>
@@ -84,7 +84,7 @@
                             <div class="col-md-2" *ngIf="viewMode === 'orders'">
                                 <div class="mb-3">
                                     <label class="form-label">Customer</label>
-                                    <select class="form-select" 
+                                    <select class="form-select"
                                             [(ngModel)]="selectedCustomer"
                                             (change)="applyFilters()">
                                         <option *ngFor="let customer of customerOptions" [value]="customer">{{customer}}</option>
@@ -95,7 +95,7 @@
                             <div class="col-md-2" *ngIf="viewMode === 'sales'">
                                 <div class="mb-3">
                                     <label class="form-label">Institution</label>
-                                    <select class="form-select" 
+                                    <select class="form-select"
                                             [(ngModel)]="selectedInstitution"
                                             (change)="applyFilters()">
                                         <option *ngFor="let institution of institutionOptions" [value]="institution">{{institution}}</option>
@@ -106,7 +106,7 @@
                             <div class="col-md-2" *ngIf="viewMode === 'sales'">
                                 <div class="mb-3">
                                     <label class="form-label">Product Type</label>
-                                    <select class="form-select" 
+                                    <select class="form-select"
                                             [(ngModel)]="selectedProductType"
                                             (change)="applyFilters()">
                                         <option *ngFor="let product of productTypeOptions" [value]="product">{{product}}</option>
@@ -116,8 +116,8 @@
                             <div class="col-md-2">
                                 <div class="mb-3">
                                     <label class="form-label">Date From</label>
-                                    <input type="date" 
-                                           class="form-control" 
+                                    <input type="date"
+                                           class="form-control"
                                            [(ngModel)]="dateFrom"
                                            (change)="applyFilters()">
                                 </div>
@@ -125,8 +125,8 @@
                             <div class="col-md-2">
                                 <div class="mb-3">
                                     <label class="form-label">Date To</label>
-                                    <input type="date" 
-                                           class="form-control" 
+                                    <input type="date"
+                                           class="form-control"
                                            [(ngModel)]="dateTo"
                                            (change)="applyFilters()">
                                 </div>
@@ -135,18 +135,18 @@
                                 <div class="mb-3">
                                     <label class="form-label">&nbsp;</label>
                                     <div class="d-flex gap-2">
-                                        <button type="button" 
-                                                class="btn btn-secondary" 
+                                        <button type="button"
+                                                class="btn btn-secondary"
                                                 (click)="clearFilters()">
                                             <i class="dripicons-refresh me-1"></i>Clear
                                         </button>
-                                        <button type="button" 
-                                                class="btn btn-success" 
+                                        <button type="button"
+                                                class="btn btn-success"
                                                 (click)="exportData()">
                                             <i class="mdi mdi-download me-1"></i>Export
                                         </button>
-                                        <button type="button" 
-                                                class="btn btn-success" 
+                                        <button type="button"
+                                                class="btn btn-success"
                                                 (click)="exportToExcel()">
                                             <i class="dripicons-export me-1"></i>Export
                                         </button>
@@ -165,8 +165,8 @@
                 <div class="card">
                     <div class="card-header d-flex justify-content-between align-items-center">
                         <h5 class="card-title mb-0">Medical Equipment Orders ({{filteredOrders.length}} records)</h5>
-                        <button type="button" 
-                                class="btn btn-primary" 
+                        <button type="button"
+                                class="btn btn-primary"
                                 routerLink="/dashboard/sales/add">
                             <i class="dripicons-plus me-2"></i>Add New Order
                         </button>
@@ -231,26 +231,26 @@
                                         </td>
                                         <td>
                                             <div class="d-flex gap-1">
-                                                <button type="button" 
-                                                        class="btn btn-sm btn-outline-primary" 
+                                                <button type="button"
+                                                        class="btn btn-sm btn-outline-primary"
                                                         (click)="viewOrderDetails(order)"
                                                         title="View Details">
                                                     <i class="dripicons-preview"></i>
                                                 </button>
-                                                <button type="button" 
-                                                        class="btn btn-sm btn-outline-success" 
+                                                <button type="button"
+                                                        class="btn btn-sm btn-outline-success"
                                                         (click)="printOrder(order)"
                                                         title="Print">
                                                     <i class="dripicons-print"></i>
                                                 </button>
-                                                <button type="button" 
-                                                        class="btn btn-sm btn-outline-warning" 
+                                                <button type="button"
+                                                        class="btn btn-sm btn-outline-warning"
                                                         (click)="editOrder(order)"
                                                         title="Edit">
                                                     <i class="dripicons-pencil"></i>
                                                 </button>
-                                                <button type="button" 
-                                                        class="btn btn-sm btn-outline-danger" 
+                                                <button type="button"
+                                                        class="btn btn-sm btn-outline-danger"
                                                         (click)="deleteOrder(order)"
                                                         title="Delete">
                                                     <i class="dripicons-trash"></i>
@@ -260,14 +260,14 @@
                                     </tr>
                                 </tbody>
                             </table>
-                            
+
                             <div *ngIf="filteredOrders.length === 0" class="text-center py-4">
                                 <div class="empty-state">
                                     <i class="dripicons-basket display-1 text-muted"></i>
                                     <h5 class="mt-3">No orders found</h5>
                                     <p class="text-muted">No orders match your current filters.</p>
-                                    <button type="button" 
-                                            class="btn btn-primary" 
+                                    <button type="button"
+                                            class="btn btn-primary"
                                             routerLink="/dashboard/sales/add">
                                         <i class="dripicons-plus me-2"></i>Add First Order
                                     </button>
@@ -316,3 +316,12 @@
         </div>
     </div>
 </div>
+
+<!-- Edit Sale Modal -->
+<app-edit-sale-modal
+    *ngIf="showEditModal"
+    [saleData]="selectedSaleForEdit"
+    [isVisible]="showEditModal"
+    (modalClose)="closeEditModal()"
+    (saleUpdateSuccess)="onSaleUpdateSuccess()">
+</app-edit-sale-modal>
