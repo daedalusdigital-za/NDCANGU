@@ -59,6 +59,16 @@
     </div> <!-- container-fluid -->
 </div>
 
+<!-- Edit User Modal -->
+<app-edit-user-modal
+    *ngIf="showEditModal"
+    [userId]="selectedEditUser?.id"
+    [userData]="selectedEditUser"
+    [isVisible]="showEditModal"
+    (modalClose)="closeEditModal()"
+    (userUpdateSuccess)="onUserUpdateSuccess()">
+</app-edit-user-modal>
+
 <!-- Change Password Modal -->
 <app-change-password-modal
     *ngIf="selectedUser"

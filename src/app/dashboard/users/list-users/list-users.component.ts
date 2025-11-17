@@ -79,7 +79,7 @@ export class ListUsersComponent implements OnInit {
     isFilter: false,
     isSortable: false,
     onClick: (item: any) => {
-      this.router.navigateByUrl('dashboard/users/edit/' + item.id);
+      this.openEditModal(item);
     },
     getValue: function () {
       return this.field
@@ -129,6 +129,10 @@ export class ListUsersComponent implements OnInit {
   // Password management
   showPasswordModal = false;
   selectedUser: any = null;
+
+  // Edit user management
+  showEditModal = false;
+  selectedEditUser: any = null;
 
   constructor(
     private baseService: BaseService,
@@ -283,6 +287,22 @@ export class ListUsersComponent implements OnInit {
   onPasswordChangeSuccess() {
     this.toastrService.success('Password changed successfully!');
     this.closePasswordModal();
+  }
+
+  openEditModal(user: any) {
+    this.selectedEditUser = user;
+    this.showEditModal = true;
+  }
+
+  closeEditModal() {
+    this.showEditModal = false;
+    this.selectedEditUser = null;
+  }
+
+  onUserUpdateSuccess() {
+    this.toastrService.success('User updated successfully!');
+    this.closeEditModal();
+    this.getUsers(); // Refresh the list
   }
 
 }

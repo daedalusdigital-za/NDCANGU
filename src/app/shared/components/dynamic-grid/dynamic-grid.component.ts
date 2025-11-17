@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
-import { MenuItem, PrimeNGConfig } from 'primeng/api';
+import { MenuItem } from 'primeng/api';
 import { IColumns } from '../../interfaces/dynamic-grid-interfaces';
 import { Paginator } from 'primeng/paginator';
 import jsPDF from 'jspdf';
@@ -43,8 +43,6 @@ export class DynamicGridComponent implements OnInit {
   first: number = 0;
   exportColumns: any = [];
   exportPdfColumns: any = [];
-
-  constructor() { }
 
   ngOnInit(): void {
     console.log('Dynamic Grid - ngOnInit');
@@ -105,8 +103,8 @@ export class DynamicGridComponent implements OnInit {
   }
 
   saveAsExcelFile(buffer: any, fileName: string): void {
-    let EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
-    let EXCEL_EXTENSION = '.xlsx';
+    const EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
+    const EXCEL_EXTENSION = '.xlsx';
     const data: Blob = new Blob([buffer], {
       type: EXCEL_TYPE
     });
@@ -121,7 +119,7 @@ export class DynamicGridComponent implements OnInit {
     textAreaElement.value = tableHtml; // Set the value of the textarea to the table HTML
     document.body.appendChild(textAreaElement); // Append the textarea element to the DOM
     textAreaElement.select(); // Select the textarea
-    const res: any = document.execCommand('copy'); // Execute the copy command
+    document.execCommand('copy'); // Execute the copy command
     document.body.removeChild(textAreaElement.replace(/<[^>]*>?/gm, '')); // Remove the textarea element from the DOM
   }
 }

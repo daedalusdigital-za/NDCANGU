@@ -28,8 +28,8 @@ export class AddUserComponent implements OnInit {
   id: any;
   isLoading = false;
   constructor(
-    private router: Router, 
-    private baseService: BaseService, 
+    private router: Router,
+    private baseService: BaseService,
     private _route: ActivatedRoute,
     private toastrService: ToastrService
   ) { }
@@ -39,7 +39,7 @@ export class AddUserComponent implements OnInit {
     if(this.id){
       this.getUserById()
     }
-    
+
   }
 
   private getUserById(){
@@ -130,7 +130,7 @@ export class AddUserComponent implements OnInit {
     if (!this.validateForm()) {
       return;
     }
-    
+
     this.isLoading = true;
 
     // Create a clean user object
@@ -194,14 +194,14 @@ export class AddUserComponent implements OnInit {
       this.toastrService.error('Phone number is required');
       return false;
     }
-    
+
     // Email validation
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailPattern.test(this.user.email)) {
       this.toastrService.error('Please enter a valid email address');
       return false;
     }
-    
+
     return true;
   }
 }

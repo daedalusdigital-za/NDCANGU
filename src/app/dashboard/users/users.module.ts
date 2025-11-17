@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { ListUsersComponent } from './list-users/list-users.component';
 import { AddUserComponent } from './add-user/add-user.component';
 import { ChangePasswordModalComponent } from './change-password-modal/change-password-modal.component';
+import { EditUserModalComponent } from './edit-user-modal/edit-user-modal.component';
 import { SharedModule } from 'src/app/shared/shared.module';
 
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
@@ -14,7 +15,8 @@ import { ButtonModule } from 'primeng/button';
   declarations: [
     ListUsersComponent,
     AddUserComponent,
-    ChangePasswordModalComponent
+    ChangePasswordModalComponent,
+    EditUserModalComponent
   ],
   imports: [
     CommonModule,

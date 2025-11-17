@@ -1,0 +1,173 @@
+<div class="modal fade" [class.show]="isVisible" [style.display]="isVisible ? 'block' : 'none'"
+     tabindex="-1" role="dialog" [attr.aria-hidden]="!isVisible">
+  <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">
+          <i class="bx bx-edit me-2"></i>Edit User
+        </h5>
+        <button type="button" class="btn-close" (click)="closeModal()"
+                [disabled]="isLoading" aria-label="Close"></button>
+      </div>
+
+      <form #editForm="ngForm" (ngSubmit)="onSubmit(editForm)">
+        <div class="modal-body">
+          <!-- Loading Spinner -->
+          <div *ngIf="isLoading" class="text-center py-5">
+            <div class="spinner-border text-primary" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+            <p class="mt-2 text-muted">Loading user data...</p>
+          </div>
+
+          <!-- Form Fields -->
+          <div *ngIf="!isLoading" class="row">
+            <!-- First Name -->
+            <div class="col-md-6 mb-3">
+              <label for="firstName" class="form-label">
+                First Name <span class="text-danger">*</span>
+              </label>
+              <input
+                type="text"
+                class="form-control"
+                id="firstName"
+                name="firstName"
+                [(ngModel)]="user.firstName"
+                required
+                #firstName="ngModel"
+                [class.is-invalid]="firstName.invalid && firstName.touched"
+                placeholder="Enter first name">
+              <div class="invalid-feedback" *ngIf="firstName.invalid && firstName.touched">
+                First name is required
+              </div>
+            </div>
+
+            <!-- Last Name -->
+            <div class="col-md-6 mb-3">
+              <label for="lastName" class="form-label">
+                Last Name <span class="text-danger">*</span>
+              </label>
+              <input
+                type="text"
+                class="form-control"
+                id="lastName"
+                name="lastName"
+                [(ngModel)]="user.lastName"
+                required
+                #lastName="ngModel"
+                [class.is-invalid]="lastName.invalid && lastName.touched"
+                placeholder="Enter last name">
+              <div class="invalid-feedback" *ngIf="lastName.invalid && lastName.touched">
+                Last name is required
+              </div>
+            </div>
+
+            <!-- Phone Number -->
+            <div class="col-md-6 mb-3">
+              <label for="phoneNumber" class="form-label">
+                Phone Number <span class="text-danger">*</span>
+              </label>
+              <input
+                type="tel"
+                class="form-control"
+                id="phoneNumber"
+                name="phoneNumber"
+                [(ngModel)]="user.phoneNumber"
+                required
+                #phoneNumber="ngModel"
+                [class.is-invalid]="phoneNumber.invalid && phoneNumber.touched"
+                placeholder="Enter phone number">
+              <div class="invalid-feedback" *ngIf="phoneNumber.invalid && phoneNumber.touched">
+                Phone number is required
+              </div>
+            </div>
+
+            <!-- Email -->
+            <div class="col-md-6 mb-3">
+              <label for="email" class="form-label">
+                Email <span class="text-danger">*</span>
+              </label>
+              <input
+                type="email"
+                class="form-control"
+                id="email"
+                name="email"
+                [(ngModel)]="user.email"
+                required
+                email
+                #email="ngModel"
+                [class.is-invalid]="email.invalid && email.touched"
+                placeholder="Enter email">
+              <div class="invalid-feedback" *ngIf="email.invalid && email.touched">
+                <span *ngIf="email.errors?.['required']">Email is required</span>
+                <span *ngIf="email.errors?.['email']">Please enter a valid email</span>
+              </div>
+            </div>
+
+            <!-- Position Name -->
+            <div class="col-md-6 mb-3">
+              <label for="positionName" class="form-label">
+                Position Name <span class="text-danger">*</span>
+              </label>
+              <input
+                type="text"
+                class="form-control"
+                id="positionName"
+                name="positionName"
+                [(ngModel)]="user.positionName"
+                required
+                #positionName="ngModel"
+                [class.is-invalid]="positionName.invalid && positionName.touched"
+                placeholder="Enter position name">
+              <div class="invalid-feedback" *ngIf="positionName.invalid && positionName.touched">
+                Position name is required
+              </div>
+            </div>
+
+            <!-- Position Description -->
+            <div class="col-md-6 mb-3">
+              <label for="positionDesc" class="form-label">
+                Position Type <span class="text-danger">*</span>
+              </label>
+              <input
+                type="text"
+                class="form-control"
+                id="positionDesc"
+                name="positionDesc"
+                [(ngModel)]="user.positionDesc"
+                required
+                #positionDesc="ngModel"
+                [class.is-invalid]="positionDesc.invalid && positionDesc.touched"
+                placeholder="Enter position type">
+              <div class="invalid-feedback" *ngIf="positionDesc.invalid && positionDesc.touched">
+                Position type is required
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            (click)="closeModal()"
+            [disabled]="isLoading">
+            <i class="bx bx-x me-1"></i>Cancel
+          </button>
+          <button
+            type="submit"
+            class="btn btn-primary"
+            [disabled]="isLoading || editForm.invalid">
+            <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-2" role="status"></span>
+            <i *ngIf="!isLoading" class="bx bx-save me-1"></i>
+            {{ isLoading ? 'Saving...' : 'Save Changes' }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Backdrop -->
+<div class="modal-backdrop fade" [class.show]="isVisible"
+     *ngIf="isVisible" (click)="closeModal()"></div>
