@@ -137,20 +137,12 @@
                         </div>
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label for="province" class="form-label">Province *</label>
-                                <select class="form-select" id="province" formControlName="province" required>
+                                <label for="provinceId" class="form-label">Province *</label>
+                                <select class="form-select" id="provinceId" formControlName="provinceId" required>
                                     <option value="">Select province</option>
-                                    <option value="Gauteng">Gauteng</option>
-                                    <option value="Western Cape">Western Cape</option>
-                                    <option value="KwaZulu-Natal">KwaZulu-Natal</option>
-                                    <option value="Eastern Cape">Eastern Cape</option>
-                                    <option value="Free State">Free State</option>
-                                    <option value="Limpopo">Limpopo</option>
-                                    <option value="Mpumalanga">Mpumalanga</option>
-                                    <option value="North West">North West</option>
-                                    <option value="Northern Cape">Northern Cape</option>
+                                    <option *ngFor="let province of provinces" [value]="province.id">{{ province.name }}</option>
                                 </select>
-                                <div *ngIf="trainerForm.get('province')?.invalid && trainerForm.get('province')?.touched" class="text-danger">
+                                <div *ngIf="trainerForm.get('provinceId')?.invalid && trainerForm.get('provinceId')?.touched" class="text-danger">
                                     <small>Province is required</small>
                                 </div>
                             </div>
@@ -229,18 +221,10 @@
                         </div>
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label for="editProvince" class="form-label">Province *</label>
-                                <select class="form-select" id="editProvince" formControlName="province" required>
+                                <label for="editProvinceId" class="form-label">Province *</label>
+                                <select class="form-select" id="editProvinceId" formControlName="provinceId" required>
                                     <option value="">Select province</option>
-                                    <option value="Gauteng">Gauteng</option>
-                                    <option value="Western Cape">Western Cape</option>
-                                    <option value="KwaZulu-Natal">KwaZulu-Natal</option>
-                                    <option value="Eastern Cape">Eastern Cape</option>
-                                    <option value="Free State">Free State</option>
-                                    <option value="Limpopo">Limpopo</option>
-                                    <option value="Mpumalanga">Mpumalanga</option>
-                                    <option value="North West">North West</option>
-                                    <option value="Northern Cape">Northern Cape</option>
+                                    <option *ngFor="let province of provinces" [value]="province.id">{{ province.name }}</option>
                                 </select>
                             </div>
                         </div>
