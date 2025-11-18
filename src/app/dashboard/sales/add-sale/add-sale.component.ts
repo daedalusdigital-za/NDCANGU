@@ -117,7 +117,7 @@ export class AddSaleComponent implements OnInit {
   quantity: number = 1;
   unitPrice: number = 0;
   isSubmitting = false;
-  
+
   constructor(
     private router: Router,
     private toastr: ToastrService,
@@ -153,7 +153,7 @@ export class AddSaleComponent implements OnInit {
   }
 
   onProvinceChange(): void {
-    this.filteredHospitals = this.hospitals.filter(hospital => 
+    this.filteredHospitals = this.hospitals.filter(hospital =>
       hospital.province === this.sale.province
     );
     this.sale.hospital = ''; // Reset hospital selection
@@ -167,7 +167,7 @@ export class AddSaleComponent implements OnInit {
       }
 
       const existingItemIndex = this.sale.saleItems.findIndex((item: any) => item.productId === this.selectedProduct.id);
-      
+
       if (existingItemIndex !== -1) {
         // Update existing item
         this.sale.saleItems[existingItemIndex].quantity += this.quantity;
@@ -217,7 +217,11 @@ export class AddSaleComponent implements OnInit {
   saveSale(): void {
     if (this.validateSale()) {
       this.isSubmitting = true;
-      
+
+      // Get current user for audit fields
+      const currentUser = this.databaseService.getCurrentUser();
+      const userId = currentUser?.id ? parseInt(currentUser.id) : 1;
+
       // Format the sale data according to the exact API schema
       const saleData = {
         saleNumber: this.sale.saleNumber,
@@ -241,7 +245,12 @@ export class AddSaleComponent implements OnInit {
           productName: item.productName,
           quantity: item.quantity,
           unitPrice: item.unitPrice
-        }))
+        })),
+        // Audit fields required by backend
+        createdByUserId: userId,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+        updateByUserId: userId
       };
 
       console.log('Sale data payload:', saleData);
@@ -263,7 +272,7 @@ export class AddSaleComponent implements OnInit {
       error: (error) => {
         this.isSubmitting = false;
         console.error('Error saving sale via API:', error);
-        
+
         // Fallback: Save to local storage
         this.saveToLocalStorage(saleData);
         this.toastr.success('Sale saved locally (API unavailable)', 'Success');

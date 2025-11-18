@@ -97,6 +97,10 @@ export class EditSaleModalComponent implements OnChanges {
 
     this.isLoading = true;
 
+    // Get current user for audit fields
+    const currentUser = this.databaseService.getCurrentUser();
+    const userId = currentUser?.id ? parseInt(currentUser.id) : 1;
+
     // Prepare update payload
     const updatePayload = {
       id: this.sale.id,
@@ -107,7 +111,10 @@ export class EditSaleModalComponent implements OnChanges {
       invoiceNumber: this.sale.invoiceNumber,
       totalAmount: parseFloat(this.sale.totalAmount),
       deliveryStatus: parseInt(this.sale.deliveryStatus),
-      saleItems: this.sale.saleItems
+      saleItems: this.sale.saleItems,
+      // Audit fields required by backend
+      updatedAt: new Date().toISOString(),
+      updateByUserId: userId
     };
 
     console.log('Updating sale:', updatePayload);

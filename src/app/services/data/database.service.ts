@@ -186,6 +186,11 @@ interface Sale {
   invoiceNumber?: string;
   saleItems: SaleItem[];
   totalAmount?: number;
+  // Audit fields
+  createdByUserId?: number;
+  createdAt?: string; // ISO date string
+  updatedAt?: string; // ISO date string
+  updateByUserId?: number;
 }
 
 interface SaleItem {
