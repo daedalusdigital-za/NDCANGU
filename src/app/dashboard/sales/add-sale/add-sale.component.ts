@@ -218,11 +218,9 @@ export class AddSaleComponent implements OnInit {
     if (this.validateSale()) {
       this.isSubmitting = true;
 
-      // Get current user for audit fields
-      const currentUser = this.databaseService.getCurrentUser();
-      const userId = currentUser?.id ? parseInt(currentUser.id) : 1;
 
       // Format the sale data according to the exact API schema
+      // Note: Audit fields (createdByUserId, createdAt, etc.) are handled automatically by backend
       const saleData = {
         saleNumber: this.sale.saleNumber,
         saleDate: this.formatDateForAPI(this.sale.saleDate),
@@ -245,15 +243,8 @@ export class AddSaleComponent implements OnInit {
           productName: item.productName,
           quantity: item.quantity,
           unitPrice: item.unitPrice
-        })),
-        // Audit fields required by backend
-        createdByUserId: userId,
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-        updateByUserId: userId
-      };
-
-      console.log('Sale data payload:', saleData);
+        }))
+      };      console.log('Sale data payload:', saleData);
 
       // Try to save using DatabaseService
       this.saveSaleToAPI(saleData);
