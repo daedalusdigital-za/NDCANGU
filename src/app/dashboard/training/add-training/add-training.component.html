@@ -69,18 +69,18 @@
 
                                 <!-- Province -->
                                 <div class="col-md-6 mb-3">
-                                    <label for="province" class="form-label">Province <span class="text-danger">*</span></label>
-                                    <select id="province"
+                                    <label for="provinceId" class="form-label">Province <span class="text-danger">*</span></label>
+                                    <select id="provinceId"
                                             class="form-select"
-                                            formControlName="province"
-                                            [class.is-invalid]="isFieldInvalid('province')">
+                                            formControlName="provinceId"
+                                            [class.is-invalid]="isFieldInvalid('provinceId')">
                                         <option value="">Select province</option>
-                                        <option *ngFor="let province of provinces" [value]="province.name">
+                                        <option *ngFor="let province of provinces" [value]="province.id">
                                             {{ province.name }}
                                         </option>
                                     </select>
-                                    <div class="invalid-feedback" *ngIf="isFieldInvalid('province')">
-                                        {{ getFieldErrorMessage('province') }}
+                                    <div class="invalid-feedback" *ngIf="isFieldInvalid('provinceId')">
+                                        {{ getFieldErrorMessage('provinceId') }}
                                     </div>
                                 </div>
 

@@ -15,7 +15,19 @@ export class AddTrainingComponent implements OnInit {
   trainingForm: FormGroup;
   isSubmitting = false;
 
-  provinces: any[] = [];
+  // Province mapping with IDs matching backend
+  provinces = [
+    { id: 1, name: 'Gauteng' },
+    { id: 2, name: 'KwaZulu-Natal' },
+    { id: 3, name: 'Eastern Cape' },
+    { id: 4, name: 'Western Cape' },
+    { id: 5, name: 'Limpopo' },
+    { id: 6, name: 'Mpumalanga' },
+    { id: 7, name: 'North West' },
+    { id: 8, name: 'Free State' },
+    { id: 9, name: 'Northern Cape' }
+  ];
+
   hospitals: any[] = [];
   trainers: any[] = [];
   filteredHospitals: any[] = [];
@@ -42,7 +54,7 @@ export class AddTrainingComponent implements OnInit {
       trainingName: ['', [Validators.required, Validators.minLength(3)]],
       trainingType: ['', Validators.required],
       trainingDate: ['', Validators.required],
-      province: ['', Validators.required],
+      provinceId: ['', Validators.required],
       venue: ['', Validators.required],
       trainerId: ['', Validators.required],
       targetAudience: ['', Validators.required],
@@ -51,23 +63,12 @@ export class AddTrainingComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.loadProvinces();
     this.loadTrainers();
 
-    this.trainingForm.get('province')?.valueChanges.subscribe(provinceName => {
-      this.filterHospitals(provinceName);
-    });
-  }
-
-  loadProvinces(): void {
-    this.databaseService.getProvinces().subscribe({
-      next: (provinces: any[]) => {
-        this.provinces = provinces;
-        console.log('Loaded provinces:', provinces);
-      },
-      error: (error: any) => {
-        console.error('Error loading provinces:', error);
-        this.toastr.error('Failed to load provinces', 'Error');
+    this.trainingForm.get('provinceId')?.valueChanges.subscribe(provinceId => {
+      const province = this.provinces.find(p => p.id === provinceId);
+      if (province) {
+        this.filterHospitals(province.name);
       }
     });
   }
@@ -143,23 +144,15 @@ export class AddTrainingComponent implements OnInit {
 
       const formData = this.trainingForm.value;
 
-      // Convert form data to match the exact API schema
+      // Convert form data to match the API schema
       const trainingSession = {
         trainingName: formData.trainingName,
         trainingType: formData.trainingType,
-        description: formData.description || '',
-        startDate: this.formatDateForAPI(formData.startDate),
-        endDate: this.formatDateForAPI(formData.endDate),
-        startTime: this.formatTimeForAPI(formData.startTime),
-        endTime: this.formatTimeForAPI(formData.endTime),
-        province: formData.province,
-        hospital: formData.hospital,
+        trainingDate: this.formatDateForAPI(formData.trainingDate),
+        provinceId: parseInt(formData.provinceId),
         venue: formData.venue,
         trainerId: parseInt(formData.trainerId),
-        numberOfParticipants: parseInt(formData.numberOfParticipants),
         targetAudience: formData.targetAudience,
-        objectives: formData.objectives || '',
-        materials: formData.materials || '',
         status: parseInt(formData.status)
       };
 

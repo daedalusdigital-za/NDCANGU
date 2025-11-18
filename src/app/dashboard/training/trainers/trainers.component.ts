@@ -69,7 +69,7 @@ export class TrainersComponent implements OnInit {
       phone: ['', [Validators.required, Validators.pattern(/^\+?[0-9]{10,15}$/)]],
       provinceId: ['', Validators.required],
       location: ['', Validators.required],
-      status: ['Active', Validators.required]
+      status: [1, Validators.required]
     });
   }
 
@@ -255,5 +255,16 @@ export class TrainersComponent implements OnInit {
       const control = formGroup.get(key);
       control?.markAsTouched();
     });
+  }
+
+  getStatusDisplay(status: number | string): string {
+    if (status === 1 || status === 'Active') {
+      return 'Active';
+    }
+    return 'Inactive';
+  }
+
+  getStatusClass(status: number | string): string {
+    return (status === 1 || status === 'Active') ? 'bg-success' : 'bg-warning';
   }
 }
