@@ -10,9 +10,13 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class ListSalesComponent implements OnInit {
 
-  // Dual data support
+  // Simplified data support - work directly with Sale interface
   orders: OrderRecord[] = [];
   filteredOrders: OrderRecord[] = [];
+  sales: any[] = []; // Simplified sales using new interface
+  filteredSales: any[] = []; // For template compatibility
+
+  // Maintain backwards compatibility
   salesRecords: SalesRecord[] = [];
   filteredSalesRecords: SalesRecord[] = [];
 
@@ -20,23 +24,23 @@ export class ListSalesComponent implements OnInit {
   viewMode: 'orders' | 'sales' = 'sales'; // Default to sales
 
   // Loading state
-  isLoading: boolean = false;
+  isLoading = false;
 
   // Edit modal state
-  showEditModal: boolean = false;
+  showEditModal = false;
   selectedSaleForEdit: any = null;
 
   // Filter properties for orders
-  searchTerm: string = '';
-  selectedStatus: string = 'All';
-  selectedProvince: string = 'All';
-  selectedCustomer: string = 'All';
+  searchTerm = '';
+  selectedStatus = 'All';
+  selectedProvince = 'All';
+  selectedCustomer = 'All';
   dateFrom: Date | null = null;
   dateTo: Date | null = null;
 
   // Additional filter properties for sales
-  selectedInstitution: string = 'All';
-  selectedProductType: string = 'All';
+  selectedInstitution = 'All';
+  selectedProductType = 'All';
 
   // Filter options
   statusOptions: string[] = ['All'];
@@ -91,17 +95,25 @@ export class ListSalesComponent implements OnInit {
   loadSalesRecords(): void {
     this.isLoading = true;
 
-    // Load from database API
+    // Load from database API using simplified Sale interface
     this.databaseService.getSales().subscribe({
-      next: (sales) => {
-        console.log(`✅ Loaded ${sales.length} sales records from database`);
-        console.log('📦 Raw sales data from API:', JSON.stringify(sales, null, 2));
+      next: (salesData) => {
+        console.log(`✅ Loaded ${salesData.length} sales records from database`);
+        console.log('📦 Raw sales data from API:', JSON.stringify(salesData, null, 2));
 
-        // Convert Sale format to SalesRecord format for display
-        this.salesRecords = sales.map(sale => this.convertSaleToSalesRecord(sale));
-        console.log('📊 Converted sales records:', this.salesRecords);
+        // Work directly with simplified Sale interface
+        this.sales = salesData;
+        this.filteredSales = [...this.sales];
+
+        // Maintain backwards compatibility with old SalesRecord format for filters
+        this.salesRecords = salesData.map(sale => this.convertSaleToSalesRecord(sale));
         this.filteredSalesRecords = [...this.salesRecords];
+
         this.isLoading = false;
+
+        if (salesData.length > 0) {
+          this.toastr.success(`Loaded ${salesData.length} sales records`, 'Sales Data Loaded');
+        }
       },
       error: (error) => {
         console.warn('⚠️ API unavailable, using fallback data:', error);
@@ -109,7 +121,13 @@ export class ListSalesComponent implements OnInit {
         // Fallback to hardcoded data if API fails
         this.salesRecords = this.orderDataService.getAllSalesRecords();
         this.filteredSalesRecords = [...this.salesRecords];
+
+        // Convert to simplified format
+        this.sales = this.salesRecords.map(record => this.convertSalesRecordToSale(record));
+        this.filteredSales = [...this.sales];
+
         this.isLoading = false;
+        this.toastr.info('Using cached sales data (API unavailable)', 'Offline Mode');
       }
     });
   }
@@ -147,6 +165,22 @@ export class ListSalesComponent implements OnInit {
       };
       this.filteredOrders = this.orderDataService.searchOrders(criteria);
     } else {
+      // Simple filtering for sales using the new simplified structure
+      this.filteredSales = this.sales.filter(sale => {
+        const matchesSearch = !this.searchTerm ||
+          sale.saleNumber?.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+          sale.customerName?.toLowerCase().includes(this.searchTerm.toLowerCase());
+
+        const matchesCustomer = this.selectedCustomer === 'All' ||
+          sale.customerName === this.selectedCustomer;
+
+        const matchesDateRange = (!this.dateFrom || new Date(sale.saleDate) >= this.dateFrom) &&
+          (!this.dateTo || new Date(sale.saleDate) <= this.dateTo);
+
+        return matchesSearch && matchesCustomer && matchesDateRange;
+      });
+
+      // Also update the old format for compatibility
       const criteria = {
         searchTerm: this.searchTerm,
         province: this.selectedProvince,
@@ -173,7 +207,8 @@ export class ListSalesComponent implements OnInit {
     if (this.viewMode === 'orders') {
       this.filteredOrders = [...this.orders];
     } else {
-      this.filteredSalesRecords = [...this.salesRecords];
+      this.filteredSales = [...this.sales];
+      this.filteredSalesRecords = [...this.salesRecords]; // Keep both for compatibility
     }
   }
 
@@ -240,6 +275,35 @@ export class ListSalesComponent implements OnInit {
     console.log('Editing order:', order);
     this.selectedSaleForEdit = order;
     this.showEditModal = true;
+  }
+
+  editSale(sale: SalesRecord): void {
+    console.log('Editing sale:', sale);
+    this.selectedSaleForEdit = sale;
+    this.showEditModal = true;
+  }
+
+  deleteSale(sale: SalesRecord): void {
+    if (confirm('Are you sure you want to delete this sale record?')) {
+      console.log('Deleting sale:', sale);
+      // TODO: Implement delete functionality
+      // this.databaseService.deleteSale(sale.id).subscribe({
+      //   next: (response) => {
+      //     this.toastr.success('Sale deleted successfully');
+      //     this.loadData();
+      //   },
+      //   error: (error) => {
+      //     console.error('Error deleting sale:', error);
+      //     this.toastr.error('Failed to delete sale');
+      //   }
+      // });
+    }
+  }
+
+  printSalesRecord(sale: SalesRecord): void {
+    console.log('Printing sales record:', sale);
+    // TODO: Implement print functionality
+    window.print(); // Basic print for now
   }
 
   closeEditModal(): void {
@@ -343,14 +407,14 @@ export class ListSalesComponent implements OnInit {
     return {
       orderNumber: sale.saleNumber || '',
       orderDate: this.formatDateForDisplay(sale.saleDate),
-      customerName: sale.hospital || '',
-      province: sale.province || '',
-      poNumber: sale.invoiceNumber || '',
-      itemDescription: firstItem?.productName || '',
+      customerName: sale.customerName || '',
+      province: sale.provinceName || '',
+      poNumber: sale.saleNumber || '', // Use sale number as PO number
+      itemDescription: firstItem?.inventoryItemName || '',
       qtyBackOrder: firstItem?.quantity || 0,
       unitPrice: firstItem?.unitPrice || 0,
-      status: this.mapDeliveryStatus(sale.deliveryStatus),
-      totalValue: sale.totalAmount || (firstItem?.quantity * firstItem?.unitPrice) || 0
+      status: 'Completed', // Default status since delivery status removed
+      totalValue: sale.total || 0
     };
   }
 
@@ -361,15 +425,48 @@ export class ListSalesComponent implements OnInit {
     const firstItem = sale.saleItems && sale.saleItems.length > 0 ? sale.saleItems[0] : null;
 
     return {
-      institution: sale.hospital || '',
-      province: sale.province || '',
-      itemDescription: firstItem?.productName || '',
+      institution: sale.customerName || '',
+      province: sale.provinceName || '',
+      itemDescription: firstItem?.inventoryItemName || '',
       date: this.formatDateForDisplay(sale.saleDate),
-      invoiceNumber: sale.invoiceNumber || sale.saleNumber || '',
+      invoiceNumber: sale.saleNumber || '',
       quantity: firstItem?.quantity || 0,
-      salesAmount: sale.totalAmount || (firstItem?.quantity * firstItem?.unitPrice) || 0,
-      status: this.mapDeliveryStatus(sale.deliveryStatus)
+      salesAmount: sale.total || 0,
+      status: 'Completed' // Default status since delivery status removed
     };
+  }
+
+  /**
+   * Convert SalesRecord back to simplified Sale format
+   */
+  private convertSalesRecordToSale(record: SalesRecord): any {
+    return {
+      id: 0, // Will be assigned by API
+      saleNumber: record.invoiceNumber,
+      saleDate: record.date,
+      customerName: record.institution,
+      customerPhone: '', // Not available in old format
+      total: record.salesAmount,
+      notes: '',
+      isDeleted: false,
+      createdDate: record.date,
+      createdBy: 1, // Default user
+      saleItems: [{
+        id: 0,
+        inventoryItemId: 1,
+        inventoryItemName: record.itemDescription,
+        quantity: record.quantity,
+        unitPrice: record.quantity > 0 ? record.salesAmount / record.quantity : 0
+      }]
+    };
+  }
+
+  /**
+   * View details of a sale record (simplified version)
+   */
+  viewSaleDetails(sale: any): void {
+    console.log('Viewing sale details:', sale);
+    this.toastr.info(`Viewing sale: ${sale.saleNumber}`, 'Sale Details');
   }
 
   /**

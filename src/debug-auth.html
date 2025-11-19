@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Debug Authentication - NDCANGU</title>
+    <style>
+        body {
+            font-family: 'Courier New', monospace;
+            padding: 20px;
+            background: #1a1a1a;
+            color: #00ff00;
+            line-height: 1.6;
+        }
+        .container { max-width: 1200px; margin: 0 auto; }
+        h1 { color: #00ff41; border-bottom: 2px solid #00ff41; }
+        .success { color: #00ff00; }
+        .error { color: #ff4444; }
+        .warning { color: #ffaa00; }
+        .info { color: #00aaff; }
+        button {
+            padding: 10px 20px;
+            margin: 5px;
+            background: #333;
+            color: #00ff00;
+            border: 1px solid #00ff00;
+            cursor: pointer;
+            border-radius: 3px;
+        }
+        button:hover { background: #555; }
+        .code-block {
+            background: #2a2a2a;
+            padding: 15px;
+            border-left: 3px solid #00ff41;
+            margin: 10px 0;
+            overflow-x: auto;
+        }
+        .token-display {
+            word-break: break-all;
+            font-size: 12px;
+            background: #2a2a2a;
+            padding: 10px;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 NDCANGU Authentication Debugger</h1>
+        <p class="info">This tool helps diagnose authentication issues and test API calls.</p>
+
+        <div class="code-block">
+            <h3>🔧 Quick Actions</h3>
+            <button onclick="setupAuth()">🔑 Setup Authentication</button>
+            <button onclick="checkAuth()">📋 Check Auth Status</button>
+            <button onclick="testSalesAPI()">🧪 Test Sales API Call</button>
+            <button onclick="debugConsole()">💻 Enable Debug Console</button>
+            <button onclick="clearAll()">🗑️ Clear All Data</button>
+        </div>
+
+        <div id="output"></div>
+
+        <div class="code-block">
+            <h3>📝 Manual Browser Console Commands</h3>
+            <p>Open browser DevTools (F12) and paste these commands:</p>
+            <div class="token-display">
+                <strong>Setup Auth:</strong><br>
+                localStorage.setItem('authToken', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJJZCI6IjkiLCJVc2VybmFtZSI6IndlbGNvbWVraW5nQG91dGxvb2suY29tIiwiRmlyc3ROYW1lIjoid2VsY29tZSIsIkxhc3ROYW1lIjoiTWFsYW1sZWxhIiwiRW1haWwiOiJ3ZWxjb21la2luZ0BvdXRsb29rLmNvbSIsImp0aSI6IjZhOWU1NjJhLTY1ZmYtNDBjMS05Yzk2LWU4MWIwYWEyYjIxZCIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IkFkbWluIiwiZXhwIjoxNzYxMDM2MzUxLCJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjYxOTU1IiwiYXVkIjoiaHR0cDovL2xvY2FsaG9zdDo0MjAwIn0.MzlPENhnuJ1vUd5vLpQ1SUCl4jIwuyUnqZUDgsYgEJY');<br><br>
+
+                <strong>Setup CurrentUser:</strong><br>
+                localStorage.setItem('currentUser', JSON.stringify({id:"9",email:"welcomeking@outlook.com",phoneNumber:"0645210558",fullName:"welcome Malamlela",role:["Admin"],token:"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJJZCI6IjkiLCJVc2VybmFtZSI6IndlbGNvbWVraW5nQG91dGxvb2suY29tIiwiRmlyc3ROYW1lIjoid2VsY29tZSIsIkxhc3ROYW1lIjoiTWFsYW1sZWxhIiwiRW1haWwiOiJ3ZWxjb21la2luZ0BvdXRsb29rLmNvbSIsImp0aSI6IjZhOWU1NjJhLTY1ZmYtNDBjMS05Yzk2LWU4MWIwYWEyYjIxZCIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IkFkbWluIiwiZXhwIjoxNzYxMDM2MzUxLCJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjYxOTU1IiwiYXVkIjoiaHR0cDovL2xvY2FsaG9zdDo0MjAwIn0.MzlPENhnuJ1vUd5vLpQ1SUCl4jIwuyUnqZUDgsYgEJY"}));<br><br>
+
+                <strong>Test API Call:</strong><br>
+                fetch('https://ngcanduapi.azurewebsites.net/api/Sales/GetAll', {headers: {'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('currentUser')).token, 'Content-Type': 'application/json'}}).then(r=>r.json()).then(console.log).catch(console.error);<br><br>
+
+                <strong>Check Storage:</strong><br>
+                console.log('authToken:', localStorage.getItem('authToken'));<br>
+                console.log('currentUser:', localStorage.getItem('currentUser'));<br>
+                console.log('userInfo:', localStorage.getItem('userInfo'));
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'https://ngcanduapi.azurewebsites.net/api/';
+        const workingToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJJZCI6IjkiLCJVc2VybmFtZSI6IndlbGNvbWVraW5nQG91dGxvb2suY29tIiwiRmlyc3ROYW1lIjoid2VsY29tZSIsIkxhc3ROYW1lIjoiTWFsYW1sZWxhIiwiRW1haWwiOiJ3ZWxjb21la2luZ0BvdXRsb29rLmNvbSIsImp0aSI6IjZhOWU1NjJhLTY1ZmYtNDBjMS05Yzk2LWU4MWIwYWEyYjIxZCIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IkFkbWluIiwiZXhwIjoxNzYxMDM2MzUxLCJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjYxOTU1IiwiYXVkIjoiaHR0cDovL2xvY2FsaG9zdDo0MjAwIn0.MzlPENhnuJ1vUd5vLpQ1SUCl4jIwuyUnqZUDgsYgEJY";
+
+        function log(message, type = 'info') {
+            const output = document.getElementById('output');
+            const className = type;
+            const timestamp = new Date().toLocaleTimeString();
+            output.innerHTML += `<div class="${className}">[${timestamp}] ${message}</div>`;
+            output.scrollTop = output.scrollHeight;
+        }
+
+        function setupAuth() {
+            try {
+                // Clear first
+                localStorage.removeItem('authToken');
+                localStorage.removeItem('currentUser');
+                localStorage.removeItem('userInfo');
+
+                // Setup all formats
+                localStorage.setItem('authToken', workingToken);
+
+                const currentUser = {
+                    id: "9",
+                    email: "welcomeking@outlook.com",
+                    phoneNumber: "0645210558",
+                    fullName: "welcome Malamlela",
+                    role: ["Admin"],
+                    token: workingToken
+                };
+                localStorage.setItem('currentUser', JSON.stringify(currentUser));
+
+                const userInfo = {
+                    id: 9,
+                    token: workingToken,
+                    email: "welcomeking@outlook.com",
+                    firstName: "welcome",
+                    lastName: "Malamlela",
+                    role: ["Admin"]
+                };
+                localStorage.setItem('userInfo', JSON.stringify(userInfo));
+
+                log('✅ Authentication setup complete!', 'success');
+                log('📍 Set authToken: ' + workingToken.substring(0, 30) + '...', 'info');
+                log('📍 Set currentUser with token', 'info');
+                log('📍 Set userInfo for compatibility', 'info');
+
+                // Reload the page to ensure services pick up the new token
+                setTimeout(() => {
+                    log('🔄 Reloading page in 2 seconds to apply changes...', 'warning');
+                    setTimeout(() => window.location.reload(), 2000);
+                }, 1000);
+
+            } catch (error) {
+                log('❌ Error setting up authentication: ' + error.message, 'error');
+            }
+        }
+
+        function checkAuth() {
+            log('🔍 Checking authentication status...', 'info');
+
+            const authToken = localStorage.getItem('authToken');
+            const currentUser = localStorage.getItem('currentUser');
+            const userInfo = localStorage.getItem('userInfo');
+
+            if (authToken) {
+                log('✅ authToken found: ' + authToken.substring(0, 30) + '...', 'success');
+            } else {
+                log('❌ authToken missing', 'error');
+            }
+
+            if (currentUser) {
+                try {
+                    const parsed = JSON.parse(currentUser);
+                    log('✅ currentUser found: ' + parsed.fullName + ' (' + parsed.email + ')', 'success');
+                    if (parsed.token) {
+                        log('✅ currentUser has token: ' + parsed.token.substring(0, 30) + '...', 'success');
+                    } else {
+                        log('❌ currentUser missing token', 'error');
+                    }
+                } catch (e) {
+                    log('❌ currentUser has invalid JSON: ' + e.message, 'error');
+                }
+            } else {
+                log('❌ currentUser missing', 'error');
+            }
+
+            if (userInfo) {
+                log('✅ userInfo found', 'success');
+            } else {
+                log('⚠️ userInfo missing (not critical)', 'warning');
+            }
+        }
+
+        async function testSalesAPI() {
+            log('🧪 Testing Sales API call...', 'info');
+
+            const currentUser = localStorage.getItem('currentUser');
+            if (!currentUser) {
+                log('❌ No currentUser found. Run Setup Authentication first.', 'error');
+                return;
+            }
+
+            try {
+                const user = JSON.parse(currentUser);
+                if (!user.token) {
+                    log('❌ No token in currentUser. Run Setup Authentication first.', 'error');
+                    return;
+                }
+
+                log('📡 Making API call to: ' + API_URL + 'Sales/GetAll', 'info');
+                log('🔑 Using token: ' + user.token.substring(0, 30) + '...', 'info');
+
+                const response = await fetch(API_URL + 'Sales/GetAll', {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': 'Bearer ' + user.token,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                log('📊 Response Status: ' + response.status + ' ' + response.statusText,
+                    response.ok ? 'success' : 'error');
+
+                if (response.ok) {
+                    const data = await response.json();
+                    log('✅ API call successful! Data received: ' + JSON.stringify(data).substring(0, 100) + '...', 'success');
+                } else {
+                    const errorText = await response.text();
+                    log('❌ API call failed: ' + errorText, 'error');
+
+                    if (response.status === 400) {
+                        log('💡 400 Error suggests authentication or request format issue', 'warning');
+                    } else if (response.status === 401) {
+                        log('💡 401 Error suggests invalid/expired token', 'warning');
+                    } else if (response.status === 404) {
+                        log('💡 404 Error suggests API endpoint not found', 'warning');
+                    }
+                }
+
+            } catch (error) {
+                log('❌ Network error: ' + error.message, 'error');
+            }
+        }
+
+        function debugConsole() {
+            log('💻 Debug console enabled. Check browser DevTools for detailed logs.', 'info');
+
+            // Enable detailed logging
+            window.ndcanguDebug = true;
+
+            // Override fetch to log all requests
+            const originalFetch = window.fetch;
+            window.fetch = function(...args) {
+                console.log('🌐 NDCANGU API Call:', args);
+                return originalFetch.apply(this, args)
+                    .then(response => {
+                        console.log('📡 NDCANGU API Response:', response.status, response.statusText);
+                        return response;
+                    })
+                    .catch(error => {
+                        console.error('❌ NDCANGU API Error:', error);
+                        throw error;
+                    });
+            };
+
+            log('✅ Debug mode activated. All API calls will be logged to console.', 'success');
+        }
+
+        function clearAll() {
+            localStorage.clear();
+            document.getElementById('output').innerHTML = '';
+            log('🗑️ All localStorage data cleared', 'warning');
+        }
+
+        // Auto-check auth on page load
+        window.onload = function() {
+            log('🚀 NDCANGU Authentication Debugger loaded', 'success');
+            checkAuth();
+        };
+    </script>
+</body>
+</html>

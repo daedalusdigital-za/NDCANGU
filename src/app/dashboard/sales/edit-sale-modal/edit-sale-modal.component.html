@@ -18,7 +18,7 @@
           <div class="row">
             <!-- Sale Number -->
             <div class="col-md-6 mb-3">
-              <label for="saleNumber" class="form-label">Sale/Order Number</label>
+              <label for="saleNumber" class="form-label">Sale Number</label>
               <input
                 type="text"
                 class="form-control"
@@ -44,81 +44,104 @@
               <div class="invalid-feedback">Sale date is required</div>
             </div>
 
-            <!-- Hospital/Customer -->
+            <!-- Customer Name -->
             <div class="col-md-6 mb-3">
-              <label for="hospital" class="form-label">Hospital/Customer</label>
+              <label for="customerName" class="form-label">Customer Name</label>
               <input
                 type="text"
                 class="form-control"
-                id="hospital"
-                name="hospital"
-                [(ngModel)]="sale.hospital"
+                id="customerName"
+                name="customerName"
+                [(ngModel)]="sale.customerName"
                 required
-                [class.is-invalid]="saleForm.submitted && saleForm.controls['hospital']?.invalid">
-              <div class="invalid-feedback">Hospital/Customer is required</div>
+                [class.is-invalid]="saleForm.submitted && saleForm.controls['customerName']?.invalid">
+              <div class="invalid-feedback">Customer name is required</div>
+            </div>
+
+            <!-- Customer Phone -->
+            <div class="col-md-6 mb-3">
+              <label for="customerPhone" class="form-label">Customer Phone</label>
+              <input
+                type="tel"
+                class="form-control"
+                id="customerPhone"
+                name="customerPhone"
+                [(ngModel)]="sale.customerPhone"
+                required
+                [class.is-invalid]="saleForm.submitted && saleForm.controls['customerPhone']?.invalid">
+              <div class="invalid-feedback">Customer phone is required</div>
             </div>
 
             <!-- Province -->
             <div class="col-md-6 mb-3">
-              <label for="province" class="form-label">Province</label>
+              <label for="provinceId" class="form-label">Province</label>
               <select
                 class="form-select"
-                id="province"
-                name="province"
-                [(ngModel)]="sale.province"
+                id="provinceId"
+                name="provinceId"
+                [(ngModel)]="sale.provinceId"
                 required
-                [class.is-invalid]="saleForm.submitted && saleForm.controls['province']?.invalid">
+                [class.is-invalid]="saleForm.submitted && saleForm.controls['provinceId']?.invalid">
                 <option value="">Select Province</option>
-                <option *ngFor="let prov of provinces" [value]="prov">{{prov}}</option>
+                <option *ngFor="let province of provinces" [value]="province.id">{{province.name}}</option>
               </select>
               <div class="invalid-feedback">Province is required</div>
             </div>
 
-            <!-- Invoice Number -->
+            <!-- Subtotal -->
             <div class="col-md-6 mb-3">
-              <label for="invoiceNumber" class="form-label">Invoice/PO Number</label>
-              <input
-                type="text"
-                class="form-control"
-                id="invoiceNumber"
-                name="invoiceNumber"
-                [(ngModel)]="sale.invoiceNumber"
-                required
-                [class.is-invalid]="saleForm.submitted && saleForm.controls['invoiceNumber']?.invalid">
-              <div class="invalid-feedback">Invoice number is required</div>
-            </div>
-
-            <!-- Total Amount -->
-            <div class="col-md-6 mb-3">
-              <label for="totalAmount" class="form-label">Total Amount (ZAR)</label>
+              <label for="subtotal" class="form-label">Subtotal (ZAR)</label>
               <input
                 type="number"
                 class="form-control"
-                id="totalAmount"
-                name="totalAmount"
-                [(ngModel)]="sale.totalAmount"
+                id="subtotal"
+                name="subtotal"
+                [(ngModel)]="sale.subtotal"
                 required
                 min="0"
                 step="0.01"
-                [class.is-invalid]="saleForm.submitted && saleForm.controls['totalAmount']?.invalid">
+                [class.is-invalid]="saleForm.submitted && saleForm.controls['subtotal']?.invalid">
+              <div class="invalid-feedback">Subtotal is required</div>
+            </div>
+
+            <!-- Total -->
+            <div class="col-md-6 mb-3">
+              <label for="total" class="form-label">Total Amount (ZAR)</label>
+              <input
+                type="number"
+                class="form-control"
+                id="total"
+                name="total"
+                [(ngModel)]="sale.total"
+                required
+                min="0"
+                step="0.01"
+                [class.is-invalid]="saleForm.submitted && saleForm.controls['total']?.invalid">
               <div class="invalid-feedback">Total amount is required</div>
             </div>
 
-            <!-- Delivery Status -->
+            <!-- Customer ID (Optional) -->
+            <div class="col-md-6 mb-3">
+              <label for="customerId" class="form-label">Customer ID (Optional)</label>
+              <input
+                type="number"
+                class="form-control"
+                id="customerId"
+                name="customerId"
+                [(ngModel)]="sale.customerId"
+                min="1">
+            </div>
+
+            <!-- Notes -->
             <div class="col-md-12 mb-3">
-              <label for="deliveryStatus" class="form-label">Delivery Status</label>
-              <select
-                class="form-select"
-                id="deliveryStatus"
-                name="deliveryStatus"
-                [(ngModel)]="sale.deliveryStatus"
-                required
-                [class.is-invalid]="saleForm.submitted && saleForm.controls['deliveryStatus']?.invalid">
-                <option *ngFor="let status of statusOptions" [value]="status.value">
-                  {{status.label}}
-                </option>
-              </select>
-              <div class="invalid-feedback">Delivery status is required</div>
+              <label for="notes" class="form-label">Notes</label>
+              <textarea
+                class="form-control"
+                id="notes"
+                name="notes"
+                rows="3"
+                [(ngModel)]="sale.notes"
+                placeholder="Additional notes about this sale..."></textarea>
             </div>
           </div>
         </form>

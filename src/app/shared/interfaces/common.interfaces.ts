@@ -62,28 +62,53 @@ export interface Product {
 }
 
 export interface SaleItem {
-  id: string;
-  productId: string;
-  productName: string;
+  id: number;
+  saleId: number;
+  inventoryItemId: number;
+  inventoryItemName: string;
   quantity: number;
-  price: number;
-  subtotal: number;
+  unitPrice: number;
+  totalPrice: number;
 }
 
 export interface Sale {
-  id: string;
+  id: number;
+  saleNumber: string;
+  saleDate: string;
+  customerId?: number;
   customerName: string;
-  customerEmail?: string;
   customerPhone: string;
-  items: SaleItem[];
-  totalAmount: number;
-  saleDate: Date;
-  paymentMethod: 'Cash' | 'Credit Card' | 'Debit Card' | 'Bank Transfer' | 'Mobile Payment';
-  status: 'Pending' | 'Completed' | 'Cancelled';
+  subtotal: number;
+  total: number;
   notes?: string;
-  createdBy: string;
-  createdAt: Date;
-  updatedAt: Date;
+  provinceId: number;
+  provinceName: string;
+  saleItems: SaleItem[];
+  dateCreated: string;
+  lastUpdated: string;
+}
+
+// SaleModel for POST/PUT requests
+export interface SaleModel {
+  id?: number; // Optional for POST, required for PUT
+  saleNumber: string;
+  saleDate: string;
+  customerId?: number;
+  customerName: string;
+  customerPhone: string;
+  subtotal: number;
+  total: number;
+  notes?: string;
+  provinceId: number;
+  saleItems: SaleItemModel[];
+}
+
+// SaleItemModel for POST/PUT requests
+export interface SaleItemModel {
+  id?: number; // Optional for new items
+  inventoryItemId: number;
+  quantity: number;
+  unitPrice: number;
 }
 
 export interface SalesReport {

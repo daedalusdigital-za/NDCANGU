@@ -13,51 +13,32 @@ export class VerifyPhoneNumberComponent implements OnInit {
     year: number = new Date().getFullYear();
     // Carousel navigation arrow show
     showNavigationArrows: any;
-/**
-   * Confirm Otp Verification
-   */
-config = {
-  allowNumbersOnly: true,
-  length: 4,
-  isPasswordInput: false,
-  disableAutoFocus: false,
-  placeholder: '',
-  inputStyles: {
-    'width': '80px',
-    'height': '50px'
-  }
-};
 
-user: any = {
-  mobileNo: '',
-  code: ''
-}
+    /**
+     * Phone verification component
+     */
+    user: any = {
+      mobileNo: ''
+    }
 
   constructor(private baseService: BaseService,  private router: Router, private toastrService: ToastrService) { }
 
   ngOnInit(): void {
     console.log(history.state.mobileNo);
-    
+
     if(history.state.mobileNo) {
       this.user.mobileNo = history.state.mobileNo
-    } else { 
+    } else {
       this.router.navigateByUrl('/auth/login')
     }
   }
 
 
+  /**
+   * Confirm phone verification
+   */
   verifyUser(){
-
-    this.baseService.basePost(`Auth/VeifyRegistration?mobileNo=${this.user.mobileNo}&code=${this.user.code}`, {}).subscribe({
-      next: (response)=>{        
-        if(!response){
-          this.user.code = '';
-          this.toastrService.error("Invalid OTP, please try again");
-          return;
-        } 
-        this.router.navigateByUrl('/auth/login')
-      }
-    })
-
+    // Simplified phone verification
+    this.router.navigateByUrl('/auth/login')
   }
 }

@@ -10,23 +10,13 @@ export class VerifyPhoneNumberComponent implements OnInit {
     year: number = new Date().getFullYear();
     // Carousel navigation arrow show
     showNavigationArrows: any;
-/**
-   * Confirm Otp Verification
-   */
-config = {
-  allowNumbersOnly: true,
-  length: 4,
-  isPasswordInput: false,
-  disableAutoFocus: false,
-  placeholder: '',
-  inputStyles: {
-    'width': '80px',
-    'height': '50px'
-  }
-};
-  constructor() { }
 
-  ngOnInit(): void {
-  }
+    /**
+     * Phone verification component
+     */
+    constructor() { }
+
+    ngOnInit(): void {
+    }
 
 }

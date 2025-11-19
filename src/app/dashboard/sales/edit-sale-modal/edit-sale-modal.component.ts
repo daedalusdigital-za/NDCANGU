@@ -18,39 +18,32 @@ export class EditSaleModalComponent implements OnChanges {
 
   isLoading: boolean = false;
 
-  // Form data
+  // Form data - matches SaleModel structure
   sale: any = {
-    id: '',
+    id: 0,
     saleNumber: '',
     saleDate: '',
-    hospital: '',
-    province: '',
-    invoiceNumber: '',
-    totalAmount: 0,
-    deliveryStatus: 0,
+    customerId: null,
+    customerName: '',
+    customerPhone: '',
+    subtotal: 0,
+    total: 0,
+    notes: '',
+    provinceId: 1,
     saleItems: []
   };
 
-  // Province options
+  // Province options with IDs
   provinces = [
-    'Gauteng',
-    'KwaZulu-Natal',
-    'Eastern Cape',
-    'Western Cape',
-    'Limpopo',
-    'Mpumalanga',
-    'North West',
-    'Free State',
-    'Northern Cape'
-  ];
-
-  // Status options
-  statusOptions = [
-    { value: 0, label: 'Not delivered' },
-    { value: 1, label: 'Processing' },
-    { value: 2, label: 'Shipped' },
-    { value: 3, label: 'Delivered' },
-    { value: 4, label: 'Cancelled' }
+    { id: 1, name: 'Gauteng' },
+    { id: 2, name: 'KwaZulu-Natal' },
+    { id: 3, name: 'Eastern Cape' },
+    { id: 4, name: 'Western Cape' },
+    { id: 5, name: 'Limpopo' },
+    { id: 6, name: 'Mpumalanga' },
+    { id: 7, name: 'North West' },
+    { id: 8, name: 'Free State' },
+    { id: 9, name: 'Northern Cape' }
   ];
 
   constructor(
@@ -68,25 +61,18 @@ export class EditSaleModalComponent implements OnChanges {
     if (!this.saleData) return;
 
     this.sale = {
-      id: this.saleData.id || '',
-      saleNumber: this.saleData.saleNumber || this.saleData.orderNumber || '',
-      saleDate: this.formatDateForInput(this.saleData.saleDate || this.saleData.orderDate),
-      hospital: this.saleData.hospital || this.saleData.customerName || '',
-      province: this.saleData.province || '',
-      invoiceNumber: this.saleData.invoiceNumber || this.saleData.poNumber || '',
-      totalAmount: this.saleData.totalAmount || this.saleData.totalValue || 0,
-      deliveryStatus: this.parseDeliveryStatus(this.saleData.deliveryStatus || this.saleData.status),
+      id: this.saleData.id || 0,
+      saleNumber: this.saleData.saleNumber || '',
+      saleDate: this.formatDateForInput(this.saleData.saleDate),
+      customerId: this.saleData.customerId || null,
+      customerName: this.saleData.customerName || '',
+      customerPhone: this.saleData.customerPhone || '',
+      subtotal: this.saleData.subtotal || 0,
+      total: this.saleData.total || 0,
+      notes: this.saleData.notes || '',
+      provinceId: this.saleData.provinceId || 1,
       saleItems: this.saleData.saleItems || []
     };
-
-    // If we have item details from the display format, add them to saleItems
-    if (this.saleData.itemDescription && (!this.sale.saleItems || this.sale.saleItems.length === 0)) {
-      this.sale.saleItems = [{
-        productName: this.saleData.itemDescription,
-        quantity: this.saleData.qtyBackOrder || this.saleData.quantity || 0,
-        unitPrice: this.saleData.unitPrice || 0
-      }];
-    }
   }
 
   onSubmit(form: any): void {
@@ -97,23 +83,29 @@ export class EditSaleModalComponent implements OnChanges {
 
     this.isLoading = true;
 
-    // Prepare update payload
-    // Note: Audit fields (updatedAt, updateByUserId) are handled automatically by backend
-    const updatePayload = {
+    // Prepare SaleModel payload for API
+    const saleModel = {
       id: this.sale.id,
       saleNumber: this.sale.saleNumber,
       saleDate: this.sale.saleDate,
-      hospital: this.sale.hospital,
-      province: this.sale.province,
-      invoiceNumber: this.sale.invoiceNumber,
-      totalAmount: parseFloat(this.sale.totalAmount),
-      deliveryStatus: parseInt(this.sale.deliveryStatus),
-      saleItems: this.sale.saleItems
+      customerId: this.sale.customerId,
+      customerName: this.sale.customerName,
+      customerPhone: this.sale.customerPhone,
+      subtotal: parseFloat(this.sale.subtotal),
+      total: parseFloat(this.sale.total),
+      notes: this.sale.notes,
+      provinceId: parseInt(this.sale.provinceId),
+      saleItems: this.sale.saleItems.map((item: any) => ({
+        id: item.id,
+        inventoryItemId: item.inventoryItemId,
+        quantity: item.quantity,
+        unitPrice: item.unitPrice
+      }))
     };
 
-    console.log('Updating sale:', updatePayload);
+    console.log('Updating sale with SaleModel:', saleModel);
 
-    this.databaseService.updateSale(updatePayload as any).subscribe({
+    this.databaseService.updateSale(saleModel).subscribe({
       next: (response) => {
         console.log('Sale updated successfully:', response);
         this.isLoading = false;

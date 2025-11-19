@@ -25,6 +25,7 @@ import { TooltipModule } from 'primeng/tooltip';
 import { FileUploadModule } from 'primeng/fileupload';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { InputTextareaModule } from 'primeng/inputtextarea';
+import { EditTrainingComponent } from './edit-training/edit-training.component';
 
 @NgModule({
   declarations: [
@@ -33,7 +34,8 @@ import { InputTextareaModule } from 'primeng/inputtextarea';
     AddTrainingComponent,
     ListTrainingComponent,
     TrainersComponent,
-    TrainingReportsComponent
+    TrainingReportsComponent,
+    EditTrainingComponent
   ],
   imports: [
     CommonModule,

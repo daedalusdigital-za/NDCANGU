@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { DatabaseService } from '../../../services/data/database.service';
+import { DatabaseService, TrainingStatus } from '../../../services/data/database.service';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
@@ -36,12 +36,13 @@ export class AddTrainingComponent implements OnInit {
     'Virtual training'
   ];
 
-  // Status options based on API schema
+  // Status options based on TrainingStatus enum
   statusOptions = [
-    { value: 0, label: 'Scheduled' },
-    { value: 1, label: 'In Progress' },
-    { value: 2, label: 'Completed' },
-    { value: 3, label: 'Cancelled' }
+    { value: TrainingStatus.Planned, label: 'Planned' },
+    { value: TrainingStatus.Scheduled, label: 'Scheduled' },
+    { value: TrainingStatus.InProgress, label: 'In Progress' },
+    { value: TrainingStatus.Completed, label: 'Completed' },
+    { value: TrainingStatus.Cancelled, label: 'Cancelled' }
   ];
 
   constructor(
@@ -58,7 +59,8 @@ export class AddTrainingComponent implements OnInit {
       venue: ['', Validators.required],
       trainerId: ['', Validators.required],
       targetAudience: ['', Validators.required],
-      status: [0, Validators.required] // Default to 0 (Scheduled)
+      numberOfParticipants: ['', [Validators.required, Validators.min(1), Validators.max(500)]],
+      status: [TrainingStatus.Planned, Validators.required] // Default to Planned
     });
   }
 
@@ -153,6 +155,7 @@ export class AddTrainingComponent implements OnInit {
         venue: formData.venue,
         trainerId: parseInt(formData.trainerId),
         targetAudience: formData.targetAudience,
+        numberOfParticipants: parseInt(formData.numberOfParticipants),
         status: parseInt(formData.status)
       };
 
@@ -214,7 +217,7 @@ export class AddTrainingComponent implements OnInit {
 
   private resetForm(): void {
     this.trainingForm.reset();
-    this.trainingForm.get('status')?.setValue(0); // Reset to Scheduled
+    this.trainingForm.get('status')?.setValue(TrainingStatus.Planned); // Reset to Planned
     this.filteredHospitals = [];
   }
 

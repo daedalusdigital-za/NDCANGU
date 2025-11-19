@@ -4,6 +4,7 @@ import { ToastrService } from 'ngx-toastr';
 import { DatabaseService } from '../../../services/data/database.service';
 
 interface Province {
+  id: number;
   name: string;
   code: string;
 }
@@ -23,57 +24,27 @@ export class AddSaleComponent implements OnInit {
 
   sale: any = {
     saleNumber: '',
-    saleDate: new Date().toISOString(),
-    province: '',
-    hospital: '',
-    customerContactName: '',
-    customerContactEmail: '',
-    customerContactPhone: '',
-    paymentMethod: 1, // Default to first payment method
-    paymentStatus: 1, // Default to first payment status
-    deliveryStatus: 1, // Default to first delivery status
-    deliveryDate: '',
+    saleDate: new Date().toISOString().split('T')[0], // Format for date input
+    customerId: null,
+    customerName: '',
+    customerPhone: '',
+    subtotal: 0,
+    total: 0,
     notes: '',
-    salesPerson: '',
-    discount: 0,
-    invoiceNumber: '',
-    saleItems: [],
-    totalAmount: 0
+    provinceId: 1,
+    saleItems: []
   };
 
-  // Enum options based on schema (numeric values)
-  paymentMethods = [
-    { value: 1, label: 'Cash' },
-    { value: 2, label: 'Card' },
-    { value: 3, label: 'Bank Transfer' },
-    { value: 4, label: 'Credit' },
-    { value: 5, label: 'Cheque' }
-  ];
-
-  paymentStatusOptions = [
-    { value: 1, label: 'Pending' },
-    { value: 2, label: 'Paid' },
-    { value: 3, label: 'Overdue' },
-    { value: 4, label: 'Cancelled' }
-  ];
-
-  deliveryStatusOptions = [
-    { value: 1, label: 'Pending' },
-    { value: 2, label: 'In Transit' },
-    { value: 3, label: 'Delivered' },
-    { value: 4, label: 'Cancelled' }
-  ];
-
   provinces: Province[] = [
-    { name: 'Gauteng', code: 'GP' },
-    { name: 'Western Cape', code: 'WC' },
-    { name: 'KwaZulu-Natal', code: 'KZN' },
-    { name: 'Eastern Cape', code: 'EC' },
-    { name: 'Free State', code: 'FS' },
-    { name: 'Limpopo', code: 'LP' },
-    { name: 'Mpumalanga', code: 'MP' },
-    { name: 'North West', code: 'NW' },
-    { name: 'Northern Cape', code: 'NC' }
+    { id: 1, name: 'Gauteng', code: 'GP' },
+    { id: 2, name: 'Western Cape', code: 'WC' },
+    { id: 3, name: 'KwaZulu-Natal', code: 'KZN' },
+    { id: 4, name: 'Eastern Cape', code: 'EC' },
+    { id: 5, name: 'Free State', code: 'FS' },
+    { id: 6, name: 'Limpopo', code: 'LP' },
+    { id: 7, name: 'Mpumalanga', code: 'MP' },
+    { id: 8, name: 'North West', code: 'NW' },
+    { id: 9, name: 'Northern Cape', code: 'NC' }
   ];
 
   hospitals: Hospital[] = [
@@ -112,6 +83,7 @@ export class AddSaleComponent implements OnInit {
   ];
 
   products: any[] = [];
+  trainers: any[] = [];
   filteredHospitals: Hospital[] = [];
   selectedProduct: any = null;
   quantity: number = 1;
@@ -126,6 +98,7 @@ export class AddSaleComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadProducts();
+    this.loadTrainers();
     this.generateSaleNumber();
   }
 
@@ -150,6 +123,20 @@ export class AddSaleComponent implements OnInit {
       { id: 9, name: 'Blood Glucose Meter', price: 450, stock: 35, category: 'Diabetes Care' },
       { id: 10, name: 'Compression Stockings', price: 320, stock: 60, category: 'Circulation' }
     ];
+  }
+
+  loadTrainers(): void {
+    this.databaseService.getTrainers().subscribe({
+      next: (trainers) => {
+        this.trainers = trainers.filter(t => t.status === 'Active');
+        console.log('Loaded trainers:', this.trainers);
+      },
+      error: (error) => {
+        console.error('Error loading trainers:', error);
+        this.toastr.error('Failed to load trainers', 'Error');
+        this.trainers = [];
+      }
+    });
   }
 
   onProvinceChange(): void {
@@ -198,14 +185,12 @@ export class AddSaleComponent implements OnInit {
   }
 
   calculateTotal(): void {
-    this.sale.totalAmount = this.sale.saleItems.reduce((total: number, item: any) => {
+    this.sale.subtotal = this.sale.saleItems.reduce((total: number, item: any) => {
       return total + (item.quantity * item.unitPrice);
     }, 0);
 
-    // Apply discount if any
-    if (this.sale.discount > 0) {
-      this.sale.totalAmount -= (this.sale.totalAmount * this.sale.discount / 100);
-    }
+    // For now, total equals subtotal (can add tax/fees later)
+    this.sale.total = this.sale.subtotal;
   }
 
   onProductSelect(): void {
@@ -218,36 +203,28 @@ export class AddSaleComponent implements OnInit {
     if (this.validateSale()) {
       this.isSubmitting = true;
 
-
-      // Format the sale data according to the exact API schema
-      // Note: Audit fields (createdByUserId, createdAt, etc.) are handled automatically by backend
-      const saleData = {
+      // Format the sale data according to SaleModel API schema
+      const saleModel = {
         saleNumber: this.sale.saleNumber,
         saleDate: this.formatDateForAPI(this.sale.saleDate),
-        province: this.sale.province,
-        hospital: this.sale.hospital,
-        customerContactName: this.sale.customerContactName,
-        customerContactEmail: this.sale.customerContactEmail || '',
-        customerContactPhone: this.sale.customerContactPhone || '',
-        paymentMethod: parseInt(this.sale.paymentMethod),
-        paymentStatus: parseInt(this.sale.paymentStatus),
-        deliveryStatus: parseInt(this.sale.deliveryStatus),
-        deliveryDate: this.sale.deliveryDate ? this.formatDateForAPI(this.sale.deliveryDate) : '',
+        customerId: this.sale.customerId,
+        customerName: this.sale.customerName,
+        customerPhone: this.sale.customerPhone,
+        subtotal: parseFloat(this.sale.subtotal) || 0,
+        total: parseFloat(this.sale.total) || 0,
         notes: this.sale.notes || '',
-        salesPerson: this.sale.salesPerson || '',
-        discount: parseFloat(this.sale.discount) || 0,
-        invoiceNumber: this.sale.invoiceNumber || '',
+        provinceId: parseInt(this.sale.provinceId),
         saleItems: this.sale.saleItems.map((item: any) => ({
-          id: 0, // Backend will assign
-          productId: item.productId,
-          productName: item.productName,
+          inventoryItemId: item.inventoryItemId,
           quantity: item.quantity,
           unitPrice: item.unitPrice
         }))
-      };      console.log('Sale data payload:', saleData);
+      };
+
+      console.log('Sale data payload (SaleModel):', saleModel);
 
       // Try to save using DatabaseService
-      this.saveSaleToAPI(saleData);
+      this.saveSaleToAPI(saleModel);
     }
   }
 

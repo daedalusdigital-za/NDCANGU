@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Setup Authentication Token</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .success { color: green; font-weight: bold; }
+        .info { color: blue; }
+        button { padding: 10px 20px; margin: 10px 5px; cursor: pointer; }
+        .current-token { background: #f0f0f0; padding: 10px; border-radius: 4px; word-break: break-all; }
+    </style>
+</head>
+<body>
+    <h1>🔐 Setup Authentication Token for NDCANGU</h1>
+    <p>This tool sets up the authentication token needed for the sales API calls to work.</p>
+
+    <div>
+        <button onclick="setWorkingToken()">✅ Set Working Token</button>
+        <button onclick="checkCurrentToken()">🔍 Check Current Token</button>
+        <button onclick="clearTokens()">🗑️ Clear All Tokens</button>
+        <button onclick="goToApp()">🏠 Go to Main App</button>
+    </div>
+
+    <div id="output"></div>
+
+    <script>
+        // Working token from the API
+        const workingToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJJZCI6IjkiLCJVc2VybmFtZSI6IndlbGNvbWVraW5nQG91dGxvb2suY29tIiwiRmlyc3ROYW1lIjoid2VsY29tZSIsIkxhc3ROYW1lIjoiTWFsYW1sZWxhIiwiRW1haWwiOiJ3ZWxjb21la2luZ0BvdXRsb29rLmNvbSIsImp0aSI6IjZhOWU1NjJhLTY1ZmYtNDBjMS05Yzk2LWU4MWIwYWEyYjIxZCIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IkFkbWluIiwiZXhwIjoxNzYxMDM2MzUxLCJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjYxOTU1IiwiYXVkIjoiaHR0cDovL2xvY2FsaG9zdDo0MjAwIn0.MzlPENhnuJ1vUd5vLpQ1SUCl4jIwuyUnqZUDgsYgEJY";
+
+        const userInfo = {
+            id: "9",
+            email: "welcomeking@outlook.com",
+            phoneNumber: "0645210558",
+            fullName: "welcome Malamlela",
+            role: ["Admin"],
+            token: workingToken
+        };
+
+        const loginResponse = {
+            id: 9,
+            token: workingToken,
+            email: "welcomeking@outlook.com",
+            firstName: "welcome",
+            lastName: "Malamlela",
+            role: ["Admin"]
+        };
+
+        function setWorkingToken() {
+            try {
+                // Set all token formats for compatibility
+                localStorage.setItem('authToken', workingToken);
+                localStorage.setItem('currentUser', JSON.stringify(userInfo));
+                localStorage.setItem('userInfo', JSON.stringify(loginResponse));
+
+                document.getElementById('output').innerHTML = `
+                    <div class="success">✅ Authentication tokens set successfully!</div>
+                    <p class="info">All three token formats have been configured:</p>
+                    <ul>
+                        <li><strong>authToken:</strong> For DatabaseService authentication</li>
+                        <li><strong>currentUser:</strong> For AuthTokenInterceptor</li>
+                        <li><strong>userInfo:</strong> For legacy compatibility</li>
+                    </ul>
+                    <p>You can now test the sales API calls in the Angular application.</p>
+                `;
+            } catch (error) {
+                document.getElementById('output').innerHTML = `
+                    <div style="color: red;">❌ Error setting tokens: ${error.message}</div>
+                `;
+            }
+        }
+
+        function checkCurrentToken() {
+            const authToken = localStorage.getItem('authToken');
+            const currentUser = localStorage.getItem('currentUser');
+            const userInfo = localStorage.getItem('userInfo');
+
+            let output = '<h3>📋 Current Token Status:</h3>';
+
+            if (authToken) {
+                output += `<div><strong>authToken:</strong> <span class="success">✅ Present</span></div>`;
+                output += `<div class="current-token">Token: ${authToken.substring(0, 50)}...</div>`;
+            } else {
+                output += `<div><strong>authToken:</strong> <span style="color: red;">❌ Missing</span></div>`;
+            }
+
+            if (currentUser) {
+                output += `<div><strong>currentUser:</strong> <span class="success">✅ Present</span></div>`;
+                try {
+                    const parsed = JSON.parse(currentUser);
+                    output += `<div>User: ${parsed.fullName} (${parsed.email})</div>`;
+                } catch (e) {
+                    output += `<div style="color: orange;">⚠️ Invalid JSON format</div>`;
+                }
+            } else {
+                output += `<div><strong>currentUser:</strong> <span style="color: red;">❌ Missing</span></div>`;
+            }
+
+            if (userInfo) {
+                output += `<div><strong>userInfo:</strong> <span class="success">✅ Present</span></div>`;
+            } else {
+                output += `<div><strong>userInfo:</strong> <span style="color: red;">❌ Missing</span></div>`;
+            }
+
+            document.getElementById('output').innerHTML = output;
+        }
+
+        function clearTokens() {
+            localStorage.removeItem('authToken');
+            localStorage.removeItem('currentUser');
+            localStorage.removeItem('userInfo');
+
+            document.getElementById('output').innerHTML = `
+                <div style="color: orange;">🗑️ All authentication tokens have been cleared.</div>
+                <p>You will need to log in again or set the working token to access authenticated features.</p>
+            `;
+        }
+
+        function goToApp() {
+            window.location.href = '/';
+        }
+
+        // Auto-check current status on page load
+        window.onload = function() {
+            checkCurrentToken();
+        };
+    </script>
+</body>
+</html>

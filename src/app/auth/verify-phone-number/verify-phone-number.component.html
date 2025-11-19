@@ -15,16 +15,11 @@
             <div class="p-2 mt-4">
 
                 <h4>Verify your Phone Number</h4>
-                <p class="mb-5">Please enter the 4 digit code sent to <span class="fw-bold">Phone Number</span></p>
-
-                <div class="mb-3">
-                    <input type="number" required="true" class="form-control" name="code" [(ngModel)]="user.code"
-                        placeholder="Enter OTP">
-                </div>
+                <p class="mb-5">Click the button below to confirm your phone number <span class="fw-bold">{{user.mobileNo}}</span></p>
 
                 <div class="mt-4">
                     <button class="btn btn-info btn-rounded w-100 waves-effect waves-light"
-                        type="submit">Confirm</button>
+                        type="submit">Verify Phone</button>
                 </div>
 
             </div>

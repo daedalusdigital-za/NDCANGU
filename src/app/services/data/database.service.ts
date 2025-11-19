@@ -3,6 +3,15 @@ import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http
 import { Observable, of, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 
+// Training Status Enum - Export for use in components
+export enum TrainingStatus {
+  Planned = 1,
+  Scheduled = 2,
+  InProgress = 3,
+  Completed = 4,
+  Cancelled = 5
+}
+
 /**
  * NDCANGU Medical Management API - Database Service
  *
@@ -82,66 +91,33 @@ interface Trainer {
   createdAt?: string;
   updatedAt?: string;
   createdBy?: string;
-  updatedBy?: string;
+  lastUpdatedBy?: string; // Align with standard naming convention
 }
 
+// TrainingSession Interface - Aligned with 9 Required Fields Specification
 interface TrainingSession {
-  id: number;
-  trainingName: string;
-  trainingType: string;
-  description?: string;
-  startDate: string; // ISO date string
-  endDate: string; // ISO date string
-  startTime: {
-    ticks: number;
-    days?: number;
-    hours?: number;
-    milliseconds?: number;
-    microseconds?: number;
-    nanoseconds?: number;
-    minutes?: number;
-    seconds?: number;
-    totalDays?: number;
-    totalHours?: number;
-    totalMilliseconds?: number;
-    totalMicroseconds?: number;
-    totalNanoseconds?: number;
-    totalMinutes?: number;
-    totalSeconds?: number;
-  };
-  endTime: {
-    ticks: number;
-    days?: number;
-    hours?: number;
-    milliseconds?: number;
-    microseconds?: number;
-    nanoseconds?: number;
-    minutes?: number;
-    seconds?: number;
-    totalDays?: number;
-    totalHours?: number;
-    totalMilliseconds?: number;
-    totalMicroseconds?: number;
-    totalNanoseconds?: number;
-    totalMinutes?: number;
-    totalSeconds?: number;
-  };
-  province: string;
-  hospital: string;
-  venue: string;
-  trainerId: number;
-  trainerName?: string; // Added field from API
-  numberOfParticipants: number;
-  targetAudience: string;
-  objectives?: string;
-  materials?: string;
-  status: number; // Numeric status as per schema
-  statusText?: string; // Added field from API
-  dateCreated?: string; // Added field from API
-  lastUpdated?: string; // Added field from API
-  createdByUserName?: string; // Added field from API
-  createdAt?: string;
-  updatedAt?: string;
+  id?: number; // Optional for new records
+  // Core Required Fields (9 fields)
+  trainingName: string;           // Field 1: Name/title of the training session
+  trainingType: string;           // Field 2: Type (e.g., "NDC Training workshop", "Virtual training")
+  trainingDate: string;           // Field 3: DateTime - Combined date and time when training occurs (ISO string)
+  provinceId: number;             // Field 4: Reference to Province where training takes place
+  venue: string;                  // Field 5: Physical or virtual location of the training
+  trainerId: number;              // Field 6: Reference to Trainer conducting the session
+  targetAudience: string;         // Field 7: Intended audience description
+  numberOfParticipants: number;   // Field 8: ⭐ NEW - Expected or actual number of attendees
+  status: TrainingStatus;         // Field 9: Current status (Planned/Scheduled/InProgress/Completed/Cancelled)
+
+  // Optional/Backward Compatibility Fields
+  description?: string;           // Optional description
+  objectives?: string;            // Optional training objectives
+  materials?: string;             // Optional required materials
+  province?: string;              // Display name for province (derived from provinceId)
+  trainerName?: string;           // Display name for trainer (derived from trainerId)
+  statusText?: string;            // Display text for status (derived from status enum)
+  createdAt?: string;             // Creation timestamp
+  updatedAt?: string;             // Last update timestamp
+  createdBy?: string;             // User who created the session
 }
 
 interface InventoryItem {
@@ -167,38 +143,53 @@ interface InventoryItem {
   updatedAt?: string;
 }
 
-interface Sale {
-  id: number;
+// SaleModel for POST/PUT requests - Simplified 10-field structure
+interface SaleModel {
+  id?: number; // Optional for POST, required for PUT
   saleNumber: string;
   saleDate: string; // ISO date string
-  province: string;
-  hospital: string;
-  customerContactName: string;
-  customerContactEmail?: string;
-  customerContactPhone?: string;
-  paymentMethod: number; // Numeric enum value
-  paymentStatus: number; // Numeric enum value
-  deliveryStatus: number; // Numeric enum value
-  deliveryDate?: string; // ISO date string
-  notes?: string;
-  salesPerson?: string;
-  discount: number;
-  invoiceNumber?: string;
-  saleItems: SaleItem[];
-  totalAmount?: number;
-  // Audit fields
-  createdByUserId?: number;
-  createdAt?: string; // ISO date string
-  updatedAt?: string; // ISO date string
-  updateByUserId?: number;
+  customerName: string;
+  customerPhone?: string; // Optional as per new schema
+  total: number; // Only total, no subtotal
+  notes?: string; // Optional
+  isDeleted?: boolean; // Soft delete flag
+  createdDate?: string; // When record was created
+  createdBy?: number; // ID of user who created
+  saleItems: SaleItemModel[];
 }
 
-interface SaleItem {
-  id: number;
-  productId: number;
-  productName: string;
+// SaleViewModel for GET responses - Simplified 10-field structure
+interface Sale {
+  id: number; // Primary Key
+  saleNumber: string; // Unique sale reference
+  saleDate: string; // Date when sale was made
+  customerName: string; // Customer name
+  customerPhone?: string; // Customer phone (optional)
+  total: number; // Final total amount
+  notes?: string; // Additional notes (optional)
+  isDeleted: boolean; // Soft delete flag
+  createdDate: string; // When record was created
+  createdBy: number; // User who created the sale
+  saleItems: SaleItem[];
+}
+
+// SaleItemModel for POST/PUT requests
+interface SaleItemModel {
+  id?: number; // Optional for new items
+  inventoryItemId: number;
   quantity: number;
   unitPrice: number;
+}
+
+// SaleItem for GET responses
+interface SaleItem {
+  id: number;
+  saleId: number;
+  inventoryItemId: number;
+  inventoryItemName: string;
+  quantity: number;
+  unitPrice: number;
+  totalPrice: number;
 }
 
 interface User {
@@ -272,16 +263,27 @@ export class DatabaseService {
         map(response => {
           if (response.token) {
             this.authToken = response.token;
+
+            // Store in both formats for compatibility
             localStorage.setItem('authToken', response.token);
             localStorage.setItem('userInfo', JSON.stringify(response));
+
+            // Store in currentUser format used by the rest of the application
+            const currentUser = {
+              id: response.id?.toString() || '0',
+              email: response.email || email,
+              phoneNumber: '', // LoginResponse doesn't have phoneNumber field
+              fullName: `${response.firstName || ''} ${response.lastName || ''}`.trim(),
+              role: response.role || [],
+              token: response.token
+            };
+            localStorage.setItem('currentUser', JSON.stringify(currentUser));
           }
           return response;
         }),
         catchError(this.handleError)
       );
-  }
-
-  /**
+  }  /**
    * User registration
    * POST /api/Auth/register
    */
@@ -315,13 +317,25 @@ export class DatabaseService {
     this.authToken = null;
     localStorage.removeItem('authToken');
     localStorage.removeItem('userInfo');
+    localStorage.removeItem('currentUser');
   }
 
   /**
    * Check if user is authenticated
    */
   isAuthenticated(): boolean {
+    // Reload token in case it was updated by another service
+    if (!this.authToken) {
+      this.loadAuthToken();
+    }
     return !!this.authToken;
+  }
+
+  /**
+   * Refresh authentication token from localStorage
+   */
+  refreshAuthToken(): void {
+    this.loadAuthToken();
   }
 
   /**
@@ -517,7 +531,7 @@ export class DatabaseService {
   getTrainingSessionsByDateRange(startDate: string, endDate: string): Observable<TrainingSession[]> {
     return this.http.get<TrainingSession[]>(`${this.API_URL}Training/GetByDateRange?startDate=${startDate}&endDate=${endDate}`, { headers: this.getAuthHeaders() })
       .pipe(
-        catchError(() => of(this.getFallbackTrainingSessions().filter(t => t.startDate >= startDate && t.endDate <= endDate)))
+        catchError(() => of(this.getFallbackTrainingSessions().filter(t => t.trainingDate >= startDate && t.trainingDate <= endDate)))
       );
   }
 
@@ -680,8 +694,8 @@ export class DatabaseService {
    * Add new sale
    * POST /api/Sales/Add
    */
-  addSale(sale: any): Observable<any> {
-    return this.http.post<any>(`${this.API_URL}Sales/Add`, sale, { headers: this.getAuthHeaders() })
+  addSale(sale: SaleModel): Observable<Sale> {
+    return this.http.post<Sale>(`${this.API_URL}Sales/Add`, sale, { headers: this.getAuthHeaders() })
       .pipe(catchError(this.handleError));
   }
 
@@ -720,12 +734,13 @@ export class DatabaseService {
 
   /**
    * Get sales by province
+   * Note: Province filtering removed in simplified structure
    * GET /api/Sales/GetByProvince
    */
-  getSalesByProvince(province: string): Observable<Sale[]> {
-    return this.http.get<Sale[]>(`${this.API_URL}Sales/GetByProvince?province=${province}`, { headers: this.getAuthHeaders() })
+  getSalesByProvince(provinceId: number): Observable<Sale[]> {
+    return this.http.get<Sale[]>(`${this.API_URL}Sales/GetByProvince?provinceId=${provinceId}`, { headers: this.getAuthHeaders() })
       .pipe(
-        catchError(() => of(this.getFallbackSales().filter(s => s.province === province)))
+        catchError(() => of(this.getFallbackSales())) // Return all sales since we don't have province filtering
       );
   }
 
@@ -780,17 +795,21 @@ export class DatabaseService {
    * Create new sale
    * POST /api/Sales/Add
    */
-  createSale(sale: Partial<Sale>): Observable<Sale> {
+  createSale(sale: SaleModel): Observable<Sale> {
     return this.http.post<Sale>(`${this.API_URL}Sales/Add`, sale, { headers: this.getAuthHeaders() })
       .pipe(catchError(this.handleError));
   }
 
   /**
    * Update sale
-   * PATCH /api/Sales/Update
+   * PUT /api/Sales/Update
    */
-  updateSale(sale: Sale): Observable<Sale> {
-    return this.http.patch<Sale>(`${this.API_URL}Sales/Update`, sale, { headers: this.getAuthHeaders() })
+  updateSale(sale: SaleModel): Observable<Sale> {
+    // Ensure id is present for PUT operation
+    if (!sale.id) {
+      return throwError(() => new Error('Sale ID is required for update operation'));
+    }
+    return this.http.put<Sale>(`${this.API_URL}Sales/Update`, sale, { headers: this.getAuthHeaders() })
       .pipe(catchError(this.handleError));
   }
 
@@ -1002,7 +1021,20 @@ export class DatabaseService {
    * Load authentication token from localStorage
    */
   private loadAuthToken(): void {
-    this.authToken = localStorage.getItem('authToken');
+    // Use the same authentication storage as the rest of the application
+    const currentUser = localStorage.getItem('currentUser');
+    if (currentUser) {
+      try {
+        const user = JSON.parse(currentUser);
+        this.authToken = user.token || null;
+      } catch (error) {
+        console.error('Error parsing currentUser from localStorage:', error);
+        this.authToken = null;
+      }
+    } else {
+      // Fallback to the old authToken storage for backward compatibility
+      this.authToken = localStorage.getItem('authToken');
+    }
   }
 
   /**
@@ -1216,123 +1248,75 @@ export class DatabaseService {
     return [
       {
         id: 1,
+        // 9 Required Fields
         trainingName: 'Diabetes Management Excellence Program',
         trainingType: 'Clinical Skills',
-        description: 'Advanced training on diabetes care protocols and patient management',
-        startDate: '2025-01-15T00:00:00.000Z',
-        endDate: '2025-01-17T00:00:00.000Z',
-        startTime: {
-          ticks: 324000000000, // 09:00:00 in ticks
-          hours: 9,
-          minutes: 0,
-          seconds: 0,
-          totalHours: 9,
-          totalMinutes: 540,
-          totalSeconds: 32400
-        },
-        endTime: {
-          ticks: 576000000000, // 16:00:00 in ticks
-          hours: 16,
-          minutes: 0,
-          seconds: 0,
-          totalHours: 16,
-          totalMinutes: 960,
-          totalSeconds: 57600
-        },
-        province: 'KwaZulu-Natal',
-        hospital: 'Inkosi Albert Luthuli Central Hospital',
-        venue: 'Medical Training Center',
+        trainingDate: '2025-01-15T09:00:00.000Z', // Combined date and time
+        provinceId: 2, // KwaZulu-Natal
+        venue: 'Medical Training Center - Inkosi Albert Luthuli Central Hospital',
         trainerId: 1,
-        trainerName: 'DYLAN GOVENDER',
-        numberOfParticipants: 42,
         targetAudience: 'Nurses and junior doctors',
+        numberOfParticipants: 42,
+        status: TrainingStatus.Scheduled,
+
+        // Optional/Display Fields
+        description: 'Advanced training on diabetes care protocols and patient management',
         objectives: 'Improve diabetes care quality and patient outcomes',
         materials: 'Glucometers, testing strips, educational materials',
-        status: 2, // Scheduled
+        province: 'KwaZulu-Natal',
+        trainerName: 'DYLAN GOVENDER',
         statusText: 'Scheduled',
-        dateCreated: '2024-11-01T08:00:00.000Z',
-        lastUpdated: '2024-11-12T10:15:00.000Z',
-        createdByUserName: 'Admin User'
+        createdAt: '2024-11-01T08:00:00.000Z',
+        updatedAt: '2024-11-12T10:15:00.000Z',
+        createdBy: 'Admin User'
       },
       {
         id: 2,
+        // 9 Required Fields
         trainingName: 'Hypertension Care Masterclass',
         trainingType: 'Preventive Care',
-        description: 'Advanced training on blood pressure management and cardiovascular risk reduction',
-        startDate: '2025-01-20T00:00:00.000Z',
-        endDate: '2025-01-21T00:00:00.000Z',
-        startTime: {
-          ticks: 306000000000, // 08:30:00 in ticks
-          hours: 8,
-          minutes: 30,
-          seconds: 0,
-          totalHours: 8.5,
-          totalMinutes: 510,
-          totalSeconds: 30600
-        },
-        endTime: {
-          ticks: 612000000000, // 17:00:00 in ticks
-          hours: 17,
-          minutes: 0,
-          seconds: 0,
-          totalHours: 17,
-          totalMinutes: 1020,
-          totalSeconds: 61200
-        },
-        province: 'Gauteng',
-        hospital: 'Chris Hani Baragwanath Academic Hospital',
-        venue: 'Medical Education Centre',
+        trainingDate: '2025-01-20T08:30:00.000Z', // Combined date and time
+        provinceId: 1, // Gauteng
+        venue: 'Medical Education Centre - Chris Hani Baragwanath Academic Hospital',
         trainerId: 2,
-        trainerName: 'LINDANI',
-        numberOfParticipants: 55,
         targetAudience: 'Community health workers and nurses',
+        numberOfParticipants: 55,
+        status: TrainingStatus.Completed,
+
+        // Optional/Display Fields
+        description: 'Advanced training on blood pressure management and cardiovascular risk reduction',
         objectives: 'Standardize hypertension screening across facilities',
         materials: 'BP monitors, stethoscopes, training mannequins',
-        status: 1, // Completed
+        province: 'Gauteng',
+        trainerName: 'LINDANI',
         statusText: 'Completed',
-        dateCreated: '2024-10-15T09:00:00.000Z',
-        lastUpdated: '2024-11-10T17:30:00.000Z',
-        createdByUserName: 'Training Coordinator'
+        createdAt: '2024-10-15T09:00:00.000Z',
+        updatedAt: '2024-11-10T17:30:00.000Z',
+        createdBy: 'Training Coordinator'
       },
       {
         id: 3,
+        // 9 Required Fields
         trainingName: 'NCD Management Innovation Summit',
         trainingType: 'Continuing Education',
-        description: 'Latest evidence-based approaches to non-communicable disease management',
-        startDate: '2025-02-05T00:00:00.000Z',
-        endDate: '2025-02-06T00:00:00.000Z',
-        startTime: {
-          ticks: 324000000000, // 09:00:00 in ticks
-          hours: 9,
-          minutes: 0,
-          seconds: 0,
-          totalHours: 9,
-          totalMinutes: 540,
-          totalSeconds: 32400
-        },
-        endTime: {
-          ticks: 558000000000, // 15:30:00 in ticks
-          hours: 15,
-          minutes: 30,
-          seconds: 0,
-          totalHours: 15.5,
-          totalMinutes: 930,
-          totalSeconds: 55800
-        },
-        province: 'KwaZulu-Natal',
-        hospital: 'Inkosi Albert Luthuli Central Hospital',
-        venue: 'Auditorium B',
+        trainingDate: '2025-02-05T09:00:00.000Z', // Combined date and time
+        provinceId: 2, // KwaZulu-Natal
+        venue: 'Auditorium B - Inkosi Albert Luthuli Central Hospital',
         trainerId: 5,
-        trainerName: 'ZIBA MTHETHWA',
-        numberOfParticipants: 38,
         targetAudience: 'Senior clinical staff',
+        numberOfParticipants: 38,
+        status: TrainingStatus.Completed,
+
+        // Optional/Display Fields
+        description: 'Latest evidence-based approaches to non-communicable disease management',
         objectives: 'Update knowledge on latest NCD treatment protocols',
         materials: 'Clinical guidelines, case studies, assessment tools',
-        status: 4, // Completed
+        province: 'KwaZulu-Natal',
+        trainerName: 'ZIBA MTHETHWA',
         statusText: 'Completed',
-        dateCreated: '2024-09-10T11:20:00.000Z',
-        lastUpdated: '2024-10-26T17:00:00.000Z',
-        createdByUserName: 'Head of Training'
+        createdAt: '2024-09-10T11:20:00.000Z',
+        updatedAt: '2024-10-26T17:00:00.000Z',
+        createdBy: 'Head of Training'
       }
     ];
   }
@@ -1396,52 +1380,7 @@ export class DatabaseService {
   }
 
   private getFallbackSales(): Sale[] {
-    return [
-      {
-        id: 1,
-        saleNumber: 'SALE-2024-001',
-        saleDate: '2024-10-01T00:00:00.000Z',
-        province: 'Western Cape',
-        hospital: 'Tygerberg Hospital',
-        customerContactName: 'Dr. Susan Williams',
-        customerContactEmail: 'susan.williams@tygerberg.gov.za',
-        customerContactPhone: '+27-21-938-5555',
-        paymentMethod: 3, // Bank Transfer
-        paymentStatus: 2, // Paid
-        deliveryStatus: 3, // Delivered
-        deliveryDate: '2024-10-03T00:00:00.000Z',
-        notes: 'Urgent delivery for diabetes clinic',
-        salesPerson: 'John Marketing',
-        discount: 5.00,
-        invoiceNumber: 'INV-2024-001',
-        saleItems: [
-          { id: 1, productId: 1, productName: 'Glucose Test Strips', quantity: 10, unitPrice: 45.50 },
-          { id: 2, productId: 2, productName: 'Blood Pressure Monitor', quantity: 2, unitPrice: 320.00 }
-        ],
-        totalAmount: 1095.00
-      },
-      {
-        id: 2,
-        saleNumber: 'SALE-2024-002',
-        saleDate: '2024-10-02T00:00:00.000Z',
-        province: 'Gauteng',
-        hospital: 'Charlotte Maxeke Hospital',
-        customerContactName: 'Sr. Patricia Mthembu',
-        customerContactEmail: 'patricia.mthembu@cmjah.ac.za',
-        customerContactPhone: '+27-11-488-5000',
-        paymentMethod: 2, // Card
-        paymentStatus: 2, // Paid
-        deliveryStatus: 2, // In Transit
-        deliveryDate: '2024-10-05T00:00:00.000Z',
-        salesPerson: 'Sarah Sales',
-        discount: 0.00,
-        invoiceNumber: 'INV-2024-002',
-        saleItems: [
-          { id: 3, productId: 3, productName: 'Digital Thermometer', quantity: 20, unitPrice: 12.75 }
-        ],
-        totalAmount: 255.00
-      }
-    ];
+    return [];
   }
 
   private getFallbackDistrictsByProvinceName(provinceName: string): string[] {

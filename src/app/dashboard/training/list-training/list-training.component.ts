@@ -54,14 +54,14 @@ export class ListTrainingComponent implements OnInit {
 
   applyFilters(): void {
     this.filteredSessions = this.trainingSessions.filter(session => {
-      const matchesSearch = !this.searchTerm || 
+      const matchesSearch = !this.searchTerm ||
         session.trainingName.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-        session.province.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-        session.hospital.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-        (session.trainerName && session.trainerName.toLowerCase().includes(this.searchTerm.toLowerCase()));
-      
+        (session.provinceName && session.provinceName.toLowerCase().includes(this.searchTerm.toLowerCase())) ||
+        (session.venue && session.venue.toLowerCase().includes(this.searchTerm.toLowerCase())) ||
+        (session.trainer?.name && session.trainer.name.toLowerCase().includes(this.searchTerm.toLowerCase()));
+
       const matchesStatus = !this.filterStatus || session.status.toString() === this.filterStatus;
-      const matchesProvince = !this.filterProvince || session.province === this.filterProvince;
+      const matchesProvince = !this.filterProvince || session.provinceName === this.filterProvince;
 
       return matchesSearch && matchesStatus && matchesProvince;
     });
@@ -82,15 +82,8 @@ export class ListTrainingComponent implements OnInit {
     });
   }
 
-  formatTime(timeObj: any): string {
-    if (!timeObj || !timeObj.hours && timeObj.hours !== 0) return 'N/A';
-    const hours = timeObj.hours.toString().padStart(2, '0');
-    const minutes = (timeObj.minutes || 0).toString().padStart(2, '0');
-    return `${hours}:${minutes}`;
-  }
-
   getUniqueProvinces(): string[] {
-    const provinces = this.trainingSessions.map(session => session.province);
+    const provinces = this.trainingSessions.map(session => session.provinceName);
     return [...new Set(provinces)].filter(province => province && province.trim() !== '');
   }
 

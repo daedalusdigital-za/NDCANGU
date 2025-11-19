@@ -25,11 +25,6 @@ export class LoginUserComponent implements OnInit {
   isLoading: boolean = false;
   isProduction: boolean = environment.production;
 
-  // Forgot Password Modal
-  showForgotPasswordModal: boolean = false;
-  forgotPasswordEmail: string = '';
-  isForgotPasswordLoading: boolean = false;
-
   // Contact Admin Modal
   showContactAdminModal: boolean = false;
 
@@ -116,34 +111,6 @@ export class LoginUserComponent implements OnInit {
       contentStyle: {"max-height": "500px", "overflow": "auto"},
       baseZIndex: 10000,
     });
-  }
-
-  // Forgot Password Modal Methods
-  openForgotPasswordModal(): void {
-    this.showForgotPasswordModal = true;
-    this.forgotPasswordEmail = this.user.email || '';
-  }
-
-  closeForgotPasswordModal(): void {
-    this.showForgotPasswordModal = false;
-    this.forgotPasswordEmail = '';
-    this.isForgotPasswordLoading = false;
-  }
-
-  submitForgotPassword(): void {
-    if (!this.forgotPasswordEmail || !this.isValidEmail(this.forgotPasswordEmail)) {
-      this.errorHandling.showWarning('Please enter a valid email address');
-      return;
-    }
-
-    this.isForgotPasswordLoading = true;
-
-    // Simulate API call - replace with actual service call
-    setTimeout(() => {
-      this.isForgotPasswordLoading = false;
-      this.errorHandling.showSuccess('Password reset instructions have been sent to your email address');
-      this.closeForgotPasswordModal();
-    }, 2000);
   }
 
   // Contact Admin Modal Methods

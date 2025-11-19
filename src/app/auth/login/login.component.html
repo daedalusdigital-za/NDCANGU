@@ -55,7 +55,7 @@
         <!-- Forgot Password -->
         <div class="form-options">
             <div class="forgot-password">
-                <a (click)="openForgotPasswordModal()" class="forgot-link">Forgot Password?</a>
+
             </div>
         </div>
 
@@ -170,63 +170,6 @@
                 (click)="closeContactAdminModal()">
                 <i class="fas fa-check"></i>
                 Got It
-            </button>
-        </div>
-    </div>
-</div>
-
-<!-- Forgot Password Modal -->
-<div class="modal-overlay" *ngIf="showForgotPasswordModal" (click)="closeForgotPasswordModal()">
-    <div class="forgot-password-modal" (click)="$event.stopPropagation()">
-        <div class="modal-header">
-            <h3 class="modal-title">Reset Password</h3>
-            <button type="button" class="modal-close" (click)="closeForgotPasswordModal()">
-                <i class="fas fa-times"></i>
-            </button>
-        </div>
-
-        <div class="modal-body">
-            <p class="modal-description">
-                Enter your email address and we'll send you instructions to reset your password.
-            </p>
-
-            <div class="form-group">
-                <div class="input-wrapper">
-                    <div class="input-icon">
-                        <i class="fas fa-envelope"></i>
-                    </div>
-                    <input
-                        type="email"
-                        class="form-control modern-input"
-                        [(ngModel)]="forgotPasswordEmail"
-                        placeholder="Enter your email address"
-                        [class.has-value]="forgotPasswordEmail">
-                    <label class="floating-label">Email Address</label>
-                </div>
-            </div>
-        </div>
-
-        <div class="modal-footer">
-            <button
-                type="button"
-                class="btn btn-secondary"
-                (click)="closeForgotPasswordModal()"
-                [disabled]="isForgotPasswordLoading">
-                Cancel
-            </button>
-            <button
-                type="button"
-                class="btn modern-login-btn"
-                (click)="submitForgotPassword()"
-                [disabled]="isForgotPasswordLoading">
-                <span *ngIf="!isForgotPasswordLoading">
-                    <i class="fas fa-paper-plane"></i>
-                    Send Reset Link
-                </span>
-                <span *ngIf="isForgotPasswordLoading">
-                    <i class="fas fa-spinner fa-spin"></i>
-                    Sending...
-                </span>
             </button>
         </div>
     </div>
