@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth/auth.service';
 import { GlobalService } from '../../services/global/global.service';
 import { ErrorHandlingService } from '../../services/error-handling/error-handling.service';
-import { TermsComponent } from 'src/app/auth/terms/terms.component';
+
 import { PrivacyPolicyComponent } from 'src/app/auth/privacy-policy/privacy-policy.component';
 import { DialogService } from 'primeng/dynamicdialog';
 import { User } from '../../shared/interfaces/common.interfaces';
@@ -95,14 +95,7 @@ export class LoginUserComponent implements OnInit {
     return emailRegex.test(email);
   }
 
-  openTermsModal(): void {
-    this.dialogService.open(TermsComponent, {
-      header: 'Terms of Use',
-      width: '70%',
-      contentStyle: {"max-height": "500px", "overflow": "auto"},
-      baseZIndex: 10000,
-    });
-  }
+
 
   openPrivacyPolicyModal(): void {
     this.dialogService.open(PrivacyPolicyComponent, {

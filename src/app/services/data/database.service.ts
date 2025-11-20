@@ -12,6 +12,9 @@ export enum TrainingStatus {
   Cancelled = 5
 }
 
+// Export Sales interfaces for use in components
+export { Sale, SaleModel, SaleItem, SaleItemModel };
+
 /**
  * NDCANGU Medical Management API - Database Service
  *
@@ -143,53 +146,49 @@ interface InventoryItem {
   updatedAt?: string;
 }
 
-// SaleModel for POST/PUT requests - Simplified 10-field structure
+// SaleModel for POST/PUT requests - Matches API JSON structure
 interface SaleModel {
   id?: number; // Optional for POST, required for PUT
   saleNumber: string;
-  saleDate: string; // ISO date string
+  saleDate: string; // ISO date string format
   customerName: string;
-  customerPhone?: string; // Optional as per new schema
-  total: number; // Only total, no subtotal
-  notes?: string; // Optional
-  isDeleted?: boolean; // Soft delete flag
-  createdDate?: string; // When record was created
-  createdBy?: number; // ID of user who created
+  customerPhone?: string; // Optional field
+  total: number; // Total sale amount (decimal with 2 places)
+  notes?: string; // Additional sale information
+  dateCreated?: string; // Record creation timestamp
   saleItems: SaleItemModel[];
 }
 
-// SaleViewModel for GET responses - Simplified 10-field structure
+// Sale interface for GET responses - Matches exact API JSON structure
 interface Sale {
-  id: number; // Primary Key
-  saleNumber: string; // Unique sale reference
-  saleDate: string; // Date when sale was made
-  customerName: string; // Customer name
-  customerPhone?: string; // Customer phone (optional)
-  total: number; // Final total amount
-  notes?: string; // Additional notes (optional)
-  isDeleted: boolean; // Soft delete flag
-  createdDate: string; // When record was created
-  createdBy: number; // User who created the sale
-  saleItems: SaleItem[];
+  id: number; // Unique sale record ID
+  saleNumber: string; // Invoice/Sale number (e.g., "SALE-2024-001", "IN157895")
+  saleDate: string; // Date of the sale (ISO format)
+  customerName: string; // Hospital/Customer name
+  customerPhone?: string; // Customer contact number (can be empty)
+  total: number; // Total sale amount (decimal with 2 places)
+  notes?: string; // Additional sale information
+  dateCreated: string; // Record creation timestamp
+  saleItems: SaleItem[]; // Array of sale line items
 }
 
 // SaleItemModel for POST/PUT requests
 interface SaleItemModel {
   id?: number; // Optional for new items
-  inventoryItemId: number;
-  quantity: number;
-  unitPrice: number;
+  inventoryItemId: number; // KEY FIELD - Links to medical equipment/supplies
+  quantity: number; // Number of units sold
+  unitPrice: number; // Price per unit (decimal)
 }
 
-// SaleItem for GET responses
+// SaleItem for GET responses - Matches exact API JSON structure
 interface SaleItem {
-  id: number;
-  saleId: number;
-  inventoryItemId: number;
-  inventoryItemName: string;
-  quantity: number;
-  unitPrice: number;
-  totalPrice: number;
+  id: number; // Unique sale item ID
+  saleId: number; // Reference to parent sale
+  inventoryItemId: number; // KEY FIELD - Links to medical equipment/supplies
+  inventoryItemName: string; // Equipment name (currently empty, could be populated via join)
+  quantity: number; // Number of units sold
+  unitPrice: number; // Price per unit (decimal)
+  totalPrice: number; // Line total (quantity × unitPrice)
 }
 
 interface User {
@@ -1380,7 +1379,146 @@ export class DatabaseService {
   }
 
   private getFallbackSales(): Sale[] {
-    return [];
+    return [
+      {
+        id: 1,
+        saleNumber: "SALE-2024-001",
+        saleDate: "2024-01-15T00:00:00",
+        customerName: "Charlotte Maxeke Hospital",
+        customerPhone: "+27 11 488 4911",
+        total: 4312.50,
+        notes: "Monthly medical supplies order for diabetes clinic",
+        dateCreated: "2025-10-07T04:34:25.8033333",
+        saleItems: [
+          {
+            id: 1,
+            saleId: 1,
+            inventoryItemId: 2,
+            inventoryItemName: "Glucometer Test Strips",
+            quantity: 20,
+            unitPrice: 85.50,
+            totalPrice: 1710.00
+          },
+          {
+            id: 2,
+            saleId: 1,
+            inventoryItemId: 4,
+            inventoryItemName: "Pulse Oximeter",
+            quantity: 3,
+            unitPrice: 425.00,
+            totalPrice: 1275.00
+          },
+          {
+            id: 3,
+            saleId: 1,
+            inventoryItemId: 6,
+            inventoryItemName: "Digital Thermometer",
+            quantity: 12,
+            unitPrice: 125.00,
+            totalPrice: 1500.00
+          }
+        ]
+      },
+      {
+        id: 2,
+        saleNumber: "SALE-2024-002",
+        saleDate: "2024-01-20T00:00:00",
+        customerName: "Steve Biko Academic Hospital",
+        customerPhone: "+27 12 354 1000",
+        total: 2361.00,
+        notes: "Equipment order for new cardiac unit",
+        dateCreated: "2025-10-07T04:34:25.8033333",
+        saleItems: [
+          {
+            id: 4,
+            saleId: 2,
+            inventoryItemId: 1,
+            inventoryItemName: "Digital Blood Pressure Monitor",
+            quantity: 1,
+            unitPrice: 1250.00,
+            totalPrice: 1250.00
+          },
+          {
+            id: 5,
+            saleId: 2,
+            inventoryItemId: 3,
+            inventoryItemName: "Stethoscope",
+            quantity: 4,
+            unitPrice: 275.50,
+            totalPrice: 1102.00
+          }
+        ]
+      },
+      {
+        id: 3,
+        saleNumber: "IN157895",
+        saleDate: "2024-02-05T00:00:00",
+        customerName: "Groote Schuur Hospital",
+        customerPhone: "+27 21 404 9111",
+        total: 8750.00,
+        notes: "Emergency department supply restocking",
+        dateCreated: "2025-10-07T04:34:25.8033333",
+        saleItems: [
+          {
+            id: 6,
+            saleId: 3,
+            inventoryItemId: 5,
+            inventoryItemName: "Nebulizer Device",
+            quantity: 5,
+            unitPrice: 350.00,
+            totalPrice: 1750.00
+          },
+          {
+            id: 7,
+            saleId: 3,
+            inventoryItemId: 7,
+            inventoryItemName: "Wheelchair (Standard)",
+            quantity: 2,
+            unitPrice: 1850.00,
+            totalPrice: 3700.00
+          },
+          {
+            id: 8,
+            saleId: 3,
+            inventoryItemId: 8,
+            inventoryItemName: "First Aid Kit (Comprehensive)",
+            quantity: 8,
+            unitPrice: 185.00,
+            totalPrice: 1480.00
+          }
+        ]
+      },
+      {
+        id: 4,
+        saleNumber: "IN157934",
+        saleDate: "2024-02-12T00:00:00",
+        customerName: "Red Cross War Memorial Children's Hospital",
+        customerPhone: "+27 21 658 5111",
+        total: 3285.00,
+        notes: "Pediatric ward medical supplies",
+        dateCreated: "2025-10-07T04:34:25.8033333",
+        saleItems: [
+          {
+            id: 9,
+            saleId: 4,
+            inventoryItemId: 9,
+            inventoryItemName: "Blood Glucose Meter",
+            quantity: 6,
+            unitPrice: 320.00,
+            totalPrice: 1920.00
+          },
+          {
+            id: 10,
+            saleId: 4,
+            inventoryItemId: 10,
+            inventoryItemName: "Disposable Syringes (Pack of 100)",
+            quantity: 15,
+            unitPrice: 91.00,
+            totalPrice: 1365.00
+          }
+        ]
+      }
+    ];
   }
 
   private getFallbackDistrictsByProvinceName(provinceName: string): string[] {

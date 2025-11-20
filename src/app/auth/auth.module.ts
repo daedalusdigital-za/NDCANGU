@@ -7,7 +7,7 @@ import { AuthComponent } from './auth.component';
 import { FormsModule } from '@angular/forms';
 import { LockUserComponent } from '../components/lock-user/lock-user.component';
 import { VerifyPhoneNumberComponent } from './verify-phone-number/verify-phone-number.component';
-import { TermsComponent } from './terms/terms.component';
+
 import { PrivacyPolicyComponent } from './privacy-policy/privacy-policy.component';
 
 @NgModule({
@@ -16,7 +16,7 @@ import { PrivacyPolicyComponent } from './privacy-policy/privacy-policy.componen
     LockUserComponent,
     AuthComponent,
     VerifyPhoneNumberComponent,
-    TermsComponent,
+
     PrivacyPolicyComponent
   ],
   imports: [

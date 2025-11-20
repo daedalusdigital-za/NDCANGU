@@ -5,7 +5,6 @@ import { LockUserComponent } from './components/lock-user/lock-user.component';
 import { AuthGuard } from './shared/guards/auth.guard';
 import { ProfileComponent } from './components/profile/profile.component';
 import { NotFoundComponent } from './components/not-found/not-found.component';
-import { TermsComponent } from './auth/terms/terms.component';
 
 const routes: Routes = [
   {
@@ -27,22 +26,19 @@ const routes: Routes = [
     path: 'profile',
     component: ProfileComponent
   },
-  {
-    path: 'terms',
-    component: TermsComponent
-  },
+
   { path: '404',
-   component: NotFoundComponent 
+   component: NotFoundComponent
   },
-  
+
   {
     path: '', redirectTo: 'auth', pathMatch: 'full'
   },
   { path: '**',
    redirectTo: '/404'
   } ,
-  
-  
+
+
 ];
 
 @NgModule({

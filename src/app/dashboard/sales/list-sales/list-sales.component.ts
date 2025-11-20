@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { OrderDataService, OrderRecord, SalesRecord } from '../../../services/order-data.service';
-import { DatabaseService } from '../../../services/data/database.service';
+import { DatabaseService, Sale } from '../../../services/data/database.service';
 import { ToastrService } from 'ngx-toastr';
 
 @Component({
@@ -13,8 +13,8 @@ export class ListSalesComponent implements OnInit {
   // Simplified data support - work directly with Sale interface
   orders: OrderRecord[] = [];
   filteredOrders: OrderRecord[] = [];
-  sales: any[] = []; // Simplified sales using new interface
-  filteredSales: any[] = []; // For template compatibility
+  sales: Sale[] = []; // Updated to use proper Sale interface
+  filteredSales: Sale[] = []; // For template compatibility
 
   // Maintain backwards compatibility
   salesRecords: SalesRecord[] = [];
@@ -28,7 +28,7 @@ export class ListSalesComponent implements OnInit {
 
   // Edit modal state
   showEditModal = false;
-  selectedSaleForEdit: any = null;
+  selectedSaleForEdit: Sale | null = null;
 
   // Filter properties for orders
   searchTerm = '';
@@ -48,6 +48,20 @@ export class ListSalesComponent implements OnInit {
   customerOptions: string[] = ['All'];
   institutionOptions: string[] = ['All'];
   productTypeOptions: string[] = ['All'];
+
+  // 📋 Complete Inventory Reference - Medical Equipment Lookup
+  private inventoryLookup: { [key: number]: { name: string; price: number } } = {
+    1: { name: 'Digital Blood Pressure Monitor', price: 1250.00 },
+    2: { name: 'Glucometer Test Strips', price: 85.50 },
+    3: { name: 'Disposable Lancets', price: 42.75 },
+    4: { name: 'Weighing Scale - Digital', price: 2150.00 },
+    5: { name: 'Stethoscope - Cardiology', price: 3200.00 },
+    6: { name: 'Cholesterol Test Kit', price: 125.00 },
+    7: { name: 'Blood Pressure Cuffs - Adult', price: 95.00 },
+    8: { name: 'HbA1c Test Cartridges', price: 850.00 },
+    9: { name: 'Pulse Oximeter', price: 320.00 },
+    10: { name: 'ECG Electrodes', price: 28.50 }
+  };
 
   constructor(
     private orderDataService: OrderDataService,
@@ -273,36 +287,35 @@ export class ListSalesComponent implements OnInit {
 
   editOrder(order: OrderRecord): void {
     console.log('Editing order:', order);
-    this.selectedSaleForEdit = order;
+    // TODO: Convert OrderRecord to Sale format for editing
     this.showEditModal = true;
   }
 
-  editSale(sale: SalesRecord): void {
+  editSale(sale: Sale): void {
     console.log('Editing sale:', sale);
     this.selectedSaleForEdit = sale;
     this.showEditModal = true;
   }
 
-  deleteSale(sale: SalesRecord): void {
+  deleteSale(sale: Sale): void {
     if (confirm('Are you sure you want to delete this sale record?')) {
       console.log('Deleting sale:', sale);
-      // TODO: Implement delete functionality
-      // this.databaseService.deleteSale(sale.id).subscribe({
-      //   next: (response) => {
-      //     this.toastr.success('Sale deleted successfully');
-      //     this.loadData();
-      //   },
-      //   error: (error) => {
-      //     console.error('Error deleting sale:', error);
-      //     this.toastr.error('Failed to delete sale');
-      //   }
-      // });
+      this.databaseService.deleteSale(sale.id).subscribe({
+        next: () => {
+          this.toastr.success('Sale deleted successfully');
+          this.loadSalesRecords();
+        },
+        error: (error) => {
+          console.error('Error deleting sale:', error);
+          this.toastr.error('Failed to delete sale');
+        }
+      });
     }
   }
 
-  printSalesRecord(sale: SalesRecord): void {
+  printSalesRecord(sale: Sale): void {
     console.log('Printing sales record:', sale);
-    // TODO: Implement print functionality
+    // TODO: Implement proper print functionality with sale items
     window.print(); // Basic print for now
   }
 
@@ -401,14 +414,14 @@ export class ListSalesComponent implements OnInit {
   /**
    * Convert Sale API format to OrderRecord display format
    */
-  private convertSaleToOrder(sale: any): OrderRecord {
+  private convertSaleToOrder(sale: Sale): OrderRecord {
     const firstItem = sale.saleItems && sale.saleItems.length > 0 ? sale.saleItems[0] : null;
 
     return {
       orderNumber: sale.saleNumber || '',
       orderDate: this.formatDateForDisplay(sale.saleDate),
       customerName: sale.customerName || '',
-      province: sale.provinceName || '',
+      province: 'N/A', // Province not available in Sale structure
       poNumber: sale.saleNumber || '', // Use sale number as PO number
       itemDescription: firstItem?.inventoryItemName || '',
       qtyBackOrder: firstItem?.quantity || 0,
@@ -421,12 +434,12 @@ export class ListSalesComponent implements OnInit {
   /**
    * Convert Sale API format to SalesRecord display format
    */
-  private convertSaleToSalesRecord(sale: any): SalesRecord {
+  private convertSaleToSalesRecord(sale: Sale): SalesRecord {
     const firstItem = sale.saleItems && sale.saleItems.length > 0 ? sale.saleItems[0] : null;
 
     return {
       institution: sale.customerName || '',
-      province: sale.provinceName || '',
+      province: 'N/A', // Province not available in Sale structure
       itemDescription: firstItem?.inventoryItemName || '',
       date: this.formatDateForDisplay(sale.saleDate),
       invoiceNumber: sale.saleNumber || '',
@@ -437,9 +450,9 @@ export class ListSalesComponent implements OnInit {
   }
 
   /**
-   * Convert SalesRecord back to simplified Sale format
+   * Convert SalesRecord back to Sale format
    */
-  private convertSalesRecordToSale(record: SalesRecord): any {
+  private convertSalesRecordToSale(record: SalesRecord): Sale {
     return {
       id: 0, // Will be assigned by API
       saleNumber: record.invoiceNumber,
@@ -448,25 +461,61 @@ export class ListSalesComponent implements OnInit {
       customerPhone: '', // Not available in old format
       total: record.salesAmount,
       notes: '',
-      isDeleted: false,
-      createdDate: record.date,
-      createdBy: 1, // Default user
+      dateCreated: record.date,
       saleItems: [{
         id: 0,
+        saleId: 0,
         inventoryItemId: 1,
         inventoryItemName: record.itemDescription,
         quantity: record.quantity,
-        unitPrice: record.quantity > 0 ? record.salesAmount / record.quantity : 0
+        unitPrice: record.quantity > 0 ? record.salesAmount / record.quantity : 0,
+        totalPrice: record.salesAmount
       }]
     };
   }
 
   /**
-   * View details of a sale record (simplified version)
+   * View details of a sale record - displays formatted sale information
    */
-  viewSaleDetails(sale: any): void {
+  viewSaleDetails(sale: Sale): void {
     console.log('Viewing sale details:', sale);
-    this.toastr.info(`Viewing sale: ${sale.saleNumber}`, 'Sale Details');
+
+    // Format the sale details as specified
+    const saleDetails = `
+saleNumber    : ${sale.saleNumber}
+saleDate      : ${sale.saleDate}
+customerName  : ${sale.customerName}
+customerPhone : ${sale.customerPhone || ''}
+total         : ${sale.total.toLocaleString('en-ZA', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+
+    // Format sale items with equipment names
+    let itemsDetails = '\n\n📋 Equipment Items:';
+    if (sale.saleItems && sale.saleItems.length > 0) {
+      sale.saleItems.forEach(item => {
+        const equipment = this.getEquipmentByInventoryId(item.inventoryItemId);
+        itemsDetails += `\n  ID ${item.inventoryItemId}: ${equipment.name} (R${item.unitPrice.toLocaleString('en-ZA', { minimumFractionDigits: 2 })}) x${item.quantity} = R${item.totalPrice.toLocaleString('en-ZA', { minimumFractionDigits: 2 })}`;
+      });
+    } else {
+      itemsDetails += '\n  No items found';
+    }
+
+    const fullDetails = saleDetails + itemsDetails;
+
+    console.log('Sale Details:');
+    console.log(fullDetails);
+
+    // Show in toast notification as well
+    this.toastr.info(`Sale Details:${fullDetails}`, `Sale: ${sale.saleNumber}`, {
+      timeOut: 15000,
+      extendedTimeOut: 8000
+    });
+  }
+
+  /**
+   * Get equipment information by inventory ID
+   */
+  private getEquipmentByInventoryId(inventoryId: number): { name: string; price: number } {
+    return this.inventoryLookup[inventoryId] || { name: `Unknown Equipment (ID: ${inventoryId})`, price: 0 };
   }
 
   /**
