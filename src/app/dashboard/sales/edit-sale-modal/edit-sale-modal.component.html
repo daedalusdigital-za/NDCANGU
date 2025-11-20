@@ -144,21 +144,21 @@
                 placeholder="Additional notes about this sale..."></textarea>
             </div>
           </div>
-        </form>
-      </div>
 
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" (click)="closeModal()" [disabled]="isLoading">
-          Cancel
-        </button>
-        <button
-          type="button"
-          class="btn btn-primary"
-          (click)="onSubmit(saleForm)"
-          [disabled]="isLoading || saleForm.invalid">
-          <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-2"></span>
-          Save Changes
-        </button>
+          <!-- Modal Footer inside Form -->
+          <div class="modal-footer mt-3">
+            <button type="button" class="btn btn-secondary" (click)="closeModal()" [disabled]="isLoading">
+              Cancel
+            </button>
+            <button
+              type="submit"
+              class="btn btn-primary"
+              [disabled]="isLoading || saleForm.invalid">
+              <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-2"></span>
+              Save Changes
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   </div>

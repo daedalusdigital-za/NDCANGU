@@ -1,6 +1,6 @@
 import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { DatabaseService } from '../../../services/data/database.service';
+import { DatabaseService, Sale, SaleItem } from '../../../services/data/database.service';
 import { ToastrService } from 'ngx-toastr';
 
 @Component({
@@ -11,7 +11,7 @@ import { ToastrService } from 'ngx-toastr';
 export class EditSaleModalComponent implements OnChanges {
   @ViewChild('saleForm') saleForm!: NgForm;
 
-  @Input() saleData: any = null;
+  @Input() saleData: Sale | null = null;
   @Input() isVisible: boolean = false;
   @Output() modalClose = new EventEmitter<void>();
   @Output() saleUpdateSuccess = new EventEmitter<void>();
@@ -52,27 +52,53 @@ export class EditSaleModalComponent implements OnChanges {
   ) { }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['saleData'] && this.saleData) {
-      this.populateSaleData();
+    console.log('ngOnChanges triggered:', changes);
+    if (changes['saleData']) {
+      console.log('saleData changed:', {
+        currentValue: changes['saleData'].currentValue,
+        previousValue: changes['saleData'].previousValue
+      });
+      if (this.saleData) {
+        console.log('About to populate sale data with:', this.saleData);
+        this.populateSaleData();
+      }
+    }
+    if (changes['isVisible']) {
+      console.log('isVisible changed:', {
+        currentValue: changes['isVisible'].currentValue,
+        previousValue: changes['isVisible'].previousValue
+      });
     }
   }
 
   populateSaleData(): void {
-    if (!this.saleData) return;
+    console.log('populateSaleData called with saleData:', this.saleData);
+    if (!this.saleData) {
+      console.log('No saleData available, returning early');
+      return;
+    }
+
+    // Calculate subtotal from saleItems
+    const subtotal = this.saleData.saleItems ?
+      this.saleData.saleItems.reduce((sum: number, item: SaleItem) => sum + (item.totalPrice || 0), 0) : 0;
+
+    console.log('Calculated subtotal:', subtotal);
 
     this.sale = {
       id: this.saleData.id || 0,
       saleNumber: this.saleData.saleNumber || '',
       saleDate: this.formatDateForInput(this.saleData.saleDate),
-      customerId: this.saleData.customerId || null,
+      customerId: null, // Not available in Sale interface
       customerName: this.saleData.customerName || '',
       customerPhone: this.saleData.customerPhone || '',
-      subtotal: this.saleData.subtotal || 0,
-      total: this.saleData.total || 0,
+      subtotal: subtotal,
+      total: this.saleData.total || subtotal,
       notes: this.saleData.notes || '',
-      provinceId: this.saleData.provinceId || 1,
+      provinceId: 1, // Default value as not available in Sale interface
       saleItems: this.saleData.saleItems || []
     };
+
+    console.log('Final populated sale object:', this.sale);
   }
 
   onSubmit(form: any): void {

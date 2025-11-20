@@ -292,9 +292,13 @@ export class ListSalesComponent implements OnInit {
   }
 
   editSale(sale: Sale): void {
-    console.log('Editing sale:', sale);
+    console.log('editSale called with sale:', sale);
+    console.log('Setting selectedSaleForEdit to:', sale);
     this.selectedSaleForEdit = sale;
+    console.log('selectedSaleForEdit after assignment:', this.selectedSaleForEdit);
+    console.log('Setting showEditModal to true');
     this.showEditModal = true;
+    console.log('showEditModal after assignment:', this.showEditModal);
   }
 
   deleteSale(sale: Sale): void {
