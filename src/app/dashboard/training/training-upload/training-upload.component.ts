@@ -34,6 +34,8 @@ export class TrainingUploadComponent implements OnInit {
   selectedFile: File | null = null;
   uploadInfo = {
     province: '',
+    venue: '',
+    trainingId: '',
     trainer: '',
     date: ''
   };
@@ -136,6 +138,8 @@ export class TrainingUploadComponent implements OnInit {
     this.selectedFile = file;
     this.uploadInfo = {
       province: '',
+      venue: '',
+      trainingId: '',
       trainer: '',
       date: ''
     };
@@ -143,7 +147,8 @@ export class TrainingUploadComponent implements OnInit {
   }
 
   async confirmUpload(): Promise<void> {
-    if (!this.selectedFile || !this.uploadInfo.province || !this.uploadInfo.trainer || !this.uploadInfo.date) {
+    if (!this.selectedFile || !this.uploadInfo.province || !this.uploadInfo.venue ||
+        !this.uploadInfo.trainingId || !this.uploadInfo.trainer || !this.uploadInfo.date) {
       this.toastr.error('Please fill in all required fields', 'Missing Information');
       return;
     }
@@ -189,6 +194,8 @@ export class TrainingUploadComponent implements OnInit {
     this.selectedFile = null;
     this.uploadInfo = {
       province: '',
+      venue: '',
+      trainingId: '',
       trainer: '',
       date: ''
     };

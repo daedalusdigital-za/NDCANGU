@@ -211,15 +211,31 @@
                         </div>
 
                         <div class="mb-3">
+                            <label for="venue" class="form-label">Venue <span class="text-danger">*</span></label>
+                            <input type="text"
+                                   id="venue"
+                                   class="form-control"
+                                   [(ngModel)]="uploadInfo.venue"
+                                   placeholder="Enter training venue">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="trainingId" class="form-label">Training ID <span class="text-danger">*</span></label>
+                            <input type="text"
+                                   id="trainingId"
+                                   class="form-control"
+                                   [(ngModel)]="uploadInfo.trainingId"
+                                   placeholder="Enter training ID">
+                        </div>
+
+                        <div class="mb-3">
                             <label for="trainer" class="form-label">Trainer Name <span class="text-danger">*</span></label>
                             <input type="text"
                                    id="trainer"
                                    class="form-control"
                                    [(ngModel)]="uploadInfo.trainer"
                                    placeholder="Enter trainer name">
-                        </div>
-
-                        <div class="mb-3">
+                        </div>                        <div class="mb-3">
                             <label for="date" class="form-label">Training Date <span class="text-danger">*</span></label>
                             <input type="date"
                                    id="date"
@@ -234,7 +250,7 @@
                         <button type="button"
                                 class="btn btn-success"
                                 (click)="confirmUpload()"
-                                [disabled]="!uploadInfo.province || !uploadInfo.trainer || !uploadInfo.date">
+                                [disabled]="!uploadInfo.province || !uploadInfo.venue || !uploadInfo.trainingId || !uploadInfo.trainer || !uploadInfo.date">
                             <i class="dripicons-checkmark me-2"></i>Process Upload
                         </button>
                     </div>
