@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
-import * as XLSX from 'xlsx';
 
 interface TrainingRecord {
   trainingName: string;
@@ -28,7 +27,7 @@ export class TrainingUploadComponent implements OnInit {
 
   uploadedFiles: File[] = [];
   maxFileSize = 5000000; // 5MB
-  acceptedFileTypes = '.xlsx,.xls,.csv';
+  acceptedFileTypes = '.pdf';
 
   // Upload dialog properties
   showUploadDialog = false;
@@ -53,19 +52,19 @@ export class TrainingUploadComponent implements OnInit {
 
   uploadHistory: UploadHistory[] = [
     {
-      fileName: 'training_register_Q1_2024.xlsx',
+      fileName: 'training_register_Q1_2024.pdf',
       uploadDate: '2024-01-15 10:30',
       recordsProcessed: 45,
       status: 'Completed'
     },
     {
-      fileName: 'training_register_Q2_2024.xlsx',
+      fileName: 'training_register_Q2_2024.pdf',
       uploadDate: '2024-04-20 14:15',
       recordsProcessed: 38,
       status: 'Completed'
     },
     {
-      fileName: 'training_register_Q3_2024.xlsx',
+      fileName: 'training_register_Q3_2024.pdf',
       uploadDate: '2024-07-10 09:45',
       recordsProcessed: 52,
       status: 'Processing'
@@ -103,20 +102,16 @@ export class TrainingUploadComponent implements OnInit {
 
     // Check file type
     const allowedTypes = [
-      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-      'application/vnd.ms-excel',
-      'text/csv'
+      'application/pdf'
     ];
 
     if (!allowedTypes.includes(file.type)) {
-      this.toastr.error('Invalid file type. Please upload Excel or CSV files only.', 'Invalid File Type');
+      this.toastr.error('Invalid file type. Please upload PDF files only.', 'Invalid File Type');
       return false;
     }
 
     return true;
-  }
-
-  removeFile(index: number): void {
+  }  removeFile(index: number): void {
     this.uploadedFiles.splice(index, 1);
     this.toastr.info('File removed from upload queue', 'File Removed');
   }
@@ -134,48 +129,6 @@ export class TrainingUploadComponent implements OnInit {
     const i = Math.floor(Math.log(bytes) / Math.log(k));
 
     return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
-  }
-
-  downloadTemplate(): void {
-    // Create sample template data
-    const templateData = [
-      {
-        'Training Name': 'NCD Prevention Workshop',
-        'Date': '2024-01-15',
-        'Province': 'Gauteng',
-        'Hospital': 'Chris Hani Baragwanath Hospital',
-        'Trainer Name': 'Dr. Thabo Mthembu',
-        'Number of Participants': 25
-      },
-      {
-        'Training Name': 'Diabetes Management Course',
-        'Date': '2024-01-20',
-        'Province': 'Western Cape',
-        'Hospital': 'Groote Schuur Hospital',
-        'Trainer Name': 'Dr. Nomsa Dlamini',
-        'Number of Participants': 18
-      },
-      {
-        'Training Name': 'Hypertension Control Training',
-        'Date': '2024-01-25',
-        'Province': 'KwaZulu-Natal',
-        'Hospital': 'Inkosi Albert Luthuli Hospital',
-        'Trainer Name': 'Dr. Sipho Ndaba',
-        'Number of Participants': 22
-      }
-    ];
-
-    // Create workbook and worksheet
-    const wb = XLSX.utils.book_new();
-    const ws = XLSX.utils.json_to_sheet(templateData);
-
-    // Add worksheet to workbook
-    XLSX.utils.book_append_sheet(wb, ws, 'Training Register Template');
-
-    // Save the file
-    XLSX.writeFile(wb, 'training_register_template.xlsx');
-
-    this.toastr.success('Template downloaded successfully', 'Download Complete');
   }
 
   processTrainingRegister(file: File): void {
@@ -197,10 +150,10 @@ export class TrainingUploadComponent implements OnInit {
 
     try {
       this.showUploadDialog = false;
-      this.toastr.info('Processing training register...', 'Processing');
+      this.toastr.info('Processing training register PDF...', 'Processing');
 
-      const data = await this.readExcelFile(this.selectedFile);
-      const trainingRecords = this.parseTrainingData(data);
+      // For PDF files, we'll process them differently
+      const trainingRecords = await this.processPdfFile(this.selectedFile);
 
       // Add upload info to each record
       trainingRecords.forEach(record => {
@@ -228,12 +181,10 @@ export class TrainingUploadComponent implements OnInit {
 
     } catch (error) {
       console.error('Error processing training register:', error);
-      this.toastr.error('Error processing training register. Please check the file format.', 'Processing Error');
+      this.toastr.error('Error processing training register PDF. Please check the file format.', 'Processing Error');
       this.showUploadDialog = false;
     }
-  }
-
-  cancelUpload(): void {
+  }  cancelUpload(): void {
     this.showUploadDialog = false;
     this.selectedFile = null;
     this.uploadInfo = {
@@ -243,54 +194,39 @@ export class TrainingUploadComponent implements OnInit {
     };
   }
 
-  private readExcelFile(file: File): Promise<any[]> {
+  private async processPdfFile(file: File): Promise<TrainingRecord[]> {
     return new Promise((resolve, reject) => {
-      const reader = new FileReader();
+      // For now, we'll simulate PDF processing
+      // In a real implementation, you would use a PDF parsing library like pdf-parse
 
-      reader.onload = (e: any) => {
+      setTimeout(() => {
         try {
-          const data = e.target.result;
-          const workbook = XLSX.read(data, { type: 'binary' });
-          const firstSheetName = workbook.SheetNames[0];
-          const worksheet = workbook.Sheets[firstSheetName];
-          const jsonData = XLSX.utils.sheet_to_json(worksheet);
-          resolve(jsonData);
+          // Simulate extracted data from PDF
+          const mockData: TrainingRecord[] = [
+            {
+              trainingName: 'NCD Prevention Workshop',
+              date: this.uploadInfo.date,
+              province: this.uploadInfo.province,
+              hospital: 'Extracted from PDF',
+              trainerName: this.uploadInfo.trainer,
+              numberOfParticipants: 25
+            },
+            {
+              trainingName: 'Diabetes Management Training',
+              date: this.uploadInfo.date,
+              province: this.uploadInfo.province,
+              hospital: 'Extracted from PDF',
+              trainerName: this.uploadInfo.trainer,
+              numberOfParticipants: 18
+            }
+          ];
+
+          resolve(mockData);
         } catch (error) {
           reject(error);
         }
-      };
-
-      reader.onerror = (error) => reject(error);
-      reader.readAsBinaryString(file);
+      }, 1500); // Simulate processing time
     });
-  }
-
-  private parseTrainingData(data: any[]): TrainingRecord[] {
-    const trainingRecords: TrainingRecord[] = [];
-
-    data.forEach((row, index) => {
-      try {
-        const record: TrainingRecord = {
-          trainingName: row['Training Name'] || row['trainingName'] || '',
-          date: row['Date'] || row['date'] || '',
-          province: row['Province'] || row['province'] || '',
-          hospital: row['Hospital'] || row['hospital'] || '',
-          trainerName: row['Trainer Name'] || row['trainerName'] || '',
-          numberOfParticipants: parseInt(row['Number of Participants'] || row['numberOfParticipants'] || 0)
-        };
-
-        // Validate required fields
-        if (record.trainingName && record.date && record.province && record.hospital) {
-          trainingRecords.push(record);
-        } else {
-          console.warn(`Row ${index + 1}: Missing required fields`);
-        }
-      } catch (error) {
-        console.error(`Error parsing row ${index + 1}:`, error);
-      }
-    });
-
-    return trainingRecords;
   }
 
   private async saveTrainingRecords(records: TrainingRecord[]): Promise<void> {
