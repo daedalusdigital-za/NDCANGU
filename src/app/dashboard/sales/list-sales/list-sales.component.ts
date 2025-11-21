@@ -50,19 +50,8 @@ export class ListSalesComponent implements OnInit {
   institutionOptions: string[] = ['All'];
   productTypeOptions: string[] = ['All'];
 
-  // 📋 Complete Inventory Reference - Medical Equipment Lookup
-  private inventoryLookup: { [key: number]: { name: string; price: number } } = {
-    1: { name: 'Digital Blood Pressure Monitor', price: 1250.00 },
-    2: { name: 'Glucometer Test Strips', price: 85.50 },
-    3: { name: 'Disposable Lancets', price: 42.75 },
-    4: { name: 'Weighing Scale - Digital', price: 2150.00 },
-    5: { name: 'Stethoscope - Cardiology', price: 3200.00 },
-    6: { name: 'Cholesterol Test Kit', price: 125.00 },
-    7: { name: 'Blood Pressure Cuffs - Adult', price: 95.00 },
-    8: { name: 'HbA1c Test Cartridges', price: 850.00 },
-    9: { name: 'Pulse Oximeter', price: 320.00 },
-    10: { name: 'ECG Electrodes', price: 28.50 }
-  };
+  // 📦 Dynamic Inventory Reference - Loaded from API
+  private inventoryLookup: { [key: number]: { name: string; price: number } } = {};
 
   constructor(
     private orderDataService: OrderDataService,
@@ -71,9 +60,39 @@ export class ListSalesComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.loadInventoryLookup(); // Load inventory first
     this.loadOrders();
     this.loadSalesRecords();
     this.loadFilterOptions();
+  }
+
+  /**
+   * Load inventory from API to populate inventoryLookup for product name/price display
+   */
+  loadInventoryLookup(): void {
+    console.log('🔄 Loading inventory lookup from API...');
+
+    this.databaseService.getInventoryItems().subscribe({
+      next: (items) => {
+        console.log(`✅ Loaded ${items.length} inventory items for lookup`);
+
+        // Build lookup table from real API data
+        this.inventoryLookup = {};
+        items.forEach(item => {
+          this.inventoryLookup[item.id] = {
+            name: item.name || item.description || `Item ${item.id}`,
+            price: item.unitPrice || 0
+          };
+        });
+
+        console.log('📦 Inventory lookup built:', this.inventoryLookup);
+      },
+      error: (error) => {
+        console.warn('⚠️ Failed to load inventory for lookup:', error);
+        // Keep empty lookup - getInventoryDetails will handle unknown items
+        this.inventoryLookup = {};
+      }
+    });
   }
 
   loadOrders(): void {

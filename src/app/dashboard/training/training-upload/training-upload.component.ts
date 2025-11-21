@@ -29,7 +29,28 @@ export class TrainingUploadComponent implements OnInit {
   uploadedFiles: File[] = [];
   maxFileSize = 5000000; // 5MB
   acceptedFileTypes = '.xlsx,.xls,.csv';
-  
+
+  // Upload dialog properties
+  showUploadDialog = false;
+  selectedFile: File | null = null;
+  uploadInfo = {
+    province: '',
+    trainer: '',
+    date: ''
+  };
+
+  provinces = [
+    'Eastern Cape',
+    'Free State',
+    'Gauteng',
+    'KwaZulu-Natal',
+    'Limpopo',
+    'Mpumalanga',
+    'Northern Cape',
+    'North West',
+    'Western Cape'
+  ];
+
   uploadHistory: UploadHistory[] = [
     {
       fileName: 'training_register_Q1_2024.xlsx',
@@ -60,7 +81,7 @@ export class TrainingUploadComponent implements OnInit {
 
   onUpload(event: any): void {
     const files = event.files;
-    
+
     for (let file of files) {
       if (this.validateFile(file)) {
         this.uploadedFiles.push(file);
@@ -86,7 +107,7 @@ export class TrainingUploadComponent implements OnInit {
       'application/vnd.ms-excel',
       'text/csv'
     ];
-    
+
     if (!allowedTypes.includes(file.type)) {
       this.toastr.error('Invalid file type. Please upload Excel or CSV files only.', 'Invalid File Type');
       return false;
@@ -107,11 +128,11 @@ export class TrainingUploadComponent implements OnInit {
 
   formatFileSize(bytes: number): string {
     if (bytes === 0) return '0 Bytes';
-    
+
     const k = 1024;
     const sizes = ['Bytes', 'KB', 'MB', 'GB'];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
-    
+
     return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
   }
 
@@ -153,43 +174,79 @@ export class TrainingUploadComponent implements OnInit {
 
     // Save the file
     XLSX.writeFile(wb, 'training_register_template.xlsx');
-    
+
     this.toastr.success('Template downloaded successfully', 'Download Complete');
   }
 
-  async processTrainingRegister(file: File): Promise<void> {
+  processTrainingRegister(file: File): void {
+    // Show dialog to get upload information
+    this.selectedFile = file;
+    this.uploadInfo = {
+      province: '',
+      trainer: '',
+      date: ''
+    };
+    this.showUploadDialog = true;
+  }
+
+  async confirmUpload(): Promise<void> {
+    if (!this.selectedFile || !this.uploadInfo.province || !this.uploadInfo.trainer || !this.uploadInfo.date) {
+      this.toastr.error('Please fill in all required fields', 'Missing Information');
+      return;
+    }
+
     try {
+      this.showUploadDialog = false;
       this.toastr.info('Processing training register...', 'Processing');
-      
-      const data = await this.readExcelFile(file);
+
+      const data = await this.readExcelFile(this.selectedFile);
       const trainingRecords = this.parseTrainingData(data);
-      
+
+      // Add upload info to each record
+      trainingRecords.forEach(record => {
+        record.province = this.uploadInfo.province;
+        record.trainerName = this.uploadInfo.trainer;
+        record.date = this.uploadInfo.date;
+      });
+
       // Simulate processing
       await this.saveTrainingRecords(trainingRecords);
-      
+
       this.toastr.success(`Successfully processed ${trainingRecords.length} training records`, 'Processing Complete');
-      
+
       // Add to upload history
       this.uploadHistory.unshift({
-        fileName: file.name,
+        fileName: this.selectedFile.name,
         uploadDate: new Date().toLocaleString(),
         recordsProcessed: trainingRecords.length,
         status: 'Completed'
       });
-      
+
       // Clear uploaded files
       this.uploadedFiles = [];
-      
+      this.selectedFile = null;
+
     } catch (error) {
       console.error('Error processing training register:', error);
       this.toastr.error('Error processing training register. Please check the file format.', 'Processing Error');
+      this.showUploadDialog = false;
     }
+  }
+
+  cancelUpload(): void {
+    this.showUploadDialog = false;
+    this.selectedFile = null;
+    this.uploadInfo = {
+      province: '',
+      trainer: '',
+      date: ''
+    };
   }
 
   private readExcelFile(file: File): Promise<any[]> {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
-      
+
       reader.onload = (e: any) => {
         try {
           const data = e.target.result;
@@ -202,7 +259,7 @@ export class TrainingUploadComponent implements OnInit {
           reject(error);
         }
       };
-      
+
       reader.onerror = (error) => reject(error);
       reader.readAsBinaryString(file);
     });
@@ -210,7 +267,7 @@ export class TrainingUploadComponent implements OnInit {
 
   private parseTrainingData(data: any[]): TrainingRecord[] {
     const trainingRecords: TrainingRecord[] = [];
-    
+
     data.forEach((row, index) => {
       try {
         const record: TrainingRecord = {
@@ -221,7 +278,7 @@ export class TrainingUploadComponent implements OnInit {
           trainerName: row['Trainer Name'] || row['trainerName'] || '',
           numberOfParticipants: parseInt(row['Number of Participants'] || row['numberOfParticipants'] || 0)
         };
-        
+
         // Validate required fields
         if (record.trainingName && record.date && record.province && record.hospital) {
           trainingRecords.push(record);
@@ -232,7 +289,7 @@ export class TrainingUploadComponent implements OnInit {
         console.error(`Error parsing row ${index + 1}:`, error);
       }
     });
-    
+
     return trainingRecords;
   }
 
