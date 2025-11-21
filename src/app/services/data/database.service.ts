@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Observable, of, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
+import { ApiResponse, Sale, SaleModel, SaleItem, SaleItemModel } from '../../shared/interfaces/common.interfaces';
 
 // Training Status Enum - Export for use in components
 export enum TrainingStatus {
@@ -12,8 +13,7 @@ export enum TrainingStatus {
   Cancelled = 5
 }
 
-// Export Sales interfaces for use in components
-export { Sale, SaleModel, SaleItem, SaleItemModel };
+// Sales interfaces imported from shared/interfaces/common.interfaces.ts
 
 /**
  * NDCANGU Medical Management API - Database Service
@@ -125,71 +125,32 @@ interface TrainingSession {
 
 interface InventoryItem {
   id: number;
-  itemNumber: string;
-  description: string;
-  location: string;
-  uom: string;
-  category: string; // Changed back to string for compatibility
-  qtyOnHand: number;
-  qtyOnPO: number;
-  qtyOnSO: number;
-  stockAvailable?: number;
-  unitCostForQOH: number;
-  totalCostForQOH?: number;
+  name: string;
+  description?: string | null;
+  category: number; // enum value
+  categoryText: string; // enum name like "HemoglobinTesting"
+  sku: string;
+  unitOfMeasure: string;
+  unitPrice: number; // decimal
+  stockAvailable: number;
   reorderLevel: number;
-  maxStockLevel: number;
-  supplier?: string;
-  lastRestocked?: string;
-  expiryDate?: string;
-  status: string; // Changed to string for consistency
-  createdAt?: string;
-  updatedAt?: string;
+  supplier?: string | null;
+  expiryDate?: string | null; // datetime
+  batchNumber?: string | null;
+  status: number; // enum value
+  statusText: string; // enum name like "InStock"
+  createdDate: string; // datetime
+  lastUpdated?: string | null; // datetime
+  createdByUserName: string; // currently empty
 }
 
-// SaleModel for POST/PUT requests - Matches API JSON structure
-interface SaleModel {
-  id?: number; // Optional for POST, required for PUT
-  saleNumber: string;
-  saleDate: string; // ISO date string format
-  customerName: string;
-  customerPhone?: string; // Optional field
-  total: number; // Total sale amount (decimal with 2 places)
-  notes?: string; // Additional sale information
-  dateCreated?: string; // Record creation timestamp
-  saleItems: SaleItemModel[];
-}
+// Using SaleModel from shared interfaces
 
-// Sale interface for GET responses - Matches exact API JSON structure
-interface Sale {
-  id: number; // Unique sale record ID
-  saleNumber: string; // Invoice/Sale number (e.g., "SALE-2024-001", "IN157895")
-  saleDate: string; // Date of the sale (ISO format)
-  customerName: string; // Hospital/Customer name
-  customerPhone?: string; // Customer contact number (can be empty)
-  total: number; // Total sale amount (decimal with 2 places)
-  notes?: string; // Additional sale information
-  dateCreated: string; // Record creation timestamp
-  saleItems: SaleItem[]; // Array of sale line items
-}
+// Using Sale from shared interfaces
 
-// SaleItemModel for POST/PUT requests
-interface SaleItemModel {
-  id?: number; // Optional for new items
-  inventoryItemId: number; // KEY FIELD - Links to medical equipment/supplies
-  quantity: number; // Number of units sold
-  unitPrice: number; // Price per unit (decimal)
-}
+// Using SaleItemModel from shared interfaces
 
-// SaleItem for GET responses - Matches exact API JSON structure
-interface SaleItem {
-  id: number; // Unique sale item ID
-  saleId: number; // Reference to parent sale
-  inventoryItemId: number; // KEY FIELD - Links to medical equipment/supplies
-  inventoryItemName: string; // Equipment name (currently empty, could be populated via join)
-  quantity: number; // Number of units sold
-  unitPrice: number; // Price per unit (decimal)
-  totalPrice: number; // Line total (quantity × unitPrice)
-}
+// Using SaleItem from shared interfaces
 
 interface User {
   id: number;
@@ -590,10 +551,7 @@ export class DatabaseService {
    * GET /api/Inventory/GetAll
    */
   getInventoryItems(): Observable<InventoryItem[]> {
-    return this.http.get<InventoryItem[]>(`${this.API_URL}Inventory/GetAll`, { headers: this.getAuthHeaders() })
-      .pipe(
-        catchError(() => of(this.getFallbackInventoryItems()))
-      );
+    return this.http.get<InventoryItem[]>(`${this.API_URL}Inventory/GetAll`, { headers: this.getAuthHeaders() });
   }
 
   /**
@@ -601,10 +559,7 @@ export class DatabaseService {
    * GET /api/Inventory/GetById
    */
   getInventoryItemById(id: number): Observable<InventoryItem> {
-    return this.http.get<InventoryItem>(`${this.API_URL}Inventory/GetById?id=${id}`, { headers: this.getAuthHeaders() })
-      .pipe(
-        catchError(() => of(this.getFallbackInventoryItems().find(i => i.id === id)!))
-      );
+    return this.http.get<InventoryItem>(`${this.API_URL}Inventory/GetById?id=${id}`, { headers: this.getAuthHeaders() });
   }
 
   /**
@@ -612,10 +567,7 @@ export class DatabaseService {
    * GET /api/Inventory/GetByCategory
    */
   getInventoryItemsByCategory(category: string): Observable<InventoryItem[]> {
-    return this.http.get<InventoryItem[]>(`${this.API_URL}Inventory/GetByCategory?category=${category}`, { headers: this.getAuthHeaders() })
-      .pipe(
-        catchError(() => of(this.getFallbackInventoryItems().filter(i => i.category === category)))
-      );
+    return this.http.get<InventoryItem[]>(`${this.API_URL}Inventory/GetByCategory?category=${category}`, { headers: this.getAuthHeaders() });
   }
 
   /**
@@ -623,10 +575,7 @@ export class DatabaseService {
    * GET /api/Inventory/GetLowStock
    */
   getLowStockItems(): Observable<InventoryItem[]> {
-    return this.http.get<InventoryItem[]>(`${this.API_URL}Inventory/GetLowStock`, { headers: this.getAuthHeaders() })
-      .pipe(
-        catchError(() => of(this.getFallbackInventoryItems().filter(i => i.qtyOnHand <= i.reorderLevel)))
-      );
+    return this.http.get<InventoryItem[]>(`${this.API_URL}Inventory/GetLowStock`, { headers: this.getAuthHeaders() });
   }
 
   /**
@@ -634,10 +583,7 @@ export class DatabaseService {
    * GET /api/Inventory/GetByStatus
    */
   getInventoryItemsByStatus(status: string): Observable<InventoryItem[]> {
-    return this.http.get<InventoryItem[]>(`${this.API_URL}Inventory/GetByStatus?status=${status}`, { headers: this.getAuthHeaders() })
-      .pipe(
-        catchError(() => of(this.getFallbackInventoryItems().filter(i => i.status === status)))
-      );
+    return this.http.get<InventoryItem[]>(`${this.API_URL}Inventory/GetByStatus?status=${status}`, { headers: this.getAuthHeaders() });
   }
 
   /**
@@ -1320,75 +1266,22 @@ export class DatabaseService {
     ];
   }
 
-  private getFallbackInventoryItems(): InventoryItem[] {
-    return [
-      {
-        id: 1,
-        itemNumber: 'GLU-001',
-        description: 'Glucose Test Strips (Box of 50)',
-        location: 'Medical Store Room A',
-        uom: 'box',
-        category: 'Medical',
-        qtyOnHand: 150,
-        qtyOnPO: 200,
-        qtyOnSO: 75,
-        unitCostForQOH: 45.50,
-        reorderLevel: 50,
-        maxStockLevel: 500,
-        supplier: 'MedSupply SA',
-        lastRestocked: '2024-09-15',
-        expiryDate: '2025-08-31',
-        status: 'Active'
-      },
-      {
-        id: 2,
-        itemNumber: 'BP-002',
-        description: 'Digital Blood Pressure Monitor',
-        location: 'Equipment Store',
-        uom: 'each',
-        category: 'Equipment',
-        qtyOnHand: 25,
-        qtyOnPO: 10,
-        qtyOnSO: 5,
-        unitCostForQOH: 320.00,
-        reorderLevel: 10,
-        maxStockLevel: 50,
-        supplier: 'HealthTech Solutions',
-        lastRestocked: '2024-09-20',
-        status: 'Active'
-      },
-      {
-        id: 3,
-        itemNumber: 'MET-003',
-        description: 'Metformin 500mg Tablets (Bottle of 100)',
-        location: 'Pharmacy Store',
-        uom: 'bottle',
-        category: 'Pharmaceutical',
-        qtyOnHand: 80,
-        qtyOnPO: 150,
-        qtyOnSO: 40,
-        unitCostForQOH: 12.75,
-        reorderLevel: 30,
-        maxStockLevel: 300,
-        supplier: 'Pharma Direct',
-        lastRestocked: '2024-09-10',
-        expiryDate: '2026-03-15',
-        status: 'Active'
-      }
-    ];
-  }
-
   private getFallbackSales(): Sale[] {
     return [
       {
         id: 1,
         saleNumber: "SALE-2024-001",
         saleDate: "2024-01-15T00:00:00",
+        customerId: 101,
         customerName: "Charlotte Maxeke Hospital",
         customerPhone: "+27 11 488 4911",
+        subtotal: 4485.00,
         total: 4312.50,
         notes: "Monthly medical supplies order for diabetes clinic",
+        provinceId: 1,
+        provinceName: "Gauteng",
         dateCreated: "2025-10-07T04:34:25.8033333",
+        lastUpdated: "2025-10-07T04:34:25.8033333",
         saleItems: [
           {
             id: 1,
@@ -1423,11 +1316,16 @@ export class DatabaseService {
         id: 2,
         saleNumber: "SALE-2024-002",
         saleDate: "2024-01-20T00:00:00",
+        customerId: 102,
         customerName: "Steve Biko Academic Hospital",
         customerPhone: "+27 12 354 1000",
+        subtotal: 2352.00,
         total: 2361.00,
         notes: "Equipment order for new cardiac unit",
+        provinceId: 2,
+        provinceName: "Gauteng",
         dateCreated: "2025-10-07T04:34:25.8033333",
+        lastUpdated: "2025-10-07T04:34:25.8033333",
         saleItems: [
           {
             id: 4,
@@ -1453,11 +1351,16 @@ export class DatabaseService {
         id: 3,
         saleNumber: "IN157895",
         saleDate: "2024-02-05T00:00:00",
+        customerId: 103,
         customerName: "Groote Schuur Hospital",
         customerPhone: "+27 21 404 9111",
+        subtotal: 6930.00,
         total: 8750.00,
         notes: "Emergency department supply restocking",
+        provinceId: 3,
+        provinceName: "Western Cape",
         dateCreated: "2025-10-07T04:34:25.8033333",
+        lastUpdated: "2025-10-07T04:34:25.8033333",
         saleItems: [
           {
             id: 6,
@@ -1492,11 +1395,16 @@ export class DatabaseService {
         id: 4,
         saleNumber: "IN157934",
         saleDate: "2024-02-12T00:00:00",
+        customerId: 104,
         customerName: "Red Cross War Memorial Children's Hospital",
         customerPhone: "+27 21 658 5111",
+        subtotal: 3285.00,
         total: 3285.00,
         notes: "Pediatric ward medical supplies",
+        provinceId: 3,
+        provinceName: "Western Cape",
         dateCreated: "2025-10-07T04:34:25.8033333",
+        lastUpdated: "2025-10-07T04:34:25.8033333",
         saleItems: [
           {
             id: 9,

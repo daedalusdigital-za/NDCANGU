@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { OrderDataService, OrderRecord, SalesRecord } from '../../../services/order-data.service';
-import { DatabaseService, Sale } from '../../../services/data/database.service';
+import { DatabaseService } from '../../../services/data/database.service';
+import { Sale, SaleItem } from '../../../shared/interfaces/common.interfaces';
 import { ToastrService } from 'ngx-toastr';
 
 @Component({
@@ -461,11 +462,16 @@ export class ListSalesComponent implements OnInit {
       id: 0, // Will be assigned by API
       saleNumber: record.invoiceNumber,
       saleDate: record.date,
+      customerId: undefined,
       customerName: record.institution,
       customerPhone: '', // Not available in old format
+      subtotal: record.salesAmount,
       total: record.salesAmount,
       notes: '',
+      provinceId: 1, // Default province
+      provinceName: 'Unknown Province',
       dateCreated: record.date,
+      lastUpdated: record.date,
       saleItems: [{
         id: 0,
         saleId: 0,
@@ -495,7 +501,7 @@ total         : ${sale.total.toLocaleString('en-ZA', { minimumFractionDigits: 2,
     // Format sale items with equipment names
     let itemsDetails = '\n\n📋 Equipment Items:';
     if (sale.saleItems && sale.saleItems.length > 0) {
-      sale.saleItems.forEach(item => {
+      sale.saleItems.forEach((item: SaleItem) => {
         const equipment = this.getEquipmentByInventoryId(item.inventoryItemId);
         itemsDetails += `\n  ID ${item.inventoryItemId}: ${equipment.name} (R${item.unitPrice.toLocaleString('en-ZA', { minimumFractionDigits: 2 })}) x${item.quantity} = R${item.totalPrice.toLocaleString('en-ZA', { minimumFractionDigits: 2 })}`;
       });

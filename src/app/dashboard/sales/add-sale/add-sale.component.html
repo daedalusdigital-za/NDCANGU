@@ -15,147 +15,142 @@
             </div>
         </div>
 
-        <form #saleForm="ngForm" (ngSubmit)="saveSale()">
-        <!-- Customer Information -->
-        <div class="row">
-            <div class="col-lg-8">
-                <div class="card">
-                    <div class="card-header">
-                        <h5 class="card-title mb-0">Sale & Customer Information</h5>
+        <form #saleForm="ngForm" (ngSubmit)="onSave()">
+            <!-- Customer Information -->
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title mb-0">Sale Information</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">Sale Number</label>
+                                        <input type="text"
+                                               class="form-control"
+                                               [(ngModel)]="sale.saleNumber"
+                                               name="saleNumber"
+                                               readonly
+                                               placeholder="Auto-generated">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">Sale Date *</label>
+                                        <input type="date"
+                                               class="form-control"
+                                               [(ngModel)]="sale.saleDate"
+                                               name="saleDate"
+                                               required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">Customer Name *</label>
+                                        <input type="text"
+                                               class="form-control"
+                                               [(ngModel)]="sale.customerName"
+                                               name="customerName"
+                                               required
+                                               placeholder="Enter customer name">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">Customer Phone *</label>
+                                        <input type="tel"
+                                               class="form-control"
+                                               [(ngModel)]="sale.customerPhone"
+                                               name="customerPhone"
+                                               required
+                                               placeholder="Enter customer phone">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="mb-3">
+                                        <label class="form-label">Notes</label>
+                                        <textarea class="form-control"
+                                                  [(ngModel)]="sale.notes"
+                                                  name="notes"
+                                                  rows="3"
+                                                  placeholder="Add any additional notes or comments..."></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label class="form-label">Sale Number</label>
-                                    <input type="text"
-                                           class="form-control"
-                                           [(ngModel)]="sale.saleNumber"
-                                           name="saleNumber"
-                                           readonly
-                                           placeholder="Auto-generated">
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label class="form-label">Sale Date *</label>
-                                    <input type="datetime-local"
-                                           class="form-control"
-                                           [(ngModel)]="sale.saleDate"
-                                           name="saleDate"
-                                           required>
-                                </div>
-                            </div>
+
+                    <!-- Add Sale Items -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title mb-0">Add Items to Sale</h5>
                         </div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label class="form-label">Customer Name *</label>
-                                    <input type="text"
-                                           class="form-control"
-                                           [(ngModel)]="sale.customerContactName"
-                                           name="customerContactName"
-                                           required
-                                           placeholder="Enter customer name">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="mb-3">
+                                        <label class="form-label">Medical Equipment *</label>
+                                        <select class="form-select"
+                                                [(ngModel)]="newSaleItem.inventoryItemId"
+                                                name="inventoryItemId"
+                                                (change)="onInventoryItemChange()"
+                                                [disabled]="loadingInventory">
+                                            <option value="0">
+                                                {{loadingInventory ? 'Loading inventory...' : 'Select an item'}}
+                                            </option>
+                                            <option *ngFor="let item of inventoryItems"
+                                                    [value]="item.id">
+                                                {{item.name || item.description}} - R{{item.unitPrice | number:'1.2-2'}} ({{item.sku}})
+                                            </option>
+                                        </select>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label class="form-label">Customer Phone *</label>
-                                    <input type="tel"
-                                           class="form-control"
-                                           [(ngModel)]="sale.customerContactPhone"
-                                           name="customerContactPhone"
-                                           required
-                                           placeholder="Enter customer phone">
+                                <div class="col-md-3">
+                                    <div class="mb-3">
+                                        <label class="form-label">Quantity *</label>
+                                        <input type="number"
+                                               class="form-control"
+                                               [(ngModel)]="newSaleItem.quantity"
+                                               name="quantity"
+                                               min="1"
+                                               step="1">
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label class="form-label">Customer Email</label>
-                                    <input type="email"
-                                           class="form-control"
-                                           [(ngModel)]="sale.customerContactEmail"
-                                           name="customerContactEmail"
-                                           placeholder="Enter customer email">
+                                <div class="col-md-3">
+                                    <div class="mb-3">
+                                        <label class="form-label">Unit Price (Auto)</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text">R</span>
+                                            <input type="text"
+                                                   class="form-control"
+                                                   [value]="newSaleItem.unitPrice | number:'1.2-2'"
+                                                   readonly
+                                                   placeholder="Auto-filled">
+                                        </div>
+                                        <small class="text-muted">From inventory cost</small>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label class="form-label">Sales Person</label>
-                                    <select class="form-select"
-                                            [(ngModel)]="sale.salesPerson"
-                                            name="salesPerson">
-                                        <option value="">Select Sales Person</option>
-                                        <option *ngFor="let trainer of trainers" [value]="trainer.name">
-                                            {{trainer.name}} - {{trainer.province}}
-                                        </option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label class="form-label">Province *</label>
-                                    <select class="form-select"
-                                            [(ngModel)]="sale.province"
-                                            name="province"
-                                            required
-                                            (change)="onProvinceChange()">
-                                        <option value="">Select Province</option>
-                                        <option *ngFor="let province of provinces" [value]="province.name">
-                                            {{province.name}}
-                                        </option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label class="form-label">Hospital/Clinic</label>
-                                    <select class="form-select"
-                                            [(ngModel)]="sale.hospital"
-                                            name="hospital"
-                                            [disabled]="filteredHospitals.length === 0">
-                                        <option value="">Select Hospital</option>
-                                        <option *ngFor="let hospital of filteredHospitals" [value]="hospital.name">
-                                            {{hospital.name}}
-                                        </option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label class="form-label">Invoice Number</label>
-                                    <input type="text"
-                                           class="form-control"
-                                           [(ngModel)]="sale.invoiceNumber"
-                                           name="invoiceNumber"
-                                           placeholder="Enter invoice number">
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label class="form-label">Discount (%)</label>
-                                    <input type="number"
-                                           class="form-control"
-                                           [(ngModel)]="sale.discount"
-                                           name="discount"
-                                           min="0"
-                                           max="100"
-                                           step="0.01"
-                                           (input)="calculateTotal()"
-                                           placeholder="0">
+                                <div class="col-md-2">
+                                    <div class="mb-3">
+                                        <label class="form-label">&nbsp;</label>
+                                        <button type="button"
+                                                class="btn btn-primary d-block w-100"
+                                                (click)="addSaleItem()">
+                                            <i class="dripicons-plus me-2"></i>Add
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
+
                 <!-- Sale Summary -->
                 <div class="col-lg-4">
                     <div class="card">
@@ -164,12 +159,16 @@
                         </div>
                         <div class="card-body">
                             <div class="mb-3">
+                                <label class="form-label">Total Items</label>
+                                <div class="display-6">{{sale.saleItems.length}}</div>
+                            </div>
+                            <div class="mb-3">
                                 <label class="form-label">Total Amount</label>
                                 <div class="input-group">
                                     <span class="input-group-text">R</span>
-                                    <input type="number"
-                                           class="form-control"
-                                           [value]="sale.totalAmount | number:'1.2-2'"
+                                    <input type="text"
+                                           class="form-control form-control-lg"
+                                           [value]="sale.total | number:'1.2-2'"
                                            readonly>
                                 </div>
                             </div>
@@ -178,49 +177,69 @@
                 </div>
             </div>
 
-            <!-- Sale Items -->
+            <!-- Sale Items List -->
             <div class="row" *ngIf="sale.saleItems.length > 0">
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
-                            <h5 class="card-title mb-0">Sale Items</h5>
+                            <h5 class="card-title mb-0">Sale Items ({{sale.saleItems.length}})</h5>
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
                                 <table class="table table-striped">
                                     <thead>
                                         <tr>
-                                            <th>Product Name</th>
-                                            <th>Unit Price</th>
+                                            <th>Equipment Name</th>
                                             <th>Quantity</th>
+                                            <th>Unit Price</th>
                                             <th>Subtotal</th>
                                             <th>Actions</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr *ngFor="let item of sale.saleItems">
-                                            <td>{{item.productName}}</td>
-                                            <td>R{{item.unitPrice | number:'1.2-2'}}</td>
-                                            <td>{{item.quantity}}</td>
-                                            <td>R{{(item.quantity * item.unitPrice) | number:'1.2-2'}}</td>
+                                        <tr *ngFor="let item of sale.saleItems; let i = index">
+                                            <td>
+                                                <strong>{{getInventoryItemName(item.inventoryItemId)}}</strong>
+                                                <br>
+                                                <small class="text-muted">ID: {{item.inventoryItemId}}</small>
+                                            </td>
+                                            <td>
+                                                <input type="number"
+                                                       class="form-control form-control-sm"
+                                                       [value]="item.quantity"
+                                                       min="1"
+                                                       (change)="updateSaleItemQuantity(i, $any($event.target).value)"
+                                                       style="width: 80px;">
+                                            </td>
+                                            <td>
+                                                <div class="input-group input-group-sm">
+                                                    <span class="input-group-text">R</span>
+                                                    <input type="number"
+                                                           class="form-control"
+                                                           [value]="item.unitPrice"
+                                                           min="0"
+                                                           step="0.01"
+                                                           (change)="updateSaleItemPrice(i, $any($event.target).value)"
+                                                           style="width: 100px;">
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <strong>R{{getSaleItemTotal(item) | number:'1.2-2'}}</strong>
+                                            </td>
                                             <td>
                                                 <button type="button"
                                                         class="btn btn-sm btn-danger"
-                                                        (click)="removeProductFromSale(item.productId)">
+                                                        (click)="removeSaleItem(i)"
+                                                        title="Remove item">
                                                     <i class="dripicons-trash"></i>
                                                 </button>
                                             </td>
                                         </tr>
                                     </tbody>
                                     <tfoot>
-                                        <tr>
-                                            <th colspan="3">
-                                                Total:
-                                                <span *ngIf="sale.discount > 0" class="text-muted small">
-                                                    ({{sale.discount}}% discount applied)
-                                                </span>
-                                            </th>
-                                            <th>R{{sale.totalAmount | number:'1.2-2'}}</th>
+                                        <tr class="table-active">
+                                            <th colspan="3">Total:</th>
+                                            <th>R{{sale.total | number:'1.2-2'}}</th>
                                             <th></th>
                                         </tr>
                                     </tfoot>
@@ -238,24 +257,14 @@
                         <div class="card-body">
                             <div class="d-flex justify-content-end gap-3">
                                 <button type="button"
-                                        class="btn btn-secondary"
-                                        (click)="resetForm()">
-                                    <i class="dripicons-refresh me-2"></i>Reset
-                                </button>
-                                <button type="button"
-                                        class="btn btn-outline-primary"
-                                        routerLink="/dashboard/sales">
-                                    <i class="dripicons-arrow-left me-2"></i>Back to Sales
+                                        class="btn btn-outline-secondary"
+                                        (click)="onCancel()">
+                                    <i class="dripicons-arrow-left me-2"></i>Cancel
                                 </button>
                                 <button type="submit"
                                         class="btn btn-primary"
-                                        [disabled]="!saleForm.valid || sale.saleItems.length === 0 || isSubmitting">
-                                    <i class="dripicons-checkmark me-2"></i>
-                                    <span *ngIf="!isSubmitting">Save Sale</span>
-                                    <span *ngIf="isSubmitting">
-                                        <i class="spinner-border spinner-border-sm me-2"></i>
-                                        Saving...
-                                    </span>
+                                        [disabled]="!saleForm.valid || sale.saleItems.length === 0">
+                                    <i class="dripicons-checkmark me-2"></i>Save Sale
                                 </button>
                             </div>
                         </div>

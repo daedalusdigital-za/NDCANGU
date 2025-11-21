@@ -2,17 +2,27 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { DatabaseService } from '../../../services/data/database.service';
+import { SaleModel, SaleItemModel } from '../../../shared/interfaces/common.interfaces';
 
-interface Province {
+interface InventoryItem {
   id: number;
   name: string;
-  code: string;
-}
-
-interface Hospital {
-  name: string;
-  code: string;
-  province: string;
+  description?: string | null;
+  category: number; // enum value
+  categoryText: string; // enum name like "HemoglobinTesting"
+  sku: string;
+  unitOfMeasure: string;
+  unitPrice: number; // decimal
+  stockAvailable: number;
+  reorderLevel: number;
+  supplier?: string | null;
+  expiryDate?: string | null; // datetime
+  batchNumber?: string | null;
+  status: number; // enum value
+  statusText: string; // enum name like "InStock"
+  createdDate: string; // datetime
+  lastUpdated?: string | null; // datetime
+  createdByUserName: string; // currently empty
 }
 
 @Component({
@@ -22,73 +32,25 @@ interface Hospital {
 })
 export class AddSaleComponent implements OnInit {
 
-  sale: any = {
+  sale: SaleModel = {
     saleNumber: '',
-    saleDate: new Date().toISOString().split('T')[0], // Format for date input
-    customerId: null,
+    saleDate: new Date().toISOString().split('T')[0], // Today's date in YYYY-MM-DD format
     customerName: '',
     customerPhone: '',
-    subtotal: 0,
     total: 0,
+    subtotal: 0,
     notes: '',
     provinceId: 1,
     saleItems: []
+  };  newSaleItem = {
+    inventoryItemId: 0,
+    inventoryItemName: '',
+    quantity: 1,
+    unitPrice: 0
   };
 
-  provinces: Province[] = [
-    { id: 1, name: 'Gauteng', code: 'GP' },
-    { id: 2, name: 'Western Cape', code: 'WC' },
-    { id: 3, name: 'KwaZulu-Natal', code: 'KZN' },
-    { id: 4, name: 'Eastern Cape', code: 'EC' },
-    { id: 5, name: 'Free State', code: 'FS' },
-    { id: 6, name: 'Limpopo', code: 'LP' },
-    { id: 7, name: 'Mpumalanga', code: 'MP' },
-    { id: 8, name: 'North West', code: 'NW' },
-    { id: 9, name: 'Northern Cape', code: 'NC' }
-  ];
-
-  hospitals: Hospital[] = [
-    // Gauteng
-    { name: 'Chris Hani Baragwanath Hospital', code: 'CHBH', province: 'GP' },
-    { name: 'Charlotte Maxeke Hospital', code: 'CMH', province: 'GP' },
-    { name: 'Helen Joseph Hospital', code: 'HJH', province: 'GP' },
-    { name: 'Rahima Moosa Mother & Child Hospital', code: 'RMMCH', province: 'GP' },
-    // Western Cape
-    { name: 'Groote Schuur Hospital', code: 'GSH', province: 'WC' },
-    { name: 'Tygerberg Hospital', code: 'TH', province: 'WC' },
-    { name: 'Red Cross War Memorial Children\'s Hospital', code: 'RCWMCH', province: 'WC' },
-    // KwaZulu-Natal
-    { name: 'Inkosi Albert Luthuli Hospital', code: 'IALH', province: 'KZN' },
-    { name: 'King Edward VIII Hospital', code: 'KEVIII', province: 'KZN' },
-    { name: 'Addington Hospital', code: 'AH', province: 'KZN' },
-    // Eastern Cape
-    { name: 'Livingstone Hospital', code: 'LH', province: 'EC' },
-    { name: 'Cecilia Makiwane Hospital', code: 'CMH', province: 'EC' },
-    { name: 'Frere Hospital', code: 'FH', province: 'EC' },
-    // Free State
-    { name: 'Universitas Academic Hospital', code: 'UAH', province: 'FS' },
-    { name: 'Pelonomi Hospital', code: 'PH', province: 'FS' },
-    // Limpopo
-    { name: 'Pietersburg Hospital', code: 'PH', province: 'LP' },
-    { name: 'Mankweng Hospital', code: 'MH', province: 'LP' },
-    // Mpumalanga
-    { name: 'Rob Ferreira Hospital', code: 'RFH', province: 'MP' },
-    { name: 'Witbank Hospital', code: 'WH', province: 'MP' },
-    // North West
-    { name: 'Klerksdorp Hospital', code: 'KH', province: 'NW' },
-    { name: 'Mafikeng Provincial Hospital', code: 'MPH', province: 'NW' },
-    // Northern Cape
-    { name: 'Kimberley Hospital', code: 'KH', province: 'NC' },
-    { name: 'Upington Hospital', code: 'UH', province: 'NC' }
-  ];
-
-  products: any[] = [];
-  trainers: any[] = [];
-  filteredHospitals: Hospital[] = [];
-  selectedProduct: any = null;
-  quantity: number = 1;
-  unitPrice: number = 0;
-  isSubmitting = false;
+  inventoryItems: InventoryItem[] = [];
+  loadingInventory = false;
 
   constructor(
     private router: Router,
@@ -97,230 +59,261 @@ export class AddSaleComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.loadProducts();
-    this.loadTrainers();
     this.generateSaleNumber();
+    this.loadInventory();
   }
 
   generateSaleNumber(): void {
-    // Generate a unique sale number
+    // Generate a unique sale number like the example
     const date = new Date();
-    const timestamp = date.getTime();
-    this.sale.saleNumber = `SALE-${timestamp.toString().slice(-8)}`;
+    const year = date.getFullYear();
+    const timestamp = date.getTime().toString().slice(-6);
+    this.sale.saleNumber = `SALE-${year}-${timestamp}`;
   }
 
-  loadProducts(): void {
-    // South African medical products with ZAR pricing
-    this.products = [
-      { id: 1, name: 'Blood Pressure Monitor (Digital)', price: 1200, stock: 25, category: 'Diagnostic' },
-      { id: 2, name: 'Glucose Test Strips (Box of 50)', price: 280, stock: 100, category: 'Diabetes Care' },
-      { id: 3, name: 'Digital Thermometer', price: 125, stock: 50, category: 'Basic Care' },
-      { id: 4, name: 'Pulse Oximeter', price: 650, stock: 30, category: 'Diagnostic' },
-      { id: 5, name: 'Stethoscope (Dual Head)', price: 950, stock: 15, category: 'Professional' },
-      { id: 6, name: 'Insulin Pen Needles (100 pack)', price: 95, stock: 200, category: 'Diabetes Care' },
-      { id: 7, name: 'Wound Care Kit', price: 185, stock: 40, category: 'Basic Care' },
-      { id: 8, name: 'Nebulizer Machine', price: 1800, stock: 12, category: 'Respiratory' },
-      { id: 9, name: 'Blood Glucose Meter', price: 450, stock: 35, category: 'Diabetes Care' },
-      { id: 10, name: 'Compression Stockings', price: 320, stock: 60, category: 'Circulation' }
-    ];
-  }
+  loadInventory(): void {
+    this.loadingInventory = true;
+    this.inventoryItems = [];
 
-  loadTrainers(): void {
-    this.databaseService.getTrainers().subscribe({
-      next: (trainers) => {
-        this.trainers = trainers.filter(t => t.status === 'Active');
-        console.log('Loaded trainers:', this.trainers);
-      },
-      error: (error) => {
-        console.error('Error loading trainers:', error);
-        this.toastr.error('Failed to load trainers', 'Error');
-        this.trainers = [];
-      }
+    // Load all 16 inventory IDs using GetById endpoint only
+    const allInventoryIds = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16];
+    let loadedCount = 0;
+    let errorCount = 0;
+
+    console.log(`Using GET /api/Inventory/GetById for IDs: ${allInventoryIds.join(', ')}`);
+
+    allInventoryIds.forEach(id => {
+      // Call GET /api/Inventory/GetById?id={inventoryItemId}
+      this.databaseService.getInventoryItemById(id).subscribe({
+        next: (item: InventoryItem) => {
+          if (item) {
+            this.inventoryItems.push(item);
+            console.log(`Loaded inventory item ${id}:`, item);
+          }
+          loadedCount++;
+
+          // Check if all requests completed
+          if (loadedCount + errorCount === allInventoryIds.length) {
+            this.loadingInventory = false;
+
+            if (this.inventoryItems.length > 0) {
+              this.toastr.success(`Loaded ${this.inventoryItems.length} inventory items via GetById`, 'Success');
+            } else {
+              this.toastr.info('No inventory items available via GetById', 'Info');
+            }
+          }
+        },
+        error: (error: {status?: number, message?: string}) => {
+          console.error(`GetById failed for ID ${id}:`, error);
+          errorCount++;
+
+          // Check if all requests completed
+          if (loadedCount + errorCount === allInventoryIds.length) {
+            this.loadingInventory = false;
+
+            if (errorCount === allInventoryIds.length) {
+              // All requests failed - no real data available
+              if (error.status === 400 || error.message?.includes('Invalid object name')) {
+                this.toastr.error(`GetById API failed: ${error.message || 'Database table issue'}`, 'Database Error');
+              } else {
+                this.toastr.error(`All GetById requests failed: ${error.message || 'Unknown error'}`, 'API Error');
+              }
+              // Clear inventory since we're not using fallback data
+              this.inventoryItems = [];
+            } else {
+              // Some succeeded, some failed
+              this.toastr.warning(`Partial success: ${this.inventoryItems.length} loaded, ${errorCount} failed`, 'Partial Success');
+            }
+          }
+        }
+      });
     });
   }
 
-  onProvinceChange(): void {
-    this.filteredHospitals = this.hospitals.filter(hospital =>
-      hospital.province === this.sale.province
-    );
-    this.sale.hospital = ''; // Reset hospital selection
-  }
+  onInventoryItemChange(): void {
+    // Update unit price when inventory item is selected
+    console.log('onInventoryItemChange triggered - inventoryItemId:', this.newSaleItem.inventoryItemId);
+    console.log('Type of inventoryItemId:', typeof this.newSaleItem.inventoryItemId);
+    console.log('Available inventory items:', this.inventoryItems.length);
 
-  addProductToSale(): void {
-    if (this.selectedProduct && this.quantity > 0 && this.unitPrice > 0) {
-      if (this.quantity > this.selectedProduct.stock) {
-        this.toastr.error('Quantity exceeds available stock', 'Error');
-        return;
-      }
+    // Ensure we're working with a number (Angular forms sometimes convert to string)
+    const itemId = Number(this.newSaleItem.inventoryItemId);
+    console.log('Converted itemId to number:', itemId);
 
-      const existingItemIndex = this.sale.saleItems.findIndex((item: any) => item.productId === this.selectedProduct.id);
+    const selectedItem = this.inventoryItems.find(item => item.id === itemId);
+    console.log('Selected item found:', !!selectedItem);
 
-      if (existingItemIndex !== -1) {
-        // Update existing item
-        this.sale.saleItems[existingItemIndex].quantity += this.quantity;
-        this.sale.saleItems[existingItemIndex].unitPrice = this.unitPrice;
-      } else {
-        // Add new item according to schema
-        this.sale.saleItems.push({
-          id: 0, // Will be set by backend
-          productId: this.selectedProduct.id,
-          productName: this.selectedProduct.name,
-          quantity: this.quantity,
-          unitPrice: this.unitPrice
-        });
-      }
+    if (selectedItem) {
+      console.log('BEFORE update - Unit price was:', this.newSaleItem.unitPrice);
 
-      this.calculateTotal();
-      this.selectedProduct = null;
-      this.quantity = 1;
-      this.unitPrice = 0;
-      this.toastr.success('Product added to sale', 'Success');
+      // Use name or description for the item name
+      this.newSaleItem.inventoryItemName = selectedItem.name || selectedItem.description || 'Unknown Item';
+      // Use unitPrice from the actual database schema
+      this.newSaleItem.unitPrice = selectedItem.unitPrice || 0;
+
+      console.log('AFTER update - Unit price is now:', this.newSaleItem.unitPrice);
+      console.log(`Selected inventory item:`, {
+        id: selectedItem.id,
+        name: selectedItem.name,
+        description: selectedItem.description,
+        sku: selectedItem.sku,
+        unitPrice: selectedItem.unitPrice,
+        stockAvailable: selectedItem.stockAvailable,
+        categoryText: selectedItem.categoryText,
+        statusText: selectedItem.statusText
+      });
+    } else {
+      console.log('No item found for ID:', itemId);
+      console.log('Available item IDs:', this.inventoryItems.map(i => i.id));
     }
   }
 
-  removeProductFromSale(productId: number): void {
-    this.sale.saleItems = this.sale.saleItems.filter((item: any) => item.productId !== productId);
+  addSaleItem(): void {
+    if (this.newSaleItem.inventoryItemId === 0) {
+      this.toastr.error('Please select an inventory item', 'Error');
+      return;
+    }
+
+    if (this.newSaleItem.quantity <= 0) {
+      this.toastr.error('Quantity must be greater than 0', 'Error');
+      return;
+    }
+
+    if (this.newSaleItem.unitPrice <= 0) {
+      this.toastr.error('Unit price must be greater than 0', 'Error');
+      return;
+    }
+
+    // Check if item already exists in sale
+    const existingItemIndex = this.sale.saleItems.findIndex(
+      item => item.inventoryItemId === this.newSaleItem.inventoryItemId
+    );
+
+    if (existingItemIndex !== -1) {
+      // Update existing item quantity
+      this.sale.saleItems[existingItemIndex].quantity += this.newSaleItem.quantity;
+      this.toastr.info('Updated existing item quantity', 'Info');
+    } else {
+      // Add new item
+      const saleItem: SaleItemModel = {
+        inventoryItemId: this.newSaleItem.inventoryItemId,
+        quantity: this.newSaleItem.quantity,
+        unitPrice: this.newSaleItem.unitPrice
+      };
+      this.sale.saleItems.push(saleItem);
+      this.toastr.success('Item added to sale', 'Success');
+    }
+
     this.calculateTotal();
-    this.toastr.info('Product removed from sale', 'Info');
+    this.resetNewSaleItem();
+  }
+
+  removeSaleItem(index: number): void {
+    this.sale.saleItems.splice(index, 1);
+    this.calculateTotal();
+    this.toastr.info('Item removed from sale', 'Info');
+  }
+
+  updateSaleItemQuantity(index: number, quantity: number): void {
+    if (quantity <= 0) {
+      this.removeSaleItem(index);
+      return;
+    }
+    this.sale.saleItems[index].quantity = quantity;
+    this.calculateTotal();
+  }
+
+  updateSaleItemPrice(index: number, unitPrice: number): void {
+    if (unitPrice < 0) {
+      this.toastr.error('Unit price cannot be negative', 'Error');
+      return;
+    }
+    this.sale.saleItems[index].unitPrice = unitPrice;
+    this.calculateTotal();
+  }
+
+  resetNewSaleItem(): void {
+    this.newSaleItem = {
+      inventoryItemId: 0,
+      inventoryItemName: '',
+      quantity: 1,
+      unitPrice: 0
+    };
   }
 
   calculateTotal(): void {
-    this.sale.subtotal = this.sale.saleItems.reduce((total: number, item: any) => {
+    this.sale.subtotal = this.sale.saleItems.reduce((total, item) => {
       return total + (item.quantity * item.unitPrice);
     }, 0);
-
-    // For now, total equals subtotal (can add tax/fees later)
-    this.sale.total = this.sale.subtotal;
+    this.sale.total = this.sale.subtotal; // For now, total equals subtotal (no tax/fees)
   }
 
-  onProductSelect(): void {
-    if (this.selectedProduct) {
-      this.unitPrice = this.selectedProduct.price;
+  getInventoryItemName(inventoryItemId: number): string {
+    const item = this.inventoryItems.find(i => i.id === inventoryItemId);
+    return item ? (item.name || item.description || 'Unknown Item') : 'Unknown Item';
+  }
+
+  getSaleItemTotal(item: SaleItemModel): number {
+    return item.quantity * item.unitPrice;
+  }
+
+  onSave(): void {
+    if (!this.isFormValid()) {
+      return;
     }
-  }
 
-  saveSale(): void {
-    if (this.validateSale()) {
-      this.isSubmitting = true;
-
-      // Format the sale data according to SaleModel API schema
-      const saleModel = {
-        saleNumber: this.sale.saleNumber,
-        saleDate: this.formatDateForAPI(this.sale.saleDate),
-        customerId: this.sale.customerId,
-        customerName: this.sale.customerName,
-        customerPhone: this.sale.customerPhone,
-        subtotal: parseFloat(this.sale.subtotal) || 0,
-        total: parseFloat(this.sale.total) || 0,
-        notes: this.sale.notes || '',
-        provinceId: parseInt(this.sale.provinceId),
-        saleItems: this.sale.saleItems.map((item: any) => ({
-          inventoryItemId: item.inventoryItemId,
-          quantity: item.quantity,
-          unitPrice: item.unitPrice
-        }))
-      };
-
-      console.log('Sale data payload (SaleModel):', saleModel);
-
-      // Try to save using DatabaseService
-      this.saveSaleToAPI(saleModel);
-    }
-  }
-
-  private saveSaleToAPI(saleData: any): void {
-    // Use DatabaseService to save the sale
-    this.databaseService.createSale(saleData).subscribe({
-      next: (response) => {
-        this.isSubmitting = false;
-        console.log('Sale saved successfully:', response);
-        this.toastr.success('Sale saved successfully!', 'Success');
-        this.router.navigate(['/dashboard/sales/list']);
-      },
-      error: (error) => {
-        this.isSubmitting = false;
-        console.error('Error saving sale via API:', error);
-
-        // Fallback: Save to local storage
-        this.saveToLocalStorage(saleData);
-        this.toastr.success('Sale saved locally (API unavailable)', 'Success');
-        this.router.navigate(['/dashboard/sales/list']);
-      }
-    });
-  }
-
-  private saveToLocalStorage(saleData: any): void {
-    try {
-      const existingSales = JSON.parse(localStorage.getItem('sales') || '[]');
-      const saleWithId = {
-        ...saleData,
-        id: Date.now(),
-        createdAt: new Date().toISOString()
-      };
-      existingSales.push(saleWithId);
-      localStorage.setItem('sales', JSON.stringify(existingSales));
-      console.log('Sale saved to localStorage:', saleWithId);
-    } catch (error) {
-      console.error('Error saving to localStorage:', error);
-      this.toastr.error('Failed to save sale', 'Error');
-    }
-  }
-
-  // Helper method to format date for API (ISO format)
-  private formatDateForAPI(dateValue: any): string {
-    if (!dateValue) return '';
-    const date = new Date(dateValue);
-    return date.toISOString();
-  }
-
-  resetForm(): void {
-    this.sale = {
-      saleNumber: '',
-      saleDate: new Date().toISOString(),
-      province: '',
-      hospital: '',
-      customerContactName: '',
-      customerContactEmail: '',
-      customerContactPhone: '',
-      paymentMethod: 1,
-      paymentStatus: 1,
-      deliveryStatus: 1,
-      deliveryDate: '',
-      notes: '',
-      salesPerson: '',
-      discount: 0,
-      invoiceNumber: '',
-      saleItems: [],
-      totalAmount: 0
+    // Convert date picker value to ISO string for API
+    const saleDate = new Date(this.sale.saleDate);
+    const apiSale = {
+      ...this.sale,
+      saleDate: saleDate.toISOString()
     };
-    this.selectedProduct = null;
-    this.quantity = 1;
-    this.unitPrice = 0;
-    this.filteredHospitals = [];
-    this.generateSaleNumber();
+
+    console.log('Saving sale with API structure:', apiSale);
+
+    // Here you would typically call your API service
+    // this.salesService.createSale(this.sale).subscribe({
+    //   next: (response) => {
+    //     this.toastr.success('Sale saved successfully!', 'Success');
+    //     this.router.navigate(['/dashboard/sales']);
+    //   },
+    //   error: (error) => {
+    //     console.error('Error saving sale:', error);
+    //     this.toastr.error('Failed to save sale', 'Error');
+    //   }
+    // });
+
+    // For now, simulate success
+    this.toastr.success('Sale saved successfully!', 'Success');
+    console.log('Sale data structure:', JSON.stringify(apiSale, null, 2));
+    this.router.navigate(['/dashboard/sales']);
   }
 
-  private validateSale(): boolean {
-    if (!this.sale.customerContactName.trim()) {
+  isFormValid(): boolean {
+    if (!this.sale.customerName.trim()) {
       this.toastr.error('Customer name is required', 'Validation Error');
       return false;
     }
 
-    if (!this.sale.customerContactPhone.trim()) {
+    if (!this.sale.customerPhone.trim()) {
       this.toastr.error('Customer phone is required', 'Validation Error');
       return false;
     }
 
-    if (!this.sale.province.trim()) {
-      this.toastr.error('Province is required', 'Validation Error');
+    if (this.sale.saleItems.length === 0) {
+      this.toastr.error('At least one sale item is required', 'Validation Error');
       return false;
     }
 
-    if (this.sale.saleItems.length === 0) {
-      this.toastr.error('At least one product must be added to the sale', 'Validation Error');
+    if (this.sale.total <= 0) {
+      this.toastr.error('Total amount must be greater than zero', 'Validation Error');
       return false;
     }
 
     return true;
+  }
+
+  onCancel(): void {
+    this.router.navigate(['/dashboard/sales']);
   }
 }

@@ -1,6 +1,7 @@
 import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { DatabaseService, Sale, SaleItem } from '../../../services/data/database.service';
+import { DatabaseService } from '../../../services/data/database.service';
+import { Sale, SaleModel, SaleItem } from '../../../shared/interfaces/common.interfaces';
 import { ToastrService } from 'ngx-toastr';
 
 @Component({

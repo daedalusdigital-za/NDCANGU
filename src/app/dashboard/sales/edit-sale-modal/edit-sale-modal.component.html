@@ -1,10 +1,10 @@
 <div class="modal" [class.show]="isVisible" [style.display]="isVisible ? 'block' : 'none'" tabindex="-1">
-  <div class="modal-backdrop" [class.show]="isVisible" (click)="closeModal()"></div>
+  <div class="modal-backdrop" [class.show]="isVisible" (click)="closeModal()" (keydown.escape)="closeModal()" role="button" tabindex="0" aria-label="Close modal"></div>
   <div class="modal-dialog modal-lg modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title">Edit Sale</h5>
-        <button type="button" class="btn-close" (click)="closeModal()"></button>
+        <button type="button" class="btn-close" (click)="closeModal()" aria-label="Close"></button>
       </div>
 
       <div class="modal-body">
@@ -26,7 +26,7 @@
                 name="saleNumber"
                 [(ngModel)]="sale.saleNumber"
                 required
-                [class.is-invalid]="saleForm.submitted && saleForm.controls['saleNumber']?.invalid">
+                [class.is-invalid]="saleForm.submitted && saleForm.controls['saleNumber'].invalid">
               <div class="invalid-feedback">Sale number is required</div>
             </div>
 
@@ -40,7 +40,7 @@
                 name="saleDate"
                 [(ngModel)]="sale.saleDate"
                 required
-                [class.is-invalid]="saleForm.submitted && saleForm.controls['saleDate']?.invalid">
+                [class.is-invalid]="saleForm.submitted && saleForm.controls['saleDate'].invalid">
               <div class="invalid-feedback">Sale date is required</div>
             </div>
 
@@ -54,7 +54,7 @@
                 name="customerName"
                 [(ngModel)]="sale.customerName"
                 required
-                [class.is-invalid]="saleForm.submitted && saleForm.controls['customerName']?.invalid">
+                [class.is-invalid]="saleForm.submitted && saleForm.controls['customerName'].invalid">
               <div class="invalid-feedback">Customer name is required</div>
             </div>
 
@@ -68,7 +68,7 @@
                 name="customerPhone"
                 [(ngModel)]="sale.customerPhone"
                 required
-                [class.is-invalid]="saleForm.submitted && saleForm.controls['customerPhone']?.invalid">
+                [class.is-invalid]="saleForm.submitted && saleForm.controls['customerPhone'].invalid">
               <div class="invalid-feedback">Customer phone is required</div>
             </div>
 
@@ -81,7 +81,7 @@
                 name="provinceId"
                 [(ngModel)]="sale.provinceId"
                 required
-                [class.is-invalid]="saleForm.submitted && saleForm.controls['provinceId']?.invalid">
+                [class.is-invalid]="saleForm.submitted && saleForm.controls['provinceId'].invalid">
                 <option value="">Select Province</option>
                 <option *ngFor="let province of provinces" [value]="province.id">{{province.name}}</option>
               </select>
@@ -100,7 +100,7 @@
                 required
                 min="0"
                 step="0.01"
-                [class.is-invalid]="saleForm.submitted && saleForm.controls['subtotal']?.invalid">
+                [class.is-invalid]="saleForm.submitted && saleForm.controls['subtotal'].invalid">
               <div class="invalid-feedback">Subtotal is required</div>
             </div>
 
@@ -116,7 +116,7 @@
                 required
                 min="0"
                 step="0.01"
-                [class.is-invalid]="saleForm.submitted && saleForm.controls['total']?.invalid">
+                [class.is-invalid]="saleForm.submitted && saleForm.controls['total'].invalid">
               <div class="invalid-feedback">Total amount is required</div>
             </div>
 
