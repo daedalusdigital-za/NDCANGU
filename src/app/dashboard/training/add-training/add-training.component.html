@@ -93,9 +93,21 @@
                                            formControlName="venue"
                                            [class.is-invalid]="isFieldInvalid('venue')"
                                            placeholder="e.g., Conference Room A">
-                                    <div class="invalid-feedback" *ngIf="isFieldInvalid('venue')">
+                                    <div class="invalid-feedback d-block" *ngIf="isFieldInvalid('venue')">
                                         {{ getFieldErrorMessage('venue') }}
                                     </div>
+                                </div>
+
+                                <!-- Training Register Upload -->
+                                <div class="col-md-6 mb-3">
+                                    <label for="trainingRegisterInput" class="form-label">Upload Training Register <span class="text-danger">*</span></label>
+                                    <input type="file"
+                                           id="trainingRegisterInput"
+                                           class="form-control"
+                                           accept=".pdf"
+                                           (change)="onTrainingRegisterFileSelected($event)"
+                                           #trainingRegisterFile>
+                                    <small class="text-muted d-block mt-2">PDF format only | Maximum size: 5MB</small>
                                 </div>
 
                                 <!-- Trainer -->
@@ -223,13 +235,89 @@
                             <button class="btn btn-warning" routerLink="/dashboard/training/trainers">
                                 <i class="dripicons-user-group me-2"></i>Manage Trainers
                             </button>
-                            <button class="btn btn-primary" routerLink="/dashboard/training/reports">
-                                <i class="dripicons-document me-2"></i>Training Reports
-                            </button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+
+        <!-- Upload Modal -->
+        <div class="modal fade" id="uploadTrainingRegisterModal"
+             [class.show]="showUploadDialog"
+             [style.display]="showUploadDialog ? 'block' : 'none'"
+             tabindex="-1"
+             role="dialog"
+             aria-labelledby="uploadModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="uploadModalLabel">Upload Training Register</h5>
+                        <button type="button" class="btn-close" (click)="cancelUpload()" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <div class="mb-3">
+                                <label for="uploadProvince" class="form-label">Province <span class="text-danger">*</span></label>
+                                <select id="uploadProvince"
+                                        class="form-select"
+                                        [(ngModel)]="uploadInfo.province"
+                                        name="province">
+                                    <option value="" disabled selected>Select province</option>
+                                    <option *ngFor="let province of provinces" [value]="province.name">
+                                        {{ province.name }}
+                                    </option>
+                                </select>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="uploadVenue" class="form-label">Venue <span class="text-danger">*</span></label>
+                                <input type="text"
+                                       id="uploadVenue"
+                                       class="form-control"
+                                       [(ngModel)]="uploadInfo.venue"
+                                       name="venue"
+                                       placeholder="Enter venue">
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="uploadTrainer" class="form-label">Trainer Name <span class="text-danger">*</span></label>
+                                <select id="uploadTrainer"
+                                        class="form-select"
+                                        [(ngModel)]="uploadInfo.trainer"
+                                        name="trainer">
+                                    <option value="" disabled selected>Select a trainer</option>
+                                    <option *ngFor="let trainer of trainers" [value]="trainer.name">
+                                        {{ trainer.name }}
+                                    </option>
+                                </select>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="uploadDate" class="form-label">Training Date <span class="text-danger">*</span></label>
+                                <input type="date"
+                                       id="uploadDate"
+                                       class="form-control"
+                                       [(ngModel)]="uploadInfo.date"
+                                       name="date">
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" (click)="cancelUpload()">
+                            <i class="dripicons-cross me-2"></i>Cancel
+                        </button>
+                        <button type="button"
+                                class="btn btn-success"
+                                (click)="confirmUpload()"
+                                [disabled]="!uploadInfo.province || !uploadInfo.venue || !uploadInfo.trainer || !uploadInfo.date">
+                            <i class="dripicons-checkmark me-2"></i>Process Upload
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Modal Backdrop -->
+        <div class="modal-backdrop fade" [class.show]="showUploadDialog" *ngIf="showUploadDialog"></div>
     </div>
 </div>

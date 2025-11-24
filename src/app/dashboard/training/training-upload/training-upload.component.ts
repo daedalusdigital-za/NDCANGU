@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
+import { DatabaseService } from 'src/app/services/data/database.service';
 
 interface TrainingRecord {
   trainingName: string;
@@ -16,6 +17,19 @@ interface UploadHistory {
   uploadDate: string;
   recordsProcessed: number;
   status: string;
+}
+
+interface Trainer {
+  id?: number;
+  name?: string;
+  email?: string;
+  phone?: string;
+  province?: string;
+  location?: string;
+  status?: string;
+  qualification?: string;
+  experience?: number;
+  bio?: string;
 }
 
 @Component({
@@ -52,6 +66,8 @@ export class TrainingUploadComponent implements OnInit {
     'Western Cape'
   ];
 
+  trainers: Trainer[] = [];
+
   uploadHistory: UploadHistory[] = [
     {
       fileName: 'training_register_Q1_2024.pdf',
@@ -75,10 +91,37 @@ export class TrainingUploadComponent implements OnInit {
 
   constructor(
     private toastr: ToastrService,
-    private router: Router
+    private router: Router,
+    private databaseService: DatabaseService
   ) { }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.loadTrainers();
+  }
+
+  loadTrainers(): void {
+    this.databaseService.getTrainers().subscribe({
+      next: (trainers) => {
+        this.trainers = trainers;
+        console.log('Trainers loaded:', trainers);
+      },
+      error: (error) => {
+        console.error('Error loading trainers:', error);
+        this.trainers = [];
+      }
+    });
+  }
+
+  onFileSelected(event: any): void {
+    const files = event.target.files;
+
+    for (let file of files) {
+      if (this.validateFile(file)) {
+        this.uploadedFiles.push(file);
+        this.toastr.success(`File ${file.name} uploaded successfully`, 'Success');
+      }
+    }
+  }
 
   onUpload(event: any): void {
     const files = event.files;
@@ -135,6 +178,7 @@ export class TrainingUploadComponent implements OnInit {
 
   processTrainingRegister(file: File): void {
     // Show dialog to get upload information
+    console.log('Opening upload dialog for file:', file.name);
     this.selectedFile = file;
     this.uploadInfo = {
       province: '',
@@ -144,6 +188,7 @@ export class TrainingUploadComponent implements OnInit {
       date: ''
     };
     this.showUploadDialog = true;
+    console.log('Upload dialog shown:', this.showUploadDialog);
   }
 
   async confirmUpload(): Promise<void> {

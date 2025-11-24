@@ -23,56 +23,16 @@
                         <h5 class="card-title mb-0">Upload Training Register</h5>
                     </div>
                     <div class="card-body">
-                        <p-fileUpload
-                            name="trainingFiles[]"
-                            [multiple]="true"
-                            [maxFileSize]="maxFileSize"
-                            [accept]="acceptedFileTypes"
-                            (onUpload)="onUpload($event)"
-                            (onError)="onError($event)"
-                            [customUpload]="true"
-                            [showUploadButton]="false"
-                            [showCancelButton]="false"
-                            chooseLabel="Choose Files"
-                            class="upload-component">
-
-                            <ng-template pTemplate="content">
-                                <div class="upload-area text-center"
-                                     *ngIf="uploadedFiles.length === 0">
-                                    <i class="dripicons-cloud-upload upload-icon"></i>
-                                    <h5>Drop files here or click to browse</h5>
-                                    <p class="text-muted">Supported formats: PDF (.pdf)</p>
-                                </div>
-
-                                <div *ngIf="uploadedFiles.length > 0" class="uploaded-files">
-                                    <h6>Uploaded Files:</h6>
-                                    <div class="row">
-                                        <div class="col-md-6 mb-3" *ngFor="let file of uploadedFiles; let i = index">
-                                            <div class="file-item p-3 border rounded">
-                                                <div class="d-flex justify-content-between align-items-center">
-                                                    <div>
-                                                        <h6 class="mb-1">{{file.name}}</h6>
-                                                        <small class="text-muted">{{formatFileSize(file.size)}}</small>
-                                                    </div>
-                                                    <button type="button"
-                                                            class="btn btn-sm btn-outline-danger"
-                                                            (click)="removeFile(i)">
-                                                        <i class="dripicons-trash"></i>
-                                                    </button>
-                                                </div>
-                                                <div class="progress mt-2">
-                                                    <div class="progress-bar bg-success"
-                                                         role="progressbar"
-                                                         style="width: 100%">
-                                                        Complete
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </ng-template>
-                        </p-fileUpload>
+                        <!-- Simple File Input -->
+                        <div class="mb-3">
+                            <label for="pdfFileInput" class="form-label">Select PDF File</label>
+                            <input type="file"
+                                   id="pdfFileInput"
+                                   class="form-control"
+                                   accept=".pdf"
+                                   (change)="onFileSelected($event)">
+                            <small class="text-muted d-block mt-2">Supported format: PDF (.pdf) | Maximum size: 5MB</small>
+                        </div>
 
                         <div class="mt-3" *ngIf="uploadedFiles.length > 0">
                             <div class="d-flex gap-2 justify-content-end">
@@ -86,6 +46,35 @@
                                         (click)="processTrainingRegister(uploadedFiles[0])">
                                     <i class="dripicons-checkmark me-2"></i>Process Upload
                                 </button>
+                            </div>
+                        </div>
+
+                        <!-- Uploaded Files Display -->
+                        <div *ngIf="uploadedFiles.length > 0" class="mt-4">
+                            <h6>Uploaded Files:</h6>
+                            <div class="row">
+                                <div class="col-md-6 mb-3" *ngFor="let file of uploadedFiles; let i = index">
+                                    <div class="file-item p-3 border rounded">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div>
+                                                <h6 class="mb-1">{{file.name}}</h6>
+                                                <small class="text-muted">{{formatFileSize(file.size)}}</small>
+                                            </div>
+                                            <button type="button"
+                                                    class="btn btn-sm btn-outline-danger"
+                                                    (click)="removeFile(i)">
+                                                <i class="dripicons-trash"></i>
+                                            </button>
+                                        </div>
+                                        <div class="progress mt-2">
+                                            <div class="progress-bar bg-success"
+                                                 role="progressbar"
+                                                 style="width: 100%">
+                                                Complete
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -181,9 +170,6 @@
                             <button class="btn btn-success" routerLink="/dashboard/training/trainers">
                                 <i class="dripicons-user-group me-2"></i>Manage Trainers
                             </button>
-                            <button class="btn btn-warning" routerLink="/dashboard/training/reports">
-                                <i class="dripicons-document me-2"></i>Training Reports
-                            </button>
                         </div>
                     </div>
                 </div>
@@ -191,13 +177,13 @@
         </div>
 
         <!-- Upload Information Modal -->
-        <div class="modal fade" [class.show]="showUploadDialog" [style.display]="showUploadDialog ? 'block' : 'none'" tabindex="-1" *ngIf="showUploadDialog">
-            <div class="modal-backdrop fade show" (click)="cancelUpload()"></div>
-            <div class="modal-dialog modal-dialog-centered">
+        <div class="modal fade" [class.show]="showUploadDialog" [style.display]="showUploadDialog ? 'block' : 'none'" role="dialog" tabindex="-1" *ngIf="showUploadDialog" (click)="$event.target === $event.currentTarget && cancelUpload()">
+            <div class="modal-backdrop fade" [class.show]="showUploadDialog"></div>
+            <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title">Upload Information</h5>
-                        <button type="button" class="btn-close" (click)="cancelUpload()"></button>
+                        <button type="button" class="btn-close" aria-label="Close" (click)="cancelUpload()"></button>
                     </div>
                     <div class="modal-body">
                         <p class="text-muted">Please provide the following information for this training upload:</p>
@@ -230,12 +216,17 @@
 
                         <div class="mb-3">
                             <label for="trainer" class="form-label">Trainer Name <span class="text-danger">*</span></label>
-                            <input type="text"
-                                   id="trainer"
-                                   class="form-control"
-                                   [(ngModel)]="uploadInfo.trainer"
-                                   placeholder="Enter trainer name">
-                        </div>                        <div class="mb-3">
+                            <select id="trainer"
+                                    class="form-control"
+                                    [(ngModel)]="uploadInfo.trainer">
+                                <option value="" disabled selected>Select a trainer</option>
+                                <option *ngFor="let trainer of trainers" [value]="trainer.name">
+                                    {{ trainer.name }}
+                                </option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
                             <label for="date" class="form-label">Training Date <span class="text-danger">*</span></label>
                             <input type="date"
                                    id="date"

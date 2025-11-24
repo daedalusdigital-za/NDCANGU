@@ -9,7 +9,6 @@ import { TrainingUploadComponent } from './training-upload/training-upload.compo
 import { AddTrainingComponent } from './add-training/add-training.component';
 import { ListTrainingComponent } from './list-training/list-training.component';
 import { TrainersComponent } from './trainers/trainers.component';
-import { TrainingReportsComponent } from './training-reports/training-reports.component';
 
 // PrimeNG imports
 import { TableModule } from 'primeng/table';
@@ -34,7 +33,6 @@ import { EditTrainingComponent } from './edit-training/edit-training.component';
     AddTrainingComponent,
     ListTrainingComponent,
     TrainersComponent,
-    TrainingReportsComponent,
     EditTrainingComponent
   ],
   imports: [

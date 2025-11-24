@@ -1,10 +1,23 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { DatabaseService, TrainingStatus } from '../../../services/data/database.service';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+
+interface Trainer {
+  id?: number;
+  name?: string;
+  email?: string;
+  phone?: string;
+  province?: string;
+  location?: string;
+  status?: string;
+  qualification?: string;
+  experience?: number;
+  bio?: string;
+}
 
 @Component({
   selector: 'app-add-training',
@@ -14,6 +27,17 @@ import { map } from 'rxjs/operators';
 export class AddTrainingComponent implements OnInit {
   trainingForm: FormGroup;
   isSubmitting = false;
+
+  // File upload properties
+  @ViewChild('trainingRegisterFile') trainingRegisterFile: ElementRef | null = null;
+  showUploadDialog = false;
+  selectedFile: File | null = null;
+  uploadInfo = {
+    province: '',
+    venue: '',
+    trainer: '',
+    date: ''
+  };
 
   // Province mapping with IDs matching backend
   provinces = [
@@ -271,5 +295,92 @@ export class AddTrainingComponent implements OnInit {
   onReset(): void {
     this.resetForm();
     this.toastr.info('Form has been reset', 'Reset');
+  }
+
+  // File Upload Methods
+  onTrainingRegisterFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const files = input.files;
+
+    if (files && files.length > 0) {
+      const file = files[0];
+
+      // Validate file type
+      if (file.type !== 'application/pdf') {
+        this.toastr.error('Please select a PDF file', 'Invalid File');
+        return;
+      }
+
+      // Validate file size (5MB)
+      const maxFileSize = 5000000;
+      if (file.size > maxFileSize) {
+        this.toastr.error('File size cannot exceed 5MB', 'File Too Large');
+        return;
+      }
+
+      this.selectedFile = file;
+      // Reset upload info and open modal
+      this.uploadInfo = {
+        province: '',
+        venue: '',
+        trainer: '',
+        date: ''
+      };
+      this.showUploadDialog = true;
+    }
+  }
+
+  cancelUpload(): void {
+    this.showUploadDialog = false;
+    this.selectedFile = null;
+    this.uploadInfo = {
+      province: '',
+      venue: '',
+      trainer: '',
+      date: ''
+    };
+  }
+
+  confirmUpload(): void {
+    // Validate all fields are filled
+    if (!this.uploadInfo.province || !this.uploadInfo.venue || !this.uploadInfo.trainer || !this.uploadInfo.date) {
+      this.toastr.error('Please fill in all required fields', 'Validation Error');
+      return;
+    }
+
+    if (!this.selectedFile) {
+      this.toastr.error('No file selected', 'Error');
+      return;
+    }
+
+    // Process the upload
+    this.processTrainingRegisterUpload();
+  }
+
+  private processTrainingRegisterUpload(): void {
+    if (!this.selectedFile) {
+      return;
+    }
+
+    console.log('Processing Training Register:', {
+      file: this.selectedFile.name,
+      uploadInfo: this.uploadInfo
+    });
+
+    // Show success message
+    this.toastr.success(`Training register '${this.selectedFile.name}' uploaded successfully`, 'Upload Complete');
+
+    // Close modal
+    this.showUploadDialog = false;
+
+    // Optionally, you can extract data from PDF and populate form fields
+    // For now, just populate the venue field from the modal
+    this.trainingForm.get('venue')?.setValue(this.uploadInfo.venue);
+
+    // Reset file input
+    if (this.trainingRegisterFile) {
+      this.trainingRegisterFile.nativeElement.value = '';
+    }
+    this.selectedFile = null;
   }
 }
