@@ -167,7 +167,7 @@ export class TrainersComponent implements OnInit {
     this.editingIndex = this.trainers.findIndex(t => t.id === trainer.id);
 
     // Convert status to numeric value for form
-    const statusValue = (trainer.status as any) === 'Active' || trainer.status === 1 ? 1 : 0;
+    const statusValue = (trainer.status as any) === 'Active' || (trainer.status as any) === 1 ? 1 : 0;
 
     // Populate form with trainer data
     this.trainerForm.patchValue({
