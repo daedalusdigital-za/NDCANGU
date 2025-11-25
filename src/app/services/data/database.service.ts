@@ -362,32 +362,49 @@ export class DatabaseService {
    * - dateCreated, lastUpdated (ISO datetime), updatedBy, modifiedBy
    *
    * Maps API response to include computed 'name' field for UI compatibility
+   * Handles null/missing data gracefully with proper defaults
    */
   getTrainers(): Observable<Trainer[]> {
     if (this.FORCE_FALLBACK_MODE) {
       return of(this.getFallbackTrainers());
     }
 
-    return this.http.get<Trainer[]>(`${this.API_URL}Trainer/GetAll`, { headers: this.getAuthHeaders() })
+    return this.http.get<any[]>(`${this.API_URL}Trainer/GetAll`, { headers: this.getAuthHeaders() })
       .pipe(
         map((trainers: any[]) => {
+          if (!Array.isArray(trainers)) {
+            console.warn('Invalid trainer response format - expected array');
+            return this.getFallbackTrainers();
+          }
+
           // Map API response to Trainer interface
           // Ensure 'name' field is computed from firstName + lastName for UI compatibility
-          return trainers.map(t => ({
-            ...t,
-            name: `${t.firstName} ${t.lastName}`,
-            status: t.isActive ? 'Active' : 'Inactive',
-            qualification: t.specialization,
-            experience: t.experience
-          }));
+          return trainers.map((t: any) => {
+            try {
+              return {
+                ...t,
+                // Computed fields for UI compatibility
+                name: `${t.firstName || ''} ${t.lastName || ''}`.trim() || 'Unknown Trainer',
+                status: t.isActive === true ? 'Active' : 'Inactive',
+                qualification: t.specialization || '',
+                experience: Number(t.experience) || 0,
+                // Ensure null fields are properly handled
+                lastUpdated: t.lastUpdated || null,
+                updatedBy: t.updatedBy || null,
+                modifiedBy: t.modifiedBy || null
+              };
+            } catch (error) {
+              console.error('Error mapping trainer data:', t, error);
+              return null;
+            }
+          }).filter((t): t is Trainer => t !== null);
         }),
         catchError((error) => {
-          console.warn('Trainer API error - falling back to local data:', error?.error?.message || error?.message || 'Unknown error');
-          // Check if it's the specific database schema error
-          if (error?.error?.message?.includes('Invalid column name') ||
-              error?.status === 500) {
-            console.warn('Database schema issue detected - using fallback trainers');
-          }
+          console.warn('Trainer API error - falling back to local data:', {
+            message: error?.error?.message || error?.message || 'Unknown error',
+            status: error?.status,
+            statusText: error?.statusText
+          });
           return of(this.getFallbackTrainers());
         })
       );
@@ -581,36 +598,70 @@ export class DatabaseService {
    * GET /api/Inventory/GetAll
    *
    * Returns: Array of inventory items with:
-   * - id, name, description
+   * - id, name, description (nullable)
    * - category (number), categoryText (string), sku
    * - unitOfMeasure, unitPrice (decimal), stockAvailable
-   * - reorderLevel, supplier, expiryDate (ISO datetime or null)
-   * - batchNumber (string or null), status (number), statusText
+   * - reorderLevel, supplier (nullable), expiryDate (ISO datetime or null)
+   * - batchNumber (nullable), status (number), statusText
    * - createdDate (ISO datetime), lastUpdated (ISO datetime or null)
    * - createdByUserName
    *
    * Includes proper error handling for null/missing data
+   * ISO 8601 date format support with graceful fallbacks
    */
   getInventoryItems(): Observable<InventoryItem[]> {
-    return this.http.get<InventoryItem[]>(`${this.API_URL}Inventory/GetAll`, { headers: this.getAuthHeaders() })
+    return this.http.get<any[]>(`${this.API_URL}Inventory/GetAll`, { headers: this.getAuthHeaders() })
       .pipe(
-        map((items: InventoryItem[]) => {
-          // Ensure all required fields are properly typed
-          return items.map(item => ({
-            ...item,
-            // Ensure dates are properly formatted
-            createdDate: item.createdDate ? new Date(item.createdDate).toISOString() : new Date().toISOString(),
-            lastUpdated: item.lastUpdated ? new Date(item.lastUpdated).toISOString() : null,
-            expiryDate: item.expiryDate ? new Date(item.expiryDate).toISOString() : null,
-            // Ensure numeric fields
-            unitPrice: Number(item.unitPrice) || 0,
-            stockAvailable: Number(item.stockAvailable) || 0,
-            reorderLevel: Number(item.reorderLevel) || 0
-          }));
+        map((items: any[]) => {
+          if (!Array.isArray(items)) {
+            console.warn('Invalid inventory response format - expected array');
+            return [];
+          }
+
+          return items.map((item: any) => {
+            try {
+              return {
+                ...item,
+                // Ensure dates are properly formatted - handle ISO 8601 and null values
+                createdDate: item.createdDate
+                  ? new Date(item.createdDate).toISOString()
+                  : new Date().toISOString(),
+                lastUpdated: item.lastUpdated
+                  ? new Date(item.lastUpdated).toISOString()
+                  : null,
+                expiryDate: item.expiryDate
+                  ? new Date(item.expiryDate).toISOString()
+                  : null,
+                // Ensure numeric fields with defaults - handle null/missing/invalid values
+                unitPrice: Number(item.unitPrice) || 0,
+                stockAvailable: Number(item.stockAvailable) || 0,
+                reorderLevel: Number(item.reorderLevel) || 0,
+                // Ensure nullable fields remain nullable
+                description: item.description || null,
+                supplier: item.supplier || null,
+                batchNumber: item.batchNumber || null,
+                lastUpdated: item.lastUpdated || null,
+                // Ensure category and status are properly handled
+                category: Number(item.category) || 0,
+                status: Number(item.status) || 0,
+                categoryText: item.categoryText || 'Unknown',
+                statusText: item.statusText || 'Unknown',
+                createdByUserName: item.createdByUserName || 'System'
+              } as InventoryItem;
+            } catch (error) {
+              console.error('Error mapping inventory item:', item, error);
+              return null;
+            }
+          }).filter((item): item is InventoryItem => item !== null);
         }),
         catchError((error) => {
-          console.error('Error fetching inventory items:', error);
-          return throwError(() => new Error('Failed to fetch inventory items'));
+          console.error('Error fetching inventory items:', {
+            message: error?.error?.message || error?.message || 'Unknown error',
+            status: error?.status,
+            statusText: error?.statusText
+          });
+          // Return empty array instead of throwing - allows graceful degradation
+          return of([]);
         })
       );
   }
