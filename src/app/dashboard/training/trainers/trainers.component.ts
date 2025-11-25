@@ -174,15 +174,22 @@ export class TrainersComponent implements OnInit {
     // Convert status to numeric value for form
     const statusValue = (trainer.status as any) === 'Active' || (trainer.status as any) === 1 ? 1 : 0;
 
+    // Reset form first to ensure clean state
+    this.trainerForm.reset();
+
     // Populate form with trainer data
     this.trainerForm.patchValue({
       name: trainer.name,
       email: trainer.email,
       phone: trainer.phone,
-      provinceId: trainer.provinceId,
+      provinceId: trainer.provinceId || 1,
       location: trainer.location,
       status: statusValue
     });
+
+    // Mark form as pristine/untouched after patching
+    this.trainerForm.markAsPristine();
+    this.trainerForm.markAsUntouched();
 
     // Show edit modal
     const editModal = new bootstrap.Modal(document.getElementById('editTrainerModal'));
@@ -282,9 +289,14 @@ export class TrainersComponent implements OnInit {
     });
   }  // Update trainer
   onUpdateSubmit(): void {
-    if (!this.trainerForm.valid || this.editingIndex === -1) {
+    if (!this.trainerForm.valid) {
       this.toastr.error('Please fill in all required fields correctly', 'Form Error');
       this.markFormGroupTouched(this.trainerForm);
+      return;
+    }
+
+    if (this.editingIndex === -1 || !this.editingTrainer) {
+      this.toastr.error('No trainer selected for update', 'Error');
       return;
     }
 
@@ -301,17 +313,17 @@ export class TrainersComponent implements OnInit {
 
     // Create trainer object matching API PATCH requirements
     const trainerData = {
-      id: this.editingTrainer!.id,
+      id: this.editingTrainer.id,
       firstName: firstName,
       lastName: lastName,
       email: formValue.email,
       phone: formValue.phone,
       provinceId: formValue.provinceId,
       isActive: isActive,
-      specialization: this.editingTrainer!.specialization || '',
-      experience: this.editingTrainer!.experience || 0,
-      certification: this.editingTrainer!.certification || '',
-      isDeleted: this.editingTrainer!.isDeleted || false
+      specialization: this.editingTrainer.specialization || '',
+      experience: this.editingTrainer.experience || 0,
+      certification: this.editingTrainer.certification || '',
+      isDeleted: this.editingTrainer.isDeleted || false
     };
 
     // Call API to update trainer
@@ -350,7 +362,9 @@ export class TrainersComponent implements OnInit {
         this.editingIndex = -1;
 
         const modal = bootstrap.Modal.getInstance(document.getElementById('editTrainerModal'));
-        modal?.hide();
+        if (modal) {
+          modal.hide();
+        }
       },
       error: (error: any) => {
         console.error('Error updating trainer:', error);
