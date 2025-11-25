@@ -10,24 +10,34 @@ declare var bootstrap: any;
 interface Trainer {
   id: number;
   // Personal Information
-  name: string;
+  firstName?: string;
+  lastName?: string;
+  name: string; // Computed display name - required
   email: string;
   phone: string;
+  // Professional
+  specialization?: string;
+  experience?: number;
+  certification?: string;
   // Location
-  provinceId: number;
-  province?: string; // Display name from provinces array
-  location: string;
+  provinceId?: number;
+  province?: string;
+  location?: string;
   // Status
-  status: string; // Active/Inactive
+  isActive?: boolean;
+  status: string; // Active/Inactive - required
+  isDeleted?: boolean;
   // Optional fields
   qualification?: string;
-  experience?: number;
   bio?: string;
   // Audit fields
+  dateCreated?: string;
+  lastUpdated?: string | null;
   createdAt?: string;
   updatedAt?: string;
   createdBy?: string;
   updatedBy?: string;
+  modifiedBy?: string;
 }
 
 @Component({
@@ -211,32 +221,48 @@ export class TrainersComponent implements OnInit {
       // Convert numeric status to display value
       const statusDisplay = formValue.status === 1 || formValue.status === '1' ? 'Active' : 'Inactive';
 
+      // Extract first and last name from full name
+      const nameParts = formValue.name.trim().split(/\s+/);
+      const firstName = nameParts[0];
+      const lastName = nameParts.slice(1).join(' ') || '';
+
       // Create trainer object for API (match API expected format)
-      const trainerData = {
-        name: formValue.name,
+      const trainerData: Partial<any> = {
+        firstName: firstName,
+        lastName: lastName,
         email: formValue.email,
         phone: formValue.phone,
         provinceId: formValue.provinceId,
         location: formValue.location,
-        status: statusDisplay,
-        isActive: statusDisplay === 'Active' ? true : false
+        isActive: statusDisplay === 'Active' ? true : false,
+        specialization: '',
+        experience: 0,
+        certification: ''
       };
 
       // Call API to add trainer
-      this.databaseService.addTrainer(trainerData).subscribe({
+      this.databaseService.createTrainer(trainerData).subscribe({
         next: (response: any) => {
           // Add the new trainer to local list with response data
+          const fullName = `${response.firstName || ''} ${response.lastName || ''}`.trim() || formValue.name;
           const newTrainer: Trainer = {
             id: response.id,
-            name: response.name || formValue.name,
+            firstName: response.firstName || firstName,
+            lastName: response.lastName || lastName,
+            name: fullName,
             email: response.email || formValue.email,
             phone: response.phone || formValue.phone,
             provinceId: response.provinceId || formValue.provinceId,
             province: province,
             location: response.location || formValue.location,
             status: statusDisplay,
-            createdAt: response.dateCreated || new Date().toISOString(),
-            updatedAt: response.lastUpdated || new Date().toISOString()
+            isActive: statusDisplay === 'Active',
+            specialization: response.specialization || '',
+            experience: response.experience || 0,
+            certification: response.certification || '',
+            isDeleted: false,
+            dateCreated: response.dateCreated || new Date().toISOString(),
+            lastUpdated: response.lastUpdated || new Date().toISOString()
           };
 
           this.trainers.push(newTrainer);
@@ -249,7 +275,7 @@ export class TrainersComponent implements OnInit {
           const modal = bootstrap.Modal.getInstance(document.getElementById('addTrainerModal'));
           modal?.hide();
         },
-        error: (error) => {
+        error: (error: any) => {
           console.error('Error adding trainer:', error);
           this.toastr.error('Failed to add trainer. Please try again.', 'Error');
         }
@@ -267,36 +293,55 @@ export class TrainersComponent implements OnInit {
       // Convert numeric status to display value
       const statusDisplay = formValue.status === 1 || formValue.status === '1' ? 'Active' : 'Inactive';
 
-      // Create trainer object for API (match API expected format)
-      const trainerData = {
+      // Parse full name into firstName and lastName
+      const nameParts = formValue.name.trim().split(/\s+/);
+      const firstName = nameParts[0] || '';
+      const lastName = nameParts.slice(1).join(' ') || '';
+
+      // Create trainer object for API - match API expected format with all required fields
+      const trainerData: Partial<any> = {
         id: this.editingTrainer!.id,
-        name: formValue.name,
+        firstName: firstName,
+        lastName: lastName,
         email: formValue.email,
         phone: formValue.phone,
         provinceId: formValue.provinceId,
         location: formValue.location,
-        status: statusDisplay,
-        isActive: statusDisplay === 'Active' ? true : false
+        isActive: statusDisplay === 'Active',
+        specialization: this.editingTrainer!.specialization || '',
+        experience: this.editingTrainer!.experience || 0,
+        certification: this.editingTrainer!.certification || '',
+        isDeleted: false,
+        dateCreated: this.editingTrainer!.dateCreated || new Date().toISOString()
       };
 
       // Call API to update trainer
-      this.databaseService.updateTrainer(trainerData).subscribe({
+      this.databaseService.updateTrainer(trainerData as any).subscribe({
         next: (response: any) => {
-          // Update the trainer in local list
+          // Transform API response to component's display interface
+          const fullName = `${response.firstName || firstName} ${response.lastName || lastName}`.trim();
           const updatedTrainer: Trainer = {
             id: response.id || this.editingTrainer!.id,
-            name: response.name || formValue.name,
+            firstName: response.firstName || firstName,
+            lastName: response.lastName || lastName,
+            name: fullName,
             email: response.email || formValue.email,
             phone: response.phone || formValue.phone,
             provinceId: response.provinceId || formValue.provinceId,
             province: province,
             location: response.location || formValue.location,
             status: statusDisplay,
-            updatedAt: response.lastUpdated || new Date().toISOString()
+            isActive: statusDisplay === 'Active',
+            specialization: response.specialization || '',
+            experience: response.experience || 0,
+            certification: response.certification || '',
+            isDeleted: false,
+            dateCreated: response.dateCreated || this.editingTrainer!.dateCreated,
+            lastUpdated: response.lastUpdated || new Date().toISOString()
           };
 
           this.trainers[this.editingIndex] = updatedTrainer;
-          this.toastr.success(`${updatedTrainer.name} has been updated successfully`, 'Trainer Updated');
+          this.toastr.success(`${fullName} has been updated successfully`, 'Trainer Updated');
 
           // Reset form and close modal
           this.trainerForm.reset();
@@ -307,7 +352,7 @@ export class TrainersComponent implements OnInit {
           const modal = bootstrap.Modal.getInstance(document.getElementById('editTrainerModal'));
           modal?.hide();
         },
-        error: (error) => {
+        error: (error: any) => {
           console.error('Error updating trainer:', error);
           this.toastr.error('Failed to update trainer. Please try again.', 'Error');
         }
@@ -326,14 +371,19 @@ export class TrainersComponent implements OnInit {
     });
   }
 
-  getStatusDisplay(status: number | string): string {
-    if (status === 1 || status === 'Active') {
+  getStatusDisplay(status: string | undefined): string {
+    if (status === 'Active' || status === '1') {
       return 'Active';
     }
     return 'Inactive';
   }
 
-  getStatusClass(status: number | string): string {
-    return (status === 1 || status === 'Active') ? 'bg-success' : 'bg-warning';
+  getStatusClass(status: string | undefined): string {
+    return (status === 'Active' || status === '1') ? 'bg-success' : 'bg-warning';
+  }
+
+  getInitials(name: string | undefined): string {
+    if (!name) return '?';
+    return name.split(' ').map(n => n[0]).join('').toUpperCase();
   }
 }
