@@ -469,7 +469,7 @@ export class DatabaseService {
    * Update trainer
    * PATCH /api/Trainer/Update
    */
-  updateTrainer(trainer: Trainer): Observable<Trainer> {
+  updateTrainer(trainer: Partial<Trainer>): Observable<Trainer> {
     return this.http.patch<Trainer>(`${this.API_URL}Trainer/Update`, trainer, { headers: this.getAuthHeaders() })
       .pipe(catchError(this.handleError));
   }
