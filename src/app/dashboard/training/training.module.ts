@@ -5,7 +5,6 @@ import { SharedModule } from 'src/app/shared/shared.module';
 
 import { TrainingRoutingModule } from './training-routing.module';
 import { TrainingComponent } from './training.component';
-import { TrainingUploadComponent } from './training-upload/training-upload.component';
 import { AddTrainingComponent } from './add-training/add-training.component';
 import { ListTrainingComponent } from './list-training/list-training.component';
 import { TrainersComponent } from './trainers/trainers.component';
@@ -29,7 +28,6 @@ import { EditTrainingComponent } from './edit-training/edit-training.component';
 @NgModule({
   declarations: [
     TrainingComponent,
-    TrainingUploadComponent,
     AddTrainingComponent,
     ListTrainingComponent,
     TrainersComponent,
