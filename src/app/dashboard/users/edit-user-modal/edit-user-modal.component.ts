@@ -8,9 +8,9 @@ import { ToastrService } from 'ngx-toastr';
   styleUrls: ['./edit-user-modal.component.scss']
 })
 export class EditUserModalComponent implements OnInit, OnChanges {
-  @Input() userId: string = '';
+  @Input() userId = '';
   @Input() userData: any = null;
-  @Input() isVisible: boolean = false;
+  @Input() isVisible = false;
   @Output() modalClose = new EventEmitter<void>();
   @Output() userUpdateSuccess = new EventEmitter<void>();
 
@@ -102,7 +102,7 @@ export class EditUserModalComponent implements OnInit, OnChanges {
     };
 
     this.baseService.basePatch('User/UpdateUser', userData).subscribe({
-      next: (response: any) => {
+      next: () => {
         this.toastrService.success('User updated successfully!', 'Success');
         this.isLoading = false;
         this.userUpdateSuccess.emit();

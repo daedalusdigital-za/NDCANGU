@@ -1,7 +1,7 @@
 import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { DatabaseService } from '../../../services/data/database.service';
-import { Sale, SaleModel, SaleItem } from '../../../shared/interfaces/common.interfaces';
+import { Sale, SaleItem } from '../../../shared/interfaces/common.interfaces';
 import { ToastrService } from 'ngx-toastr';
 
 @Component({
@@ -13,11 +13,11 @@ export class EditSaleModalComponent implements OnChanges {
   @ViewChild('saleForm') saleForm!: NgForm;
 
   @Input() saleData: Sale | null = null;
-  @Input() isVisible: boolean = false;
+  @Input() isVisible = false;
   @Output() modalClose = new EventEmitter<void>();
   @Output() saleUpdateSuccess = new EventEmitter<void>();
 
-  isLoading: boolean = false;
+  isLoading = false;
 
   // Form data - matches SaleModel structure
   sale: any = {
