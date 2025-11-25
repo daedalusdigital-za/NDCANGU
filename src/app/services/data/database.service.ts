@@ -102,6 +102,7 @@ interface Trainer {
   // Computed/Optional Fields (for backward compatibility and display)
   name?: string; // Computed from firstName + lastName
   province?: string; // For display purposes
+  provinceId?: number; // Province ID for lookups
   location?: string;
   status?: string; // Active/Inactive - derived from isActive
   qualification?: string;
@@ -378,21 +379,24 @@ export class DatabaseService {
           }
 
           // Map API response to Trainer interface
-          // Ensure 'name' field is computed from firstName + lastName for UI compatibility
+          // Ensure 'name' field is always a string (computed from firstName + lastName for UI compatibility)
           return trainers.map((t: any) => {
             try {
+              const name = `${t.firstName || ''} ${t.lastName || ''}`.trim() || 'Unknown Trainer';
               return {
                 ...t,
-                // Computed fields for UI compatibility
-                name: `${t.firstName || ''} ${t.lastName || ''}`.trim() || 'Unknown Trainer',
+                // Computed fields for UI compatibility - name is ALWAYS a string
+                name: name as string,
                 status: t.isActive === true ? 'Active' : 'Inactive',
                 qualification: t.specialization || '',
                 experience: Number(t.experience) || 0,
+                // Province ID - default to 1 if not provided by API
+                provinceId: t.provinceId || 1,
                 // Ensure null fields are properly handled
                 lastUpdated: t.lastUpdated || null,
                 updatedBy: t.updatedBy || null,
                 modifiedBy: t.modifiedBy || null
-              };
+              } as Trainer;
             } catch (error) {
               console.error('Error mapping trainer data:', t, error);
               return null;
@@ -640,7 +644,6 @@ export class DatabaseService {
                 description: item.description || null,
                 supplier: item.supplier || null,
                 batchNumber: item.batchNumber || null,
-                lastUpdated: item.lastUpdated || null,
                 // Ensure category and status are properly handled
                 category: Number(item.category) || 0,
                 status: Number(item.status) || 0,

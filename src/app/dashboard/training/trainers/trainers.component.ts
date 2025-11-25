@@ -81,16 +81,31 @@ export class TrainersComponent implements OnInit {
   loadTrainers(): void {
     this.databaseService.getTrainersWithFallback().subscribe({
       next: (trainers) => {
-        // Map database trainers with province names
+        // Map database trainers with province names and ensure all required fields
         this.trainers = trainers.map(trainer => {
-          const province = this.provinces.find(p => p.id === trainer.provinceId);
+          const province = this.provinces.find(p => p.id === (trainer.provinceId || 1));
+          // Ensure name is always a string (never undefined or null)
+          const name = trainer.name && trainer.name.trim()
+            ? trainer.name
+            : `${trainer.firstName || ''} ${trainer.lastName || ''}`.trim() || 'Unknown Trainer';
+
           return {
-            ...trainer,
+            id: trainer.id,
+            name: name,
+            email: trainer.email || '',
+            phone: trainer.phone || '',
+            provinceId: trainer.provinceId || 1,
             province: province?.name || 'Unknown',
-            qualification: trainer.qualification || '',
+            location: trainer.location || '',
+            status: trainer.status || (trainer.isActive ? 'Active' : 'Inactive'),
+            qualification: trainer.qualification || trainer.specialization || '',
             experience: trainer.experience || 0,
-            location: trainer.location || ''
-          };
+            bio: trainer.bio,
+            createdAt: trainer.dateCreated,
+            updatedAt: trainer.lastUpdated,
+            createdBy: trainer.updatedBy && typeof trainer.updatedBy === 'number' ? String(trainer.updatedBy) : undefined,
+            updatedBy: trainer.modifiedBy && typeof trainer.modifiedBy === 'number' ? String(trainer.modifiedBy) : undefined
+          } as Trainer;
         });
       },
       error: (error) => {
