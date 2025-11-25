@@ -131,11 +131,6 @@ export class TrainersComponent implements OnInit {
     return province?.name || 'Unknown';
   }
 
-  // Get initials for avatar
-  getInitials(name: string): string {
-    return name.split(' ').map(n => n[0]).join('').toUpperCase();
-  }
-
   // View trainer details
   viewTrainer(trainer: Trainer): void {
     const trainerData = {
