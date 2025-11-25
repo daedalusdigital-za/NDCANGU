@@ -189,8 +189,16 @@ export class TrainersComponent implements OnInit {
     const confirmDelete = confirm(`Are you sure you want to delete trainer "${trainer.name}"?`);
 
     if (confirmDelete) {
-      this.trainers.splice(index, 1);
-      this.toastr.success(`${trainer.name} has been removed from the system`, 'Trainer Deleted');
+      this.databaseService.deleteTrainer(trainer.id).subscribe({
+        next: () => {
+          this.trainers.splice(index, 1);
+          this.toastr.success(`${trainer.name} has been removed from the system`, 'Trainer Deleted');
+        },
+        error: (error) => {
+          console.error('Error deleting trainer:', error);
+          this.toastr.error('Failed to delete trainer. Please try again.', 'Error');
+        }
+      });
     }
   }
 
@@ -203,35 +211,54 @@ export class TrainersComponent implements OnInit {
       // Convert numeric status to display value
       const statusDisplay = formValue.status === 1 || formValue.status === '1' ? 'Active' : 'Inactive';
 
-      const newTrainer: Trainer = {
-        id: this.getNextId(),
+      // Create trainer object for API (match API expected format)
+      const trainerData = {
         name: formValue.name,
         email: formValue.email,
         phone: formValue.phone,
         provinceId: formValue.provinceId,
-        province: province,
         location: formValue.location,
         status: statusDisplay,
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString()
+        isActive: statusDisplay === 'Active' ? true : false
       };
 
-      this.trainers.push(newTrainer);
-      this.toastr.success(`${newTrainer.name} has been added successfully`, 'Trainer Added');
+      // Call API to add trainer
+      this.databaseService.addTrainer(trainerData).subscribe({
+        next: (response: any) => {
+          // Add the new trainer to local list with response data
+          const newTrainer: Trainer = {
+            id: response.id,
+            name: response.name || formValue.name,
+            email: response.email || formValue.email,
+            phone: response.phone || formValue.phone,
+            provinceId: response.provinceId || formValue.provinceId,
+            province: province,
+            location: response.location || formValue.location,
+            status: statusDisplay,
+            createdAt: response.dateCreated || new Date().toISOString(),
+            updatedAt: response.lastUpdated || new Date().toISOString()
+          };
 
-      // Reset form and close modal
-      this.trainerForm.reset();
-      this.trainerForm.patchValue({ status: 1 });
+          this.trainers.push(newTrainer);
+          this.toastr.success(`${newTrainer.name} has been added successfully`, 'Trainer Added');
 
-      const modal = bootstrap.Modal.getInstance(document.getElementById('addTrainerModal'));
-      modal?.hide();
+          // Reset form and close modal
+          this.trainerForm.reset();
+          this.trainerForm.patchValue({ status: 1 });
+
+          const modal = bootstrap.Modal.getInstance(document.getElementById('addTrainerModal'));
+          modal?.hide();
+        },
+        error: (error) => {
+          console.error('Error adding trainer:', error);
+          this.toastr.error('Failed to add trainer. Please try again.', 'Error');
+        }
+      });
     } else {
       this.toastr.error('Please fill in all required fields correctly', 'Form Error');
       this.markFormGroupTouched(this.trainerForm);
     }
-  }
-
-  // Update trainer
+  }  // Update trainer
   onUpdateSubmit(): void {
     if (this.trainerForm.valid && this.editingIndex !== -1) {
       const formValue = this.trainerForm.value;
@@ -240,29 +267,51 @@ export class TrainersComponent implements OnInit {
       // Convert numeric status to display value
       const statusDisplay = formValue.status === 1 || formValue.status === '1' ? 'Active' : 'Inactive';
 
-      const updatedTrainer: Trainer = {
-        ...this.editingTrainer!,
+      // Create trainer object for API (match API expected format)
+      const trainerData = {
+        id: this.editingTrainer!.id,
         name: formValue.name,
         email: formValue.email,
         phone: formValue.phone,
         provinceId: formValue.provinceId,
-        province: province,
         location: formValue.location,
         status: statusDisplay,
-        updatedAt: new Date().toISOString()
+        isActive: statusDisplay === 'Active' ? true : false
       };
 
-      this.trainers[this.editingIndex] = updatedTrainer;
-      this.toastr.success(`${updatedTrainer.name} has been updated successfully`, 'Trainer Updated');
+      // Call API to update trainer
+      this.databaseService.updateTrainer(trainerData).subscribe({
+        next: (response: any) => {
+          // Update the trainer in local list
+          const updatedTrainer: Trainer = {
+            id: response.id || this.editingTrainer!.id,
+            name: response.name || formValue.name,
+            email: response.email || formValue.email,
+            phone: response.phone || formValue.phone,
+            provinceId: response.provinceId || formValue.provinceId,
+            province: province,
+            location: response.location || formValue.location,
+            status: statusDisplay,
+            updatedAt: response.lastUpdated || new Date().toISOString()
+          };
 
-      // Reset form and close modal
-      this.trainerForm.reset();
-      this.trainerForm.patchValue({ status: 1 });
-      this.editingTrainer = null;
-      this.editingIndex = -1;
+          this.trainers[this.editingIndex] = updatedTrainer;
+          this.toastr.success(`${updatedTrainer.name} has been updated successfully`, 'Trainer Updated');
 
-      const modal = bootstrap.Modal.getInstance(document.getElementById('editTrainerModal'));
-      modal?.hide();
+          // Reset form and close modal
+          this.trainerForm.reset();
+          this.trainerForm.patchValue({ status: 1 });
+          this.editingTrainer = null;
+          this.editingIndex = -1;
+
+          const modal = bootstrap.Modal.getInstance(document.getElementById('editTrainerModal'));
+          modal?.hide();
+        },
+        error: (error) => {
+          console.error('Error updating trainer:', error);
+          this.toastr.error('Failed to update trainer. Please try again.', 'Error');
+        }
+      });
     } else {
       this.toastr.error('Please fill in all required fields correctly', 'Form Error');
       this.markFormGroupTouched(this.trainerForm);
@@ -270,10 +319,6 @@ export class TrainersComponent implements OnInit {
   }
 
   // Helper methods
-  private getNextId(): number {
-    return Math.max(...this.trainers.map(t => t.id)) + 1;
-  }
-
   private markFormGroupTouched(formGroup: FormGroup): void {
     Object.keys(formGroup.controls).forEach(key => {
       const control = formGroup.get(key);
