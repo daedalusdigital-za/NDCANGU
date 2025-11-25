@@ -166,6 +166,9 @@ export class TrainersComponent implements OnInit {
     this.editingTrainer = { ...trainer };
     this.editingIndex = this.trainers.findIndex(t => t.id === trainer.id);
 
+    // Convert status to numeric value for form
+    const statusValue = trainer.status === 'Active' || trainer.status === 1 ? 1 : 0;
+
     // Populate form with trainer data
     this.trainerForm.patchValue({
       name: trainer.name,
@@ -173,7 +176,7 @@ export class TrainersComponent implements OnInit {
       phone: trainer.phone,
       provinceId: trainer.provinceId,
       location: trainer.location,
-      status: trainer.status
+      status: statusValue
     });
 
     // Show edit modal
@@ -197,6 +200,9 @@ export class TrainersComponent implements OnInit {
       const formValue = this.trainerForm.value;
       const province = this.getProvinceName(formValue.provinceId);
 
+      // Convert numeric status to display value
+      const statusDisplay = formValue.status === 1 || formValue.status === '1' ? 'Active' : 'Inactive';
+
       const newTrainer: Trainer = {
         id: this.getNextId(),
         name: formValue.name,
@@ -205,7 +211,7 @@ export class TrainersComponent implements OnInit {
         provinceId: formValue.provinceId,
         province: province,
         location: formValue.location,
-        status: formValue.status,
+        status: statusDisplay,
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString()
       };
@@ -215,7 +221,7 @@ export class TrainersComponent implements OnInit {
 
       // Reset form and close modal
       this.trainerForm.reset();
-      this.trainerForm.patchValue({ status: 'Active' });
+      this.trainerForm.patchValue({ status: 1 });
 
       const modal = bootstrap.Modal.getInstance(document.getElementById('addTrainerModal'));
       modal?.hide();
@@ -231,6 +237,9 @@ export class TrainersComponent implements OnInit {
       const formValue = this.trainerForm.value;
       const province = this.getProvinceName(formValue.provinceId);
 
+      // Convert numeric status to display value
+      const statusDisplay = formValue.status === 1 || formValue.status === '1' ? 'Active' : 'Inactive';
+
       const updatedTrainer: Trainer = {
         ...this.editingTrainer!,
         name: formValue.name,
@@ -239,7 +248,7 @@ export class TrainersComponent implements OnInit {
         provinceId: formValue.provinceId,
         province: province,
         location: formValue.location,
-        status: formValue.status,
+        status: statusDisplay,
         updatedAt: new Date().toISOString()
       };
 
@@ -248,7 +257,7 @@ export class TrainersComponent implements OnInit {
 
       // Reset form and close modal
       this.trainerForm.reset();
-      this.trainerForm.patchValue({ status: 'Active' });
+      this.trainerForm.patchValue({ status: 1 });
       this.editingTrainer = null;
       this.editingIndex = -1;
 
