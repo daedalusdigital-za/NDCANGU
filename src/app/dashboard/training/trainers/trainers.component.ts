@@ -281,81 +281,105 @@ export class TrainersComponent implements OnInit {
     }
   }  // Update trainer
   onUpdateSubmit(): void {
-    if (this.trainerForm.valid && this.editingIndex !== -1) {
-      const formValue = this.trainerForm.value;
-      const province = this.getProvinceName(formValue.provinceId);
+    // Debug: Check form validity and required fields
+    console.log('Form Valid:', this.trainerForm.valid);
+    console.log('Form Value:', this.trainerForm.value);
+    console.log('Form Errors:', this.trainerForm.errors);
+    console.log('Editing Index:', this.editingIndex);
 
-      // Convert numeric status to display value
-      const statusDisplay = formValue.status === 1 || formValue.status === '1' ? 'Active' : 'Inactive';
+    // Check individual control errors
+    Object.keys(this.trainerForm.controls).forEach(key => {
+      const control = this.trainerForm.get(key);
+      if (control?.errors) {
+        console.log(`${key} errors:`, control.errors);
+      }
+    });
 
-      // Parse full name into firstName and lastName
-      const nameParts = formValue.name.trim().split(/\s+/);
-      const firstName = nameParts[0] || '';
-      const lastName = nameParts.slice(1).join(' ') || '';
+    if (this.editingIndex === -1) {
+      this.toastr.error('No trainer selected for editing', 'Error');
+      return;
+    }
 
-      // Create trainer object for API - match API expected format with all required fields
-      const trainerData: Partial<any> = {
-        id: this.editingTrainer!.id,
-        firstName: firstName,
-        lastName: lastName,
-        email: formValue.email,
-        phone: formValue.phone,
-        provinceId: formValue.provinceId,
-        location: formValue.location,
-        isActive: statusDisplay === 'Active',
-        specialization: this.editingTrainer!.specialization || '',
-        experience: this.editingTrainer!.experience || 0,
-        certification: this.editingTrainer!.certification || '',
-        isDeleted: false,
-        dateCreated: this.editingTrainer!.dateCreated || new Date().toISOString()
-      };
-
-      // Call API to update trainer
-      this.databaseService.updateTrainer(trainerData as any).subscribe({
-        next: (response: any) => {
-          // Transform API response to component's display interface
-          const fullName = `${response.firstName || firstName} ${response.lastName || lastName}`.trim();
-          const updatedTrainer: Trainer = {
-            id: response.id || this.editingTrainer!.id,
-            firstName: response.firstName || firstName,
-            lastName: response.lastName || lastName,
-            name: fullName,
-            email: response.email || formValue.email,
-            phone: response.phone || formValue.phone,
-            provinceId: response.provinceId || formValue.provinceId,
-            province: province,
-            location: response.location || formValue.location,
-            status: statusDisplay,
-            isActive: statusDisplay === 'Active',
-            specialization: response.specialization || '',
-            experience: response.experience || 0,
-            certification: response.certification || '',
-            isDeleted: false,
-            dateCreated: response.dateCreated || this.editingTrainer!.dateCreated,
-            lastUpdated: response.lastUpdated || new Date().toISOString()
-          };
-
-          this.trainers[this.editingIndex] = updatedTrainer;
-          this.toastr.success(`${fullName} has been updated successfully`, 'Trainer Updated');
-
-          // Reset form and close modal
-          this.trainerForm.reset();
-          this.trainerForm.patchValue({ status: 1 });
-          this.editingTrainer = null;
-          this.editingIndex = -1;
-
-          const modal = bootstrap.Modal.getInstance(document.getElementById('editTrainerModal'));
-          modal?.hide();
-        },
-        error: (error: any) => {
-          console.error('Error updating trainer:', error);
-          this.toastr.error('Failed to update trainer. Please try again.', 'Error');
-        }
-      });
-    } else {
+    if (!this.trainerForm.valid) {
       this.toastr.error('Please fill in all required fields correctly', 'Form Error');
       this.markFormGroupTouched(this.trainerForm);
+      return;
     }
+
+    const formValue = this.trainerForm.value;
+    const province = this.getProvinceName(formValue.provinceId);
+
+    // Convert numeric status to display value
+    const statusDisplay = formValue.status === 1 || formValue.status === '1' ? 'Active' : 'Inactive';
+
+    // Parse full name into firstName and lastName
+    const nameParts = formValue.name.trim().split(/\s+/);
+    const firstName = nameParts[0] || '';
+    const lastName = nameParts.slice(1).join(' ') || '';
+
+    // Create trainer object for API - match API expected format with all required fields
+    const trainerData: Partial<any> = {
+      id: this.editingTrainer!.id,
+      firstName: firstName,
+      lastName: lastName,
+      email: formValue.email,
+      phone: formValue.phone,
+      provinceId: formValue.provinceId,
+      location: formValue.location,
+      isActive: statusDisplay === 'Active',
+      specialization: this.editingTrainer!.specialization || '',
+      experience: this.editingTrainer!.experience || 0,
+      certification: this.editingTrainer!.certification || '',
+      isDeleted: false,
+      dateCreated: this.editingTrainer!.dateCreated || new Date().toISOString()
+    };
+
+    console.log('Sending trainer data:', trainerData);
+
+    // Call API to update trainer
+    this.databaseService.updateTrainer(trainerData as any).subscribe({
+      next: (response: any) => {
+        console.log('Update response:', response);
+        // Transform API response to component's display interface
+        const fullName = `${response.firstName || firstName} ${response.lastName || lastName}`.trim();
+        const updatedTrainer: Trainer = {
+          id: response.id || this.editingTrainer!.id,
+          firstName: response.firstName || firstName,
+          lastName: response.lastName || lastName,
+          name: fullName,
+          email: response.email || formValue.email,
+          phone: response.phone || formValue.phone,
+          provinceId: response.provinceId || formValue.provinceId,
+          province: province,
+          location: response.location || formValue.location,
+          status: statusDisplay,
+          isActive: statusDisplay === 'Active',
+          specialization: response.specialization || '',
+          experience: response.experience || 0,
+          certification: response.certification || '',
+          isDeleted: false,
+          dateCreated: response.dateCreated || this.editingTrainer!.dateCreated,
+          lastUpdated: response.lastUpdated || new Date().toISOString()
+        };
+
+        this.trainers[this.editingIndex] = updatedTrainer;
+        this.toastr.success(`${fullName} has been updated successfully`, 'Trainer Updated');
+
+        // Reset form and close modal
+        this.trainerForm.reset();
+        this.trainerForm.patchValue({ status: 1 });
+        this.editingTrainer = null;
+        this.editingIndex = -1;
+
+        const modal = bootstrap.Modal.getInstance(document.getElementById('editTrainerModal'));
+        modal?.hide();
+      },
+      error: (error: any) => {
+        console.error('Error updating trainer:', error);
+        this.toastr.error('Failed to update trainer. Please try again.', 'Error');
+      }
+    });
+  }
   }
 
   // Helper methods
