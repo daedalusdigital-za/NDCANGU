@@ -15,7 +15,7 @@ export class TrainingSessionsListComponent implements OnInit {
 
   sessions: TrainingSession[] = [];
   displayedSessions: TrainingSession[] = [];
-  
+
   loading = false;
   error: string | null = null;
   filterProvince = '';
