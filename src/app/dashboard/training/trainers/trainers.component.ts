@@ -380,7 +380,6 @@ export class TrainersComponent implements OnInit {
       }
     });
   }
-  }
 
   // Helper methods
   private markFormGroupTouched(formGroup: FormGroup): void {
