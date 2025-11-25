@@ -75,26 +75,37 @@ interface HealthFacility {
 }
 
 interface Trainer {
+  // Primary Identifier
   id: number;
-  // Personal Information
-  name: string;
+
+  // Personal Information (as per API)
+  firstName: string;
+  lastName: string;
   email: string;
   phone: string;
-  // Location
-  provinceId: number;
-  province?: string; // For display purposes
-  location: string;
+
+  // Professional Details
+  specialization: string;
+  experience: number; // Years of experience
+  certification: string;
+
   // Status
-  status: string; // Active/Inactive
-  // Optional fields (for backward compatibility)
+  isActive: boolean;
+  isDeleted: boolean;
+
+  // Audit Fields
+  dateCreated: string; // ISO datetime
+  lastUpdated?: string | null; // ISO datetime
+  updatedBy?: number | null;
+  modifiedBy?: number | null;
+
+  // Computed/Optional Fields (for backward compatibility and display)
+  name?: string; // Computed from firstName + lastName
+  province?: string; // For display purposes
+  location?: string;
+  status?: string; // Active/Inactive - derived from isActive
   qualification?: string;
-  experience?: number;
   bio?: string;
-  // Audit fields
-  createdAt?: string;
-  updatedAt?: string;
-  createdBy?: string;
-  lastUpdatedBy?: string; // Align with standard naming convention
 }
 
 // TrainingSession Interface - Aligned with 9 Required Fields Specification
@@ -343,6 +354,14 @@ export class DatabaseService {
   /**
    * Get all trainers
    * GET /api/Trainer/GetAll
+   *
+   * Returns: Array of trainer objects
+   * - firstName, lastName, email, phone
+   * - specialization, experience (years), certification
+   * - isActive, isDeleted
+   * - dateCreated, lastUpdated (ISO datetime), updatedBy, modifiedBy
+   *
+   * Maps API response to include computed 'name' field for UI compatibility
    */
   getTrainers(): Observable<Trainer[]> {
     if (this.FORCE_FALLBACK_MODE) {
@@ -351,6 +370,17 @@ export class DatabaseService {
 
     return this.http.get<Trainer[]>(`${this.API_URL}Trainer/GetAll`, { headers: this.getAuthHeaders() })
       .pipe(
+        map((trainers: any[]) => {
+          // Map API response to Trainer interface
+          // Ensure 'name' field is computed from firstName + lastName for UI compatibility
+          return trainers.map(t => ({
+            ...t,
+            name: `${t.firstName} ${t.lastName}`,
+            status: t.isActive ? 'Active' : 'Inactive',
+            qualification: t.specialization,
+            experience: t.experience
+          }));
+        }),
         catchError((error) => {
           console.warn('Trainer API error - falling back to local data:', error?.error?.message || error?.message || 'Unknown error');
           // Check if it's the specific database schema error
@@ -549,9 +579,40 @@ export class DatabaseService {
   /**
    * Get all inventory items
    * GET /api/Inventory/GetAll
+   *
+   * Returns: Array of inventory items with:
+   * - id, name, description
+   * - category (number), categoryText (string), sku
+   * - unitOfMeasure, unitPrice (decimal), stockAvailable
+   * - reorderLevel, supplier, expiryDate (ISO datetime or null)
+   * - batchNumber (string or null), status (number), statusText
+   * - createdDate (ISO datetime), lastUpdated (ISO datetime or null)
+   * - createdByUserName
+   *
+   * Includes proper error handling for null/missing data
    */
   getInventoryItems(): Observable<InventoryItem[]> {
-    return this.http.get<InventoryItem[]>(`${this.API_URL}Inventory/GetAll`, { headers: this.getAuthHeaders() });
+    return this.http.get<InventoryItem[]>(`${this.API_URL}Inventory/GetAll`, { headers: this.getAuthHeaders() })
+      .pipe(
+        map((items: InventoryItem[]) => {
+          // Ensure all required fields are properly typed
+          return items.map(item => ({
+            ...item,
+            // Ensure dates are properly formatted
+            createdDate: item.createdDate ? new Date(item.createdDate).toISOString() : new Date().toISOString(),
+            lastUpdated: item.lastUpdated ? new Date(item.lastUpdated).toISOString() : null,
+            expiryDate: item.expiryDate ? new Date(item.expiryDate).toISOString() : null,
+            // Ensure numeric fields
+            unitPrice: Number(item.unitPrice) || 0,
+            stockAvailable: Number(item.stockAvailable) || 0,
+            reorderLevel: Number(item.reorderLevel) || 0
+          }));
+        }),
+        catchError((error) => {
+          console.error('Error fetching inventory items:', error);
+          return throwError(() => new Error('Failed to fetch inventory items'));
+        })
+      );
   }
 
   /**
@@ -1123,68 +1184,118 @@ export class DatabaseService {
     return [
       {
         id: 1,
-        name: 'DYLAN GOVENDER',
+        firstName: 'DYLAN',
+        lastName: 'GOVENDER',
         email: 'dylan.govender@promedtechnologies.co.za',
         phone: '+27-82-456-7890',
-        province: 'KwaZulu-Natal',
-        provinceId: 5,
-        qualification: 'Medical Trainer, NCD Specialist',
+        specialization: 'Medical Trainer, NCD Specialist',
         experience: 8,
-        status: 'Active',
+        certification: 'Medical Training Certification',
+        isActive: true,
+        isDeleted: false,
+        dateCreated: new Date().toISOString(),
+        lastUpdated: null,
+        updatedBy: null,
+        modifiedBy: null,
+        // Computed fields for backward compatibility
+        name: 'DYLAN GOVENDER',
+        province: 'KwaZulu-Natal',
         location: 'Durban',
-        bio: 'Experienced medical trainer specializing in non-communicable disease management and community health programs'
+        status: 'Active',
+        qualification: 'Medical Trainer, NCD Specialist',
+        bio: 'Experienced medical trainer specializing in non-communicable disease management'
       },
       {
         id: 2,
-        name: 'LINDANI',
+        firstName: 'LINDANI',
+        lastName: 'MKHIZE',
         email: 'lindani@promedtechnologies.co.za',
         phone: '+27-83-567-8901',
-        province: 'Gauteng',
-        provinceId: 7,
-        qualification: 'Healthcare Educator, Diabetes Management',
+        specialization: 'Healthcare Educator, Diabetes Management',
         experience: 6,
-        status: 'Active',
+        certification: 'Healthcare Education Certification',
+        isActive: true,
+        isDeleted: false,
+        dateCreated: new Date().toISOString(),
+        lastUpdated: null,
+        updatedBy: null,
+        modifiedBy: null,
+        // Computed fields
+        name: 'LINDANI MKHIZE',
+        province: 'Gauteng',
         location: 'Johannesburg',
-        bio: 'Healthcare educator with expertise in diabetes management and preventive care training'
+        status: 'Active',
+        qualification: 'Healthcare Educator, Diabetes Management',
+        bio: 'Healthcare educator with expertise in diabetes management'
       },
       {
         id: 3,
-        name: 'MASIXOLE',
+        firstName: 'MASIXOLE',
+        lastName: 'NDABA',
         email: 'masixole@promedtechnologies.co.za',
         phone: '+27-84-678-9012',
-        province: 'Eastern Cape',
-        provinceId: 2,
-        qualification: 'Clinical Trainer, Hypertension Specialist',
+        specialization: 'Clinical Trainer, Hypertension Specialist',
         experience: 10,
-        status: 'Active',
+        certification: 'Clinical Training Certification',
+        isActive: true,
+        isDeleted: false,
+        dateCreated: new Date().toISOString(),
+        lastUpdated: null,
+        updatedBy: null,
+        modifiedBy: null,
+        // Computed fields
+        name: 'MASIXOLE NDABA',
+        province: 'Eastern Cape',
         location: 'East London',
-        bio: 'Clinical trainer specializing in hypertension management and cardiovascular health education'
+        status: 'Active',
+        qualification: 'Clinical Trainer, Hypertension Specialist',
+        bio: 'Clinical trainer specializing in hypertension management'
       },
       {
         id: 4,
-        name: 'SELBY',
+        firstName: 'SELBY',
+        lastName: 'NGUBANE',
         email: 'selby@promedtechnologies.co.za',
         phone: '+27-85-789-0123',
-        province: 'Western Cape',
-        provinceId: 1,
-        qualification: 'Medical Education Specialist',
+        specialization: 'Medical Education Specialist',
         experience: 12,
-        status: 'Active',
+        certification: 'Medical Education Certification',
+        isActive: true,
+        isDeleted: false,
+        dateCreated: new Date().toISOString(),
+        lastUpdated: null,
+        updatedBy: null,
+        modifiedBy: null,
+        // Computed fields
+        name: 'SELBY NGUBANE',
+        province: 'Western Cape',
         location: 'Cape Town',
-        bio: 'Medical education specialist with extensive experience in community health worker training'
+        status: 'Active',
+        qualification: 'Medical Education Specialist',
+        bio: 'Medical education specialist with extensive experience'
       },
       {
         id: 5,
-        name: 'ZIBA MTHETHWA',
+        firstName: 'ZIBA',
+        lastName: 'MTHETHWA',
         email: 'ziba.mthethwa@promedtechnologies.co.za',
         phone: '+27-86-890-1234',
-        province: 'Limpopo',
-        provinceId: 9,
-        qualification: 'Public Health Trainer, NCD Prevention',
+        specialization: 'Public Health Trainer, NCD Prevention',
         experience: 15,
-        status: 'Active',
+        certification: 'Public Health Certification',
+        isActive: true,
+        isDeleted: false,
+        dateCreated: new Date().toISOString(),
+        lastUpdated: null,
+        updatedBy: null,
+        modifiedBy: null,
+        // Computed fields
+        name: 'ZIBA MTHETHWA',
+        province: 'Limpopo',
         location: 'Polokwane',
-        bio: 'Public health trainer focusing on non-communicable disease prevention and rural health initiatives'
+        status: 'Active',
+        qualification: 'Public Health Trainer, NCD Prevention',
+        bio: 'Public health trainer focusing on NCD prevention'
       }
     ];
   }
