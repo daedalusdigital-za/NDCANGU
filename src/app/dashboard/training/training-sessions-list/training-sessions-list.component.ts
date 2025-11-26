@@ -2,6 +2,8 @@ import { Component, OnInit, inject } from '@angular/core';
 import { TrainingService, TrainingSession } from '../../services/training/training.service';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import { DialogService } from 'primeng/dynamicdialog';
+import { EditTrainingComponent } from '../edit-training/edit-training.component';
 
 @Component({
   selector: 'app-training-sessions-list',
@@ -12,6 +14,7 @@ export class TrainingSessionsListComponent implements OnInit {
   private trainingService = inject(TrainingService);
   private router = inject(Router);
   private toastr = inject(ToastrService);
+  private dialogService = inject(DialogService);
 
   sessions: TrainingSession[] = [];
   displayedSessions: TrainingSession[] = [];
@@ -127,7 +130,21 @@ export class TrainingSessionsListComponent implements OnInit {
    * Edit session
    */
   editSession(session: TrainingSession): void {
-    this.router.navigate(['/training/edit', session.id]);
+    // Open edit training session in modal
+    const ref = this.dialogService.open(EditTrainingComponent, {
+      header: 'Edit Training Session',
+      width: '80%',
+      data: { id: session.id },
+      modal: true,
+      closable: true
+    });
+
+    ref.onClose.subscribe((result) => {
+      if (result) {
+        // Refresh the list if session was updated
+        this.loadAllSessions();
+      }
+    });
   }
 
   /**
