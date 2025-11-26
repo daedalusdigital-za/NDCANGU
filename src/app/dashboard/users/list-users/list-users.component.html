@@ -62,7 +62,7 @@
 <!-- Edit User Modal -->
 <app-edit-user-modal
     *ngIf="showEditModal"
-    [userId]="selectedEditUser?.id"
+    [userId]="selectedEditUser?.id || ''"
     [userData]="selectedEditUser"
     [isVisible]="showEditModal"
     (modalClose)="closeEditModal()"
