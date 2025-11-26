@@ -5,7 +5,6 @@ import { DashboardLayoutComponent } from './dashboard-layout/dashboard-layout.co
 import { DashboardComponent } from './dashboard.component';
 import { ReportsComponent } from './reports.component';
 import { ListStatsComponent } from './list-stats/list-stats.component';
-import { VerifyPhoneNumberComponent } from './verify-phone-number/verify-phone-number.component';
 
 const routes: Routes = [
   {
@@ -43,10 +42,6 @@ const routes: Routes = [
       {
         path: 'training',
         loadChildren: () => import('./training/training.module').then(m => m.TrainingModule),
-      },
-      {
-        path: 'verify-phone-number',
-        component: VerifyPhoneNumberComponent
       },
       { path: '', redirectTo: 'home', pathMatch: 'full' }
     ]

@@ -15,7 +15,6 @@ import { MultiSelectModule } from 'primeng/multiselect';
 import { FormsModule } from '@angular/forms';
 import { CheckboxModule } from 'primeng/checkbox';
 import { SharedModule } from '../shared/shared.module';
-import { VerifyPhoneNumberComponent } from './verify-phone-number/verify-phone-number.component';
 
 @NgModule({
   declarations: [
@@ -24,8 +23,7 @@ import { VerifyPhoneNumberComponent } from './verify-phone-number/verify-phone-n
     ReportsComponent,
     // AddReportComponent,
     AddStatsComponent,
-    ListStatsComponent,
-    VerifyPhoneNumberComponent
+    ListStatsComponent
   ],
   imports: [
     CommonModule,
