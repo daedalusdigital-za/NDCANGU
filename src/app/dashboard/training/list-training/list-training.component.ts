@@ -125,6 +125,24 @@ export class ListTrainingComponent implements OnInit {
     });
   }
 
+  openEditModal(session: any): void {
+    console.log('Opening edit modal for session:', session.id);
+    const ref = this.dialogService.open(EditTrainingComponent, {
+      header: 'Edit Training Session',
+      width: '80%',
+      data: { id: session.id },
+      modal: true,
+      closable: true
+    });
+
+    ref.onClose.subscribe((result) => {
+      console.log('Modal closed with result:', result);
+      if (result) {
+        this.loadTrainingSessions();
+      }
+    });
+  }
+
   addNewTraining(): void {
     this.router.navigate(['/dashboard/training/add']);
   }
