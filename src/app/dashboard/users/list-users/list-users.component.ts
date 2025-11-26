@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core'; import { Router } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { BaseService } from 'src/app/services/base/base.service';
 import { IColumns } from 'src/app/shared/interfaces/dynamic-grid-interfaces';
+import { User } from 'src/app/shared/interfaces/common.interfaces';
 import { ConfirmationService } from 'primeng/api';
 import { ToastrService } from 'ngx-toastr';
 
@@ -12,7 +14,7 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class ListUsersComponent implements OnInit {
 
-  source: Array<any> = [];
+  source: any[] = [];
   cols: IColumns[] = [{
     header: 'Name',
     field: 'firstName',
@@ -79,7 +81,7 @@ export class ListUsersComponent implements OnInit {
     isFilter: false,
     isSortable: false,
     onClick: (item: any) => {
-      this.openEditModal(item);
+      this.openEditModal(item as User);
     },
     getValue: function () {
       return this.field
@@ -92,7 +94,7 @@ export class ListUsersComponent implements OnInit {
     isFilter: false,
     isSortable: false,
     onClick: (item: any) => {
-      this.confirmResetPassword(item);
+      this.confirmResetPassword(item as User);
     },
     getValue: function () {
       return this.field
@@ -105,7 +107,7 @@ export class ListUsersComponent implements OnInit {
     isFilter: false,
     isSortable: false,
     onClick: (item: any) => {
-      this.openChangePasswordModal(item);
+      this.openChangePasswordModal(item as User);
     },
     getValue: function () {
       return this.field
@@ -118,7 +120,7 @@ export class ListUsersComponent implements OnInit {
     isFilter: false,
     isSortable: false,
     onClick: (item: any) => {
-      this.confirm(item.id);
+      this.confirm((item as User).id);
     },
     getValue: function () {
       return this.field
@@ -128,11 +130,11 @@ export class ListUsersComponent implements OnInit {
 
   // Password management
   showPasswordModal = false;
-  selectedUser: any = null;
+  selectedUser: User | null = null;
 
   // Edit user management
   showEditModal = false;
-  selectedEditUser: any = null;
+  selectedEditUser: User | null = null;
 
   constructor(
     private baseService: BaseService,
@@ -147,11 +149,11 @@ export class ListUsersComponent implements OnInit {
   private getUsers() {
     // In development mode, provide mock data if API fails
     this.baseService.baseGet('User/GetUsers').subscribe({
-      next: (response: any) => {
+      next: (response: User[]) => {
         this.source = response;
         console.log('Users loaded successfully:', response);
       },
-      error: (error: any) => {
+      error: (error: Error) => {
         console.error('Error loading users, using mock data:', error);
         // Provide mock user data for development
         this.source = this.getMockUsers();
@@ -210,12 +212,12 @@ export class ListUsersComponent implements OnInit {
     ];
   }
 
-  edit(item: any) {
+  edit(item: User) {
     console.log(item);
 
   }
 
-  private confirm(id: any) {
+  private confirm(id: string | number) {
     this.confirmationService.confirm({
       message: 'Do you want to delete this record?',
       header: 'Delete Confirmation',
@@ -223,12 +225,12 @@ export class ListUsersComponent implements OnInit {
       accept: () => {
         console.log('Deleting user with ID:', id);
         this.baseService.baseDelete(`User/Delete?id=${id}`).subscribe({
-          next: (response: any) => {
+          next: (response: {success?: boolean}) => {
             console.log('Delete response:', response);
             this.toastrService.success('User deleted successfully!', 'Success');
             this.getUsers(); // Refresh the list
           },
-          error: (error: any) => {
+          error: (error: Error) => {
             console.error('Delete error:', error);
             this.toastrService.error('Failed to delete user. Please try again.', 'Error');
           }
@@ -240,7 +242,7 @@ export class ListUsersComponent implements OnInit {
     });
   }
 
-  confirmResetPassword(user: any) {
+  confirmResetPassword(user: User) {
     this.confirmationService.confirm({
       message: `Are you sure you want to reset the password for ${user.firstName} ${user.lastName}? The password will be reset to the default: 654724135`,
       header: 'Reset Password Confirmation',
@@ -256,7 +258,7 @@ export class ListUsersComponent implements OnInit {
 
   private resetPassword(userId: string) {
     this.baseService.basePost(`User/ResetPassword?userId=${userId}`, {}).subscribe({
-      next: (response: any) => {
+      next: (response: {success?: boolean}) => {
         console.log('Password reset response:', response);
         this.toastrService.success(
           'Password has been reset to: 654724135',
@@ -264,17 +266,18 @@ export class ListUsersComponent implements OnInit {
           { timeOut: 10000 }
         );
       },
-      error: (error: any) => {
+      error: (error: Error) => {
         console.error('Password reset error:', error);
+        const errorMsg = (error as {error?: {message?: string}})?.error?.message || 'Failed to reset password. Please try again.';
         this.toastrService.error(
-          error.error?.message || 'Failed to reset password. Please try again.',
+          errorMsg,
           'Error'
         );
       }
     });
   }
 
-  openChangePasswordModal(user: any) {
+  openChangePasswordModal(user: User) {
     this.selectedUser = user;
     this.showPasswordModal = true;
   }
@@ -289,7 +292,7 @@ export class ListUsersComponent implements OnInit {
     this.closePasswordModal();
   }
 
-  openEditModal(user: any) {
+  openEditModal(user: User) {
     this.selectedEditUser = user;
     this.showEditModal = true;
   }
