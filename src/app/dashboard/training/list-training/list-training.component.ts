@@ -2,8 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { DatabaseService } from '../../../services/data/database.service';
-import { DialogService } from 'primeng/dynamicdialog';
-import { EditTrainingComponent } from '../edit-training/edit-training.component';
 
 @Component({
   selector: 'app-list-training',
@@ -30,8 +28,7 @@ export class ListTrainingComponent implements OnInit {
   constructor(
     private router: Router,
     private toastr: ToastrService,
-    private databaseService: DatabaseService,
-    private dialogService: DialogService
+    private databaseService: DatabaseService
   ) { }
 
   ngOnInit(): void {
@@ -107,40 +104,8 @@ export class ListTrainingComponent implements OnInit {
     this.router.navigate(['/dashboard/training/view', session.id]);
   }
 
-  editTrainingSession(session: any): void {
-    // Open edit training session in modal
-    const ref = this.dialogService.open(EditTrainingComponent, {
-      header: 'Edit Training Session',
-      width: '80%',
-      data: { id: session.id },
-      modal: true,
-      closable: true
-    });
-
-    ref.onClose.subscribe((result) => {
-      if (result) {
-        // Refresh the list if session was updated
-        this.loadTrainingSessions();
-      }
-    });
-  }
-
   openEditModal(session: any): void {
-    console.log('Opening edit modal for session:', session.id);
-    const ref = this.dialogService.open(EditTrainingComponent, {
-      header: 'Edit Training Session',
-      width: '80%',
-      data: { id: session.id },
-      modal: true,
-      closable: true
-    });
-
-    ref.onClose.subscribe((result) => {
-      console.log('Modal closed with result:', result);
-      if (result) {
-        this.loadTrainingSessions();
-      }
-    });
+    this.router.navigate(['/dashboard/training/edit', session.id]);
   }
 
   addNewTraining(): void {

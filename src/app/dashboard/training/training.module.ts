@@ -25,7 +25,6 @@ import { FileUploadModule } from 'primeng/fileupload';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { EditTrainingComponent } from './edit-training/edit-training.component';
-import { DialogService } from 'primeng/dynamicdialog';
 
 @NgModule({
   declarations: [
@@ -55,7 +54,6 @@ import { DialogService } from 'primeng/dynamicdialog';
     FileUploadModule,
     InputNumberModule,
     InputTextareaModule
-  ],
-  providers: [DialogService]
+  ]
 })
 export class TrainingModule { }
