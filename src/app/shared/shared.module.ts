@@ -15,8 +15,6 @@ import { ButtonModule } from "primeng/button";
 import { LottieModule } from 'ngx-lottie';
 
 // Import our services to ensure they're available app-wide
-import { ErrorHandlingService } from '../core/services/error-handling/error-handling.service';
-import { LoadingService } from '../core/services/ui/loading.service';
 import { PopupPreviewService } from '../services/popup-preview/popup-preview.service';
 
 export function playerFactory(): any {
@@ -60,8 +58,6 @@ export function playerFactory(): any {
         ButtonModule
     ],
     providers: [
-        ErrorHandlingService,
-        LoadingService,
         PopupPreviewService
     ]
 })
