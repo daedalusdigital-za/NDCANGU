@@ -1,5 +1,6 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { TrainingService, TrainingSession } from '../../services/training/training.service';
+import { TrainingService, TrainingSession } from '../../../services/training/training.service';
+import { DatabaseService, Province } from '../../../services/data/database.service';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { DialogService } from 'primeng/dynamicdialog';
@@ -12,12 +13,16 @@ import { EditTrainingComponent } from '../edit-training/edit-training.component'
 })
 export class TrainingSessionsListComponent implements OnInit {
   private trainingService = inject(TrainingService);
+  private databaseService = inject(DatabaseService);
   private router = inject(Router);
   private toastr = inject(ToastrService);
   private dialogService = inject(DialogService);
 
   sessions: TrainingSession[] = [];
   displayedSessions: TrainingSession[] = [];
+
+  // Provinces list from API/fallback
+  provinces: Province[] = [];
 
   loading = false;
   error: string | null = null;
@@ -36,8 +41,26 @@ export class TrainingSessionsListComponent implements OnInit {
     'participants',
     'status',
     'actions'
-  ];  ngOnInit(): void {
+  ];
+
+  ngOnInit(): void {
+    this.loadProvinces();
     this.loadAllSessions();
+  }
+
+  /**
+   * Load all provinces
+   */
+  loadProvinces(): void {
+    this.databaseService.getProvinces().subscribe({
+      next: (provinces) => {
+        this.provinces = provinces;
+        console.log('✅ Loaded', provinces.length, 'provinces');
+      },
+      error: (error) => {
+        console.error('Error loading provinces:', error);
+      }
+    });
   }
 
   /**

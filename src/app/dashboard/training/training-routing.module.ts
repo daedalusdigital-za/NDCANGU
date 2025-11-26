@@ -4,6 +4,7 @@ import { TrainingComponent } from './training.component';
 import { AddTrainingComponent } from './add-training/add-training.component';
 import { ListTrainingComponent } from './list-training/list-training.component';
 import { TrainersComponent } from './trainers/trainers.component';
+import { TrainingSessionsListComponent } from './training-sessions-list/training-sessions-list.component';
 
 const routes: Routes = [
   {
@@ -17,6 +18,10 @@ const routes: Routes = [
   {
     path: 'list',
     component: ListTrainingComponent
+  },
+  {
+    path: 'sessions',
+    component: TrainingSessionsListComponent
   },
   {
     path: 'trainers',

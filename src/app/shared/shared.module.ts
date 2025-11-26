@@ -14,9 +14,7 @@ import { PaginatorModule } from 'primeng/paginator';
 import { ButtonModule } from "primeng/button";
 import { LottieModule } from 'ngx-lottie';
 
-// Import our services to ensure they're available app-wide
-import { ErrorHandlingService } from '../services/error-handling/error-handling.service';
-import { LoadingService } from '../services/loading/loading.service';
+// Import PopupPreviewService only - other services are provided globally in CoreModule
 import { PopupPreviewService } from '../services/popup-preview/popup-preview.service';
 
 export function playerFactory(): any {
@@ -60,8 +58,6 @@ export function playerFactory(): any {
         ButtonModule
     ],
     providers: [
-        ErrorHandlingService,
-        LoadingService,
         PopupPreviewService
     ]
 })

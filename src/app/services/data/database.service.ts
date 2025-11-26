@@ -40,7 +40,7 @@ export enum TrainingStatus {
 // ENTITY INTERFACES
 // =============================================
 
-interface Province {
+export interface Province {
   id: number;
   name: string;
   code: string;

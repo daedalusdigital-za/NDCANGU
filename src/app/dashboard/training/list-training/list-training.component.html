@@ -59,8 +59,8 @@
                                             [(ngModel)]="filterProvince"
                                             (change)="applyFilters()">
                                         <option value="">All Provinces</option>
-                                        <option *ngFor="let province of getUniqueProvinces()" [value]="province">
-                                            {{ province }}
+                                        <option *ngFor="let province of provinces" [value]="province.name">
+                                            {{ province.name }}
                                         </option>
                                     </select>
                                 </div>

@@ -24,10 +24,14 @@
         <div class="col-md-3">
           <div class="mb-3">
             <label for="filterProvince" class="form-label">Filter by Province</label>
-            <input type="text" class="form-control" id="filterProvince"
-                   [(ngModel)]="filterProvince"
-                   (change)="loadByProvince(filterProvince)"
-                   placeholder="e.g., Western Cape">
+            <select class="form-select" id="filterProvince"
+                    [(ngModel)]="filterProvince"
+                    (change)="loadByProvince(filterProvince)">
+              <option value="">All Provinces</option>
+              <option *ngFor="let province of provinces" [value]="province.name">
+                {{ province.name }}
+              </option>
+            </select>
           </div>
         </div>
         <div class="col-md-3">
@@ -107,7 +111,7 @@
               <td>{{ session.venue }}</td>
               <td>
                 <span *ngIf="session.trainer?.name; else noTrainer">
-                  {{ session.trainer.name }}
+                  {{ session.trainer?.name }}
                 </span>
                 <ng-template #noTrainer>
                   <span class="text-muted">N/A</span>

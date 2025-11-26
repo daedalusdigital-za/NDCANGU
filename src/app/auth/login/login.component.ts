@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth/auth.service';
 import { GlobalService } from '../../services/global/global.service';
-import { ErrorHandlingService } from '../../services/error-handling/error-handling.service';
+import { ErrorHandlingService } from '../../core/services/error-handling/error-handling.service';
 
 import { PrivacyPolicyComponent } from 'src/app/auth/privacy-policy/privacy-policy.component';
 import { DialogService } from 'primeng/dynamicdialog';

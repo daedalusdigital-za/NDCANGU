@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { DatabaseService } from '../../../services/data/database.service';
+import { DatabaseService, Province } from '../../../services/data/database.service';
 import { DialogService } from 'primeng/dynamicdialog';
 import { EditTrainingComponent } from '../edit-training/edit-training.component';
 
@@ -17,6 +17,9 @@ export class ListTrainingComponent implements OnInit {
   searchTerm = '';
   filterStatus = '';
   filterProvince = '';
+
+  // Provinces list from API/fallback
+  provinces: Province[] = [];
 
   // Status options based on numeric values
   statusOptions = [
@@ -35,7 +38,20 @@ export class ListTrainingComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.loadProvinces();
     this.loadTrainingSessions();
+  }
+
+  loadProvinces(): void {
+    this.databaseService.getProvinces().subscribe({
+      next: (provinces) => {
+        this.provinces = provinces;
+        console.log('✅ Loaded', provinces.length, 'provinces');
+      },
+      error: (error) => {
+        console.error('Error loading provinces:', error);
+      }
+    });
   }
 
   loadTrainingSessions(): void {

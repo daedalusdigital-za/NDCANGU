@@ -8,6 +8,7 @@ import { TrainingComponent } from './training.component';
 import { AddTrainingComponent } from './add-training/add-training.component';
 import { ListTrainingComponent } from './list-training/list-training.component';
 import { TrainersComponent } from './trainers/trainers.component';
+import { TrainingSessionsListComponent } from './training-sessions-list/training-sessions-list.component';
 
 // PrimeNG imports
 import { TableModule } from 'primeng/table';
@@ -26,13 +27,18 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { EditTrainingComponent } from './edit-training/edit-training.component';
 
+// PrimeNG Services
+import { DialogService } from 'primeng/dynamicdialog';
+import { ConfirmationService } from 'primeng/api';
+
 @NgModule({
   declarations: [
     TrainingComponent,
     AddTrainingComponent,
     ListTrainingComponent,
     TrainersComponent,
-    EditTrainingComponent
+    EditTrainingComponent,
+    TrainingSessionsListComponent
   ],
   imports: [
     CommonModule,
@@ -54,6 +60,10 @@ import { EditTrainingComponent } from './edit-training/edit-training.component';
     FileUploadModule,
     InputNumberModule,
     InputTextareaModule
+  ],
+  providers: [
+    DialogService,
+    ConfirmationService
   ]
 })
 export class TrainingModule { }
