@@ -178,3 +178,25 @@
         </form>
     </div>
 </div>
+
+<!-- Modal Footer with Action Buttons -->
+<ng-template pTemplate="footer">
+    <div class="d-flex justify-content-end gap-2">
+        <button type="button"
+                class="btn btn-secondary"
+                (click)="cancel()">
+            <i class="dripicons-cross me-2"></i>Cancel
+        </button>
+        <button type="button"
+                class="btn btn-primary"
+                (click)="updateTraining()"
+                [disabled]="isSubmitting">
+            <i class="dripicons-checkmark me-2"></i>
+            <span *ngIf="!isSubmitting">Update Training</span>
+            <span *ngIf="isSubmitting">
+                <span class="spinner-border spinner-border-sm me-2"></span>
+                Updating...
+            </span>
+        </button>
+    </div>
+</ng-template>
