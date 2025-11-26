@@ -5,7 +5,7 @@ import { AuthRoutingModule } from './auth-routing.module';
 import { LoginUserComponent } from './login/login.component';
 import { AuthComponent } from './auth.component';
 import { FormsModule } from '@angular/forms';
-import { LockUserComponent } from '../components/lock-user/lock-user.component';
+import { LockUserComponent } from '../shared/components/lock-user/lock-user.component';
 import { VerifyPhoneNumberComponent } from './verify-phone-number/verify-phone-number.component';
 
 import { PrivacyPolicyComponent } from './privacy-policy/privacy-policy.component';
