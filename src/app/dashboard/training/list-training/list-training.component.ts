@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { DatabaseService } from '../../../services/data/database.service';
+import { DialogService } from 'primeng/dynamicdialog';
+import { EditTrainingComponent } from '../edit-training/edit-training.component';
 
 @Component({
   selector: 'app-list-training',
@@ -28,7 +30,8 @@ export class ListTrainingComponent implements OnInit {
   constructor(
     private router: Router,
     private toastr: ToastrService,
-    private databaseService: DatabaseService
+    private databaseService: DatabaseService,
+    private dialogService: DialogService
   ) { }
 
   ngOnInit(): void {
@@ -105,8 +108,21 @@ export class ListTrainingComponent implements OnInit {
   }
 
   editTrainingSession(session: any): void {
-    // Navigate to edit training session
-    this.router.navigate(['/dashboard/training/edit', session.id]);
+    // Open edit training session in modal
+    const ref = this.dialogService.open(EditTrainingComponent, {
+      header: 'Edit Training Session',
+      width: '80%',
+      data: { id: session.id },
+      modal: true,
+      closable: true
+    });
+
+    ref.onClose.subscribe((result) => {
+      if (result) {
+        // Refresh the list if session was updated
+        this.loadTrainingSessions();
+      }
+    });
   }
 
   addNewTraining(): void {

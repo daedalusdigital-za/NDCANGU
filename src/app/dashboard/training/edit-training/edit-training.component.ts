@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { DynamicDialogRef, DynamicDialogConfig } from 'primeng/dynamicdialog';
 import { ToastrService } from 'ngx-toastr';
 import { DatabaseService } from '../../../services/data/database.service';
 
@@ -89,14 +89,14 @@ export class EditTrainingComponent implements OnInit {
   ];
 
   constructor(
-    private route: ActivatedRoute,
-    private router: Router,
+    public ref: DynamicDialogRef,
+    public config: DynamicDialogConfig,
     private toastr: ToastrService,
     private databaseService: DatabaseService
   ) { }
 
   ngOnInit(): void {
-    this.trainingId = Number(this.route.snapshot.paramMap.get('id'));
+    this.trainingId = this.config.data?.id || 0;
     this.loadTrainers();
     this.loadTrainingSession();
   }
@@ -132,7 +132,7 @@ export class EditTrainingComponent implements OnInit {
         this.isLoading = false;
         console.error('Error loading training session:', error);
         this.toastr.error('Failed to load training session', 'Error');
-        this.router.navigate(['/dashboard/training/list']);
+        this.ref.close();
       }
     });
   }
@@ -158,7 +158,7 @@ export class EditTrainingComponent implements OnInit {
         next: (result) => {
           this.isSubmitting = false;
           this.toastr.success('Training session updated successfully!', 'Success');
-          this.router.navigate(['/dashboard/training/list']);
+          this.ref.close(result);
         },
         error: (error) => {
           this.isSubmitting = false;
@@ -204,7 +204,7 @@ export class EditTrainingComponent implements OnInit {
   }
 
   cancel(): void {
-    this.router.navigate(['/dashboard/training/list']);
+    this.ref.close();
   }
 
   formatDateForInput(dateString: string): string {

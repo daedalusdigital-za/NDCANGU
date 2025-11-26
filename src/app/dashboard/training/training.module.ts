@@ -19,6 +19,7 @@ import { MultiSelectModule } from 'primeng/multiselect';
 import { CheckboxModule } from 'primeng/checkbox';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { DialogModule } from 'primeng/dialog';
+import { DynamicDialogModule } from 'primeng/dynamicdialog';
 import { TooltipModule } from 'primeng/tooltip';
 import { FileUploadModule } from 'primeng/fileupload';
 import { InputNumberModule } from 'primeng/inputnumber';
@@ -48,6 +49,7 @@ import { EditTrainingComponent } from './edit-training/edit-training.component';
     CheckboxModule,
     ConfirmDialogModule,
     DialogModule,
+    DynamicDialogModule,
     TooltipModule,
     FileUploadModule,
     InputNumberModule,

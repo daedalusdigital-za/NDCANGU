@@ -5,8 +5,6 @@ import { DashboardRoutingModule } from './dashboard-routing.module';
 import { DashboardComponent } from './dashboard.component';
 import { DashboardLayoutComponent } from './dashboard-layout/dashboard-layout.component';
 import { ReportsComponent } from './reports.component';
-import { AddStatsComponent } from './add-stats/add-stats.component';
-import { ListStatsComponent } from './list-stats/list-stats.component';
 import { NgApexchartsModule } from 'ng-apexcharts';
 import { NgxEchartsModule } from 'ngx-echarts';
 import { TableModule } from 'primeng/table';
@@ -20,10 +18,7 @@ import { SharedModule } from '../shared/shared.module';
   declarations: [
     DashboardComponent,
     DashboardLayoutComponent,
-    ReportsComponent,
-    // AddReportComponent,
-    AddStatsComponent,
-    ListStatsComponent
+    ReportsComponent
   ],
   imports: [
     CommonModule,

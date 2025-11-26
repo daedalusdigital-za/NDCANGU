@@ -3,7 +3,6 @@ import { RouterModule, Routes } from '@angular/router';
 import { TrainingComponent } from './training.component';
 import { AddTrainingComponent } from './add-training/add-training.component';
 import { ListTrainingComponent } from './list-training/list-training.component';
-import { EditTrainingComponent } from './edit-training/edit-training.component';
 import { TrainersComponent } from './trainers/trainers.component';
 
 const routes: Routes = [
@@ -18,10 +17,6 @@ const routes: Routes = [
   {
     path: 'list',
     component: ListTrainingComponent
-  },
-  {
-    path: 'edit/:id',
-    component: EditTrainingComponent
   },
   {
     path: 'trainers',

@@ -1,10 +1,8 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { AddStatsComponent } from './add-stats/add-stats.component';
 import { DashboardLayoutComponent } from './dashboard-layout/dashboard-layout.component';
 import { DashboardComponent } from './dashboard.component';
 import { ReportsComponent } from './reports.component';
-import { ListStatsComponent } from './list-stats/list-stats.component';
 
 const routes: Routes = [
   {
@@ -17,11 +15,12 @@ const routes: Routes = [
       },
       {
         path: 'stats',
-        component: ListStatsComponent
+        loadChildren: () => import('./stats/stats.module').then(m => m.StatsModule)
       },
       {
         path: 'document/upload',
-        component: AddStatsComponent
+        redirectTo: 'stats/upload',
+        pathMatch: 'full'
       },
       {
         path: 'users',

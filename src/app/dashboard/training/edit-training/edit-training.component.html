@@ -1,238 +1,180 @@
-<div class="page-content">
-    <div class="container-fluid">
-        <!-- Page Title -->
-        <div class="row">
-            <div class="col-12">
-                <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                    <h4 class="mb-sm-0 font-size-18">Edit Training Session</h4>
-                    <div class="page-title-right">
-                        <ol class="breadcrumb m-0">
-                            <li class="breadcrumb-item"><a routerLink="/dashboard/training">Training</a></li>
-                            <li class="breadcrumb-item"><a routerLink="/dashboard/training/list">Sessions</a></li>
-                            <li class="breadcrumb-item active">Edit</li>
-                        </ol>
-                    </div>
-                </div>
-            </div>
+<div class="p-4">
+    <!-- Loading State -->
+    <div *ngIf="isLoading" class="text-center p-5">
+        <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
         </div>
+        <p class="mt-3">Loading training session...</p>
+    </div>
 
-        <!-- Loading State -->
-        <div *ngIf="isLoading" class="row">
-            <div class="col-12">
-                <div class="text-center">
-                    <div class="spinner-border" role="status">
-                        <span class="visually-hidden">Loading...</span>
+    <!-- Edit Form -->
+    <div *ngIf="!isLoading">
+        <form #trainingForm="ngForm">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label">Training Name *</label>
+                        <input type="text"
+                               class="form-control"
+                               [(ngModel)]="training.trainingName"
+                               name="trainingName"
+                               required
+                               placeholder="Enter training name">
                     </div>
                 </div>
-            </div>
-        </div>
-
-        <!-- Edit Form -->
-        <div *ngIf="!isLoading" class="row">
-            <div class="col-lg-8">
-                <div class="card">
-                    <div class="card-header">
-                        <h5 class="card-title mb-0">Training Session Details</h5>
-                    </div>
-                    <div class="card-body">
-                        <form #trainingForm="ngForm">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="mb-3">
-                                        <label class="form-label">Training Name *</label>
-                                        <input type="text"
-                                               class="form-control"
-                                               [(ngModel)]="training.trainingName"
-                                               name="trainingName"
-                                               required
-                                               placeholder="Enter training name">
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="mb-3">
-                                        <label class="form-label">Training Type *</label>
-                                        <select class="form-select"
-                                                [(ngModel)]="training.trainingType"
-                                                name="trainingType"
-                                                required>
-                                            <option value="">Select Training Type</option>
-                                            <option *ngFor="let type of trainingTypes" [value]="type">
-                                                {{type}}
-                                            </option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="mb-3">
-                                        <label class="form-label">Training Date *</label>
-                                        <input type="date"
-                                               class="form-control"
-                                               [(ngModel)]="training.trainingDate"
-                                               name="trainingDate"
-                                               required>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="mb-3">
-                                        <label class="form-label">Target Audience *</label>
-                                        <select class="form-select"
-                                                [(ngModel)]="training.targetAudience"
-                                                name="targetAudience"
-                                                required>
-                                            <option value="">Select Target Audience</option>
-                                            <option *ngFor="let audience of targetAudiences" [value]="audience">
-                                                {{audience}}
-                                            </option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="mb-3">
-                                        <label class="form-label">Province *</label>
-                                        <select class="form-select"
-                                                [(ngModel)]="training.provinceId"
-                                                name="provinceId"
-                                                required>
-                                            <option [ngValue]="null">Select Province</option>
-                                            <option *ngFor="let province of provinces" [value]="province.id">
-                                                {{province.name}}
-                                            </option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="mb-3">
-                                        <label class="form-label">Venue *</label>
-                                        <select class="form-select"
-                                                [(ngModel)]="training.venue"
-                                                name="venue"
-                                                required>
-                                            <option value="">Select Venue</option>
-                                            <option *ngFor="let venue of venues" [value]="venue">
-                                                {{venue}}
-                                            </option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="mb-3">
-                                        <label class="form-label">Trainer</label>
-                                        <select class="form-select"
-                                                [(ngModel)]="training.trainerId"
-                                                name="trainerId">
-                                            <option [ngValue]="null">Select Trainer</option>
-                                            <option *ngFor="let trainer of trainers" [value]="trainer.id">
-                                                {{trainer.name}} - {{trainer.location}}
-                                            </option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="mb-3">
-                                        <label class="form-label">Status</label>
-                                        <select class="form-select"
-                                                [(ngModel)]="training.status"
-                                                name="status">
-                                            <option *ngFor="let status of statusOptions" [value]="status.value">
-                                                {{status.label}}
-                                            </option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </form>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label">Training Type *</label>
+                        <select class="form-select"
+                                [(ngModel)]="training.trainingType"
+                                name="trainingType"
+                                required>
+                            <option value="">Select Training Type</option>
+                            <option *ngFor="let type of trainingTypes" [value]="type">
+                                {{type}}
+                            </option>
+                        </select>
                     </div>
                 </div>
             </div>
 
-            <!-- Summary Card -->
-            <div class="col-lg-4">
-                <div class="card">
-                    <div class="card-header">
-                        <h5 class="card-title mb-0">Training Summary</h5>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label">Training Date *</label>
+                        <input type="date"
+                               class="form-control"
+                               [(ngModel)]="training.trainingDate"
+                               name="trainingDate"
+                               required>
                     </div>
-                    <div class="card-body">
-                        <div class="mb-3">
-                            <label class="form-label">Training ID</label>
-                            <p class="form-control-plaintext">{{training.id}}</p>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Current Status</label>
-                            <p class="form-control-plaintext">{{training.statusText}}</p>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Created</label>
-                            <p class="form-control-plaintext">{{training.dateCreated | date:'short'}}</p>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Last Updated</label>
-                            <p class="form-control-plaintext">{{training.lastUpdated | date:'short'}}</p>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Created By</label>
-                            <p class="form-control-plaintext">{{training.createdByUserName}}</p>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Assigned Trainer</label>
-                            <div *ngIf="training.trainer; else noTrainer">
-                                <p class="form-control-plaintext mb-1">
-                                    <strong>{{training.trainer.name}}</strong>
-                                </p>
-                                <p class="form-control-plaintext text-muted mb-1">
-                                    <i class="dripicons-mail me-1"></i>{{training.trainer.email}}
-                                </p>
-                                <p class="form-control-plaintext text-muted mb-1">
-                                    <i class="dripicons-phone me-1"></i>{{training.trainer.phone}}
-                                </p>
-                                <p class="form-control-plaintext text-muted">
-                                    <i class="dripicons-location me-1"></i>{{training.trainer.location}}
-                                </p>
-                            </div>
-                            <ng-template #noTrainer>
-                                <p class="form-control-plaintext text-muted">Not assigned</p>
-                            </ng-template>
-                        </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label">Target Audience *</label>
+                        <select class="form-select"
+                                [(ngModel)]="training.targetAudience"
+                                name="targetAudience"
+                                required>
+                            <option value="">Select Target Audience</option>
+                            <option *ngFor="let audience of targetAudiences" [value]="audience">
+                                {{audience}}
+                            </option>
+                        </select>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <!-- Action Buttons -->
-        <div class="row">
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-end gap-3">
-                            <button type="button"
-                                    class="btn btn-secondary"
-                                    (click)="cancel()">
-                                <i class="dripicons-arrow-left me-2"></i>Cancel
-                            </button>
-                            <button type="button"
-                                    class="btn btn-primary"
-                                    (click)="updateTraining()"
-                                    [disabled]="isSubmitting">
-                                <i class="dripicons-checkmark me-2"></i>
-                                <span *ngIf="!isSubmitting">Update Training</span>
-                                <span *ngIf="isSubmitting">
-                                    <i class="spinner-border spinner-border-sm me-2"></i>
-                                    Updating...
-                                </span>
-                            </button>
-                        </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label">Province *</label>
+                        <select class="form-select"
+                                [(ngModel)]="training.provinceId"
+                                name="provinceId"
+                                required>
+                            <option [ngValue]="null">Select Province</option>
+                            <option *ngFor="let province of provinces" [value]="province.id">
+                                {{province.name}}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label">Venue *</label>
+                        <select class="form-select"
+                                [(ngModel)]="training.venue"
+                                name="venue"
+                                required>
+                            <option value="">Select Venue</option>
+                            <option *ngFor="let venue of venues" [value]="venue">
+                                {{venue}}
+                            </option>
+                        </select>
                     </div>
                 </div>
             </div>
-        </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label">Trainer</label>
+                        <select class="form-select"
+                                [(ngModel)]="training.trainerId"
+                                name="trainerId">
+                            <option [ngValue]="null">Select Trainer</option>
+                            <option *ngFor="let trainer of trainers" [value]="trainer.id">
+                                {{trainer.name}} - {{trainer.location}}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label">Status</label>
+                        <select class="form-select"
+                                [(ngModel)]="training.status"
+                                name="status">
+                            <option *ngFor="let status of statusOptions" [value]="status.value">
+                                {{status.label}}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Training Summary Section -->
+            <div class="row mt-4">
+                <div class="col-12">
+                    <hr>
+                    <h6 class="mb-3">Training Summary</h6>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label text-muted">Training ID</label>
+                        <p class="form-control-plaintext">{{training.id}}</p>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label text-muted">Current Status</label>
+                        <p class="form-control-plaintext">{{training.statusText}}</p>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label text-muted">Created</label>
+                        <p class="form-control-plaintext">{{training.dateCreated | date:'short'}}</p>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label text-muted">Last Updated</label>
+                        <p class="form-control-plaintext">{{training.lastUpdated | date:'short'}}</p>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label text-muted">Created By</label>
+                        <p class="form-control-plaintext">{{training.createdByUserName}}</p>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label text-muted">Assigned Trainer</label>
+                        <div *ngIf="training.trainer; else noTrainer">
+                            <p class="form-control-plaintext mb-1">
+                                <strong>{{training.trainer.name}}</strong>
+                            </p>
+                            <p class="form-control-plaintext text-muted mb-1">
+                                <i class="dripicons-mail me-1"></i>{{training.trainer.email}}
+                            </p>
+                            <p class="form-control-plaintext text-muted mb-1">
+                                <i class="dripicons-phone me-1"></i>{{training.trainer.phone}}
+                            </p>
+                            <p class="form-control-plaintext text-muted">
+                                <i class="dripicons-location me-1"></i>{{training.trainer.location}}
+                            </p>
+                        </div>
+                        <ng-template #noTrainer>
+                            <p class="form-control-plaintext text-muted">Not assigned</p>
+                        </ng-template>
+                    </div>
+                </div>
+            </div>
+        </form>
     </div>
 </div>
