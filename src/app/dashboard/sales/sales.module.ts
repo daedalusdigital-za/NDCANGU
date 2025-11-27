@@ -12,6 +12,10 @@ import { SalesReportsComponent } from './sales-reports/sales-reports.component';
 import { ProductManagementComponent } from './product-management/product-management.component';
 import { EditSaleModalComponent } from './edit-sale-modal/edit-sale-modal.component';
 
+// Services
+import { DatabaseService } from '../../services/data/database.service';
+import { SalesApiService } from './services/sales-api.service';
+
 // PrimeNG imports
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
@@ -49,6 +53,10 @@ import { TooltipModule } from 'primeng/tooltip';
     ConfirmDialogModule,
     DialogModule,
     TooltipModule
+  ],
+  providers: [
+    DatabaseService,
+    SalesApiService
   ]
 })
 export class SalesModule { }

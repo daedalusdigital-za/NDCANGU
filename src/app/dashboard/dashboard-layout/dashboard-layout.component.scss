@@ -754,6 +754,14 @@
             }
           }
         }
+
+        // Show state for nav dropdown menu (click-based toggling)
+        &.show .nav-dropdown-menu,
+        .nav-dropdown-menu.show {
+          opacity: 1;
+          visibility: visible;
+          transform: translateY(0);
+        }
       }
     }
   }

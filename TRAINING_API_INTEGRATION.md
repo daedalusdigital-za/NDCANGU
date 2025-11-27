@@ -9,7 +9,7 @@ The training functionality has been successfully updated to use API endpoints wi
 ### 1. **API Configuration Updated**
 - ✅ Base URL: `https://ngcanduapi.azurewebsites.net/api/`
 - ✅ Authentication: JWT token support
-- ✅ Login working with credentials: `welcomeking@outlook.com / Kingsland`
+- ✅ Login working with secure admin credentials
 
 ### 2. **DatabaseService Enhanced**
 - ✅ **Authentication Methods**:

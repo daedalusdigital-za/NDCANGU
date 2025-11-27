@@ -118,11 +118,6 @@ export class ListTrainingComponent implements OnInit {
     return this.trainingSessions.filter(s => s.status === 2).length;
   }
 
-  viewTrainingSession(session: any): void {
-    // Navigate to training session details
-    this.router.navigate(['/dashboard/training/view', session.id]);
-  }
-
   editTrainingSession(session: any): void {
     // Open edit training session in modal
     const ref = this.dialogService.open(EditTrainingComponent, {

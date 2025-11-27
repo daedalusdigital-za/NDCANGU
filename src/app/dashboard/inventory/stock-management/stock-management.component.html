@@ -1,0 +1,206 @@
+<div class="stock-management-container">
+  <div class="page-header">
+    <div class="header-content">
+      <h1 class="page-title">
+        <i class="fas fa-boxes"></i>
+        Stock Management
+      </h1>
+      <p class="page-description">
+        Update inventory quantities on hand
+      </p>
+    </div>
+  </div>
+
+  <!-- Search and Filters -->
+  <div class="filters-section">
+    <div class="search-container">
+      <div class="search-input-wrapper">
+        <i class="fas fa-search search-icon"></i>
+        <input
+          type="text"
+          class="search-input"
+          placeholder="Search by item name, number, or location..."
+          [(ngModel)]="searchTerm"
+          (input)="filterItems()"
+        />
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading Indicator -->
+  <div *ngIf="loading" class="loading-container">
+    <div class="loading-spinner">
+      <i class="fas fa-spinner fa-spin"></i>
+      <span>Loading inventory items...</span>
+    </div>
+  </div>
+
+  <!-- Inventory Items Table -->
+  <div class="inventory-table-container" *ngIf="!loading">
+    <div class="table-header">
+      <h3>Inventory Items ({{ filteredItems.length }})</h3>
+    </div>
+
+    <div class="table-responsive">
+      <table class="inventory-table">
+        <thead>
+          <tr>
+            <th>SKU</th>
+            <th>Description</th>
+            <th>Category</th>
+            <th>Supplier</th>
+            <th>Current Stock</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of filteredItems" class="inventory-row">
+            <td class="item-number">{{ item.sku }}</td>
+            <td class="description">
+              <div class="item-info">
+                <span class="item-name">{{ item.description || item.name }}</span>
+                <small class="item-details" *ngIf="item.supplier">
+                  {{ item.supplier }}
+                </small>
+              </div>
+            </td>
+            <td class="category">{{ getCategoryName(item.category) }}</td>
+            <td class="location">{{ item.supplier || 'N/A' }}</td>
+            <td class="stock-info">
+              <div class="stock-display">
+                <span class="stock-quantity">{{ item.stockAvailable || 0 }}</span>
+                <span class="stock-unit">{{ item.unitOfMeasure || 'units' }}</span>
+                <div class="stock-status" [ngClass]="getStockStatusClass(item)">
+                  {{ getStockStatusText(item) }}
+                </div>
+              </div>
+            </td>
+            <td class="status">
+              <span class="status-badge" [ngClass]="'status-' + item.status">
+                {{ getStatusName(item.status) }}
+              </span>
+            </td>
+            <td class="actions">
+              <button
+                class="btn btn-primary btn-sm"
+                (click)="openStockUpdateModal(item)"
+                title="Update Stock">
+                <i class="fas fa-plus"></i>
+                Update Stock
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- Empty State -->
+      <div *ngIf="filteredItems.length === 0 && !loading" class="empty-state">
+        <div class="empty-icon">
+          <i class="fas fa-box-open"></i>
+        </div>
+        <h3>No Items Found</h3>
+        <p *ngIf="searchTerm">
+          No inventory items match your search criteria.
+        </p>
+        <p *ngIf="!searchTerm">
+          No inventory items available.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stock Update Modal -->
+  <div class="modal-overlay" *ngIf="stockUpdateModal" (click)="closeStockUpdateModal()" (keyup.escape)="closeStockUpdateModal()" tabindex="0">
+    <div class="modal-container" (click)="$event.stopPropagation()" (keyup)="$event.stopPropagation()" tabindex="0">
+      <div class="modal-header">
+        <h3>Update Stock</h3>
+        <button class="modal-close" (click)="closeStockUpdateModal()" (keyup.enter)="closeStockUpdateModal()">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+
+      <div class="modal-body" *ngIf="selectedItem">
+        <div class="item-info-section">
+          <h4>{{ selectedItem!.description || selectedItem!.name }}</h4>
+          <p class="item-details">
+            <strong>SKU:</strong> {{ selectedItem!.sku }}<br>
+            <strong>Current Stock:</strong> {{ selectedItem!.stockAvailable || 0 }} {{ selectedItem!.unitOfMeasure || 'units' }}<br>
+            <strong>Supplier:</strong> {{ selectedItem!.supplier || 'N/A' }}
+          </p>
+        </div>
+
+        <div class="stock-update-form">
+          <div class="form-group">
+            <fieldset>
+              <legend>Update Type:</legend>
+              <div class="radio-group">
+                <label class="radio-option">
+                  <input
+                    type="radio"
+                    value="add"
+                    [(ngModel)]="updateType"
+                    name="updateType"
+                  />
+                  <span>Add to current stock</span>
+                </label>
+                <label class="radio-option">
+                  <input
+                    type="radio"
+                    value="set"
+                    [(ngModel)]="updateType"
+                    name="updateType"
+                  />
+                  <span>Set total stock</span>
+                </label>
+              </div>
+            </fieldset>
+          </div>
+
+          <div class="form-group">
+            <label for="stockQuantity">
+              <span *ngIf="updateType === 'add'">Quantity to Add:</span>
+              <span *ngIf="updateType === 'set'">New Total Quantity:</span>
+            </label>
+            <input
+              id="stockQuantity"
+              type="number"
+              min="0"
+              class="form-control"
+              [(ngModel)]="newStockQuantity"
+              placeholder="Enter quantity"
+            />
+          </div>
+
+          <div class="preview-section" *ngIf="newStockQuantity > 0">
+            <h5>Preview:</h5>
+            <div class="preview-calculation">
+              <span *ngIf="updateType === 'add'">
+                Current: {{ selectedItem!.stockAvailable || 0 }} + {{ newStockQuantity }} =
+                <strong>{{ (selectedItem!.stockAvailable || 0) + newStockQuantity }}</strong>
+              </span>
+              <span *ngIf="updateType === 'set'">
+                New total: <strong>{{ newStockQuantity }}</strong>
+              </span>
+              {{ selectedItem!.unitOfMeasure || 'units' }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-secondary" (click)="closeStockUpdateModal()">
+          Cancel
+        </button>
+        <button
+          class="btn btn-primary"
+          (click)="updateStock()"
+          [disabled]="newStockQuantity <= 0 || loading">
+          <i class="fas fa-save" *ngIf="!loading"></i>
+          <i class="fas fa-spinner fa-spin" *ngIf="loading"></i>
+          Update Stock
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

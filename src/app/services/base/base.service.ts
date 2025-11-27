@@ -30,24 +30,19 @@ export class BaseService {
     }).pipe(
       timeout(this.REQUEST_TIMEOUT),
       map(response => {
-        console.log('BaseService - Raw response:', response);
-        console.log('BaseService - Response type:', typeof response);
-        console.log('BaseService - Is array:', Array.isArray(response));
+        // Response processed successfully
 
         // If it's an array (like GetUsers), return it directly
         if (Array.isArray(response)) {
-          console.log('BaseService - Returning array directly');
           return response;
         }
 
         // If it has the expected ApiResponse structure, handle accordingly
         if (response && typeof response === 'object' && 'success' in response) {
-          console.log('BaseService - Has success property, handling as ApiResponse');
           return this.handleResponse(response);
         }
 
         // Otherwise, wrap it in ApiResponse format
-        console.log('BaseService - Wrapping in ApiResponse format');
         return this.handleResponse(response);
       }),
       catchError(this.handleError)

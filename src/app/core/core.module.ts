@@ -38,6 +38,9 @@ import { LoaderInterceptor } from './interceptors/loader.interceptor';
     CommonModule,
     HttpClientModule
   ],
+  exports: [
+    HttpClientModule
+  ],
   providers: [
     // Core Services (Singletons)
     AuthService,

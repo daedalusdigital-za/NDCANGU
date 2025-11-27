@@ -141,15 +141,6 @@ export class TrainingSessionsListComponent implements OnInit {
   }
 
   /**
-   * View session details
-   */
-  viewDetails(sessionId?: number): void {
-    if (sessionId) {
-      this.router.navigate(['/training/details', sessionId]);
-    }
-  }
-
-  /**
    * Edit session
    */
   editSession(session: TrainingSession): void {

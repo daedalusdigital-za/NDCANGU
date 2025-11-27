@@ -151,7 +151,6 @@ export class ListUsersComponent implements OnInit {
     this.baseService.baseGet('User/GetUsers').subscribe({
       next: (response: User[]) => {
         this.source = response;
-        console.log('Users loaded successfully:', response);
       },
       error: (error: Error) => {
         console.error('Error loading users, using mock data:', error);
@@ -223,11 +222,9 @@ export class ListUsersComponent implements OnInit {
       header: 'Delete Confirmation',
       icon: 'pi pi-info-circle',
       accept: () => {
-        console.log('Deleting user with ID:', id);
         this.baseService.baseDelete(`User/Delete?id=${id}`).subscribe({
-          next: (response: {success?: boolean}) => {
-            console.log('Delete response:', response);
-            this.toastrService.success('User deleted successfully!', 'Success');
+          next: () => {
+            this.toastrService.success('User deleted successfully', 'Success');
             this.getUsers(); // Refresh the list
           },
           error: (error: Error) => {
@@ -244,34 +241,37 @@ export class ListUsersComponent implements OnInit {
 
   confirmResetPassword(user: User) {
     this.confirmationService.confirm({
-      message: `Are you sure you want to reset the password for ${user.firstName} ${user.lastName}? The password will be reset to the default: 654724135`,
+      message: `Are you sure you want to reset the password for ${user.firstName} ${user.lastName}? A secure temporary password will be generated and sent to their email.`,
       header: 'Reset Password Confirmation',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
         this.resetPassword(user.id);
       },
       reject: () => {
-        console.log('Password reset cancelled');
+        // Password reset cancelled - no action needed
       }
     });
   }
 
   private resetPassword(userId: string) {
     this.baseService.basePost(`User/ResetPassword?userId=${userId}`, {}).subscribe({
-      next: (response: {success?: boolean}) => {
-        console.log('Password reset response:', response);
+      next: (response: any) => {
+        // Check if response contains the new password (for secure display)
+        const message = response?.data?.tempPassword
+          ? `Password reset successful. Temporary password has been sent to the user's email.`
+          : 'Password reset successful. The user will receive their new password via email.';
+
         this.toastrService.success(
-          'Password has been reset to: 654724135',
+          message,
           'Password Reset Successful',
-          { timeOut: 10000 }
+          { timeOut: 8000 }
         );
       },
       error: (error: Error) => {
-        console.error('Password reset error:', error);
         const errorMsg = (error as {error?: {message?: string}})?.error?.message || 'Failed to reset password. Please try again.';
         this.toastrService.error(
           errorMsg,
-          'Error'
+          'Password Reset Error'
         );
       }
     });

@@ -146,9 +146,9 @@ export class AddUserComponent implements OnInit {
       // Update existing user
       userData.id = this.id;
       this.baseService.basePatch('User/UpdateUser', userData).subscribe({
-        next: (response: any) => {
+        next: () => {
           this.isLoading = false;
-          console.log('User updated successfully:', response);
+          // User updated successfully
           this.toastrService.success('User updated successfully');
           this.router.navigate(['/dashboard/users']);
         },

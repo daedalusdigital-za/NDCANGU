@@ -1,0 +1,224 @@
+<div class="inventory-list-container">
+  <!-- Header with controls -->
+  <div class="list-header">
+    <div class="header-left">
+      <h3>
+        <i class="fas fa-boxes"></i>
+        Inventory Items
+        <span class="count-badge" *ngIf="filteredItems.length">{{ filteredItems.length }}</span>
+      </h3>
+    </div>
+    <div class="header-right">
+      <button
+        type="button"
+        class="btn btn-primary"
+        (click)="addNewItem()">
+        <i class="fas fa-plus"></i>
+        Add New Item
+      </button>
+      <button
+        type="button"
+        class="btn btn-outline-secondary"
+        (click)="refresh()"
+        [disabled]="loading">
+        <i class="fas fa-sync" [class.fa-spin]="loading"></i>
+        Refresh
+      </button>
+    </div>
+  </div>
+
+  <!-- Filters -->
+  <div class="filters-container">
+    <div class="filter-row">
+      <!-- Search -->
+      <div class="filter-group">
+        <label for="searchInput">Search</label>
+        <div class="input-with-icon">
+          <i class="fas fa-search"></i>
+          <input
+            type="text"
+            id="searchInput"
+            class="form-control"
+            placeholder="Search by name, SKU, description..."
+            [(ngModel)]="searchTerm"
+            (input)="onSearchChange()">
+        </div>
+      </div>
+
+      <!-- Category Filter -->
+      <div class="filter-group">
+        <label for="categorySelect">Category</label>
+        <select
+          class="form-control"
+          id="categorySelect"
+          [(ngModel)]="selectedCategory"
+          (change)="onCategoryChange()">
+          <option *ngFor="let option of categoryOptions" [ngValue]="option.value">
+            {{ option.label }}
+          </option>
+        </select>
+      </div>
+
+      <!-- Status Filter -->
+      <div class="filter-group">
+        <label for="statusSelect">Status</label>
+        <select
+          class="form-control"
+          id="statusSelect"
+          [(ngModel)]="selectedStatus"
+          (change)="onStatusChange()">
+          <option *ngFor="let option of statusOptions" [ngValue]="option.value">
+            {{ option.label }}
+          </option>
+        </select>
+      </div>
+
+      <!-- Low Stock Toggle -->
+      <div class="filter-group">
+        <label class="checkbox-label">
+          <input
+            type="checkbox"
+            [(ngModel)]="showLowStockOnly"
+            (change)="onLowStockToggle()">
+          <span class="checkmark"></span>
+          Low Stock Only
+        </label>
+      </div>
+
+      <!-- Clear Filters -->
+      <div class="filter-group">
+        <button
+          type="button"
+          class="btn btn-outline-secondary btn-sm"
+          (click)="clearFilters()">
+          <i class="fas fa-times"></i>
+          Clear
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="loading" class="loading-container">
+    <div class="loading-spinner">
+      <i class="fas fa-spinner fa-spin fa-2x"></i>
+      <p>Loading inventory items...</p>
+    </div>
+  </div>
+
+  <!-- Inventory Table -->
+  <div *ngIf="!loading" class="inventory-table-container">
+    <div *ngIf="filteredItems.length === 0" class="empty-state">
+      <i class="fas fa-box-open fa-3x"></i>
+      <h4>No Items Found</h4>
+      <p *ngIf="inventoryItems.length === 0">No inventory items have been added yet.</p>
+      <p *ngIf="inventoryItems.length > 0">No items match your current filters.</p>
+      <button
+        type="button"
+        class="btn btn-primary"
+        (click)="addNewItem()"
+        *ngIf="inventoryItems.length === 0">
+        <i class="fas fa-plus"></i>
+        Add First Item
+      </button>
+    </div>
+
+    <div *ngIf="filteredItems.length > 0" class="table-responsive">
+      <table class="table inventory-table">
+        <thead>
+          <tr>
+            <th>SKU</th>
+            <th>Name</th>
+            <th>Category</th>
+            <th>Stock</th>
+            <th>Unit Price</th>
+            <th>Status</th>
+            <th>Supplier</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of filteredItems; trackBy: trackByItemId">
+            <!-- SKU -->
+            <td class="sku-cell">
+              <code>{{ item.sku }}</code>
+            </td>
+
+            <!-- Name -->
+            <td class="name-cell">
+              <div class="item-name">
+                <strong>{{ item.name }}</strong>
+                <small *ngIf="item.description" class="text-muted d-block">
+                  {{ item.description }}
+                </small>
+              </div>
+            </td>
+
+            <!-- Category -->
+            <td class="category-cell">
+              <span class="badge badge-category">{{ item.categoryText }}</span>
+            </td>
+
+            <!-- Stock -->
+            <td class="stock-cell">
+              <div class="stock-info" [class.low-stock]="isLowStock(item)">
+                <span class="stock-value">{{ item.stockAvailable }}</span>
+                <small class="text-muted d-block">{{ item.unitOfMeasure }}</small>
+                <small
+                  *ngIf="isLowStock(item)"
+                  class="low-stock-warning">
+                  <i class="fas fa-exclamation-triangle"></i>
+                  Low Stock
+                </small>
+              </div>
+            </td>
+
+            <!-- Unit Price -->
+            <td class="price-cell">
+              <span class="price">R {{ item.unitPrice.toFixed(2) }}</span>
+            </td>
+
+            <!-- Status -->
+            <td class="status-cell">
+              <span [class]="'badge status-badge ' + getStatusClass(item.status)">
+                {{ item.statusText }}
+              </span>
+            </td>
+
+            <!-- Supplier -->
+            <td class="supplier-cell">
+              <span>{{ item.supplier || '-' }}</span>
+            </td>
+
+            <!-- Actions -->
+            <td class="actions-cell">
+              <div class="action-buttons">
+                <button
+                  type="button"
+                  class="btn btn-sm btn-outline-primary"
+                  (click)="editItem(item)"
+                  title="Edit Item">
+                  <i class="fas fa-edit"></i>
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-sm btn-outline-success"
+                  (click)="quickStockUpdate(item)"
+                  title="Update Stock">
+                  <i class="fas fa-boxes"></i>
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-sm btn-outline-danger"
+                  (click)="deleteItem(item)"
+                  title="Delete Item">
+                  <i class="fas fa-trash"></i>
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

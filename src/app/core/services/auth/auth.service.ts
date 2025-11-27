@@ -18,7 +18,7 @@ export class AuthService {
     if (!environment.production && this.shouldUseMockAuth(credentials)) {
       return this.getMockAuthResponse(credentials);
     }
-    
+
     return this.http.post<any>(`${this.API_URL}Auth/Login`, credentials)
       .pipe(
         map(response => this.handleLoginResponse(response)),
@@ -64,9 +64,7 @@ export class AuthService {
     if (!response) {
       throw new Error('No response received from server');
     }
-    
-    console.log('Auth Service Raw Response:', response);
-    
+
     // Check if response is already in ApiResponse format
     if (response.success !== undefined) {
       if (!response.success) {
@@ -76,7 +74,7 @@ export class AuthService {
       }
       return response;
     }
-    
+
     // Handle direct API response format (like from your API)
     if (response.token && response.email) {
       const user: User = {
@@ -87,40 +85,38 @@ export class AuthService {
         role: response.role || [],
         token: response.token
       };
-      
+
       const apiResponse: ApiResponse<User> = {
         success: true,
         data: user,
         message: 'Login successful'
       };
-      
-      console.log('Transformed API response:', apiResponse);
+
+      // Transform response to ApiResponse format
       return apiResponse;
     }
-    
+
     // If we can't determine the format, treat as error
     throw new Error('Invalid response format from server');
   }
 
   private handleResponse<T>(response: ApiResponse<T>): ApiResponse<T> {
-    if (!response) {
+    if (!response.success) {
       throw new Error('No response received from server');
     }
-    
-    console.log('Auth Service Response:', response);
-    
+
     if (!response.success) {
       const errorMessage = response.message || response.errors?.[0] || 'Authentication failed';
       console.error('Authentication failed with response:', response);
       throw new Error(errorMessage);
     }
-    
+
     return response;
   }
 
   private handleError(error: HttpErrorResponse): Observable<never> {
     let errorMessage = 'An unexpected error occurred';
-    
+
     if (error.error instanceof ErrorEvent) {
       // Client-side error
       errorMessage = error.error.message || 'A client-side error occurred';
@@ -136,7 +132,7 @@ export class AuthService {
         errorMessage = `Server returned error code: ${error.status || 'Unknown'}`;
       }
     }
-    
+
     console.error('Auth Service Error:', error);
     return throwError(() => errorMessage);
   }

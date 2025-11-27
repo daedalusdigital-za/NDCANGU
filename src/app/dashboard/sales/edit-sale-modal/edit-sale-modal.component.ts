@@ -60,7 +60,7 @@ export class EditSaleModalComponent implements OnChanges {
         previousValue: changes['saleData'].previousValue
       });
       if (this.saleData) {
-        console.log('About to populate sale data with:', this.saleData);
+        // About to populate sale data
         this.populateSaleData();
       }
     }
@@ -73,7 +73,7 @@ export class EditSaleModalComponent implements OnChanges {
   }
 
   populateSaleData(): void {
-    console.log('populateSaleData called with saleData:', this.saleData);
+    // Populating sale data
     if (!this.saleData) {
       console.log('No saleData available, returning early');
       return;
@@ -133,8 +133,8 @@ export class EditSaleModalComponent implements OnChanges {
     console.log('Updating sale with SaleModel:', saleModel);
 
     this.databaseService.updateSale(saleModel).subscribe({
-      next: (response) => {
-        console.log('Sale updated successfully:', response);
+      next: () => {
+        // Sale updated successfully
         this.isLoading = false;
         this.toastr.success('Sale updated successfully!', 'Success');
         this.saleUpdateSuccess.emit();

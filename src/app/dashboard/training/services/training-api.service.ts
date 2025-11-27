@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { BaseService } from '../api/base-api.service';
+import { BaseService } from '../../../core/services/api/base-api.service';
 
 /**
  * Training API Service
@@ -160,3 +160,4 @@ export class TrainingApiService {
     return this.baseService.baseDelete(`${this.TRAINING_ENDPOINTS.SESSION_BY_ID}/${id}`);
   }
 }
+

@@ -577,10 +577,10 @@ export class DatabaseService {
 
   /**
    * Update training session
-   * PATCH /api/Training/Update
+   * PUT /api/Training/Update
    */
-  updateTrainingSession(trainingSession: TrainingSession): Observable<TrainingSession> {
-    return this.http.patch<TrainingSession>(`${this.API_URL}Training/Update`, trainingSession, { headers: this.getAuthHeaders() })
+  updateTrainingSession(trainingSession: any): Observable<any> {
+    return this.http.put<any>(`${this.API_URL}Training/Update`, trainingSession, { headers: this.getAuthHeaders() })
       .pipe(catchError(this.handleError));
   }
 
@@ -590,6 +590,52 @@ export class DatabaseService {
    */
   deleteTrainingSession(id: number): Observable<any> {
     return this.http.delete<any>(`${this.API_URL}Training/Delete?id=${id}`, { headers: this.getAuthHeaders() })
+      .pipe(catchError(this.handleError));
+  }
+
+  /**
+   * Upload PDF document for training session
+   * POST /api/Training/UploadPDF
+   *
+   * @param formData - FormData containing file, trainingSessionId, documentType, fileName
+   * @returns Observable with upload result
+   */
+  uploadTrainingDocument(formData: FormData): Observable<any> {
+    const headers = new HttpHeaders();
+    if (this.authToken) {
+      headers.set('Authorization', `Bearer ${this.authToken}`);
+    }
+    // Don't set Content-Type for FormData, let browser set it with boundary
+
+    return this.http.post<any>(`${this.API_URL}Training/UploadPDF`, formData, { headers })
+      .pipe(catchError(this.handleError));
+  }  /**
+   * Get documents for training session
+   * GET /api/Training/GetDocuments
+   */
+  getTrainingDocuments(trainingSessionId: number): Observable<any[]> {
+    return this.http.get<any[]>(`${this.API_URL}Training/GetDocuments?trainingSessionId=${trainingSessionId}`, { headers: this.getAuthHeaders() })
+      .pipe(catchError(this.handleError));
+  }
+
+  /**
+   * Download training document
+   * GET /api/Training/DownloadDocument
+   */
+  downloadTrainingDocument(documentId: number): Observable<Blob> {
+    return this.http.get(`${this.API_URL}Training/DownloadDocument?id=${documentId}`, {
+      headers: this.getAuthHeaders(),
+      responseType: 'blob'
+    })
+    .pipe(catchError(this.handleError));
+  }
+
+  /**
+   * Delete training document
+   * DELETE /api/Training/DeleteDocument
+   */
+  deleteTrainingDocument(documentId: number): Observable<any> {
+    return this.http.delete<any>(`${this.API_URL}Training/DeleteDocument?id=${documentId}`, { headers: this.getAuthHeaders() })
       .pipe(catchError(this.handleError));
   }
 

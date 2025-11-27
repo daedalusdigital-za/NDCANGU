@@ -128,3 +128,89 @@ export interface SalesReport {
   };
   createdAt: Date;
 }
+
+// INVENTORY ENUMS
+export enum InventoryCategory {
+  MedicalSupplies = 0,
+  Consumables = 1,
+  Equipment = 2,
+  Pharmaceuticals = 3,
+  Other = 4
+}
+
+export enum InventoryStatus {
+  Active = 0,
+  Inactive = 1,
+  Discontinued = 2
+}
+
+// INVENTORY INTERFACES
+export interface InventoryItem {
+  id: number;
+  name: string;
+  description?: string | null;
+  category: InventoryCategory;
+  categoryText: string;
+  sku: string;
+  unitOfMeasure: string;
+  unitPrice: number;
+  stockAvailable: number;
+  reorderLevel: number;
+  minimumStockLevel: number;
+  supplier?: string | null;
+  supplierContact?: string | null;
+  expiryDate?: string | null;
+  batchNumber?: string | null;
+  status: InventoryStatus;
+  statusText: string;
+  notes?: string | null;
+  createdDate: string;
+  lastUpdated?: string | null;
+  createdByUserName: string;
+}
+
+// Model for creating/updating inventory items
+export interface InventoryItemModel {
+  id?: number; // Optional for POST, required for PATCH
+  name: string;
+  description?: string;
+  category: InventoryCategory;
+  sku: string;
+  unitOfMeasure: string;
+  unitPrice: number;
+  stockAvailable: number;
+  reorderLevel: number;
+  minimumStockLevel: number;
+  supplier?: string;
+  supplierContact?: string;
+  expiryDate?: string; // ISO date string
+  batchNumber?: string;
+  status: InventoryStatus;
+  notes?: string;
+}
+
+// Model for stock updates only
+export interface InventoryStockUpdateModel {
+  id: number;
+  stockAvailable: number;
+}
+
+// Inventory statistics response
+export interface InventoryStats {
+  totalItems: number;
+  totalValue: number;
+  totalInventoryValue: number;
+  lowStockItems: number;
+  lowStockItemsCount: number;
+  averageItemValue: number;
+  activeItems: number;
+  inactiveItems: number;
+  discontinuedItems: number;
+  categories: {
+    medicalSupplies: number;
+    consumables: number;
+    equipment: number;
+    pharmaceuticals: number;
+    other: number;
+  };
+}

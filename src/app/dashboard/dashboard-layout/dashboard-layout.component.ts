@@ -31,7 +31,7 @@ export class DashboardLayoutComponent implements OnInit, AfterViewInit, OnDestro
   isNurseUser: boolean = false;
   districts: Array<string> = ['EHLANZENI', 'GERT SIBANDE', 'NKANGALA'];
   pdflink: string = 'assets/pdfs/Mpumalanga.pdf';
-  
+
   // Notification modal properties
   allNotifications: Notification[] = [];
   filteredNotifications: Notification[] = [];
@@ -41,7 +41,7 @@ export class DashboardLayoutComponent implements OnInit, AfterViewInit, OnDestro
   itemsPerPage: number = 10;
   totalPages: number = 1;
   Math = Math; // Make Math available in template
-  
+
   constructor(
     private globalService: GlobalService,
     private router: Router
@@ -49,12 +49,12 @@ export class DashboardLayoutComponent implements OnInit, AfterViewInit, OnDestro
     this.user = this.globalService.getLocalStorage<User>('currentUser');
     this.globalService.selectedProvince = this.flagText;
     this.globalService.selectedDistricts = this.districts;
-    
+
     if (this.user) {
       // Create fullName safely, handling undefined values
       const firstName = this.user.firstName || '';
       const lastName = this.user.lastName || '';
-      
+
       if (firstName && lastName) {
         this.user.fullName = `${firstName} ${lastName}`;
       } else if (firstName) {
@@ -64,7 +64,7 @@ export class DashboardLayoutComponent implements OnInit, AfterViewInit, OnDestro
       } else {
         this.user.fullName = this.user.email || 'Administrator';
       }
-      
+
       if (this.user.role?.[0] == 'Admin') {
         this.isMenuShown = true;
       } else if (this.user.role?.[0] == 'Nurse') {
@@ -92,14 +92,18 @@ export class DashboardLayoutComponent implements OnInit, AfterViewInit, OnDestro
   private initializeDropdownInteractions(): void {
     // Add keyboard navigation for dropdowns
     document.addEventListener('keydown', this.handleKeyboardNavigation.bind(this));
-    
+
     // Add click outside listeners
     document.addEventListener('click', this.handleClickOutside.bind(this));
+
+    // Add dropdown toggle click listeners
+    document.addEventListener('click', this.handleDropdownToggle.bind(this));
   }
 
   private removeDropdownListeners(): void {
     document.removeEventListener('keydown', this.handleKeyboardNavigation.bind(this));
     document.removeEventListener('click', this.handleClickOutside.bind(this));
+    document.removeEventListener('click', this.handleDropdownToggle.bind(this));
   }
 
   private handleKeyboardNavigation(event: KeyboardEvent): void {
@@ -111,7 +115,7 @@ export class DashboardLayoutComponent implements OnInit, AfterViewInit, OnDestro
         searchInput.focus();
       }
     }
-    
+
     // Escape key to close dropdowns
     if (event.key === 'Escape') {
       this.closeAllDropdowns();
@@ -120,13 +124,33 @@ export class DashboardLayoutComponent implements OnInit, AfterViewInit, OnDestro
 
   private handleClickOutside(event: Event): void {
     const target = event.target as HTMLElement;
-    if (!target.closest('.dropdown')) {
+    if (!target.closest('.nav-dropdown')) {
       this.closeAllDropdowns();
     }
   }
 
+  handleDropdownToggle(event: Event): void {
+    const target = event.target as HTMLElement;
+    const toggle = target.closest('.nav-dropdown-toggle');
+
+    if (toggle) {
+      event.preventDefault();
+      event.stopPropagation();
+
+      const dropdownItem = toggle.closest('.nav-dropdown');
+
+      if (dropdownItem) {
+        // Close all other dropdowns first
+        this.closeAllDropdowns();
+
+        // Toggle current dropdown by adding show class to the nav-dropdown element
+        dropdownItem.classList.add('show');
+      }
+    }
+  }
+
   private closeAllDropdowns(): void {
-    const dropdowns = document.querySelectorAll('.dropdown-menu');
+    const dropdowns = document.querySelectorAll('.nav-dropdown.show');
     dropdowns.forEach(dropdown => {
       dropdown.classList.remove('show');
     });
@@ -137,13 +161,13 @@ export class DashboardLayoutComponent implements OnInit, AfterViewInit, OnDestro
     this.flagImg = img;
     this.flagText = text;
     this.pdflink = `assets/pdfs/${text}.pdf`;
-    
+
     // Location services removed - districts no longer available
     this.districts = [];
     this.globalService.selectedDistricts = this.districts;
-    
+
     this.globalService.selectedProvince = this.flagText;
-    
+
     // Add animation feedback
     this.showNotification(`Province changed to ${text}`, 'success');
   }
@@ -165,15 +189,15 @@ export class DashboardLayoutComponent implements OnInit, AfterViewInit, OnDestro
         <span>${message}</span>
       </div>
     `;
-    
+
     // Add to DOM
     document.body.appendChild(notification);
-    
+
     // Animate in
     setTimeout(() => {
       notification.classList.add('show');
     }, 100);
-    
+
     // Remove after 3 seconds
     setTimeout(() => {
       notification.classList.remove('show');
@@ -296,7 +320,7 @@ export class DashboardLayoutComponent implements OnInit, AfterViewInit, OnDestro
     // Apply search filter
     if (this.notificationSearchTerm.trim()) {
       const searchTerm = this.notificationSearchTerm.toLowerCase();
-      filtered = filtered.filter(notification => 
+      filtered = filtered.filter(notification =>
         notification.title.toLowerCase().includes(searchTerm) ||
         notification.message.toLowerCase().includes(searchTerm) ||
         notification.category.toLowerCase().includes(searchTerm)
@@ -363,14 +387,14 @@ export class DashboardLayoutComponent implements OnInit, AfterViewInit, OnDestro
     if (minutes < 60) return `${minutes} minute${minutes > 1 ? 's' : ''} ago`;
     if (hours < 24) return `${hours} hour${hours > 1 ? 's' : ''} ago`;
     if (days < 7) return `${days} day${days > 1 ? 's' : ''} ago`;
-    
+
     return timestamp.toLocaleDateString();
   }
 
   handleNotificationAction(notification: Notification, action: 'primary' | 'secondary'): void {
     const actionText = action === 'primary' ? notification.primaryAction : notification.secondaryAction;
     this.showNotification(`${actionText} clicked for: ${notification.title}`, 'info');
-    
+
     // Mark notification as read when action is taken
     notification.read = true;
     this.filterNotifications();
@@ -410,7 +434,7 @@ export class DashboardLayoutComponent implements OnInit, AfterViewInit, OnDestro
   deleteSelectedNotifications(): void {
     const selected = this.getSelectedNotifications();
     if (selected.length === 0) return;
-    
+
     if (confirm(`Are you sure you want to delete ${selected.length} selected notifications?`)) {
       selected.forEach(notification => {
         const index = this.allNotifications.findIndex(n => n.id === notification.id);

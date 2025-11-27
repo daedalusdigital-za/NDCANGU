@@ -1,0 +1,267 @@
+<div class="inventory-stats-container">
+  <!-- Header -->
+  <div class="stats-header">
+    <div class="header-content">
+      <h2>
+        <i class="fas fa-chart-bar"></i>
+        Inventory Statistics & Analytics
+      </h2>
+      <div class="header-actions">
+        <button
+          type="button"
+          class="btn btn-outline-primary"
+          (click)="exportStats()"
+          [disabled]="loading">
+          <i class="fas fa-download"></i>
+          Export
+        </button>
+        <button
+          type="button"
+          class="btn btn-outline-secondary"
+          (click)="refresh()"
+          [disabled]="loading">
+          <i class="fas fa-sync" [class.fa-spin]="loading"></i>
+          Refresh
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="loading" class="loading-container">
+    <div class="loading-spinner">
+      <i class="fas fa-spinner fa-spin fa-2x"></i>
+      <p>Loading inventory statistics...</p>
+    </div>
+  </div>
+
+  <!-- Statistics Content -->
+  <div *ngIf="!loading" class="stats-content">
+
+    <!-- Overview Cards -->
+    <div class="overview-section">
+      <h3>
+        <i class="fas fa-tachometer-alt"></i>
+        Overview
+      </h3>
+
+      <div class="stats-cards">
+        <div class="stat-card total-items">
+          <div class="card-icon">
+            <i class="fas fa-boxes"></i>
+          </div>
+          <div class="card-content">
+            <h4>Total Items</h4>
+            <p class="stat-value">{{ formatNumber(stats?.totalItems || 0) }}</p>
+            <small class="stat-label">Active inventory items</small>
+          </div>
+        </div>
+
+        <div class="stat-card total-value">
+          <div class="card-icon">
+            <i class="fas fa-coins"></i>
+          </div>
+          <div class="card-content">
+            <h4>Total Value</h4>
+            <p class="stat-value">{{ formatCurrency(stats?.totalValue || 0) }}</p>
+            <small class="stat-label">Current stock value</small>
+          </div>
+        </div>
+
+        <div class="stat-card low-stock" [class.alert]="(stats?.lowStockItems || 0) > 0">
+          <div class="card-icon">
+            <i class="fas fa-exclamation-triangle"></i>
+          </div>
+          <div class="card-content">
+            <h4>Low Stock Items</h4>
+            <p class="stat-value">{{ formatNumber(stats?.lowStockItems || 0) }}</p>
+            <small class="stat-label">Below minimum level</small>
+          </div>
+          <button
+            *ngIf="(stats?.lowStockItems || 0) > 0"
+            class="card-action"
+            (click)="navigateToLowStock()"
+            title="View low stock items">
+            <i class="fas fa-arrow-right"></i>
+          </button>
+        </div>
+
+        <div class="stat-card average-value">
+          <div class="card-icon">
+            <i class="fas fa-calculator"></i>
+          </div>
+          <div class="card-content">
+            <h4>Average Value</h4>
+            <p class="stat-value">{{ formatCurrency(averageItemValue) }}</p>
+            <small class="stat-label">Per item average</small>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Category Analysis -->
+    <div class="analysis-section">
+      <h3>
+        <i class="fas fa-layer-group"></i>
+        Category Analysis
+      </h3>
+
+      <div class="category-stats">
+        <div *ngIf="categoryStats.length === 0" class="empty-state">
+          <i class="fas fa-folder-open"></i>
+          <p>No category data available</p>
+        </div>
+
+        <div class="category-grid" *ngIf="categoryStats.length > 0">
+          <div
+            *ngFor="let category of categoryStats"
+            class="category-card"
+            tabindex="0"
+            role="button"
+            (click)="navigateToCategory(category.category)"
+            (keyup.enter)="navigateToCategory(category.category)"
+            (keyup.space)="navigateToCategory(category.category)">
+            <div class="category-header">
+              <h5>{{ category.categoryText }}</h5>
+              <span class="item-count">{{ formatNumber(category.totalItems) }} items</span>
+            </div>
+            <div class="category-metrics">
+              <div class="metric">
+                <span class="metric-label">Total Value</span>
+                <span class="metric-value">{{ formatCurrency(category.totalValue) }}</span>
+              </div>
+              <div class="metric">
+                <span class="metric-label">Average Value</span>
+                <span class="metric-value">{{ formatCurrency(category.averageValue) }}</span>
+              </div>
+              <div class="metric" [class.warning]="category.lowStockItems > 0">
+                <span class="metric-label">Low Stock</span>
+                <span class="metric-value">{{ formatNumber(category.lowStockItems) }}</span>
+              </div>
+            </div>
+            <div class="category-action">
+              <i class="fas fa-arrow-right"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Status Distribution -->
+    <div class="analysis-section">
+      <h3>
+        <i class="fas fa-pie-chart"></i>
+        Status Distribution
+      </h3>
+
+      <div class="status-distribution">
+        <div *ngIf="statusStats.length === 0" class="empty-state">
+          <i class="fas fa-chart-pie"></i>
+          <p>No status data available</p>
+        </div>
+
+        <div class="status-grid" *ngIf="statusStats.length > 0">
+          <div *ngFor="let status of statusStats" class="status-item">
+            <div class="status-info">
+              <span [class]="'status-badge ' + getStatusClass(status.status)">
+                {{ status.statusText }}
+              </span>
+              <div class="status-metrics">
+                <span class="count">{{ formatNumber(status.count) }} items</span>
+                <span class="percentage">({{ formatPercentage(status.percentage) }})</span>
+              </div>
+            </div>
+            <div class="status-value">
+              <span class="value-label">Total Value</span>
+              <span class="value-amount">{{ formatCurrency(status.value) }}</span>
+            </div>
+            <div class="progress-bar">
+              <div class="progress-fill" [style.width.%]="status.percentage"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Critical Items -->
+    <div class="critical-section">
+      <div class="critical-grid">
+
+        <!-- Low Stock Items -->
+        <div class="critical-card">
+          <div class="critical-header">
+            <h4>
+              <i class="fas fa-exclamation-triangle"></i>
+              Critical Low Stock
+            </h4>
+            <span class="item-count">{{ topLowStockItems.length }} items</span>
+          </div>
+
+          <div class="critical-content">
+            <div *ngIf="topLowStockItems.length === 0" class="empty-state-small">
+              <i class="fas fa-check-circle"></i>
+              <p>All items above minimum stock</p>
+            </div>
+
+            <div *ngIf="topLowStockItems.length > 0" class="critical-items">
+              <div *ngFor="let item of topLowStockItems" class="critical-item">
+                <div class="item-info">
+                  <span class="item-name">{{ item.name }}</span>
+                  <span class="item-sku">{{ item.sku }}</span>
+                </div>
+                <div class="stock-info">
+                  <span class="current-stock">{{ item.stockAvailable }}</span>
+                  <span class="stock-separator">/</span>
+                  <span class="min-stock">{{ item.reorderLevel }}</span>
+                  <span class="unit">{{ item.unitOfMeasure }}</span>
+                </div>
+                <div class="urgency-indicator"
+                     [class.critical]="item.stockAvailable === 0"
+                     [class.warning]="item.stockAvailable > 0">
+                  <i class="fas fa-circle"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- High Value Items -->
+        <div class="critical-card">
+          <div class="critical-header">
+            <h4>
+              <i class="fas fa-gem"></i>
+              Highest Value Items
+            </h4>
+            <span class="item-count">{{ topValueItems.length }} items</span>
+          </div>
+
+          <div class="critical-content">
+            <div *ngIf="topValueItems.length === 0" class="empty-state-small">
+              <i class="fas fa-box"></i>
+              <p>No items to display</p>
+            </div>
+
+            <div *ngIf="topValueItems.length > 0" class="critical-items">
+              <div *ngFor="let item of topValueItems" class="critical-item">
+                <div class="item-info">
+                  <span class="item-name">{{ item.name }}</span>
+                  <span class="item-category">{{ getCategoryText(item.category) }}</span>
+                </div>
+                <div class="value-info">
+                  <span class="unit-price">{{ formatCurrency(item.unitPrice) }}</span>
+                  <span class="stock-amount">× {{ item.stockAvailable }}</span>
+                  <span class="total-value">{{ formatCurrency(item.unitPrice * item.stockAvailable) }}</span>
+                </div>
+                <div class="value-indicator">
+                  <i class="fas fa-coins"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>

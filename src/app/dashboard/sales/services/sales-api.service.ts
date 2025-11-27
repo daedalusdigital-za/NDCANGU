@@ -81,7 +81,7 @@ export class SalesApiService {
    * Update inventory item
    */
   updateInventoryItem(item: any): Observable<any> {
-    return this.baseService.basePut(`${this.SALES_ENDPOINTS.ITEM_BY_ID}/${item.id}`, item);
+    return this.baseService.basePatch(`${this.SALES_ENDPOINTS.ITEM_BY_ID}/${item.id}`, item);
   }
 
   /**

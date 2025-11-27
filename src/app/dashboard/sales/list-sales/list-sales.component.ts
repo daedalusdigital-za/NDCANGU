@@ -101,7 +101,7 @@ export class ListSalesComponent implements OnInit {
     // Load from database API
     this.databaseService.getSales().subscribe({
       next: (sales) => {
-        console.log(`✅ Loaded ${sales.length} sales from database`);
+        // Sales loaded successfully
 
         // Convert Sale format to OrderRecord format for display
         this.orders = sales.map(sale => this.convertSaleToOrder(sale));
@@ -132,8 +132,8 @@ export class ListSalesComponent implements OnInit {
     // Load from database API using simplified Sale interface
     this.databaseService.getSales().subscribe({
       next: (salesData) => {
-        console.log(`✅ Loaded ${salesData.length} sales records from database`);
-        console.log('📦 Raw sales data from API:', JSON.stringify(salesData, null, 2));
+        // Sales data loaded from database
+        // Sales data processed
 
         // Work directly with simplified Sale interface
         this.sales = salesData;

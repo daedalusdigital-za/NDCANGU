@@ -285,7 +285,7 @@ export class AddSaleComponent implements OnInit {
 
     // For now, simulate success
     this.toastr.success('Sale saved successfully!', 'Success');
-    console.log('Sale data structure:', JSON.stringify(apiSale, null, 2));
+    // Sale data structure prepared for API
     this.router.navigate(['/dashboard/sales']);
   }
 

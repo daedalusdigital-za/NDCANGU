@@ -9,9 +9,14 @@ BASE_URL="https://ngcanduapi.azurewebsites.net/api"
 
 # Login and get token
 echo "1. Testing Login..."
+echo "Please provide your login credentials:"
+read -p "Email: " USER_EMAIL
+read -s -p "Password: " USER_PASSWORD
+echo
+
 LOGIN_RESPONSE=$(curl -s -X POST "$BASE_URL/Auth/Login" \
   -H "Content-Type: application/json" \
-  -d '{"email":"welcomeking@outlook.com","password":"Kingsland"}')
+  -d "{\"email\":\"$USER_EMAIL\",\"password\":\"$USER_PASSWORD\"}")
 
 echo "Login Response: $LOGIN_RESPONSE"
 
@@ -31,7 +36,7 @@ echo "2. Testing authenticated endpoints..."
 
 ENDPOINTS=(
   "Provinces"
-  "Districts" 
+  "Districts"
   "HealthFacilities"
   "Trainers"
   "TrainingSessions"
@@ -47,10 +52,10 @@ for endpoint in "${ENDPOINTS[@]}"; do
     -H "Authorization: Bearer $TOKEN" \
     -H "Content-Type: application/json" \
     "$BASE_URL/$endpoint")
-  
+
   HTTP_CODE=$RESPONSE
   RESPONSE_BODY=$(cat /tmp/response.txt)
-  
+
   echo "  Status: $HTTP_CODE"
   if [ "$HTTP_CODE" = "200" ]; then
     echo "  ✅ Success - Data length: ${#RESPONSE_BODY} characters"

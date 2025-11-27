@@ -30,7 +30,7 @@ export class BaseService {
     }).pipe(
       timeout(this.REQUEST_TIMEOUT),
       map(response => {
-        console.log('BaseService - Raw response:', response);
+        // Response processed successfully
         console.log('BaseService - Response type:', typeof response);
         console.log('BaseService - Is array:', Array.isArray(response));
 

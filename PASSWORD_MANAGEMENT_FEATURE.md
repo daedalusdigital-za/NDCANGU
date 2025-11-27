@@ -76,7 +76,7 @@ selectedUser: any = null;
 
 **`confirmResetPassword(user: any)`**
 - Shows PrimeNG confirmation dialog
-- Warns admin about resetting password to default (654724135)
+- Warns admin about resetting password to secure temporary password
 - Calls `resetPassword()` on confirmation
 
 **`resetPassword(userId: string)`**
