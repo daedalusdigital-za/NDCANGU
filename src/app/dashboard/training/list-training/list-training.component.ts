@@ -136,6 +136,15 @@ export class ListTrainingComponent implements OnInit {
     });
   }
 
+  viewTrainingSession(session: any): void {
+    // Navigate to training session details
+    this.router.navigate(['/dashboard/training/view', session.id]);
+  }
+
+  openEditModal(session: any): void {
+    this.router.navigate(['/dashboard/training/edit', session.id]);
+  }
+
   addNewTraining(): void {
     this.router.navigate(['/dashboard/training/add']);
   }

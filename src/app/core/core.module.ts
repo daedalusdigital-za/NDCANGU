@@ -1,6 +1,8 @@
 import { NgModule, Optional, SkipSelf } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { ConfirmationService, MessageService } from 'primeng/api';
+import { DialogService } from 'primeng/dynamicdialog';
 
 // Services
 import { AuthService } from './services/auth/auth.service';
@@ -49,6 +51,11 @@ import { LoaderInterceptor } from './interceptors/loader.interceptor';
     GlobalService,
     LoaderService,
     LoadingService,
+
+    // PrimeNG Services
+    ConfirmationService,
+    MessageService,
+    DialogService,
 
     // Guards
     AuthGuard,

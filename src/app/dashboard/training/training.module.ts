@@ -20,7 +20,6 @@ import { MultiSelectModule } from 'primeng/multiselect';
 import { CheckboxModule } from 'primeng/checkbox';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { DialogModule } from 'primeng/dialog';
-import { DynamicDialogModule } from 'primeng/dynamicdialog';
 import { TooltipModule } from 'primeng/tooltip';
 import { FileUploadModule } from 'primeng/fileupload';
 import { InputNumberModule } from 'primeng/inputnumber';
@@ -55,7 +54,6 @@ import { ConfirmationService } from 'primeng/api';
     CheckboxModule,
     ConfirmDialogModule,
     DialogModule,
-    DynamicDialogModule,
     TooltipModule,
     FileUploadModule,
     InputNumberModule,

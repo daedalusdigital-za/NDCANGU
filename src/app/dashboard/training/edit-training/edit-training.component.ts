@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { DynamicDialogRef, DynamicDialogConfig } from 'primeng/dynamicdialog';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { DatabaseService } from '../../../services/data/database.service';
 
@@ -100,15 +100,21 @@ export class EditTrainingComponent implements OnInit {
   ];
 
   constructor(
-    public ref: DynamicDialogRef,
-    public config: DynamicDialogConfig,
+    private route: ActivatedRoute,
+    private router: Router,
     private toastr: ToastrService,
     private databaseService: DatabaseService
   ) { }
 
   ngOnInit(): void {
-    this.trainingId = this.config.data?.id || 0;
-    this.loadTrainers();
+    // Get the training ID from route params
+    this.route.params.subscribe((params) => {
+      this.trainingId = params['id'] || 0;
+      this.loadTrainers();
+      if (this.trainingId > 0) {
+        this.loadTrainingSession();
+      }
+    });
     this.loadTrainingSession();
     this.loadTrainingDocuments();
   }
@@ -144,7 +150,7 @@ export class EditTrainingComponent implements OnInit {
         this.isLoading = false;
         console.error('Error loading training session:', error);
         this.toastr.error('Failed to load training session', 'Error');
-        this.ref.close();
+        this.router.navigate(['/dashboard/training/list']);
       }
     });
   }
@@ -177,7 +183,7 @@ export class EditTrainingComponent implements OnInit {
         next: (result) => {
           this.isSubmitting = false;
           this.toastr.success('Training session updated successfully!', 'Success');
-          this.ref.close(result);
+          this.router.navigate(['/dashboard/training/list']);
         },
         error: (error) => {
           this.isSubmitting = false;
@@ -223,7 +229,7 @@ export class EditTrainingComponent implements OnInit {
   }
 
   cancel(): void {
-    this.ref.close();
+    this.router.navigate(['/dashboard/training/list']);
   }
 
   formatDateForInput(dateString: string): string {
