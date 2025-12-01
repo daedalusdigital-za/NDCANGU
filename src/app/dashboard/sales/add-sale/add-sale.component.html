@@ -39,7 +39,7 @@
                                 <div class="col-md-6">
                                     <div class="mb-3">
                                         <label class="form-label">Sale Date *</label>
-                                        <input type="date"
+                                        <input type="datetime-local"
                                                class="form-control"
                                                [(ngModel)]="sale.saleDate"
                                                name="saleDate"
@@ -61,13 +61,12 @@
                                 </div>
                                 <div class="col-md-6">
                                     <div class="mb-3">
-                                        <label class="form-label">Customer Phone *</label>
+                                        <label class="form-label">Customer Phone</label>
                                         <input type="tel"
                                                class="form-control"
                                                [(ngModel)]="sale.customerPhone"
                                                name="customerPhone"
-                                               required
-                                               placeholder="Enter customer phone">
+                                               placeholder="Enter customer phone (optional)">
                                     </div>
                                 </div>
                             </div>

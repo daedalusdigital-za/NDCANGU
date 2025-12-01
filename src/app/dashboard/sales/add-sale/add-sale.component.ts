@@ -34,7 +34,7 @@ export class AddSaleComponent implements OnInit {
 
   sale: SaleModel = {
     saleNumber: '',
-    saleDate: new Date().toISOString().split('T')[0], // Today's date in YYYY-MM-DD format
+    saleDate: new Date().toISOString().slice(0, 16), // Format for datetime-local input
     customerName: '',
     customerPhone: '',
     total: 0,
@@ -64,11 +64,13 @@ export class AddSaleComponent implements OnInit {
   }
 
   generateSaleNumber(): void {
-    // Generate a unique sale number like the example
+    // Generate a unique sale number matching API format: "SALE-20251127-001"
     const date = new Date();
     const year = date.getFullYear();
-    const timestamp = date.getTime().toString().slice(-6);
-    this.sale.saleNumber = `SALE-${year}-${timestamp}`;
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    const timestamp = String(date.getHours() * 100 + date.getMinutes()).padStart(3, '0');
+    this.sale.saleNumber = `SALE-${year}${month}${day}-${timestamp}`;
   }
 
   loadInventory(): void {
@@ -269,24 +271,21 @@ export class AddSaleComponent implements OnInit {
       saleDate: saleDate.toISOString()
     };
 
-    console.log('Saving sale with API structure:', apiSale);
+    console.log('🔄 Saving sale with API structure:', apiSale);
 
-    // Here you would typically call your API service
-    // this.salesService.createSale(this.sale).subscribe({
-    //   next: (response) => {
-    //     this.toastr.success('Sale saved successfully!', 'Success');
-    //     this.router.navigate(['/dashboard/sales']);
-    //   },
-    //   error: (error) => {
-    //     console.error('Error saving sale:', error);
-    //     this.toastr.error('Failed to save sale', 'Error');
-    //   }
-    // });
-
-    // For now, simulate success
-    this.toastr.success('Sale saved successfully!', 'Success');
-    // Sale data structure prepared for API
-    this.router.navigate(['/dashboard/sales']);
+    // Call actual API
+    this.databaseService.addSale(apiSale).subscribe({
+      next: (response) => {
+        console.log('✅ Sale saved successfully:', response);
+        console.log('✅ Sale saved successfully:', response);
+        this.toastr.success('Sale saved successfully!', 'Success');
+        this.router.navigate(['/dashboard/sales']);
+      },
+      error: (error) => {
+        console.error('❌ Error saving sale:', error);
+        this.toastr.error('Failed to save sale. Please try again.', 'Error');
+      }
+    });
   }
 
   isFormValid(): boolean {
@@ -295,8 +294,8 @@ export class AddSaleComponent implements OnInit {
       return false;
     }
 
-    if (!this.sale.customerPhone.trim()) {
-      this.toastr.error('Customer phone is required', 'Validation Error');
+    if (!this.sale.saleDate) {
+      this.toastr.error('Sale date is required', 'Validation Error');
       return false;
     }
 
