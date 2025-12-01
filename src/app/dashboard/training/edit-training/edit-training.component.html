@@ -149,7 +149,7 @@
                                 [(ngModel)]="training.trainerId"
                                 name="trainerId">
                             <option [ngValue]="null">Select Trainer</option>
-                            <option *ngFor="let trainer of trainers" [value]="trainer.id">
+                            <option *ngFor="let trainer of trainers" [ngValue]="trainer.id">
                                 {{trainer.name}} - {{trainer.location}}
                             </option>
                         </select>

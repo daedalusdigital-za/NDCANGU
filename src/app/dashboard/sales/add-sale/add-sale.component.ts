@@ -77,14 +77,34 @@ export class AddSaleComponent implements OnInit {
     this.loadingInventory = true;
     this.inventoryItems = [];
 
-    // Load all 16 inventory IDs using GetById endpoint only
-    const allInventoryIds = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16];
+    // First, get all inventory items using GetAll to see which IDs actually exist
+    this.databaseService.getInventoryItems().subscribe({
+      next: (items: InventoryItem[]) => {
+        if (items && items.length > 0) {
+          this.inventoryItems = items;
+          this.loadingInventory = false;
+          this.toastr.success(`Loaded ${this.inventoryItems.length} inventory items`, 'Success');
+        } else {
+          // If GetAll fails or returns empty, fall back to individual GetById calls
+          // but only for IDs that are likely to exist
+          this.loadInventoryByIds([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 13, 14, 15, 16]); // Skip ID 11
+        }
+      },
+      error: (error: any) => {
+        console.log('GetAll failed, trying individual GetById calls:', error);
+        // Fall back to individual GetById calls, but skip known missing IDs
+        this.loadInventoryByIds([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 13, 14, 15, 16]); // Skip ID 11
+      }
+    });
+  }
+
+  private loadInventoryByIds(inventoryIds: number[]): void {
     let loadedCount = 0;
     let errorCount = 0;
 
-    console.log(`Using GET /api/Inventory/GetById for IDs: ${allInventoryIds.join(', ')}`);
+    console.log(`Using GET /api/Inventory/GetById for IDs: ${inventoryIds.join(', ')}`);
 
-    allInventoryIds.forEach(id => {
+    inventoryIds.forEach(id => {
       // Call GET /api/Inventory/GetById?id={inventoryItemId}
       this.databaseService.getInventoryItemById(id).subscribe({
         next: (item: InventoryItem) => {
@@ -95,7 +115,7 @@ export class AddSaleComponent implements OnInit {
           loadedCount++;
 
           // Check if all requests completed
-          if (loadedCount + errorCount === allInventoryIds.length) {
+          if (loadedCount + errorCount === inventoryIds.length) {
             this.loadingInventory = false;
 
             if (this.inventoryItems.length > 0) {
@@ -106,25 +126,38 @@ export class AddSaleComponent implements OnInit {
           }
         },
         error: (error: {status?: number, message?: string}) => {
-          console.error(`GetById failed for ID ${id}:`, error);
+          // Only log errors for non-404 cases (404 means item doesn't exist, which is normal)
+          if (error.status !== 404) {
+            console.error(`GetById failed for ID ${id}:`, error);
+          } else {
+            console.log(`Inventory item ${id} not found (404) - skipping`);
+          }
           errorCount++;
 
           // Check if all requests completed
-          if (loadedCount + errorCount === allInventoryIds.length) {
+          if (loadedCount + errorCount === inventoryIds.length) {
             this.loadingInventory = false;
 
-            if (errorCount === allInventoryIds.length) {
+            if (errorCount === inventoryIds.length) {
               // All requests failed - no real data available
               if (error.status === 400 || error.message?.includes('Invalid object name')) {
                 this.toastr.error(`GetById API failed: ${error.message || 'Database table issue'}`, 'Database Error');
-              } else {
+              } else if (error.status !== 404) {
                 this.toastr.error(`All GetById requests failed: ${error.message || 'Unknown error'}`, 'API Error');
               }
               // Clear inventory since we're not using fallback data
               this.inventoryItems = [];
             } else {
-              // Some succeeded, some failed
-              this.toastr.warning(`Partial success: ${this.inventoryItems.length} loaded, ${errorCount} failed`, 'Partial Success');
+              // Some succeeded, some failed - only show warning if non-404 errors occurred
+              const nonNotFoundErrors = errorCount - inventoryIds.filter(id => id === 11).length; // Filter out expected 404s
+              if (nonNotFoundErrors > 0) {
+                this.toastr.warning(`Partial success: ${this.inventoryItems.length} loaded, ${nonNotFoundErrors} failed`, 'Partial Success');
+              } else {
+                // Only expected 404s, just show success for loaded items
+                if (this.inventoryItems.length > 0) {
+                  this.toastr.success(`Loaded ${this.inventoryItems.length} inventory items`, 'Success');
+                }
+              }
             }
           }
         }

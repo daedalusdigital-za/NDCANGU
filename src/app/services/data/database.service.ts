@@ -577,10 +577,10 @@ export class DatabaseService {
 
   /**
    * Update training session
-   * PUT /api/Training/Update
+   * PATCH /api/Training/Update
    */
   updateTrainingSession(trainingSession: any): Observable<any> {
-    return this.http.put<any>(`${this.API_URL}Training/Update`, trainingSession, { headers: this.getAuthHeaders() })
+    return this.http.patch<any>(`${this.API_URL}Training/Update`, trainingSession, { headers: this.getAuthHeaders() })
       .pipe(catchError(this.handleError));
   }
 

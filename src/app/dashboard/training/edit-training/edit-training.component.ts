@@ -123,6 +123,8 @@ export class EditTrainingComponent implements OnInit {
     this.databaseService.getTrainers().subscribe({
       next: (trainers) => {
         this.trainers = trainers.filter(t => t.status === 'Active');
+        console.log('Loaded trainers:', this.trainers);
+        console.log('Number of active trainers:', this.trainers.length);
       },
       error: (error) => {
         console.error('Error loading trainers:', error);
@@ -136,14 +138,20 @@ export class EditTrainingComponent implements OnInit {
     this.databaseService.getTrainingSessionById(this.trainingId).subscribe({
       next: (session) => {
         this.training = { ...session };
-        // Format the date for input field (API returns datetime, we need date)
-        if (this.training.trainingDate) {
-          this.training.trainingDate = this.formatDateForInput(this.training.trainingDate);
+
+        // Map the trainingDate field from API to form fields
+        if (session.trainingDate) {
+          this.training.startDate = this.formatDateForInput(session.trainingDate);
+          this.training.endDate = this.formatDateForInput(session.trainingDate);
         }
+
         // Set the trainerId for the dropdown selection
-        if (this.training.trainer) {
-          this.training.trainerId = this.training.trainer.id;
+        if (session.trainerId) {
+          this.training.trainerId = Number(session.trainerId);
         }
+
+        console.log('Loaded training session:', this.training);
+        console.log('TrainerId set to:', this.training.trainerId);
         this.isLoading = false;
       },
       error: (error) => {
@@ -178,6 +186,8 @@ export class EditTrainingComponent implements OnInit {
       };
 
       console.log('Updating training session with data:', updateData);
+      console.log('Current trainerId from form:', this.training.trainerId);
+      console.log('TrainerId being sent in updateData:', updateData.trainerId);
 
       this.databaseService.updateTrainingSession(updateData).subscribe({
         next: (result) => {
@@ -200,8 +210,13 @@ export class EditTrainingComponent implements OnInit {
       return false;
     }
 
-    if (!this.training.trainingDate) {
-      this.toastr.error('Training date is required', 'Validation Error');
+    if (!this.training.startDate) {
+      this.toastr.error('Start date is required', 'Validation Error');
+      return false;
+    }
+
+    if (!this.training.endDate) {
+      this.toastr.error('End date is required', 'Validation Error');
       return false;
     }
 
