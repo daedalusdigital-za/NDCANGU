@@ -5,7 +5,6 @@ import { AddTrainingComponent } from './add-training/add-training.component';
 import { ListTrainingComponent } from './list-training/list-training.component';
 import { TrainersComponent } from './trainers/trainers.component';
 import { TrainingSessionsListComponent } from './training-sessions-list/training-sessions-list.component';
-import { EditTrainingComponent } from './edit-training/edit-training.component';
 
 const routes: Routes = [
   {
@@ -26,7 +25,7 @@ const routes: Routes = [
   },
   {
     path: 'edit/:id',
-    component: EditTrainingComponent
+    redirectTo: 'sessions'
   },
   {
     path: 'trainers',

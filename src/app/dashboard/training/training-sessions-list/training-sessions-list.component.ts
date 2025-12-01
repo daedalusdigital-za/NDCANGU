@@ -3,8 +3,6 @@ import { TrainingService, TrainingSession } from '../../../services/training/tra
 import { DatabaseService, Province } from '../../../services/data/database.service';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { DialogService } from 'primeng/dynamicdialog';
-import { EditTrainingComponent } from '../edit-training/edit-training.component';
 
 @Component({
   selector: 'app-training-sessions-list',
@@ -16,7 +14,6 @@ export class TrainingSessionsListComponent implements OnInit {
   private databaseService = inject(DatabaseService);
   private router = inject(Router);
   private toastr = inject(ToastrService);
-  private dialogService = inject(DialogService);
 
   sessions: TrainingSession[] = [];
   displayedSessions: TrainingSession[] = [];
@@ -29,6 +26,10 @@ export class TrainingSessionsListComponent implements OnInit {
   filterProvince = '';
   filterStatus = '';
   searchTerm = '';
+
+  // Modal properties
+  showEditModal = false;
+  editingTrainingId = 0;
 
   displayedColumns: string[] = [
     'trainingName',
@@ -144,21 +145,26 @@ export class TrainingSessionsListComponent implements OnInit {
    * Edit session
    */
   editSession(session: TrainingSession): void {
-    // Open edit training session in modal
-    const ref = this.dialogService.open(EditTrainingComponent, {
-      header: 'Edit Training Session',
-      width: '80%',
-      data: { id: session.id },
-      modal: true,
-      closable: true
-    });
+    this.editingTrainingId = session.id || 0;
+    this.showEditModal = true;
+  }
 
-    ref.onClose.subscribe((result) => {
-      if (result) {
-        // Refresh the list if session was updated
-        this.loadAllSessions();
-      }
-    });
+  /**
+   * Close edit modal
+   */
+  onEditModalClose(): void {
+    this.showEditModal = false;
+    this.editingTrainingId = 0;
+  }
+
+  /**
+   * Handle training session update
+   */
+  onTrainingUpdated(): void {
+    this.showEditModal = false;
+    this.editingTrainingId = 0;
+    this.loadAllSessions();
+    this.toastr.success('Training session updated successfully', 'Success');
   }
 
   /**

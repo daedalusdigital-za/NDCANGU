@@ -1,5 +1,4 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Component, OnInit, OnChanges, SimpleChanges, Input, Output, EventEmitter } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { DatabaseService } from '../../../services/data/database.service';
 
@@ -8,19 +7,23 @@ import { DatabaseService } from '../../../services/data/database.service';
   templateUrl: './edit-training.component.html',
   styleUrls: ['./edit-training.component.scss']
 })
-export class EditTrainingComponent implements OnInit {
-  trainingId: number = 0;
+export class EditTrainingComponent implements OnInit, OnChanges {
+  @Input() trainingId: number = 0;
+  @Input() visible: boolean = false;
+  @Output() onClose = new EventEmitter<void>();
+  @Output() onSave = new EventEmitter<any>();
   training: any = {
     id: 0,
     trainingName: '',
     trainingType: '',
+    trainingDate: '',
     startDate: '',
     endDate: '',
     provinceId: null,
     provinceName: '',
     venue: '',
     trainerId: null,
-    trainer: null,
+    trainerName: '',
     targetAudience: '',
     numberOfParticipants: 0,
     status: 1,
@@ -36,6 +39,7 @@ export class EditTrainingComponent implements OnInit {
   trainers: any[] = [];
   isLoading = false;
   isSubmitting = false;
+  errorLoading = false;
 
   // Document upload properties
   selectedDocumentType: string = '';
@@ -100,23 +104,19 @@ export class EditTrainingComponent implements OnInit {
   ];
 
   constructor(
-    private route: ActivatedRoute,
-    private router: Router,
     private toastr: ToastrService,
     private databaseService: DatabaseService
   ) { }
 
   ngOnInit(): void {
-    // Get the training ID from route params
-    this.route.params.subscribe((params) => {
-      this.trainingId = params['id'] || 0;
-      this.loadTrainers();
-      if (this.trainingId > 0) {
-        this.loadTrainingSession();
-      }
-    });
-    this.loadTrainingSession();
+    this.loadTrainers();
     this.loadTrainingDocuments();
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['trainingId'] && this.trainingId > 0) {
+      this.loadTrainingSession();
+    }
   }
 
   loadTrainers(): void {
@@ -131,6 +131,34 @@ export class EditTrainingComponent implements OnInit {
         this.toastr.error('Failed to load trainers', 'Error');
       }
     });
+  }
+
+  loadTrainersByProvince(): void {
+    if (this.training.provinceName) {
+      // Filter trainers by the selected province
+      this.databaseService.getTrainers().subscribe({
+        next: (trainers) => {
+          this.trainers = trainers.filter(t => t.status === 'Active' && t.location === this.training.provinceName);
+          console.log('Filtered trainers for province:', this.training.provinceName, this.trainers);
+
+          // Reset trainer selection if current trainer is not available in new province
+          if (this.training.trainerId) {
+            const currentTrainerExists = this.trainers.some(t => t.id === this.training.trainerId);
+            if (!currentTrainerExists) {
+              this.training.trainerId = null;
+              this.training.trainerName = '';
+            }
+          }
+        },
+        error: (error) => {
+          console.error('Error loading trainers for province:', error);
+          this.toastr.error('Failed to load trainers for selected province', 'Error');
+        }
+      });
+    } else {
+      // Load all trainers if no province selected
+      this.loadTrainers();
+    }
   }
 
   loadTrainingSession(): void {
@@ -150,15 +178,25 @@ export class EditTrainingComponent implements OnInit {
           this.training.trainerId = Number(session.trainerId);
         }
 
+        // Handle display names from API
+        if ((session as any).provinceName) {
+          this.training.provinceName = (session as any).provinceName;
+        }
+
+        if ((session as any).trainerName) {
+          this.training.trainerName = (session as any).trainerName;
+        }
+
         console.log('Loaded training session:', this.training);
         console.log('TrainerId set to:', this.training.trainerId);
+        console.log('API returned trainingDate:', session.trainingDate);
         this.isLoading = false;
       },
       error: (error) => {
         this.isLoading = false;
         console.error('Error loading training session:', error);
         this.toastr.error('Failed to load training session', 'Error');
-        this.router.navigate(['/dashboard/training/list']);
+        this.onClose.emit();
       }
     });
   }
@@ -172,11 +210,10 @@ export class EditTrainingComponent implements OnInit {
         id: Number(this.training.id),
         trainingName: this.training.trainingName,
         trainingType: this.training.trainingType,
-        startDate: this.training.startDate ? this.training.startDate + 'T08:00:00' : new Date().toISOString(),
-        endDate: this.training.endDate ? this.training.endDate + 'T17:00:00' : new Date().toISOString(),
+        trainingDate: this.training.startDate ? this.training.startDate + 'T08:00:00' : new Date().toISOString(),
         provinceId: Number(this.training.provinceId),
         venue: this.training.venue,
-        trainerId: this.training.trainerId ? Number(this.training.trainerId) : 1,
+        trainerId: this.training.trainerId ? Number(this.training.trainerId) : null,
         targetAudience: this.training.targetAudience,
         numberOfParticipants: Number(this.training.numberOfParticipants) || 0,
         status: Number(this.training.status),
@@ -193,7 +230,8 @@ export class EditTrainingComponent implements OnInit {
         next: (result) => {
           this.isSubmitting = false;
           this.toastr.success('Training session updated successfully!', 'Success');
-          this.router.navigate(['/dashboard/training/list']);
+          this.onSave.emit(result);
+          this.cancel();
         },
         error: (error) => {
           this.isSubmitting = false;
@@ -211,12 +249,7 @@ export class EditTrainingComponent implements OnInit {
     }
 
     if (!this.training.startDate) {
-      this.toastr.error('Start date is required', 'Validation Error');
-      return false;
-    }
-
-    if (!this.training.endDate) {
-      this.toastr.error('End date is required', 'Validation Error');
+      this.toastr.error('Training date is required', 'Validation Error');
       return false;
     }
 
@@ -244,7 +277,7 @@ export class EditTrainingComponent implements OnInit {
   }
 
   cancel(): void {
-    this.router.navigate(['/dashboard/training/list']);
+    this.onClose.emit();
   }
 
   formatDateForInput(dateString: string): string {

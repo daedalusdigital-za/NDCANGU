@@ -150,3 +150,11 @@
     </div>
   </div>
 </div>
+
+<!-- Edit Training Modal -->
+<app-edit-training
+  [trainingId]="editingTrainingId"
+  [visible]="showEditModal"
+  (onClose)="onEditModalClose()"
+  (onSave)="onTrainingUpdated()">
+</app-edit-training>
