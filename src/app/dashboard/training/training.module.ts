@@ -6,7 +6,6 @@ import { SharedModule } from 'src/app/shared/shared.module';
 import { TrainingRoutingModule } from './training-routing.module';
 import { TrainingComponent } from './training.component';
 import { AddTrainingComponent } from './add-training/add-training.component';
-import { ListTrainingComponent } from './list-training/list-training.component';
 import { TrainersComponent } from './trainers/trainers.component';
 import { TrainingSessionsListComponent } from './training-sessions-list/training-sessions-list.component';
 
@@ -34,7 +33,6 @@ import { ConfirmationService } from 'primeng/api';
   declarations: [
     TrainingComponent,
     AddTrainingComponent,
-    ListTrainingComponent,
     TrainersComponent,
     EditTrainingComponent,
     TrainingSessionsListComponent

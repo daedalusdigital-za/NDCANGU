@@ -201,7 +201,7 @@ export class AddTrainingComponent implements OnInit {
         this.toastr.success('Training session added successfully!', 'Success');
         this.isSubmitting = false;
         this.resetForm();
-        this.router.navigate(['/dashboard/training/list']);
+        this.router.navigate(['/dashboard/training/sessions']);
       },
       error: (error) => {
         console.error('Error creating training session via API:', error);
@@ -211,7 +211,7 @@ export class AddTrainingComponent implements OnInit {
         this.toastr.success('Training session saved locally (API unavailable)', 'Success');
         this.isSubmitting = false;
         this.resetForm();
-        this.router.navigate(['/dashboard/training/list']);
+        this.router.navigate(['/dashboard/training/sessions']);
       }
     });
   }
