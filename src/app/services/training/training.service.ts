@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
+import { map, catchError } from 'rxjs/operators';
 
 export interface TrainingSession {
   id?: number;
@@ -36,11 +37,17 @@ export interface TrainingDocument {
   fileName: string;
   originalFileName: string;
   fileSize: number;
-  filePath: string;
+  filePath?: string;
+  fileUrl?: string;
   documentType: 'Register' | 'AttendanceSheet' | 'Materials';
   mimeType: string;
-  uploadedBy: string;
+  uploadedBy: string | number;
   uploadedAt: Date;
+}
+
+export interface TrainingDocumentsResponse {
+  trainingSessionId: number;
+  documents: TrainingDocument[];
 }
 
 @Injectable({
@@ -148,7 +155,24 @@ export class TrainingService {
 
     return this.http.post(`${this.apiUrl}/UploadPDF`, formData, {
       headers: { 'Authorization': `Bearer ${token}` }
-    });
+    }).pipe(
+      catchError(error => {
+        console.error('Upload PDF error:', error);
+        // Add specific error handling for common cases
+        if (error.status === 400) {
+          error.userMessage = 'Invalid file or request. Please check file size and format.';
+        } else if (error.status === 401) {
+          error.userMessage = 'Authentication failed. Please login again.';
+        } else if (error.status === 404) {
+          error.userMessage = 'Training session not found.';
+        } else if (error.status === 413) {
+          error.userMessage = 'File is too large. Maximum size is 10MB.';
+        } else if (error.status >= 500) {
+          error.userMessage = 'Server error. Please try again later.';
+        }
+        throw error;
+      })
+    );
   }
 
   /**
@@ -174,8 +198,18 @@ export class TrainingService {
    * Get training documents for a session
    */
   getSessionDocuments(trainingSessionId: number): Observable<TrainingDocument[]> {
-    return this.http.get<TrainingDocument[]>(
+    return this.http.get<TrainingDocumentsResponse>(
       `${this.apiUrl}/${trainingSessionId}/PDFs`
+    ).pipe(
+      map(response => response.documents || []),
+      catchError(error => {
+        console.error('Error fetching training documents:', error);
+        // Return empty array if API endpoint is not implemented yet
+        if (error.status === 400 || error.status === 404 || error.status === 500) {
+          return of([]);
+        }
+        throw error;
+      })
     );
   }
 

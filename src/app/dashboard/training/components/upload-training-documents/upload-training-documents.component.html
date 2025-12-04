@@ -1,0 +1,204 @@
+<p-dialog
+  [(visible)]="visible"
+  [modal]="true"
+  [closable]="true"
+  [draggable]="false"
+  [resizable]="false"
+  styleClass="upload-documents-dialog"
+  header="Upload Training Documents"
+  [style]="{width: '700px', maxHeight: '90vh'}"
+  (onHide)="closeModal()">
+
+  <!-- Modal Header with Training Info -->
+  <div class="upload-header mb-4">
+    <div class="d-flex align-items-center">
+      <i class="fas fa-file-upload text-primary me-3" style="font-size: 1.5rem;"></i>
+      <div>
+        <h5 class="mb-1">{{ trainingSessionName }}</h5>
+        <small class="text-muted">Training Session ID: {{ trainingSessionId }}</small>
+      </div>
+    </div>
+  </div>
+
+  <!-- Authentication Warning -->
+  <div *ngIf="!hasAuthToken" class="alert alert-warning d-flex align-items-center mb-4">
+    <i class="fas fa-exclamation-triangle me-2"></i>
+    <div>
+      <strong>Authentication Required:</strong> Please login to upload documents.
+    </div>
+  </div>
+
+  <!-- Upload Form -->
+  <div class="upload-form mb-4" [class.disabled]="!hasAuthToken">
+    <h6 class="mb-3">
+      <i class="fas fa-upload me-2"></i>Upload New Document
+    </h6>
+
+    <!-- Document Type Selection -->
+    <div class="mb-3">
+      <label class="form-label">Document Type *</label>
+      <div class="row g-2">
+        <div class="col-md-4" *ngFor="let type of documentTypes">
+          <div class="document-type-option"
+               [class.selected]="documentType === type.value"
+               (click)="documentType = type.value">
+            <i [class]="type.icon + ' text-' + type.color"></i>
+            <span>{{ type.label }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- File Selection -->
+    <div class="mb-3">
+      <label for="fileInput" class="form-label">Select PDF File *</label>
+      <input type="file"
+             class="form-control"
+             id="fileInput"
+             accept=".pdf"
+             [disabled]="uploading || !hasAuthToken"
+             (change)="onFileSelected($event)">
+      <div class="form-text">
+        <i class="fas fa-info-circle me-1"></i>
+        Maximum file size: 10MB. Only PDF files are allowed.
+      </div>
+    </div>
+
+    <!-- Selected File Info -->
+    <div *ngIf="selectedFile" class="selected-file-info mb-3">
+      <div class="d-flex align-items-center p-3 bg-light rounded">
+        <i class="fas fa-file-pdf text-danger me-3" style="font-size: 1.5rem;"></i>
+        <div class="flex-grow-1">
+          <strong>{{ selectedFile.name }}</strong><br>
+          <small class="text-muted">{{ formatFileSize(selectedFile.size) }}</small>
+        </div>
+        <button type="button"
+                class="btn btn-sm btn-outline-secondary"
+                (click)="selectedFile = null">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Upload Progress -->
+    <div *ngIf="uploading" class="mb-3">
+      <div class="d-flex justify-content-between align-items-center mb-1">
+        <span>Uploading...</span>
+        <span>{{ uploadProgress }}%</span>
+      </div>
+      <div class="progress">
+        <div class="progress-bar"
+             role="progressbar"
+             [style.width.%]="uploadProgress">
+        </div>
+      </div>
+    </div>
+
+    <!-- Upload Button -->
+    <button type="button"
+            class="btn btn-primary"
+            [disabled]="!canUpload"
+            (click)="uploadFile()">
+      <i class="fas fa-upload me-2"></i>
+      {{ uploadButtonText }}
+    </button>
+  </div>
+
+  <!-- Existing Documents -->
+  <div class="existing-documents">
+    <h6 class="mb-3">
+      <i class="fas fa-folder me-2"></i>Existing Documents
+    </h6>
+
+    <!-- API Deployment Status -->
+    <div *ngIf="apiNotReady && documentsLoadError" class="alert alert-info d-flex align-items-center mb-3">
+      <i class="fas fa-info-circle me-2"></i>
+      <div class="flex-grow-1">
+        <strong>API Deployment in Progress:</strong>
+        Document viewing will be available once the backend deployment completes (2-3 minutes).
+        <br><small>Upload functionality is ready to use!</small>
+      </div>
+      <button class="btn btn-sm btn-outline-primary ms-3" (click)="retryLoadDocuments()">
+        <i class="fas fa-sync-alt me-1"></i>Retry
+      </button>
+    </div>    <!-- Loading Spinner -->
+    <div *ngIf="loadingDocuments" class="text-center py-3">
+      <div class="spinner-border spinner-border-sm" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+      <span class="ms-2">Loading documents...</span>
+    </div>
+
+    <!-- Documents List -->
+    <div *ngIf="!loadingDocuments && existingDocuments.length > 0" class="documents-list">
+      <div class="document-item" *ngFor="let doc of existingDocuments; let i = index">
+        <div class="d-flex align-items-center p-3 border rounded mb-2">
+          <div class="document-type-indicator me-3">
+            <i [class]="getDocumentTypeConfig(doc.documentType).icon + ' text-' + getDocumentTypeConfig(doc.documentType).color"
+               style="font-size: 1.5rem;"></i>
+          </div>
+
+          <div class="document-info flex-grow-1">
+            <strong>{{ doc.originalFileName }}</strong>
+            <br>
+            <small class="text-muted">
+              <span class="badge" [class]="'bg-' + getDocumentTypeConfig(doc.documentType).color + ' me-2'">
+                {{ getDocumentTypeConfig(doc.documentType).label }}
+              </span>
+              {{ formatFileSize(doc.fileSize) }} •
+              Uploaded {{ formatDate(doc.uploadedAt) }} by {{ doc.uploadedBy }}
+            </small>
+          </div>
+
+          <div class="document-actions">
+            <button type="button"
+                    class="btn btn-sm btn-outline-primary me-2"
+                    (click)="downloadDocument(doc)"
+                    title="Download">
+              <i class="fas fa-download"></i>
+            </button>
+            <button type="button"
+                    class="btn btn-sm btn-outline-danger"
+                    [disabled]="!hasAuthToken"
+                    (click)="deleteDocument(doc)"
+                    title="Delete">
+              <i class="fas fa-trash"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- No Documents -->
+    <div *ngIf="!loadingDocuments && !documentsLoadError && existingDocuments.length === 0" class="no-documents text-center py-4">
+      <i class="fas fa-folder-open text-muted" style="font-size: 3rem;"></i>
+      <p class="text-muted mt-3 mb-2">No documents uploaded yet</p>
+      <small class="text-muted">
+        Upload a document above to see it appear here.
+      </small>
+    </div>
+
+    <!-- Error State -->
+    <div *ngIf="!loadingDocuments && documentsLoadError && !apiNotReady" class="error-state text-center py-4">
+      <i class="fas fa-exclamation-triangle text-warning" style="font-size: 3rem;"></i>
+      <p class="text-muted mt-3 mb-2">Unable to load documents</p>
+      <small class="text-muted d-block mb-3">
+        There was an error retrieving existing documents. Upload functionality is still available.
+      </small>
+      <button class="btn btn-sm btn-outline-primary" (click)="retryLoadDocuments()">
+        <i class="fas fa-sync-alt me-1"></i>Try Again
+      </button>
+    </div>
+  </div>
+
+  <!-- Modal Footer -->
+  <ng-template pTemplate="footer">
+    <div class="d-flex justify-content-end">
+      <button type="button"
+              class="btn btn-outline-secondary"
+              (click)="closeModal()">
+        Close
+      </button>
+    </div>
+  </ng-template>
+</p-dialog>

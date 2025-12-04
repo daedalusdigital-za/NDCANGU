@@ -1,0 +1,208 @@
+.upload-documents-dialog {
+  .upload-header {
+    border-bottom: 1px solid #e9ecef;
+    padding-bottom: 1rem;
+  }
+
+  .upload-form {
+    border-bottom: 1px solid #e9ecef;
+    padding-bottom: 1.5rem;
+
+    &.disabled {
+      opacity: 0.6;
+      pointer-events: none;
+    }
+  }
+
+  .document-type-option {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem;
+    border: 2px solid #e9ecef;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+
+    &:hover {
+      border-color: #007bff;
+      background-color: #f8f9fa;
+    }
+
+    &.selected {
+      border-color: #007bff;
+      background-color: #e7f3ff;
+      color: #007bff;
+    }
+
+    i {
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    span {
+      font-size: 0.875rem;
+      font-weight: 500;
+    }
+  }
+
+  .selected-file-info {
+    .fa-file-pdf {
+      color: #dc3545 !important;
+    }
+  }
+
+  .progress {
+    height: 8px;
+    border-radius: 4px;
+    background-color: #e9ecef;
+
+    .progress-bar {
+      background: linear-gradient(90deg, #007bff, #0056b3);
+      border-radius: 4px;
+      transition: width 0.3s ease;
+    }
+  }
+
+  .existing-documents {
+    max-height: 400px;
+    overflow-y: auto;
+  }
+
+  .document-item {
+    .document-type-indicator {
+      min-width: 60px;
+      text-align: center;
+    }
+
+    .document-info {
+      overflow: hidden;
+
+      strong {
+        display: block;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 300px;
+      }
+    }
+
+    .document-actions {
+      flex-shrink: 0;
+
+      .btn-sm {
+        padding: 0.25rem 0.5rem;
+        font-size: 0.75rem;
+      }
+    }
+
+    &:hover {
+      background-color: #f8f9fa;
+      transform: translateY(-1px);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+  }
+
+  .no-documents {
+    i {
+      opacity: 0.5;
+    }
+  }
+
+  .token-status {
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    font-size: 0.875rem;
+    margin-bottom: 1rem;
+
+    &.invalid {
+      background-color: #fff3cd;
+      border: 1px solid #ffecb5;
+      color: #664d03;
+    }
+
+    &.valid {
+      background-color: #d1e7dd;
+      border: 1px solid #badbcc;
+      color: #0f5132;
+    }
+  }
+}
+
+// Custom scrollbar for documents list
+.existing-documents::-webkit-scrollbar {
+  width: 6px;
+}
+
+.existing-documents::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+.existing-documents::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 3px;
+}
+
+.existing-documents::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+// Animation for upload progress
+@keyframes uploadPulse {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.progress-bar {
+  animation: uploadPulse 1.5s ease-in-out infinite;
+}
+
+// Badge styles
+.badge {
+  font-size: 0.7rem;
+  padding: 0.25rem 0.5rem;
+}
+
+// Alert styles
+.alert {
+  border-radius: 8px;
+  border: none;
+
+  &.alert-warning {
+    background-color: #fff3cd;
+    color: #664d03;
+  }
+
+  &.alert-info {
+    background-color: #cff4fc;
+    color: #055160;
+    border: 1px solid #b6effb;
+  }
+}
+
+// Error and loading states
+.error-state {
+  .btn {
+    transition: all 0.3s ease;
+
+    &:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+  }
+}
+
+.no-documents {
+  i {
+    opacity: 0.5;
+  }
+}

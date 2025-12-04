@@ -30,6 +30,9 @@ export class TrainingSessionsListComponent implements OnInit {
   // Modal properties
   showEditModal = false;
   editingTrainingId = 0;
+  showUploadModal = false;
+  uploadingSessionId = 0;
+  uploadingSessionName = '';
 
   displayedColumns: string[] = [
     'trainingName',
@@ -150,11 +153,29 @@ export class TrainingSessionsListComponent implements OnInit {
   }
 
   /**
+   * Upload documents for session
+   */
+  uploadDocuments(session: TrainingSession): void {
+    this.uploadingSessionId = session.id || 0;
+    this.uploadingSessionName = session.trainingName;
+    this.showUploadModal = true;
+  }
+
+  /**
    * Close edit modal
    */
   onEditModalClose(): void {
     this.showEditModal = false;
     this.editingTrainingId = 0;
+  }
+
+  /**
+   * Close upload modal
+   */
+  onUploadModalClose(): void {
+    this.showUploadModal = false;
+    this.uploadingSessionId = 0;
+    this.uploadingSessionName = '';
   }
 
   /**
@@ -165,6 +186,14 @@ export class TrainingSessionsListComponent implements OnInit {
     this.editingTrainingId = 0;
     this.loadAllSessions();
     this.toastr.success('Training session updated successfully', 'Success');
+  }
+
+  /**
+   * Handle document upload success
+   */
+  onUploadSuccess(): void {
+    this.toastr.success('Document uploaded successfully', 'Success');
+    // Don't reload sessions, just close modal
   }
 
   /**

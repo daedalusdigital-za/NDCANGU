@@ -23,7 +23,9 @@ import { TooltipModule } from 'primeng/tooltip';
 import { FileUploadModule } from 'primeng/fileupload';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { InputTextareaModule } from 'primeng/inputtextarea';
+import { ProgressBarModule } from 'primeng/progressbar';
 import { EditTrainingComponent } from './edit-training/edit-training.component';
+import { UploadTrainingDocumentsComponent } from './components/upload-training-documents/upload-training-documents.component';
 
 // PrimeNG Services
 import { DialogService } from 'primeng/dynamicdialog';
@@ -35,7 +37,8 @@ import { ConfirmationService } from 'primeng/api';
     AddTrainingComponent,
     TrainersComponent,
     EditTrainingComponent,
-    TrainingSessionsListComponent
+    TrainingSessionsListComponent,
+    UploadTrainingDocumentsComponent
   ],
   imports: [
     CommonModule,
@@ -55,7 +58,8 @@ import { ConfirmationService } from 'primeng/api';
     TooltipModule,
     FileUploadModule,
     InputNumberModule,
-    InputTextareaModule
+    InputTextareaModule,
+    ProgressBarModule
   ],
   providers: [
     DialogService,

@@ -125,6 +125,11 @@
               </td>
               <td>
                 <div class="btn-group btn-group-sm" role="group">
+                  <button type="button" class="btn btn-outline-success"
+                          (click)="uploadDocuments(session)"
+                          title="Upload Documents">
+                    <i class="fas fa-upload"></i>
+                  </button>
                   <button type="button" class="btn btn-outline-warning"
                           (click)="editSession(session)"
                           title="Edit">
@@ -158,3 +163,12 @@
   (onClose)="onEditModalClose()"
   (onSave)="onTrainingUpdated()">
 </app-edit-training>
+
+<!-- Upload Documents Modal -->
+<app-upload-training-documents
+  [trainingSessionId]="uploadingSessionId"
+  [trainingSessionName]="uploadingSessionName"
+  [visible]="showUploadModal"
+  (onClose)="onUploadModalClose()"
+  (onUploadSuccess)="onUploadSuccess()">
+</app-upload-training-documents>
