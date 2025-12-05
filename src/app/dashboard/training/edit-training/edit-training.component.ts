@@ -122,7 +122,14 @@ export class EditTrainingComponent implements OnInit, OnChanges {
   loadTrainers(): void {
     this.databaseService.getTrainers().subscribe({
       next: (trainers) => {
-        this.trainers = trainers.filter(t => t.status === 'Active');
+        // Filter for active trainers and ensure proper name formatting
+        this.trainers = trainers.filter(t => t.isActive === true || t.status === 'Active').map(trainer => {
+          // Ensure name is computed from firstName + lastName if not already present
+          if (!trainer.name && trainer.firstName && trainer.lastName) {
+            trainer.name = `${trainer.firstName} ${trainer.lastName}`;
+          }
+          return trainer;
+        });
         console.log('Loaded trainers:', this.trainers);
         console.log('Number of active trainers:', this.trainers.length);
       },
@@ -135,18 +142,31 @@ export class EditTrainingComponent implements OnInit, OnChanges {
 
   loadTrainersByProvince(): void {
     if (this.training.provinceName) {
-      // Filter trainers by the selected province
+      // Set provinceId based on selected province name
+      const province = this.provinces.find(p => p.name === this.training.provinceName);
+      if (province) {
+        this.training.provinceId = province.id;
+      }
+
+      // Load all trainers (production API doesn't filter by province)
       this.databaseService.getTrainers().subscribe({
         next: (trainers) => {
-          this.trainers = trainers.filter(t => t.status === 'Active' && t.location === this.training.provinceName);
-          console.log('Filtered trainers for province:', this.training.provinceName, this.trainers);
+          // Filter for active trainers and ensure proper name formatting
+          this.trainers = trainers.filter(t => t.isActive === true || t.status === 'Active').map(trainer => {
+            // Ensure name is computed from firstName + lastName if not already present
+            if (!trainer.name && trainer.firstName && trainer.lastName) {
+              trainer.name = `${trainer.firstName} ${trainer.lastName}`;
+            }
+            return trainer;
+          });
 
-          // Reset trainer selection if current trainer is not available in new province
+          console.log('Loaded trainers for province:', this.training.provinceName, this.trainers);
+
+          // Preserve current trainer selection if it exists
           if (this.training.trainerId) {
             const currentTrainerExists = this.trainers.some(t => t.id === this.training.trainerId);
             if (!currentTrainerExists) {
-              this.training.trainerId = null;
-              this.training.trainerName = '';
+              console.warn('Current trainer not found in loaded trainers');
             }
           }
         },
@@ -176,11 +196,19 @@ export class EditTrainingComponent implements OnInit, OnChanges {
         // Set the trainerId for the dropdown selection
         if (session.trainerId) {
           this.training.trainerId = Number(session.trainerId);
+          console.log('Set trainerId from session:', this.training.trainerId, typeof this.training.trainerId);
         }
 
         // Handle display names from API
         if ((session as any).provinceName) {
           this.training.provinceName = (session as any).provinceName;
+          // Also set the provinceId based on the province name
+          const province = this.provinces.find(p => p.name === (session as any).provinceName);
+          if (province) {
+            this.training.provinceId = province.id;
+          }
+          // Load trainers for this province after setting it
+          this.loadTrainersByProvince();
         }
 
         if ((session as any).trainerName) {
@@ -224,7 +252,7 @@ export class EditTrainingComponent implements OnInit, OnChanges {
 
       console.log('Updating training session with data:', updateData);
       console.log('Current trainerId from form:', this.training.trainerId);
-      console.log('TrainerId being sent in updateData:', updateData.trainerId);
+      console.log('TrainerId being sent in updateData:', updateData.trainerId, typeof updateData.trainerId);
 
       this.databaseService.updateTrainingSession(updateData).subscribe({
         next: (result) => {

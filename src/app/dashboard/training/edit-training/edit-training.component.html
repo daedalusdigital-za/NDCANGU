@@ -75,11 +75,11 @@
                                 name="trainer"
                                 class="form-select"
                                 [(ngModel)]="training.trainerId"
-                                [disabled]="!training.provinceName || trainers.length === 0"
+                                [disabled]="trainers.length === 0"
                                 required>
                             <option value="">Select a Trainer</option>
                             <option *ngFor="let trainer of trainers" [value]="trainer.id">
-                                {{trainer.name}}
+                                {{trainer.name || (trainer.firstName + ' ' + trainer.lastName)}}
                             </option>
                         </select>
                         <div class="invalid-feedback">
