@@ -21,6 +21,9 @@ export class TrainingSessionsListComponent implements OnInit {
   // Provinces list from API/fallback
   provinces: Province[] = [];
 
+  // Trainers list for name resolution
+  trainers: any[] = [];
+
   loading = false;
   error: string | null = null;
   filterProvince = '';
@@ -38,7 +41,6 @@ export class TrainingSessionsListComponent implements OnInit {
     'trainingName',
     'trainingType',
     'startDate',
-    'endDate',
     'province',
     'venue',
     'trainer',
@@ -49,6 +51,7 @@ export class TrainingSessionsListComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadProvinces();
+    this.loadTrainers();
     this.loadAllSessions();
   }
 
@@ -68,6 +71,27 @@ export class TrainingSessionsListComponent implements OnInit {
   }
 
   /**
+   * Load all trainers for name resolution
+   */
+  loadTrainers(): void {
+    this.databaseService.getTrainers().subscribe({
+      next: (trainers) => {
+        this.trainers = trainers.map(trainer => {
+          // Handle both name field and firstName+lastName combinations
+          if (!trainer.name && trainer.firstName && trainer.lastName) {
+            trainer.name = `${trainer.firstName} ${trainer.lastName}`;
+          }
+          return trainer;
+        });
+        console.log('✅ Loaded', this.trainers.length, 'trainers');
+      },
+      error: (error) => {
+        console.error('Error loading trainers:', error);
+      }
+    });
+  }
+
+  /**
    * Load all training sessions
    */
   loadAllSessions(): void {
@@ -79,6 +103,10 @@ export class TrainingSessionsListComponent implements OnInit {
         this.sessions = data;
         this.sessions.forEach(session => {
           session.statusText = this.trainingService.getStatusText(session.status);
+          // Populate trainer name from trainerId
+          this.populateTrainerName(session);
+          // Populate province name from provinceId
+          this.populateProvinceName(session);
         });
         this.applyFilters();
         this.loading = false;
@@ -109,6 +137,10 @@ export class TrainingSessionsListComponent implements OnInit {
         this.sessions = data;
         this.sessions.forEach(session => {
           session.statusText = this.trainingService.getStatusText(session.status);
+          // Populate trainer name from trainerId
+          this.populateTrainerName(session);
+          // Populate province name from provinceId
+          this.populateProvinceName(session);
         });
         this.applyFilters();
         this.loading = false;
@@ -218,6 +250,41 @@ export class TrainingSessionsListComponent implements OnInit {
         console.error(err);
       }
     });
+  }
+
+  /**
+   * Populate trainer name from trainerId
+   */
+  populateTrainerName(session: TrainingSession): void {
+    if (session.trainerId && this.trainers.length > 0) {
+      const trainer = this.trainers.find(t => t.id === session.trainerId);
+      if (trainer) {
+        session.trainer = {
+          id: trainer.id,
+          name: trainer.name || `${trainer.firstName} ${trainer.lastName}`,
+          email: trainer.email,
+          provinceName: trainer.provinceName || trainer.province
+        };
+      }
+    }
+  }
+
+  /**
+   * Populate province name from provinceId
+   */
+  populateProvinceName(session: TrainingSession): void {
+    // Check if we have provinceId and need to resolve to name
+    if ((session as any).provinceId && this.provinces.length > 0) {
+      const province = this.provinces.find(p => p.id === (session as any).provinceId);
+      if (province) {
+        session.provinceName = province.name;
+        session.province = province.name;
+      }
+    }
+    // Fallback: if no provinceId but we have province string, keep it
+    else if (session.province && !session.provinceName) {
+      session.provinceName = session.province;
+    }
   }
 
   /**

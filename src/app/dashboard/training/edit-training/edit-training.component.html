@@ -27,6 +27,64 @@
             <!-- Edit Form -->
             <form #editForm="ngForm" *ngIf="!isLoading && !errorLoading">
                 <div class="row">
+                    <!-- Training Name -->
+                    <div class="col-12 mb-3">
+                        <label for="trainingName" class="form-label">
+                            <i class="dripicons-document me-2"></i>Training Name
+                        </label>
+                        <input type="text"
+                               id="trainingName"
+                               name="trainingName"
+                               class="form-control"
+                               [(ngModel)]="training.trainingName"
+                               placeholder="Enter training name"
+                               required>
+                        <div class="invalid-feedback">
+                            Please enter a training name.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <!-- Training Type -->
+                    <div class="col-md-6 mb-3">
+                        <label for="trainingType" class="form-label">
+                            <i class="dripicons-briefcase me-2"></i>Training Type
+                        </label>
+                        <select id="trainingType"
+                                name="trainingType"
+                                class="form-select"
+                                [(ngModel)]="training.trainingType"
+                                required>
+                            <option value="">Select Training Type</option>
+                            <option *ngFor="let type of trainingTypes" [value]="type">
+                                {{type}}
+                            </option>
+                        </select>
+                        <div class="invalid-feedback">
+                            Please select a training type.
+                        </div>
+                    </div>
+
+                    <!-- Venue -->
+                    <div class="col-md-6 mb-3">
+                        <label for="venue" class="form-label">
+                            <i class="dripicons-location me-2"></i>Venue
+                        </label>
+                        <input type="text"
+                               id="venue"
+                               name="venue"
+                               class="form-control"
+                               [(ngModel)]="training.venue"
+                               placeholder="Enter venue name or address"
+                               required>
+                        <div class="invalid-feedback">
+                            Please enter a venue.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
                     <!-- Training Date -->
                     <div class="col-md-6 mb-3">
                         <label for="trainingDate" class="form-label">
@@ -51,11 +109,11 @@
                         <select id="province"
                                 name="province"
                                 class="form-select"
-                                [(ngModel)]="training.provinceName"
-                                (change)="loadTrainersByProvince()"
+                                [(ngModel)]="training.provinceId"
+                                (change)="onProvinceChange()"
                                 required>
                             <option value="">Select a Province</option>
-                            <option *ngFor="let province of provinces" [value]="province.name">
+                            <option *ngFor="let province of provinces" [value]="province.id">
                                 {{province.name}}
                             </option>
                         </select>
@@ -85,12 +143,52 @@
                         <div class="invalid-feedback">
                             Please select a trainer.
                         </div>
-                        <small class="form-text text-muted" *ngIf="!training.provinceName">
+                        <small class="form-text text-muted" *ngIf="!training.provinceId">
                             Please select a province first to see available trainers.
                         </small>
-                        <small class="form-text text-muted" *ngIf="training.provinceName && trainers.length === 0">
+                        <small class="form-text text-muted" *ngIf="training.provinceId && trainers.length === 0">
                             No trainers available for the selected province.
                         </small>
+                    </div>
+
+                    <!-- Target Audience -->
+                    <div class="col-md-6 mb-3">
+                        <label for="targetAudience" class="form-label">
+                            <i class="dripicons-user-group me-2"></i>Target Audience
+                        </label>
+                        <select id="targetAudience"
+                                name="targetAudience"
+                                class="form-select"
+                                [(ngModel)]="training.targetAudience"
+                                required>
+                            <option value="">Select Target Audience</option>
+                            <option *ngFor="let audience of targetAudiences" [value]="audience">
+                                {{audience}}
+                            </option>
+                        </select>
+                        <div class="invalid-feedback">
+                            Please select a target audience.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <!-- Number of Participants -->
+                    <div class="col-md-6 mb-3">
+                        <label for="numberOfParticipants" class="form-label">
+                            <i class="dripicons-user-group me-2"></i>Number of Participants
+                        </label>
+                        <input type="number"
+                               id="numberOfParticipants"
+                               name="numberOfParticipants"
+                               class="form-control"
+                               [(ngModel)]="training.numberOfParticipants"
+                               min="1"
+                               max="200"
+                               placeholder="Enter number of participants">
+                        <div class="invalid-feedback">
+                            Please enter the number of participants.
+                        </div>
                     </div>
 
                     <!-- Training Status -->

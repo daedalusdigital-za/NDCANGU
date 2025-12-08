@@ -140,12 +140,30 @@ export class EditTrainingComponent implements OnInit, OnChanges {
     });
   }
 
-  loadTrainersByProvince(): void {
-    if (this.training.provinceName) {
-      // Set provinceId based on selected province name
-      const province = this.provinces.find(p => p.name === this.training.provinceName);
+  onProvinceChange(): void {
+    // Update provinceName when provinceId changes
+    if (this.training.provinceId) {
+      const province = this.provinces.find(p => p.id == this.training.provinceId);
       if (province) {
-        this.training.provinceId = province.id;
+        this.training.provinceName = province.name;
+        console.log('Province changed to:', province.name, 'ID:', this.training.provinceId);
+      }
+    } else {
+      this.training.provinceName = '';
+    }
+
+    // Reload trainers for the new province
+    this.loadTrainersByProvince();
+  }
+
+  loadTrainersByProvince(): void {
+    if (this.training.provinceId) {
+      // Set provinceName based on selected province ID if not already set
+      if (!this.training.provinceName) {
+        const province = this.provinces.find(p => p.id == this.training.provinceId);
+        if (province) {
+          this.training.provinceName = province.name;
+        }
       }
 
       // Load all trainers (production API doesn't filter by province)
@@ -160,7 +178,7 @@ export class EditTrainingComponent implements OnInit, OnChanges {
             return trainer;
           });
 
-          console.log('Loaded trainers for province:', this.training.provinceName, this.trainers);
+          console.log('Loaded trainers for province ID:', this.training.provinceId, this.trainers);
 
           // Preserve current trainer selection if it exists
           if (this.training.trainerId) {
@@ -202,14 +220,26 @@ export class EditTrainingComponent implements OnInit, OnChanges {
         // Handle display names from API
         if ((session as any).provinceName) {
           this.training.provinceName = (session as any).provinceName;
-          // Also set the provinceId based on the province name
+          // Set the provinceId based on the province name
           const province = this.provinces.find(p => p.name === (session as any).provinceName);
           if (province) {
             this.training.provinceId = province.id;
+            console.log('Set province:', province.name, 'ID:', this.training.provinceId);
           }
-          // Load trainers for this province after setting it
-          this.loadTrainersByProvince();
         }
+
+        // If session has provinceId directly, use it
+        if (session.provinceId) {
+          this.training.provinceId = Number(session.provinceId);
+          const province = this.provinces.find(p => p.id === this.training.provinceId);
+          if (province) {
+            this.training.provinceName = province.name;
+            console.log('Set province from ID:', province.name, 'ID:', this.training.provinceId);
+          }
+        }
+
+        // Load trainers after setting province
+        this.loadTrainersByProvince();
 
         if ((session as any).trainerName) {
           this.training.trainerName = (session as any).trainerName;
@@ -251,11 +281,11 @@ export class EditTrainingComponent implements OnInit, OnChanges {
       };
 
       console.log('Updating training session with data:', updateData);
-      console.log('Current trainerId from form:', this.training.trainerId);
-      console.log('TrainerId being sent in updateData:', updateData.trainerId, typeof updateData.trainerId);
+      console.log('TrainerId being sent:', updateData.trainerId, 'ProvinceId being sent:', updateData.provinceId);
 
       this.databaseService.updateTrainingSession(updateData).subscribe({
         next: (result) => {
+          console.log('Backend response:', result);
           this.isSubmitting = false;
           this.toastr.success('Training session updated successfully!', 'Success');
           this.onSave.emit(result);

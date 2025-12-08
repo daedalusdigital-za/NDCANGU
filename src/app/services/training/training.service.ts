@@ -10,6 +10,7 @@ export interface TrainingSession {
   startDate: Date;
   endDate: Date;
   province: string;
+  provinceId?: number;
   provinceName?: string;
   venue: string;
   trainerId: number;
