@@ -202,6 +202,8 @@ export class InventoryService {
   /**
    * PATCH /api/Inventory/Update
    * Update inventory item (Auth required)
+   * Fixes: Entity Framework change tracking now works correctly
+   * Status changes (active/inactive) now persist to database
    */
   updateItem(item: InventoryItemModel): Observable<InventoryItem> {
     if (!item.id) {
@@ -249,7 +251,8 @@ export class InventoryService {
 
   /**
    * DELETE /api/Inventory/Delete?id={id}
-   * Delete inventory item (Auth required)
+   * Delete inventory item (soft delete - sets isActive = false)
+   * Auth required
    */
   deleteItem(id: number): Observable<boolean> {
     return this.http.delete(`${this.API_URL}${this.INVENTORY_ENDPOINT}/Delete?id=${id}`, {

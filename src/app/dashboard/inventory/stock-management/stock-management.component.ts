@@ -206,6 +206,11 @@ export class StockManagementComponent implements OnInit {
           `Updated ${updatedItem.name || updatedItem.description}`,
           'Item Updated'
         );
+
+        // Log status change if it was modified
+        if (this.selectedItem && this.selectedItem.status !== updatedItem.status) {
+          console.log(`Status changed: ${this.getStatusName(this.selectedItem.status)} → ${this.getStatusName(updatedItem.status)}`);
+        }
       },
       error: (error: any) => {
         console.error('Error updating item:', error);
