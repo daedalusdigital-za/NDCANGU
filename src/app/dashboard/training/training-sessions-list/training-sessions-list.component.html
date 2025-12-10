@@ -85,6 +85,7 @@
         <table class="table table-striped table-hover">
           <thead>
             <tr>
+              <th>ID</th>
               <th>Training Name</th>
               <th>Type</th>
               <th>Start Date</th>
@@ -98,6 +99,9 @@
           </thead>
           <tbody>
             <tr *ngFor="let session of displayedSessions; let i = index">
+              <td>
+                <span class="badge bg-secondary">{{ session.id }}</span>
+              </td>
               <td>
                 <strong>{{ session.trainingName }}</strong>
               </td>

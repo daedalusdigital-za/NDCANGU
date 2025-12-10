@@ -25,6 +25,13 @@ export class StockManagementComponent implements OnInit {
   newStockQuantity: number = 0;
   updateType: 'add' | 'set' = 'add';
 
+  // Edit modal
+  editModal = false;
+  editForm: any = {};
+
+  // Delete modal
+  deleteModal = false;
+
   constructor(
     private inventoryService: InventoryService,
     private toastr: ToastrService
@@ -121,6 +128,129 @@ export class StockManagementComponent implements OnInit {
         console.error('Error updating stock:', error);
         this.loading = false;
         this.toastr.error('Failed to update stock', 'Error');
+      }
+    });
+  }
+
+  openEditModal(item: InventoryItem): void {
+    this.selectedItem = item;
+    this.editForm = {
+      id: item.id,
+      name: item.name,
+      description: item.description || '',
+      sku: item.sku,
+      category: Number(item.category),
+      unitPrice: item.unitPrice || 0,
+      unitOfMeasure: item.unitOfMeasure || 'units',
+      reorderLevel: item.reorderLevel || 0,
+      supplier: item.supplier || '',
+      status: Number(item.status),
+      stockAvailable: item.stockAvailable || 0
+    };
+    console.log('Opening edit modal with item:', item);
+    console.log('Edit form initialized:', this.editForm);
+    this.editModal = true;
+  }
+
+  closeEditModal(): void {
+    this.selectedItem = null;
+    this.editForm = {};
+    this.editModal = false;
+  }
+
+  updateItem(): void {
+    if (!this.selectedItem || !this.editForm.name || !this.editForm.sku) {
+      this.toastr.error('Please fill in all required fields', 'Invalid Input');
+      return;
+    }
+
+    this.loading = true;
+
+    // Prepare the data according to InventoryItemModel interface
+    const updateData = {
+      id: this.editForm.id,
+      name: this.editForm.name,
+      description: this.editForm.description || '',
+      category: Number(this.editForm.category),
+      sku: this.editForm.sku,
+      unitOfMeasure: this.editForm.unitOfMeasure || 'units',
+      unitPrice: Number(this.editForm.unitPrice) || 0,
+      stockAvailable: Number(this.editForm.stockAvailable) || 0,
+      reorderLevel: Number(this.editForm.reorderLevel) || 0,
+      minimumStockLevel: Number(this.editForm.reorderLevel) || 0, // Use reorderLevel as minimumStockLevel
+      supplier: this.editForm.supplier || '',
+      supplierContact: '',
+      status: Number(this.editForm.status),
+      notes: ''
+    };
+
+    console.log('Edit form data:', this.editForm);
+    console.log('Update data being sent:', updateData);
+
+    this.inventoryService.updateItem(updateData).subscribe({
+      next: (updatedItem: InventoryItem) => {
+        // Update the item in our arrays
+        const index = this.inventoryItems.findIndex(item => item.id === updatedItem.id);
+        if (index !== -1) {
+          this.inventoryItems[index] = updatedItem;
+        }
+
+        const filteredIndex = this.filteredItems.findIndex(item => item.id === updatedItem.id);
+        if (filteredIndex !== -1) {
+          this.filteredItems[filteredIndex] = updatedItem;
+        }
+
+        this.loading = false;
+        this.closeEditModal();
+        this.toastr.success(
+          `Updated ${updatedItem.name || updatedItem.description}`,
+          'Item Updated'
+        );
+      },
+      error: (error: any) => {
+        console.error('Error updating item:', error);
+        this.loading = false;
+        this.toastr.error('Failed to update item', 'Error');
+      }
+    });
+  }
+
+  openDeleteModal(item: InventoryItem): void {
+    this.selectedItem = item;
+    this.deleteModal = true;
+  }
+
+  closeDeleteModal(): void {
+    this.selectedItem = null;
+    this.deleteModal = false;
+  }
+
+  deleteItem(): void {
+    if (!this.selectedItem) {
+      return;
+    }
+
+    this.loading = true;
+    const itemId = this.selectedItem.id;
+    const itemName = this.selectedItem.name || this.selectedItem.description;
+
+    this.inventoryService.deleteItem(itemId).subscribe({
+      next: () => {
+        // Remove the item from our arrays
+        this.inventoryItems = this.inventoryItems.filter(item => item.id !== itemId);
+        this.filteredItems = this.filteredItems.filter(item => item.id !== itemId);
+
+        this.loading = false;
+        this.closeDeleteModal();
+        this.toastr.success(
+          `Deleted ${itemName}`,
+          'Item Deleted'
+        );
+      },
+      error: (error: any) => {
+        console.error('Error deleting item:', error);
+        this.loading = false;
+        this.toastr.error('Failed to delete item', 'Error');
       }
     });
   }  getCategoryName(category: InventoryCategory): string {

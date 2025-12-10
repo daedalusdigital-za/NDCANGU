@@ -82,13 +82,29 @@
               </span>
             </td>
             <td class="actions">
-              <button
-                class="btn btn-primary btn-sm"
-                (click)="openStockUpdateModal(item)"
-                title="Update Stock">
-                <i class="fas fa-plus"></i>
-                Update Stock
-              </button>
+              <div class="action-buttons">
+                <button
+                  class="btn btn-primary btn-sm"
+                  (click)="openStockUpdateModal(item)"
+                  title="Update Stock">
+                  <i class="fas fa-plus"></i>
+                  Update Stock
+                </button>
+                <button
+                  class="btn btn-warning btn-sm"
+                  (click)="openEditModal(item)"
+                  title="Edit Item">
+                  <i class="fas fa-edit"></i>
+                  Edit
+                </button>
+                <button
+                  class="btn btn-danger btn-sm"
+                  (click)="openDeleteModal(item)"
+                  title="Delete Item">
+                  <i class="fas fa-trash"></i>
+                  Delete
+                </button>
+              </div>
             </td>
           </tr>
         </tbody>
@@ -199,6 +215,175 @@
           <i class="fas fa-save" *ngIf="!loading"></i>
           <i class="fas fa-spinner fa-spin" *ngIf="loading"></i>
           Update Stock
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit Item Modal -->
+  <div class="modal-overlay" *ngIf="editModal" (click)="closeEditModal()" tabindex="0">
+    <div class="modal-container" (click)="$event.stopPropagation()" tabindex="0">
+      <div class="modal-header">
+        <h3>Edit Inventory Item</h3>
+        <button class="modal-close" (click)="closeEditModal()">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="modal-body" *ngIf="selectedItem">
+        <form>
+          <div class="form-group">
+            <label for="editName">Name</label>
+            <input
+              type="text"
+              id="editName"
+              class="form-control"
+              [(ngModel)]="editForm.name"
+              name="name"
+              required>
+          </div>
+          <div class="form-group">
+            <label for="editDescription">Description</label>
+            <input
+              type="text"
+              id="editDescription"
+              class="form-control"
+              [(ngModel)]="editForm.description"
+              name="description">
+          </div>
+          <div class="form-group">
+            <label for="editSku">SKU</label>
+            <input
+              type="text"
+              id="editSku"
+              class="form-control"
+              [(ngModel)]="editForm.sku"
+              name="sku"
+              required>
+          </div>
+          <div class="form-group">
+            <label for="editCategory">Category</label>
+            <select
+              id="editCategory"
+              class="form-control"
+              [(ngModel)]="editForm.category"
+              name="category"
+              required>
+              <option value="0">Medical Supplies</option>
+              <option value="1">Consumables</option>
+              <option value="2">Equipment</option>
+              <option value="3">Pharmaceuticals</option>
+              <option value="4">Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="editUnitPrice">Unit Price</label>
+            <input
+              type="number"
+              id="editUnitPrice"
+              class="form-control"
+              [(ngModel)]="editForm.unitPrice"
+              name="unitPrice"
+              min="0"
+              step="0.01">
+          </div>
+          <div class="form-group">
+            <label for="editUnitOfMeasure">Unit of Measure</label>
+            <input
+              type="text"
+              id="editUnitOfMeasure"
+              class="form-control"
+              [(ngModel)]="editForm.unitOfMeasure"
+              name="unitOfMeasure">
+          </div>
+          <div class="form-group">
+            <label for="editReorderLevel">Reorder Level</label>
+            <input
+              type="number"
+              id="editReorderLevel"
+              class="form-control"
+              [(ngModel)]="editForm.reorderLevel"
+              name="reorderLevel"
+              min="0">
+          </div>
+          <div class="form-group">
+            <label for="editSupplier">Supplier</label>
+            <input
+              type="text"
+              id="editSupplier"
+              class="form-control"
+              [(ngModel)]="editForm.supplier"
+              name="supplier">
+          </div>
+          <div class="form-group">
+            <label for="editStatus">Status</label>
+            <select
+              id="editStatus"
+              class="form-control"
+              [(ngModel)]="editForm.status"
+              name="status"
+              required>
+              <option [value]="0">Active</option>
+              <option [value]="1">Inactive</option>
+              <option [value]="2">Discontinued</option>
+            </select>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          (click)="closeEditModal()">
+          Cancel
+        </button>
+        <button
+          type="button"
+          class="btn btn-warning"
+          (click)="updateItem()"
+          [disabled]="loading">
+          <i class="fas fa-save"></i>
+          Save Changes
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Delete Confirmation Modal -->
+  <div class="modal-overlay" *ngIf="deleteModal" (click)="closeDeleteModal()" tabindex="0">
+    <div class="modal-container" (click)="$event.stopPropagation()" tabindex="0">
+      <div class="modal-header">
+        <h3>Confirm Delete</h3>
+        <button class="modal-close" (click)="closeDeleteModal()">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="modal-body" *ngIf="selectedItem">
+        <div class="delete-warning">
+          <i class="fas fa-exclamation-triangle text-warning"></i>
+          <p>Are you sure you want to delete this inventory item?</p>
+          <div class="item-details">
+            <strong>{{ selectedItem.name || selectedItem.description }}</strong><br>
+            <span class="text-muted">SKU: {{ selectedItem.sku }}</span>
+          </div>
+          <p class="text-danger mt-3">
+            <small>This action cannot be undone.</small>
+          </p>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          (click)="closeDeleteModal()">
+          Cancel
+        </button>
+        <button
+          type="button"
+          class="btn btn-danger"
+          (click)="deleteItem()"
+          [disabled]="loading">
+          <i class="fas fa-trash"></i>
+          Delete Item
         </button>
       </div>
     </div>
