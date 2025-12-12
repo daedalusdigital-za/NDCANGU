@@ -21,7 +21,7 @@
   <div class="card mb-3">
     <div class="card-body">
       <div class="row">
-        <div class="col-md-3">
+        <div class="col-md-2">
           <div class="mb-3">
             <label for="filterProvince" class="form-label">Filter by Province</label>
             <select class="form-select" id="filterProvince"
@@ -34,7 +34,7 @@
             </select>
           </div>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-2">
           <div class="mb-3">
             <label for="filterStatus" class="form-label">Filter by Status</label>
             <select class="form-select" id="filterStatus"
@@ -47,7 +47,31 @@
             </select>
           </div>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-2">
+          <div class="mb-3">
+            <label for="filterMonth" class="form-label">Filter by Month</label>
+            <select class="form-select" id="filterMonth"
+                    [(ngModel)]="filterMonth" (change)="applyFilters()">
+              <option value="">All Months</option>
+              <option *ngFor="let month of months" [value]="month.value">
+                {{ month.name }}
+              </option>
+            </select>
+          </div>
+        </div>
+        <div class="col-md-2">
+          <div class="mb-3">
+            <label for="filterTrainer" class="form-label">Filter by Trainer</label>
+            <select class="form-select" id="filterTrainer"
+                    [(ngModel)]="filterTrainer" (change)="applyFilters()">
+              <option value="">All Trainers</option>
+              <option *ngFor="let trainer of trainers" [value]="trainer.id">
+                {{ trainer.name }}
+              </option>
+            </select>
+          </div>
+        </div>
+        <div class="col-md-2">
           <div class="mb-3">
             <label for="searchTerm" class="form-label">Search</label>
             <input type="text" class="form-control" id="searchTerm"
@@ -56,7 +80,7 @@
                    placeholder="Search by name or venue">
           </div>
         </div>
-        <div class="col-md-3 d-flex align-items-end">
+        <div class="col-md-2 d-flex align-items-end">
           <button type="button" class="btn btn-outline-primary w-100" (click)="loadAllSessions()">
             <i class="fas fa-sync-alt me-2"></i>Refresh
           </button>

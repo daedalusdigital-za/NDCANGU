@@ -28,7 +28,25 @@ export class TrainingSessionsListComponent implements OnInit {
   error: string | null = null;
   filterProvince = '';
   filterStatus = '';
+  filterMonth = '';
+  filterTrainer = '';
   searchTerm = '';
+
+  // Month options for filter
+  months = [
+    { value: '1', name: 'January' },
+    { value: '2', name: 'February' },
+    { value: '3', name: 'March' },
+    { value: '4', name: 'April' },
+    { value: '5', name: 'May' },
+    { value: '6', name: 'June' },
+    { value: '7', name: 'July' },
+    { value: '8', name: 'August' },
+    { value: '9', name: 'September' },
+    { value: '10', name: 'October' },
+    { value: '11', name: 'November' },
+    { value: '12', name: 'December' }
+  ];
 
   // Modal properties
   showEditModal = false;
@@ -97,6 +115,12 @@ export class TrainingSessionsListComponent implements OnInit {
   loadAllSessions(): void {
     this.loading = true;
     this.error = null;
+    // Reset all filters
+    this.filterProvince = '';
+    this.filterStatus = '';
+    this.filterMonth = '';
+    this.filterTrainer = '';
+    this.searchTerm = '';
 
     this.trainingService.getAllSessions().subscribe({
       next: (data: TrainingSession[]) => {
@@ -162,6 +186,17 @@ export class TrainingSessionsListComponent implements OnInit {
 
     if (this.filterStatus) {
       filtered = filtered.filter(s => s.status.toString() === this.filterStatus);
+    }
+
+    if (this.filterMonth) {
+      filtered = filtered.filter(s => {
+        const startDate = new Date(s.startDate);
+        return (startDate.getMonth() + 1).toString() === this.filterMonth;
+      });
+    }
+
+    if (this.filterTrainer) {
+      filtered = filtered.filter(s => s.trainerId.toString() === this.filterTrainer);
     }
 
     if (this.searchTerm) {

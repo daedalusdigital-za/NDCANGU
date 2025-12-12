@@ -139,12 +139,12 @@ export class StockManagementComponent implements OnInit {
       name: item.name,
       description: item.description || '',
       sku: item.sku,
-      category: Number(item.category),
+      category: String(item.category), // Store as string for dropdown binding
       unitPrice: item.unitPrice || 0,
       unitOfMeasure: item.unitOfMeasure || 'units',
       reorderLevel: item.reorderLevel || 0,
       supplier: item.supplier || '',
-      status: Number(item.status),
+      status: String(item.status), // Store as string for dropdown binding
       stockAvailable: item.stockAvailable || 0
     };
     console.log('Opening edit modal with item:', item);
@@ -166,50 +166,77 @@ export class StockManagementComponent implements OnInit {
 
     this.loading = true;
 
+    // Parse string values from form dropdowns back to numbers
+    const categoryValue = typeof this.editForm.category === 'string' ? parseInt(this.editForm.category) : Number(this.editForm.category);
+    const statusValue = typeof this.editForm.status === 'string' ? parseInt(this.editForm.status) : Number(this.editForm.status);
+    const isActive = statusValue === 0; // Only status 0 (Active) maps to true
+
     // Prepare the data according to InventoryItemModel interface
     const updateData = {
       id: this.editForm.id,
       name: this.editForm.name,
       description: this.editForm.description || '',
-      category: Number(this.editForm.category),
+      category: categoryValue,
       sku: this.editForm.sku,
       unitOfMeasure: this.editForm.unitOfMeasure || 'units',
       unitPrice: Number(this.editForm.unitPrice) || 0,
       stockAvailable: Number(this.editForm.stockAvailable) || 0,
       reorderLevel: Number(this.editForm.reorderLevel) || 0,
-      minimumStockLevel: Number(this.editForm.reorderLevel) || 0, // Use reorderLevel as minimumStockLevel
+      minimumStockLevel: Number(this.editForm.reorderLevel) || 0,
       supplier: this.editForm.supplier || '',
       supplierContact: '',
-      status: Number(this.editForm.status),
+      status: statusValue,
+      isActive: isActive,
       notes: ''
     };
 
-    console.log('Edit form data:', this.editForm);
-    console.log('Update data being sent:', updateData);
+    console.log('=== INVENTORY UPDATE DEBUG ===');
+    console.log('Original item - ID:', this.selectedItem.id, 'Status:', this.selectedItem.status, 'isActive:', this.selectedItem.status === 0);
+    console.log('Form status dropdown value:', this.editForm.status, '(type:', typeof this.editForm.status, ')');
+    console.log('Parsed status:', statusValue, 'Parsed isActive:', isActive);
+    console.log('Full payload being sent:', JSON.stringify(updateData, null, 2));
 
     this.inventoryService.updateItem(updateData).subscribe({
       next: (updatedItem: InventoryItem) => {
-        // Update the item in our arrays
-        const index = this.inventoryItems.findIndex(item => item.id === updatedItem.id);
+        console.log('=== API RESPONSE ===');
+        console.log('Returned item ID:', updatedItem.id);
+        console.log('Returned status:', updatedItem.status, '(type:', typeof updatedItem.status, ')');
+        console.log('Full returned item:', JSON.stringify(updatedItem, null, 2));
+
+        // WORKAROUND: Backend returns empty item data, so we use form data as primary source
+        // Only take the status confirmation from the API response
+        const mergedItem: InventoryItem = {
+          ...this.editForm, // Use our form data as the base (preserves SKU, description, category, supplier, etc.)
+          id: this.editForm.id, // Keep original ID
+          status: updatedItem.status !== undefined ? updatedItem.status : statusValue, // Use API-confirmed status
+          // Don't spread updatedItem to avoid null/empty values overwriting form data
+        };
+
+        console.log('Merged item (what we\'ll use to update UI):', JSON.stringify(mergedItem, null, 2));
+
+        // Update the item in our arrays using merged data
+        const index = this.inventoryItems.findIndex(item => item.id === mergedItem.id);
         if (index !== -1) {
-          this.inventoryItems[index] = updatedItem;
+          this.inventoryItems[index] = mergedItem;
         }
 
-        const filteredIndex = this.filteredItems.findIndex(item => item.id === updatedItem.id);
+        const filteredIndex = this.filteredItems.findIndex(item => item.id === mergedItem.id);
         if (filteredIndex !== -1) {
-          this.filteredItems[filteredIndex] = updatedItem;
+          this.filteredItems[filteredIndex] = mergedItem;
         }
 
         this.loading = false;
         this.closeEditModal();
         this.toastr.success(
-          `Updated ${updatedItem.name || updatedItem.description}`,
+          `Updated ${mergedItem.name || mergedItem.description}`,
           'Item Updated'
         );
 
         // Log status change if it was modified
-        if (this.selectedItem && this.selectedItem.status !== updatedItem.status) {
-          console.log(`Status changed: ${this.getStatusName(this.selectedItem.status)} → ${this.getStatusName(updatedItem.status)}`);
+        if (this.selectedItem && this.selectedItem.status !== mergedItem.status) {
+          console.log(`✓ Status changed: ${this.getStatusName(this.selectedItem.status)} → ${this.getStatusName(mergedItem.status)}`);
+        } else {
+          console.warn(`✗ Status NOT changed: Still showing status ${updatedItem.status}`);
         }
       },
       error: (error: any) => {

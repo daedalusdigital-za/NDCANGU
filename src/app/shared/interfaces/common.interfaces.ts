@@ -186,6 +186,7 @@ export interface InventoryItemModel {
   expiryDate?: string; // ISO date string
   batchNumber?: string;
   status: InventoryStatus;
+  isActive?: boolean; // Map status to isActive for backend compatibility
   notes?: string;
 }
 
