@@ -1,4 +1,16 @@
 import { Component, OnInit } from '@angular/core';
+import { DatabaseService } from '../../../services/data/database.service';
+import { Sale, SaleItem } from '../../../shared/interfaces/common.interfaces';
+import { forkJoin } from 'rxjs';
+
+interface TopProduct {
+  name: string;
+  inventoryItemId: number;
+  totalQuantitySold: number;
+  totalRevenue: number;
+  numberOfSales: number;
+  averagePrice: number;
+}
 
 @Component({
   selector: 'app-sales-dashboard',
@@ -13,23 +25,231 @@ export class SalesDashboardComponent implements OnInit {
   totalProducts: number = 0;
   averageOrderValue: number = 0;
   pendingOrders: number = 0;
-  
+
   // Recent sales data
   recentSales: any[] = [];
-  
-  // Top products
-  topProducts: any[] = [];
-  
+
+  // Top products - now from real API data
+  topProducts: TopProduct[] = [];
+
   // Provincial data
   provincialData: any[] = [];
-  
+
   // Sales chart data
   salesChartData: any = {};
-  
-  constructor() { }
+
+  // Loading state
+  isLoading: boolean = false;
+
+  // All sales data from API
+  private allSales: Sale[] = [];
+
+  constructor(private databaseService: DatabaseService) { }
 
   ngOnInit(): void {
     this.loadDashboardData();
+    this.loadRealSalesData();
+  }
+
+  /**
+   * Load real sales data from API and calculate statistics
+   */
+  private loadRealSalesData(): void {
+    this.isLoading = true;
+
+    // Load both sales and inventory data
+    forkJoin({
+      sales: this.databaseService.getSales(),
+      inventory: this.databaseService.getInventoryItems()
+    }).subscribe({
+      next: ({ sales, inventory }) => {
+        console.log('✅ Loaded sales data:', sales.length, 'sales');
+        console.log('✅ Loaded inventory data:', inventory.length, 'items');
+
+        this.allSales = sales;
+
+        // Calculate dashboard statistics
+        this.calculateStatistics(sales);
+
+        // Calculate top products from sales data with inventory names
+        this.calculateTopProducts(sales, inventory);
+
+        // Get recent sales
+        this.loadRecentSales(sales);
+
+        this.isLoading = false;
+      },
+      error: (error) => {
+        console.error('❌ Error loading sales data:', error);
+        // Fallback to hardcoded data
+        this.loadDashboardData();
+        this.isLoading = false;
+      }
+    });
+  }
+
+  /**
+   * Calculate dashboard statistics from real sales data
+   */
+  private calculateStatistics(sales: Sale[]): void {
+    if (!sales || sales.length === 0) {
+      return;
+    }
+
+    // Total sales count
+    this.totalSales = sales.length;
+
+    // Total revenue
+    this.monthlyRevenue = sales.reduce((sum, sale) => sum + (sale.total || 0), 0);
+
+    // Average order value
+    this.averageOrderValue = this.totalSales > 0 ? this.monthlyRevenue / this.totalSales : 0;
+
+    // Count unique products
+    const uniqueProducts = new Set<number>();
+    sales.forEach(sale => {
+      if (sale.saleItems && Array.isArray(sale.saleItems)) {
+        sale.saleItems.forEach(item => uniqueProducts.add(item.inventoryItemId));
+      }
+    });
+    this.totalProducts = uniqueProducts.size;
+
+    console.log('📊 Statistics calculated:', {
+      totalSales: this.totalSales,
+      monthlyRevenue: this.monthlyRevenue,
+      averageOrderValue: this.averageOrderValue,
+      totalProducts: this.totalProducts
+    });
+  }
+
+  /**
+   * Calculate top products based on actual sales data
+   */
+  private calculateTopProducts(sales: Sale[], inventory?: any[]): void {
+    if (!sales || sales.length === 0) {
+      console.warn('⚠️ No sales data to calculate top products');
+      return;
+    }
+
+    // Create inventory lookup map for product names
+    const inventoryMap = new Map<number, string>();
+    if (inventory && Array.isArray(inventory)) {
+      inventory.forEach(item => {
+        if (item.id && item.name) {
+          inventoryMap.set(item.id, item.name);
+        }
+      });
+      console.log('📦 Inventory map created with', inventoryMap.size, 'items');
+    }
+
+    // Aggregate sales by product
+    const productMap = new Map<number, {
+      name: string;
+      inventoryItemId: number;
+      totalQuantity: number;
+      totalRevenue: number;
+      salesCount: number;
+      totalPrice: number;
+    }>();
+
+    sales.forEach(sale => {
+      if (!sale.saleItems || !Array.isArray(sale.saleItems)) {
+        return;
+      }
+
+      sale.saleItems.forEach((item: SaleItem) => {
+        const existing = productMap.get(item.inventoryItemId);
+
+        // Get product name from inventory map first, fallback to saleItem name
+        const productName = inventoryMap.get(item.inventoryItemId) 
+          || item.inventoryItemName 
+          || `Product ${item.inventoryItemId}`;
+
+        if (existing) {
+          existing.totalQuantity += item.quantity;
+          existing.totalRevenue += item.totalPrice;
+          existing.salesCount += 1;
+          existing.totalPrice += item.unitPrice;
+          // Update name if we found a better one
+          if (inventoryMap.has(item.inventoryItemId)) {
+            existing.name = productName;
+          }
+        } else {
+          productMap.set(item.inventoryItemId, {
+            name: productName,
+            inventoryItemId: item.inventoryItemId,
+            totalQuantity: item.quantity,
+            totalRevenue: item.totalPrice,
+            salesCount: 1,
+            totalPrice: item.unitPrice
+          });
+        }
+      });
+    });
+
+    // Convert to array and sort by total revenue (highest first)
+    const productsArray = Array.from(productMap.values());
+    productsArray.sort((a, b) => b.totalRevenue - a.totalRevenue);
+
+    // Take top 10 and format for display
+    this.topProducts = productsArray.slice(0, 10).map(product => ({
+      name: product.name,
+      inventoryItemId: product.inventoryItemId,
+      totalQuantitySold: product.totalQuantity,
+      totalRevenue: product.totalRevenue,
+      numberOfSales: product.salesCount,
+      averagePrice: product.salesCount > 0 ? product.totalPrice / product.salesCount : 0
+    }));
+
+    console.log('🏆 Top Products calculated:', this.topProducts);
+  }
+
+  /**
+   * Load recent sales from API data
+   */
+  private loadRecentSales(sales: Sale[]): void {
+    if (!sales || sales.length === 0) {
+      return;
+    }
+
+    // Sort by date (most recent first) and take top 25
+    const sortedSales = [...sales].sort((a, b) => {
+      const dateA = new Date(a.saleDate).getTime();
+      const dateB = new Date(b.saleDate).getTime();
+      return dateB - dateA;
+    });
+
+    this.recentSales = sortedSales.slice(0, 25).map(sale => ({
+      id: sale.saleNumber,
+      customerName: sale.customerName,
+      productName: this.getMainProduct(sale),
+      amount: sale.total,
+      date: new Date(sale.saleDate),
+      status: 'Completed',
+      location: sale.provinceName || 'Unknown Province'
+    }));
+
+    console.log('📋 Recent sales loaded:', this.recentSales.length);
+  }
+
+  /**
+   * Get the main product from a sale (highest value item)
+   */
+  private getMainProduct(sale: Sale): string {
+    if (!sale.saleItems || sale.saleItems.length === 0) {
+      return 'Mixed Products';
+    }
+
+    if (sale.saleItems.length === 1) {
+      return sale.saleItems[0].inventoryItemName;
+    }
+
+    // Find item with highest total price
+    const mainItem = sale.saleItems.reduce((max, item) =>
+      item.totalPrice > max.totalPrice ? item : max
+    );
+
+    return `${mainItem.inventoryItemName} + ${sale.saleItems.length - 1} more`;
   }
 
   private loadDashboardData(): void {
@@ -219,14 +439,22 @@ export class SalesDashboardComponent implements OnInit {
 
     // Calculate totals from provincial data
     this.calculateTotals();
-    
+
+    // Generate recent dates dynamically (last 30 days)
+    const today = new Date();
+    const daysAgo = (days: number) => {
+      const date = new Date(today);
+      date.setDate(date.getDate() - days);
+      return date;
+    };
+
     this.recentSales = [
       {
         id: 'KZN-001',
         customerName: 'KZN Provincial Health Dept',
         productName: 'Glucose Test Strips',
         amount: 34500,
-        date: new Date(2025, 7, 15),
+        date: daysAgo(2), // 2 days ago
         status: 'Completed',
         location: 'KwaZulu-Natal Province',
         deliveryRate: 89
@@ -236,7 +464,7 @@ export class SalesDashboardComponent implements OnInit {
         customerName: 'Gauteng Provincial Health',
         productName: 'Glucose Meters',
         amount: 8344,
-        date: new Date(2025, 7, 20),
+        date: daysAgo(5), // 5 days ago
         status: 'Pending',
         location: 'Gauteng Province',
         deliveryRate: 74
@@ -246,7 +474,7 @@ export class SalesDashboardComponent implements OnInit {
         customerName: 'Free State Health Dept',
         productName: 'Glucose Test Strips',
         amount: 13018,
-        date: new Date(2025, 8, 1),
+        date: daysAgo(7), // 7 days ago
         status: 'Completed',
         location: 'Free State Province',
         deliveryRate: 93
@@ -256,7 +484,7 @@ export class SalesDashboardComponent implements OnInit {
         customerName: 'Limpopo Provincial Health',
         productName: 'Glucose Meters',
         amount: 2910,
-        date: new Date(2025, 8, 10),
+        date: daysAgo(12), // 12 days ago
         status: 'In Progress',
         location: 'Limpopo Province',
         deliveryRate: 79
@@ -266,73 +494,78 @@ export class SalesDashboardComponent implements OnInit {
         customerName: 'Mpumalanga Health Dept',
         productName: 'Glucose Test Strips',
         amount: 17920,
-        date: new Date(2025, 8, 25),
+        date: daysAgo(18), // 18 days ago
         status: 'Delayed',
         location: 'Mpumalanga Province',
         deliveryRate: 64
       }
     ];
-    
+
+    // Fallback top products - matching new TopProduct interface
     this.topProducts = [
       {
         name: 'Glucose Test Strips',
-        sales: 133547,
-        revenue: 133547 * 150,
-        growth: '+8%',
-        ordered: 182465,
-        delivered: 133547
+        inventoryItemId: 1,
+        totalQuantitySold: 133547,
+        totalRevenue: 133547 * 150,
+        numberOfSales: 850,
+        averagePrice: 150
       },
       {
         name: 'Glucose Meters',
-        sales: 22917,
-        revenue: 22917 * 800,
-        growth: '+12%',
-        ordered: 32063,
-        delivered: 22917
+        inventoryItemId: 2,
+        totalQuantitySold: 22917,
+        totalRevenue: 22917 * 800,
+        numberOfSales: 420,
+        averagePrice: 800
       },
       {
         name: 'HB Test Strips',
-        sales: 7499,
-        revenue: 7499 * 180,
-        growth: '+15%',
-        ordered: 7499,
-        delivered: 7499
+        inventoryItemId: 3,
+        totalQuantitySold: 7499,
+        totalRevenue: 7499 * 180,
+        numberOfSales: 320,
+        averagePrice: 180
       },
       {
         name: 'HB Meters',
-        sales: 504,
-        revenue: 504 * 1200,
-        growth: '+22%',
-        ordered: 504,
-        delivered: 504
+        inventoryItemId: 4,
+        totalQuantitySold: 504,
+        totalRevenue: 504 * 1200,
+        numberOfSales: 85,
+        averagePrice: 1200
       },
       {
         name: 'HBA1C Strips',
-        sales: 349,
-        revenue: 349 * 200,
-        growth: '+18%',
-        ordered: 349,
-        delivered: 349
+        inventoryItemId: 5,
+        totalQuantitySold: 349,
+        totalRevenue: 349 * 200,
+        numberOfSales: 45,
+        averagePrice: 200
       }
     ];
   }
 
   private calculateTotals(): void {
+    // This method is kept for backward compatibility with provincial data
     let totalOrdered = 0;
     let totalDelivered = 0;
-    
+
     this.provincialData.forEach(province => {
       province.data.forEach((item: any) => {
         totalOrdered += item.ordered;
         totalDelivered += item.delivered;
       });
     });
-    
-    this.totalSales = totalDelivered;
-    this.pendingOrders = totalOrdered - totalDelivered;
-    this.monthlyRevenue = totalDelivered * 180; // Average estimated price
-    this.totalProducts = 14; // Updated to match Product Management inventory count
-    this.averageOrderValue = this.monthlyRevenue / totalDelivered;
+
+    // Only update if no real sales data loaded
+    if (this.totalSales === 0) {
+      this.totalSales = totalDelivered;
+      this.pendingOrders = totalOrdered - totalDelivered;
+      this.monthlyRevenue = totalDelivered * 180; // Average estimated price
+      this.totalProducts = 14;
+      this.averageOrderValue = totalDelivered > 0 ? this.monthlyRevenue / totalDelivered : 0;
+    }
   }
 
   getProvinceTotal(province: any, type: 'ordered' | 'delivered'): number {
