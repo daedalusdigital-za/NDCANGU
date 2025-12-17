@@ -68,6 +68,7 @@ export class ListSalesComponent implements OnInit {
 
   /**
    * Load inventory from API to populate inventoryLookup for product name/price display
+   * and populate Product Type filter options
    */
   loadInventoryLookup(): void {
     console.log('🔄 Loading inventory lookup from API...');
@@ -78,19 +79,30 @@ export class ListSalesComponent implements OnInit {
 
         // Build lookup table from real API data
         this.inventoryLookup = {};
+        const productNames = new Set<string>();
+
         items.forEach(item => {
           this.inventoryLookup[item.id] = {
             name: item.name || item.description || `Item ${item.id}`,
             price: item.unitPrice || 0
           };
+
+          // Collect product names for filter dropdown
+          if (item.name) {
+            productNames.add(item.name);
+          }
         });
 
+        // Populate Product Type options from inventory
+        this.productTypeOptions = ['All', ...Array.from(productNames).sort()];
         console.log('📦 Inventory lookup built:', this.inventoryLookup);
+        console.log('🔽 Product Type options loaded:', this.productTypeOptions.length - 1, 'products');
       },
       error: (error) => {
         console.warn('⚠️ Failed to load inventory for lookup:', error);
         // Keep empty lookup - getInventoryDetails will handle unknown items
         this.inventoryLookup = {};
+        this.productTypeOptions = ['All'];
       }
     });
   }
@@ -195,18 +207,21 @@ export class ListSalesComponent implements OnInit {
       const uniqueCustomers = [...new Set(this.sales.map(s => s.customerName).filter(Boolean))].sort();
       this.customerOptions = ['All', ...uniqueCustomers];
 
-      // Get unique product types from sale items
-      const uniqueProducts = new Set<string>();
-      this.sales.forEach(sale => {
-        if (sale.saleItems && Array.isArray(sale.saleItems)) {
-          sale.saleItems.forEach(item => {
-            if (item.inventoryItemName) {
-              uniqueProducts.add(item.inventoryItemName);
-            }
-          });
-        }
-      });
-      this.productTypeOptions = ['All', ...Array.from(uniqueProducts).sort()];
+      // Product Type options are already loaded from inventory in loadInventoryLookup()
+      // Only add products from sales if inventory hasn't loaded yet
+      if (this.productTypeOptions.length <= 1) {
+        const uniqueProducts = new Set<string>();
+        this.sales.forEach(sale => {
+          if (sale.saleItems && Array.isArray(sale.saleItems)) {
+            sale.saleItems.forEach(item => {
+              if (item.inventoryItemName) {
+                uniqueProducts.add(item.inventoryItemName);
+              }
+            });
+          }
+        });
+        this.productTypeOptions = ['All', ...Array.from(uniqueProducts).sort()];
+      }
 
       // Get unique provinces
       const uniqueProvinces = [...new Set(this.sales.map(s => s.provinceName).filter(Boolean))].sort();
@@ -216,7 +231,11 @@ export class ListSalesComponent implements OnInit {
     } else {
       // Fallback to OrderDataService
       this.institutionOptions = ['All', ...this.orderDataService.getUniqueInstitutions()];
-      this.productTypeOptions = ['All', ...this.orderDataService.getUniqueProductTypes()];
+
+      // Only use fallback product types if inventory hasn't loaded
+      if (this.productTypeOptions.length <= 1) {
+        this.productTypeOptions = ['All', ...this.orderDataService.getUniqueProductTypes()];
+      }
     }
 
     // Merge province options from both
