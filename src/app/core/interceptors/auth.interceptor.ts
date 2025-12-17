@@ -16,16 +16,17 @@ export class AuthInterceptor implements HttpInterceptor {
         return event;
       }),
       catchError((httpErrorResponse: HttpErrorResponse, _: Observable<HttpEvent<any>>) => {
-        
+
           if (httpErrorResponse.status === 401) {
             localStorage.clear();
             this.router.navigate(['']);
           }
-          
+
           if(httpErrorResponse.error){
-            console.log('errrr');
-            
-            this.toastrService.error(httpErrorResponse?.error?.message || httpErrorResponse?.error || 'Something went wrong')
+            // Only show toastr for non-fallback endpoints (400 on GetAll endpoints use fallback data)
+            if (httpErrorResponse.status !== 400 || !httpErrorResponse.url?.includes('/GetAll')) {
+              this.toastrService.error(httpErrorResponse?.error?.message || httpErrorResponse?.error || 'Something went wrong')
+            }
           }
           return throwError(() => httpErrorResponse);
         }

@@ -21,8 +21,8 @@ export class LoaderInterceptor implements HttpInterceptor {
       this.requests.splice(i, 1);
     }
     setTimeout(() => {
-       
-        
+
+
       this.loaderService.isLoading.next(this.requests.length > 0);
     }, 0);
   }
@@ -44,7 +44,10 @@ export class LoaderInterceptor implements HttpInterceptor {
             }
           },
           error: (err: any) => {
-            console.log('error', err)
+            // Only log non-fallback errors (avoid duplicate console noise)
+            if (err.status !== 400 || !err.url?.includes('/GetAll')) {
+              console.log('HTTP error', err);
+            }
             this.removeRequest(req);
             observer.error(err);
           },
