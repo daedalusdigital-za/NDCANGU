@@ -194,7 +194,7 @@ export class ListSalesComponent implements OnInit {
   loadFilterOptions(): void {
     // Order filter options
     this.statusOptions = ['All', ...this.orderDataService.getUniqueStatuses()];
-    
+
     // Province options - Always include all 9 South African provinces
     this.provinceOptions = [
       'All',
@@ -208,7 +208,7 @@ export class ListSalesComponent implements OnInit {
       'North West',
       'Western Cape'
     ];
-    
+
     this.customerOptions = ['All', ...this.orderDataService.getUniqueCustomers()];
 
     // Sales filter options - extract from actual sales data
