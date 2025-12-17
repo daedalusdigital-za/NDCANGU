@@ -63,7 +63,7 @@ export class ListSalesComponent implements OnInit {
     this.loadInventoryLookup(); // Load inventory first
     this.loadOrders();
     this.loadSalesRecords();
-    this.loadFilterOptions();
+    // Filter options will be loaded after data is fetched
   }
 
   /**
@@ -108,6 +108,9 @@ export class ListSalesComponent implements OnInit {
         this.filteredOrders = [...this.orders];
         this.isLoading = false;
 
+        // Reload filter options after orders are loaded
+        this.loadFilterOptions();
+
         // Show success message if data loaded
         if (sales.length > 0) {
           this.toastr.success(`Loaded ${sales.length} orders from database`, 'Data Loaded');
@@ -120,6 +123,9 @@ export class ListSalesComponent implements OnInit {
         this.orders = this.orderDataService.getAllOrderRecords();
         this.filteredOrders = [...this.orders];
         this.isLoading = false;
+
+        // Reload filter options after fallback data is loaded
+        this.loadFilterOptions();
 
         this.toastr.info('Using cached order data (API unavailable)', 'Offline Mode');
       }
@@ -145,6 +151,9 @@ export class ListSalesComponent implements OnInit {
 
         this.isLoading = false;
 
+        // Reload filter options after sales data is loaded
+        this.loadFilterOptions();
+
         if (salesData.length > 0) {
           this.toastr.success(`Loaded ${salesData.length} sales records`, 'Sales Data Loaded');
         }
@@ -161,6 +170,10 @@ export class ListSalesComponent implements OnInit {
         this.filteredSales = [...this.sales];
 
         this.isLoading = false;
+
+        // Reload filter options after fallback data is loaded
+        this.loadFilterOptions();
+
         this.toastr.info('Using cached sales data (API unavailable)', 'Offline Mode');
       }
     });
@@ -172,14 +185,49 @@ export class ListSalesComponent implements OnInit {
     this.provinceOptions = ['All', ...this.orderDataService.getUniqueProvinces()];
     this.customerOptions = ['All', ...this.orderDataService.getUniqueCustomers()];
 
-    // Sales filter options
-    this.institutionOptions = ['All', ...this.orderDataService.getUniqueInstitutions()];
-    this.productTypeOptions = ['All', ...this.orderDataService.getUniqueProductTypes()];
+    // Sales filter options - extract from actual sales data
+    if (this.sales && this.sales.length > 0) {
+      // Get unique institutions from sales
+      const uniqueInstitutions = [...new Set(this.sales.map(s => s.customerName).filter(Boolean))].sort();
+      this.institutionOptions = ['All', ...uniqueInstitutions];
+
+      // Get unique customers for the customer dropdown
+      const uniqueCustomers = [...new Set(this.sales.map(s => s.customerName).filter(Boolean))].sort();
+      this.customerOptions = ['All', ...uniqueCustomers];
+
+      // Get unique product types from sale items
+      const uniqueProducts = new Set<string>();
+      this.sales.forEach(sale => {
+        if (sale.saleItems && Array.isArray(sale.saleItems)) {
+          sale.saleItems.forEach(item => {
+            if (item.inventoryItemName) {
+              uniqueProducts.add(item.inventoryItemName);
+            }
+          });
+        }
+      });
+      this.productTypeOptions = ['All', ...Array.from(uniqueProducts).sort()];
+
+      // Get unique provinces
+      const uniqueProvinces = [...new Set(this.sales.map(s => s.provinceName).filter(Boolean))].sort();
+      if (uniqueProvinces.length > 0) {
+        this.provinceOptions = ['All', ...uniqueProvinces];
+      }
+    } else {
+      // Fallback to OrderDataService
+      this.institutionOptions = ['All', ...this.orderDataService.getUniqueInstitutions()];
+      this.productTypeOptions = ['All', ...this.orderDataService.getUniqueProductTypes()];
+    }
 
     // Merge province options from both
     const salesProvinces = this.orderDataService.getUniqueSalesProvinces();
     const allProvinces = [...new Set([...this.provinceOptions.slice(1), ...salesProvinces])];
     this.provinceOptions = ['All', ...allProvinces.sort()];
+
+    // Ensure status options include relevant statuses
+    if (!this.statusOptions.includes('Completed')) {
+      this.statusOptions.push('Completed');
+    }
   }
 
   switchViewMode(mode: 'orders' | 'sales'): void {
@@ -199,32 +247,69 @@ export class ListSalesComponent implements OnInit {
       };
       this.filteredOrders = this.orderDataService.searchOrders(criteria);
     } else {
-      // Simple filtering for sales using the new simplified structure
+      // Enhanced filtering for sales using the simplified Sale structure
       this.filteredSales = this.sales.filter(sale => {
+        // Search term filter - search in invoice, customer, and product items
         const matchesSearch = !this.searchTerm ||
           sale.saleNumber?.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-          sale.customerName?.toLowerCase().includes(this.searchTerm.toLowerCase());
+          sale.customerName?.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+          (sale.saleItems && sale.saleItems.some(item =>
+            item.inventoryItemName?.toLowerCase().includes(this.searchTerm.toLowerCase())
+          ));
 
-        const matchesCustomer = this.selectedCustomer === 'All' ||
-          sale.customerName === this.selectedCustomer;
+        // Province filter
+        const matchesProvince = this.selectedProvince === 'All' ||
+          sale.provinceName === this.selectedProvince;
 
+        // Status filter (default to 'Completed' for all sales from API)
+        const saleStatus = 'Completed'; // All sales are completed
+        const matchesStatus = this.selectedStatus === 'All' ||
+          saleStatus === this.selectedStatus;
+
+        // Institution filter (same as customer name)
+        const matchesInstitution = this.selectedInstitution === 'All' ||
+          sale.customerName === this.selectedInstitution;
+
+        // Product type filter - check if any sale items match
+        const matchesProductType = this.selectedProductType === 'All' ||
+          (sale.saleItems && sale.saleItems.some(item =>
+            item.inventoryItemName === this.selectedProductType
+          ));
+
+        // Date range filter
         const matchesDateRange = (!this.dateFrom || new Date(sale.saleDate) >= this.dateFrom) &&
           (!this.dateTo || new Date(sale.saleDate) <= this.dateTo);
 
-        return matchesSearch && matchesCustomer && matchesDateRange;
+        return matchesSearch && matchesProvince && matchesStatus &&
+               matchesInstitution && matchesProductType && matchesDateRange;
       });
 
       // Also update the old format for compatibility
-      const criteria = {
-        searchTerm: this.searchTerm,
-        province: this.selectedProvince,
-        status: this.selectedStatus,
-        institution: this.selectedInstitution,
-        productType: this.selectedProductType,
-        dateFrom: this.dateFrom || undefined,
-        dateTo: this.dateTo || undefined
-      };
-      this.filteredSalesRecords = this.orderDataService.searchSalesRecords(criteria);
+      this.filteredSalesRecords = this.salesRecords.filter(record => {
+        const matchesSearch = !this.searchTerm ||
+          record.invoiceNumber?.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+          record.institution?.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+          record.itemDescription?.toLowerCase().includes(this.searchTerm.toLowerCase());
+
+        const matchesProvince = this.selectedProvince === 'All' ||
+          record.province === this.selectedProvince;
+
+        const matchesStatus = this.selectedStatus === 'All' ||
+          record.status === this.selectedStatus;
+
+        const matchesInstitution = this.selectedInstitution === 'All' ||
+          record.institution === this.selectedInstitution;
+
+        const matchesProductType = this.selectedProductType === 'All' ||
+          record.itemDescription === this.selectedProductType;
+
+        const recordDate = new Date(record.date);
+        const matchesDateRange = (!this.dateFrom || recordDate >= this.dateFrom) &&
+          (!this.dateTo || recordDate <= this.dateTo);
+
+        return matchesSearch && matchesProvince && matchesStatus &&
+               matchesInstitution && matchesProductType && matchesDateRange;
+      });
     }
   }
 

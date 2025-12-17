@@ -161,8 +161,8 @@ export class SalesDashboardComponent implements OnInit {
         const existing = productMap.get(item.inventoryItemId);
 
         // Get product name from inventory map first, fallback to saleItem name
-        const productName = inventoryMap.get(item.inventoryItemId) 
-          || item.inventoryItemName 
+        const productName = inventoryMap.get(item.inventoryItemId)
+          || item.inventoryItemName
           || `Product ${item.inventoryItemId}`;
 
         if (existing) {
