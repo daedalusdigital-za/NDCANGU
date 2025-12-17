@@ -194,7 +194,21 @@ export class ListSalesComponent implements OnInit {
   loadFilterOptions(): void {
     // Order filter options
     this.statusOptions = ['All', ...this.orderDataService.getUniqueStatuses()];
-    this.provinceOptions = ['All', ...this.orderDataService.getUniqueProvinces()];
+    
+    // Province options - Always include all 9 South African provinces
+    this.provinceOptions = [
+      'All',
+      'Eastern Cape',
+      'Free State',
+      'Gauteng',
+      'KwaZulu-Natal',
+      'Limpopo',
+      'Mpumalanga',
+      'Northern Cape',
+      'North West',
+      'Western Cape'
+    ];
+    
     this.customerOptions = ['All', ...this.orderDataService.getUniqueCustomers()];
 
     // Sales filter options - extract from actual sales data
@@ -222,12 +236,6 @@ export class ListSalesComponent implements OnInit {
         });
         this.productTypeOptions = ['All', ...Array.from(uniqueProducts).sort()];
       }
-
-      // Get unique provinces
-      const uniqueProvinces = [...new Set(this.sales.map(s => s.provinceName).filter(Boolean))].sort();
-      if (uniqueProvinces.length > 0) {
-        this.provinceOptions = ['All', ...uniqueProvinces];
-      }
     } else {
       // Fallback to OrderDataService
       this.institutionOptions = ['All', ...this.orderDataService.getUniqueInstitutions()];
@@ -237,11 +245,6 @@ export class ListSalesComponent implements OnInit {
         this.productTypeOptions = ['All', ...this.orderDataService.getUniqueProductTypes()];
       }
     }
-
-    // Merge province options from both
-    const salesProvinces = this.orderDataService.getUniqueSalesProvinces();
-    const allProvinces = [...new Set([...this.provinceOptions.slice(1), ...salesProvinces])];
-    this.provinceOptions = ['All', ...allProvinces.sort()];
 
     // Ensure status options include relevant statuses
     if (!this.statusOptions.includes('Completed')) {
