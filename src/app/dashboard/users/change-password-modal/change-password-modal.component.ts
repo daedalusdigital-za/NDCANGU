@@ -18,7 +18,6 @@ export class ChangePasswordModalComponent {
   newPassword = '';
   confirmPassword = '';
   isLoading = false;
-  showCurrentPassword = false;
   showNewPassword = false;
   showConfirmPassword = false;
 
@@ -34,7 +33,7 @@ export class ChangePasswordModalComponent {
 
   changePassword() {
     // Validation
-    if (!this.currentPassword || !this.newPassword || !this.confirmPassword) {
+    if (!this.newPassword || !this.confirmPassword) {
       this.toastrService.error('Please fill in all fields');
       return;
     }
@@ -51,7 +50,6 @@ export class ChangePasswordModalComponent {
 
     const payload = {
       userId: parseInt(this.userId),
-      currentPassword: this.currentPassword,
       newPassword: this.newPassword
     };
 
@@ -67,7 +65,7 @@ export class ChangePasswordModalComponent {
       error: (error) => {
         console.error('Error changing password:', error);
         this.toastrService.error(
-          error.error?.message || 'Failed to change password. Please check your current password.'
+          error.error?.message || 'Failed to change password. Please try again.'
         );
       },
       complete: () => {
@@ -80,16 +78,12 @@ export class ChangePasswordModalComponent {
     this.currentPassword = '';
     this.newPassword = '';
     this.confirmPassword = '';
-    this.showCurrentPassword = false;
     this.showNewPassword = false;
     this.showConfirmPassword = false;
   }
 
-  togglePasswordVisibility(field: 'current' | 'new' | 'confirm') {
+  togglePasswordVisibility(field: 'new' | 'confirm') {
     switch(field) {
-      case 'current':
-        this.showCurrentPassword = !this.showCurrentPassword;
-        break;
       case 'new':
         this.showNewPassword = !this.showNewPassword;
         break;
