@@ -254,7 +254,7 @@ export class ListUsersComponent implements OnInit {
   }
 
   private resetPassword(userId: string) {
-    this.baseService.basePost(`User/ResetPassword?userId=${userId}`, {}).subscribe({
+    this.baseService.baseGet(`User/ResetPassword?userId=${userId}`).subscribe({
       next: (response: any) => {
         // Check if response contains the new password (for secure display)
         const message = response?.data?.tempPassword
