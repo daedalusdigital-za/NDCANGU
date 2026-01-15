@@ -51,6 +51,7 @@
             <th>Supplier</th>
             <th>Current Stock</th>
             <th>Status</th>
+            <th>Last Updated</th>
             <th>Actions</th>
           </tr>
         </thead>
@@ -80,6 +81,9 @@
               <span class="status-badge" [ngClass]="'status-' + item.status">
                 {{ getStatusName(item.status) }}
               </span>
+            </td>
+            <td class="last-updated">
+              <span class="date-text">{{ formatDate(item.lastUpdated) }}</span>
             </td>
             <td class="actions">
               <div class="action-buttons">

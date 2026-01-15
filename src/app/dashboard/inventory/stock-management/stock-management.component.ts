@@ -322,4 +322,21 @@ export class StockManagementComponent implements OnInit {
     if (qty <= reorderLevel) return 'Low Stock';
     return 'In Stock';
   }
+
+  formatDate(date: string | null | undefined): string {
+    if (!date) {
+      return 'N/A';
+    }
+    const d = new Date(date);
+    if (isNaN(d.getTime())) {
+      return 'Invalid Date';
+    }
+    return d.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+  }
 }

@@ -268,7 +268,7 @@ export class EditTrainingComponent implements OnInit, OnChanges {
         id: Number(this.training.id),
         trainingName: this.training.trainingName,
         trainingType: this.training.trainingType,
-        trainingDate: this.training.startDate ? this.training.startDate + 'T08:00:00' : new Date().toISOString(),
+        trainingDate: this.training.startDate ? (this.training.startDate.includes('T') ? this.training.startDate : this.training.startDate + 'T08:00:00') : new Date().toISOString(),
         provinceId: Number(this.training.provinceId),
         venue: this.training.venue,
         trainerId: this.training.trainerId ? Number(this.training.trainerId) : null,

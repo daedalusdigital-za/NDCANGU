@@ -1413,7 +1413,7 @@ export class DatabaseService {
         trainerId: 1,
         targetAudience: 'Nurses and junior doctors',
         numberOfParticipants: 42,
-        status: TrainingStatus.Scheduled,
+        status: TrainingStatus.Completed,
 
         // Optional/Display Fields
         description: 'Advanced training on diabetes care protocols and patient management',
@@ -1421,7 +1421,7 @@ export class DatabaseService {
         materials: 'Glucometers, testing strips, educational materials',
         province: 'KwaZulu-Natal',
         trainerName: 'DYLAN GOVENDER',
-        statusText: 'Scheduled',
+        statusText: 'Completed',
         createdAt: '2024-11-01T08:00:00.000Z',
         updatedAt: '2024-11-12T10:15:00.000Z',
         createdBy: 'Admin User'
