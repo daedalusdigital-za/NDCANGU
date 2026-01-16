@@ -46,7 +46,7 @@
         <thead>
           <tr>
             <th>SKU</th>
-            <th>Description</th>
+            <th>Item Name</th>
             <th>Category</th>
             <th>Supplier</th>
             <th>Current Stock</th>
@@ -60,7 +60,7 @@
             <td class="item-number">{{ item.sku }}</td>
             <td class="description">
               <div class="item-info">
-                <span class="item-name">{{ item.description || item.name }}</span>
+                <span class="item-name">{{ item.name || item.description }}</span>
                 <small class="item-details" *ngIf="item.supplier">
                   {{ item.supplier }}
                 </small>
@@ -142,7 +142,7 @@
 
       <div class="modal-body" *ngIf="selectedItem">
         <div class="item-info-section">
-          <h4>{{ selectedItem!.description || selectedItem!.name }}</h4>
+          <h4>{{ selectedItem!.name || selectedItem!.description }}</h4>
           <p class="item-details">
             <strong>SKU:</strong> {{ selectedItem!.sku }}<br>
             <strong>Current Stock:</strong> {{ selectedItem!.stockAvailable || 0 }} {{ selectedItem!.unitOfMeasure || 'units' }}<br>

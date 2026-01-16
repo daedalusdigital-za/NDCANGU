@@ -43,15 +43,26 @@ export class StockManagementComponent implements OnInit {
 
   loadInventoryItems(): void {
     this.loading = true;
+    console.log('🔍 LOADING INVENTORY - API URL: https://ngcanduapi.azurewebsites.net/api/Inventory/GetAll');
     this.inventoryService.getAllItems().subscribe({
       next: (items: InventoryItem[]) => {
+        console.log('✅ API RESPONSE RECEIVED:', {
+          count: items.length,
+          firstItem: items[0],
+          allItems: items.map(i => ({ id: i.id, name: i.name, desc: i.description }))
+        });
         this.inventoryItems = items;
         this.filteredItems = items;
         this.loading = false;
         this.toastr.success(`Loaded ${items.length} inventory items`, 'Success');
       },
       error: (error: any) => {
-        console.error('Error loading inventory items:', error);
+        console.error('❌ Error loading inventory items:', error);
+        console.log('Error details:', {
+          status: error?.status,
+          message: error?.message,
+          url: error?.url
+        });
         this.loading = false;
         this.toastr.error('Failed to load inventory items', 'Error');
       }
@@ -66,8 +77,8 @@ export class StockManagementComponent implements OnInit {
 
     const searchLower = this.searchTerm.toLowerCase();
     this.filteredItems = this.inventoryItems.filter(item =>
-      (item.description || '').toLowerCase().includes(searchLower) ||
       (item.name || '').toLowerCase().includes(searchLower) ||
+      (item.description || '').toLowerCase().includes(searchLower) ||
       (item.sku || '').toLowerCase().includes(searchLower)
     );
   }
@@ -120,7 +131,7 @@ export class StockManagementComponent implements OnInit {
 
         const action = this.updateType === 'add' ? 'Added' : 'Set';
         this.toastr.success(
-          `${action} stock for ${updatedItem.description || updatedItem.name}. New total: ${finalStockAmount}`,
+          `${action} stock for ${updatedItem.name || updatedItem.description}. New total: ${finalStockAmount}`,
           'Stock Updated'
         );
       },
