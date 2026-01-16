@@ -9,7 +9,7 @@ import { SalesDashboardComponent } from './sales-dashboard/sales-dashboard.compo
 import { AddSaleComponent } from './add-sale/add-sale.component';
 import { ListSalesComponent } from './list-sales/list-sales.component';
 import { SalesReportsComponent } from './sales-reports/sales-reports.component';
-import { ProductManagementComponent } from './product-management/product-management.component';
+import { CreditNotesComponent } from './credit-notes/credit-notes.component';
 import { EditSaleModalComponent } from './edit-sale-modal/edit-sale-modal.component';
 
 // Services
@@ -35,7 +35,7 @@ import { TooltipModule } from 'primeng/tooltip';
     AddSaleComponent,
     ListSalesComponent,
     SalesReportsComponent,
-    ProductManagementComponent,
+    CreditNotesComponent,
     EditSaleModalComponent
   ],
   imports: [

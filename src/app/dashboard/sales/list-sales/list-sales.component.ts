@@ -16,13 +16,15 @@ export class ListSalesComponent implements OnInit {
   filteredOrders: OrderRecord[] = [];
   sales: Sale[] = []; // Updated to use proper Sale interface
   filteredSales: Sale[] = []; // For template compatibility
+  creditedSales: Sale[] = []; // Sales with credit notes
+  filteredCreditedSales: Sale[] = []; // Filtered credited sales
 
   // Maintain backwards compatibility
   salesRecords: SalesRecord[] = [];
   filteredSalesRecords: SalesRecord[] = [];
 
   // View mode toggle
-  viewMode: 'orders' | 'sales' = 'sales'; // Default to sales
+  viewMode: 'orders' | 'sales' | 'credited' = 'sales'; // Default to sales
 
   // Loading state
   isLoading = false;
@@ -191,6 +193,46 @@ export class ListSalesComponent implements OnInit {
     });
   }
 
+  /**
+   * Load credited sales - sales that have associated credit notes
+   */
+  loadCreditedSales(): void {
+    this.isLoading = true;
+
+    // TODO: Replace with actual API call to get credited sales
+    // For now, we'll simulate credited sales by filtering sales
+    // In production, this should call: this.salesApiService.getCreditedSales()
+
+    this.databaseService.getSales().subscribe({
+      next: (salesData) => {
+        // In real implementation, filter sales that have credit notes
+        // For now, we'll show all sales as a placeholder
+        // When backend is ready, this will filter based on credit note relationships
+        this.creditedSales = salesData.filter((sale: any) => {
+          // Placeholder logic - in real app, check if sale.hasCreditNote === true
+          // or join with credit notes table
+          return sale.id % 2 === 0; // Mock: show every other sale as "credited"
+        });
+
+        this.filteredCreditedSales = [...this.creditedSales];
+        this.isLoading = false;
+
+        if (this.creditedSales.length > 0) {
+          this.toastr.success(`Loaded ${this.creditedSales.length} credited sales`, 'Credited Sales Loaded');
+        } else {
+          this.toastr.info('No credited sales found', 'Credited Sales');
+        }
+      },
+      error: (error) => {
+        console.warn('⚠️ Failed to load credited sales:', error);
+        this.creditedSales = [];
+        this.filteredCreditedSales = [];
+        this.isLoading = false;
+        this.toastr.error('Failed to load credited sales', 'Error');
+      }
+    });
+  }
+
   loadFilterOptions(): void {
     // Order filter options
     this.statusOptions = ['All', ...this.orderDataService.getUniqueStatuses()];
@@ -252,9 +294,13 @@ export class ListSalesComponent implements OnInit {
     }
   }
 
-  switchViewMode(mode: 'orders' | 'sales'): void {
+  switchViewMode(mode: 'orders' | 'sales' | 'credited'): void {
     this.viewMode = mode;
     this.clearFilters();
+
+    if (mode === 'credited') {
+      this.loadCreditedSales();
+    }
   }
 
   applyFilters(): void {
@@ -268,6 +314,38 @@ export class ListSalesComponent implements OnInit {
         dateTo: this.dateTo || undefined
       };
       this.filteredOrders = this.orderDataService.searchOrders(criteria);
+    } else if (this.viewMode === 'credited') {
+      // Filter credited sales
+      this.filteredCreditedSales = this.creditedSales.filter(sale => {
+        // Search term filter
+        const matchesSearch = !this.searchTerm ||
+          sale.saleNumber?.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+          sale.customerName?.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+          (sale.saleItems && sale.saleItems.some(item =>
+            item.inventoryItemName?.toLowerCase().includes(this.searchTerm.toLowerCase())
+          ));
+
+        // Province filter
+        const matchesProvince = this.selectedProvince === 'All' ||
+          sale.provinceName === this.selectedProvince;
+
+        // Institution filter
+        const matchesInstitution = this.selectedInstitution === 'All' ||
+          sale.customerName === this.selectedInstitution;
+
+        // Product type filter
+        const matchesProductType = this.selectedProductType === 'All' ||
+          (sale.saleItems && sale.saleItems.some(item =>
+            item.inventoryItemName === this.selectedProductType
+          ));
+
+        // Date range filter
+        const matchesDateRange = (!this.dateFrom || new Date(sale.saleDate) >= this.dateFrom) &&
+          (!this.dateTo || new Date(sale.saleDate) <= this.dateTo);
+
+        return matchesSearch && matchesProvince && matchesInstitution &&
+               matchesProductType && matchesDateRange;
+      });
     } else {
       // Enhanced filtering for sales using the simplified Sale structure
       this.filteredSales = this.sales.filter(sale => {

@@ -5,7 +5,7 @@ import { SalesDashboardComponent } from './sales-dashboard/sales-dashboard.compo
 import { AddSaleComponent } from './add-sale/add-sale.component';
 import { ListSalesComponent } from './list-sales/list-sales.component';
 import { SalesReportsComponent } from './sales-reports/sales-reports.component';
-import { ProductManagementComponent } from './product-management/product-management.component';
+import { CreditNotesComponent } from './credit-notes/credit-notes.component';
 
 const routes: Routes = [
   {
@@ -37,8 +37,8 @@ const routes: Routes = [
         component: SalesReportsComponent
       },
       {
-        path: 'products',
-        component: ProductManagementComponent
+        path: 'credits',
+        component: CreditNotesComponent
       }
     ]
   }

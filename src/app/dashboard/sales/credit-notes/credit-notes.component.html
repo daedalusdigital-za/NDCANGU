@@ -1,0 +1,516 @@
+<div class="credit-notes-container">
+  <div class="page-header">
+    <div class="header-content">
+      <h1 class="page-title">
+        <i class="fas fa-file-invoice-dollar"></i>
+        Credit Notes
+      </h1>
+      <p class="page-description">
+        Manage credit notes for invoice reversals and stock returns
+      </p>
+    </div>
+    <div class="header-actions">
+      <button class="btn btn-primary" (click)="openAddModal()">
+        <i class="fas fa-plus"></i>
+        Create Credit Note
+      </button>
+    </div>
+  </div>
+
+  <!-- Filters Section -->
+  <div class="filters-section">
+    <div class="search-container">
+      <div class="search-input-wrapper">
+        <i class="fas fa-search search-icon"></i>
+        <input
+          type="text"
+          class="search-input"
+          placeholder="Search by credit note, invoice, customer, or reason..."
+          [(ngModel)]="searchTerm"
+          (input)="filterCreditNotes()"
+        />
+      </div>
+    </div>
+
+    <div class="filter-group">
+      <label>Status:</label>
+      <select class="form-select" [(ngModel)]="statusFilter" (change)="filterCreditNotes()">
+        <option value="all">All Statuses</option>
+        <option value="pending">Pending</option>
+        <option value="approved">Approved</option>
+        <option value="completed">Completed</option>
+        <option value="rejected">Rejected</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Loading Indicator -->
+  <div *ngIf="loading" class="loading-container">
+    <div class="loading-spinner">
+      <i class="fas fa-spinner fa-spin"></i>
+      <span>Loading credit notes...</span>
+    </div>
+  </div>
+
+  <!-- Credit Notes Table -->
+  <div class="credit-notes-table-container" *ngIf="!loading">
+    <div class="table-header">
+      <h3>Credit Notes ({{ filteredCreditNotes.length }})</h3>
+    </div>
+
+    <div class="table-responsive">
+      <table class="credit-notes-table">
+        <thead>
+          <tr>
+            <th>Credit Note #</th>
+            <th>Invoice #</th>
+            <th>Customer</th>
+            <th>Original Amount</th>
+            <th>Credit Amount</th>
+            <th>Reason</th>
+            <th>Status</th>
+            <th>Reverse Stock</th>
+            <th>Reverse Sale</th>
+            <th>Document</th>
+            <th>Created Date</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let creditNote of filteredCreditNotes" class="credit-note-row">
+            <td class="credit-number">
+              <strong>{{ creditNote.creditNoteNumber }}</strong>
+            </td>
+            <td class="invoice-number">{{ creditNote.invoiceNumber }}</td>
+            <td class="customer-name">{{ creditNote.customerName }}</td>
+            <td class="amount">{{ formatCurrency(creditNote.originalAmount) }}</td>
+            <td class="credit-amount">
+              <strong class="text-danger">{{ formatCurrency(creditNote.creditAmount) }}</strong>
+            </td>
+            <td class="reason">{{ creditNote.reason }}</td>
+            <td class="status">
+              <span class="badge" [ngClass]="getStatusBadgeClass(creditNote.status)">
+                {{ creditNote.status | uppercase }}
+              </span>
+            </td>
+            <td class="reverse-stock">
+              <i class="fas" [ngClass]="creditNote.reverseStock ? 'fa-check-circle text-success' : 'fa-times-circle text-muted'"></i>
+            </td>
+            <td class="reverse-sale">
+              <i class="fas" [ngClass]="creditNote.reverseSale ? 'fa-check-circle text-success' : 'fa-times-circle text-muted'"></i>
+            </td>
+            <td class="document">
+              <button
+                *ngIf="creditNote.uploadedDocument"
+                class="btn btn-sm btn-outline-primary"
+                (click)="downloadDocument(creditNote)"
+                title="Download Document">
+                <i class="fas fa-file-pdf"></i>
+                {{ creditNote.uploadedDocument.fileName }}
+              </button>
+              <span *ngIf="!creditNote.uploadedDocument" class="text-muted">
+                <i class="fas fa-minus"></i>
+              </span>
+            </td>
+            <td class="created-date">{{ formatDate(creditNote.createdDate) }}</td>
+            <td class="actions">
+              <div class="action-buttons">
+                <button
+                  class="btn btn-sm btn-info"
+                  (click)="openDetailsModal(creditNote)"
+                  title="View Details">
+                  <i class="fas fa-eye"></i>
+                </button>
+                <button
+                  *ngIf="creditNote.status === 'pending'"
+                  class="btn btn-sm btn-success"
+                  (click)="approveCreditNote(creditNote)"
+                  title="Approve">
+                  <i class="fas fa-check"></i>
+                </button>
+                <button
+                  *ngIf="creditNote.status === 'pending'"
+                  class="btn btn-sm btn-danger"
+                  (click)="rejectCreditNote(creditNote)"
+                  title="Reject">
+                  <i class="fas fa-times"></i>
+                </button>
+                <button
+                  *ngIf="creditNote.status === 'approved'"
+                  class="btn btn-sm btn-primary"
+                  (click)="processCreditNote(creditNote)"
+                  title="Process Credit">
+                  <i class="fas fa-cog"></i>
+                  Process
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- Empty State -->
+      <div *ngIf="filteredCreditNotes.length === 0 && !loading" class="empty-state">
+        <div class="empty-icon">
+          <i class="fas fa-file-invoice"></i>
+        </div>
+        <h3>No Credit Notes Found</h3>
+        <p *ngIf="searchTerm || statusFilter !== 'all'">
+          No credit notes match your search criteria.
+        </p>
+        <p *ngIf="!searchTerm && statusFilter === 'all'">
+          No credit notes have been created yet.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Credit Note Modal -->
+  <div class="modal-overlay" *ngIf="showAddModal" (click)="closeAddModal()">
+    <div class="modal-container" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h3>Create Credit Note</h3>
+        <button class="modal-close" (click)="closeAddModal()">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <form>
+          <div class="form-group">
+            <label for="invoiceNumber">
+              Search Invoice / Sale Number *
+              <small class="text-muted">Start typing to search</small>
+            </label>
+            <div class="invoice-search-container">
+              <div class="search-input-wrapper">
+                <input
+                  type="text"
+                  id="invoiceNumber"
+                  class="form-control"
+                  [(ngModel)]="invoiceSearchTerm"
+                  (input)="searchInvoices()"
+                  (focus)="searchInvoices()"
+                  name="invoiceNumber"
+                  placeholder="Search by invoice number or customer name..."
+                  autocomplete="off"
+                  required
+                />
+                <button
+                  *ngIf="selectedSale"
+                  type="button"
+                  class="clear-button"
+                  (click)="clearInvoiceSelection()"
+                  title="Clear selection">
+                  <i class="fas fa-times"></i>
+                </button>
+              </div>
+
+              <!-- Dropdown with search results -->
+              <div class="invoice-dropdown" *ngIf="showInvoiceDropdown && filteredSales.length > 0">
+                <div
+                  class="invoice-item"
+                  *ngFor="let sale of filteredSales"
+                  (click)="selectInvoice(sale)">
+                  <div class="invoice-info">
+                    <strong>{{ sale.saleNumber }}</strong>
+                    <span class="customer-name">{{ sale.customerName }}</span>
+                  </div>
+                  <div class="invoice-amount">
+                    R {{ sale.total?.toFixed(2) }}
+                  </div>
+                </div>
+              </div>
+
+              <!-- No results message -->
+              <div class="invoice-dropdown no-results" *ngIf="showInvoiceDropdown && filteredSales.length === 0 && invoiceSearchTerm">
+                <div class="text-muted">
+                  <i class="fas fa-search"></i>
+                  No invoices found matching "{{ invoiceSearchTerm }}"
+                </div>
+              </div>
+
+              <!-- Selected invoice display -->
+              <div class="selected-invoice" *ngIf="selectedSale">
+                <div class="invoice-badge">
+                  <i class="fas fa-check-circle text-success"></i>
+                  <strong>{{ selectedSale.saleNumber }}</strong> - {{ selectedSale.customerName }}
+                  <span class="amount">R {{ selectedSale.total?.toFixed(2) }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="customerName">Customer Name *</label>
+            <input
+              type="text"
+              id="customerName"
+              class="form-control"
+              [(ngModel)]="newCreditNote.customerName"
+              name="customerName"
+              [readonly]="selectedSale !== null"
+              [class.readonly-field]="selectedSale !== null"
+              required
+            />
+            <small class="text-muted" *ngIf="selectedSale">
+              <i class="fas fa-info-circle"></i> Auto-filled from selected invoice
+            </small>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="originalAmount">Original Amount *</label>
+                <input
+                  type="number"
+                  id="originalAmount"
+                  class="form-control"
+                  [(ngModel)]="newCreditNote.originalAmount"
+                  name="originalAmount"
+                  step="0.01"
+                  [readonly]="selectedSale !== null"
+                  [class.readonly-field]="selectedSale !== null"
+                  required
+                />
+                <small class="text-muted" *ngIf="selectedSale">
+                  <i class="fas fa-info-circle"></i> Auto-filled from invoice
+                </small>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="creditAmount">Credit Amount *</label>
+                <input
+                  type="number"
+                  id="creditAmount"
+                  class="form-control"
+                  [(ngModel)]="newCreditNote.creditAmount"
+                  name="creditAmount"
+                  step="0.01"
+                  required
+                />
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="reason">Reason for Credit Note *</label>
+            <textarea
+              id="reason"
+              class="form-control"
+              [(ngModel)]="newCreditNote.reason"
+              name="reason"
+              rows="3"
+              placeholder="Describe the reason for issuing this credit note..."
+              required
+            ></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="notes">Additional Notes</label>
+            <textarea
+              id="notes"
+              class="form-control"
+              [(ngModel)]="newCreditNote.notes"
+              name="notes"
+              rows="2"
+              placeholder="Any additional information..."
+            ></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="documentUpload">
+              Upload Supporting Document (PDF)
+              <small class="text-muted">Optional - Max 5MB</small>
+            </label>
+            <div class="file-upload-container">
+              <input
+                type="file"
+                id="documentUpload"
+                class="file-input"
+                accept=".pdf"
+                (change)="onFileSelected($event)"
+                #fileInput
+              />
+              <div class="file-upload-display">
+                <button
+                  type="button"
+                  class="btn btn-outline-secondary"
+                  (click)="fileInput.click()">
+                  <i class="fas fa-cloud-upload-alt"></i>
+                  Choose PDF File
+                </button>
+                <span class="file-name" *ngIf="uploadedFileName">
+                  <i class="fas fa-file-pdf text-danger"></i>
+                  {{ uploadedFileName }}
+                  <button
+                    type="button"
+                    class="btn-remove"
+                    (click)="removeSelectedFile()"
+                    title="Remove file">
+                    <i class="fas fa-times"></i>
+                  </button>
+                </span>
+                <span class="text-muted" *ngIf="!uploadedFileName">
+                  No file selected
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-check-group">
+            <div class="form-check">
+              <input
+                type="checkbox"
+                id="reverseStock"
+                class="form-check-input"
+                [(ngModel)]="newCreditNote.reverseStock"
+                name="reverseStock"
+              />
+              <label for="reverseStock" class="form-check-label">
+                <strong>Reverse Stock</strong>
+                <small class="d-block text-muted">Add items back to inventory</small>
+              </label>
+            </div>
+
+            <div class="form-check">
+              <input
+                type="checkbox"
+                id="reverseSale"
+                class="form-check-input"
+                [(ngModel)]="newCreditNote.reverseSale"
+                name="reverseSale"
+              />
+              <label for="reverseSale" class="form-check-label">
+                <strong>Reverse Sale</strong>
+                <small class="d-block text-muted">Remove sale from financial records</small>
+              </label>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-secondary" (click)="closeAddModal()">
+          Cancel
+        </button>
+        <button class="btn btn-primary" (click)="submitCreditNote()">
+          <i class="fas fa-save"></i>
+          Create Credit Note
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Credit Note Details Modal -->
+  <div class="modal-overlay" *ngIf="showDetailsModal" (click)="closeDetailsModal()">
+    <div class="modal-container modal-lg" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h3>Credit Note Details</h3>
+        <button class="modal-close" (click)="closeDetailsModal()">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+
+      <div class="modal-body" *ngIf="selectedCreditNote">
+        <div class="details-grid">
+          <div class="detail-item">
+            <label>Credit Note Number:</label>
+            <strong>{{ selectedCreditNote.creditNoteNumber }}</strong>
+          </div>
+
+          <div class="detail-item">
+            <label>Invoice Number:</label>
+            <strong>{{ selectedCreditNote.invoiceNumber }}</strong>
+          </div>
+
+          <div class="detail-item">
+            <label>Customer:</label>
+            <span>{{ selectedCreditNote.customerName }}</span>
+          </div>
+
+          <div class="detail-item">
+            <label>Status:</label>
+            <span class="badge" [ngClass]="getStatusBadgeClass(selectedCreditNote.status)">
+              {{ selectedCreditNote.status | uppercase }}
+            </span>
+          </div>
+
+          <div class="detail-item">
+            <label>Original Amount:</label>
+            <span>{{ formatCurrency(selectedCreditNote.originalAmount) }}</span>
+          </div>
+
+          <div class="detail-item">
+            <label>Credit Amount:</label>
+            <strong class="text-danger">{{ formatCurrency(selectedCreditNote.creditAmount) }}</strong>
+          </div>
+
+          <div class="detail-item full-width">
+            <label>Reason:</label>
+            <p>{{ selectedCreditNote.reason }}</p>
+          </div>
+
+          <div class="detail-item full-width" *ngIf="selectedCreditNote.notes">
+            <label>Notes:</label>
+            <p>{{ selectedCreditNote.notes }}</p>
+          </div>
+
+          <div class="detail-item">
+            <label>Reverse Stock:</label>
+            <span>
+              <i class="fas" [ngClass]="selectedCreditNote.reverseStock ? 'fa-check-circle text-success' : 'fa-times-circle text-danger'"></i>
+              {{ selectedCreditNote.reverseStock ? 'Yes' : 'No' }}
+            </span>
+          </div>
+
+          <div class="detail-item">
+            <label>Reverse Sale:</label>
+            <span>
+              <i class="fas" [ngClass]="selectedCreditNote.reverseSale ? 'fa-check-circle text-success' : 'fa-times-circle text-danger'"></i>
+              {{ selectedCreditNote.reverseSale ? 'Yes' : 'No' }}
+            </span>
+          </div>
+
+          <div class="detail-item">
+            <label>Created Date:</label>
+            <span>{{ formatDate(selectedCreditNote.createdDate) }}</span>
+          </div>
+
+          <div class="detail-item" *ngIf="selectedCreditNote.approvedDate">
+            <label>Approved Date:</label>
+            <span>{{ formatDate(selectedCreditNote.approvedDate) }}</span>
+          </div>
+
+          <div class="detail-item" *ngIf="selectedCreditNote.approvedBy">
+            <label>Approved By:</label>
+            <span>{{ selectedCreditNote.approvedBy }}</span>
+          </div>
+
+          <div class="detail-item full-width" *ngIf="selectedCreditNote.uploadedDocument">
+            <label>Uploaded Document:</label>
+            <div class="document-info">
+              <button
+                class="btn btn-primary"
+                (click)="downloadDocument(selectedCreditNote)">
+                <i class="fas fa-download"></i>
+                Download {{ selectedCreditNote.uploadedDocument.fileName }}
+              </button>
+              <small class="text-muted d-block mt-2">
+                <i class="fas fa-calendar"></i>
+                Uploaded: {{ formatDate(selectedCreditNote.uploadedDocument.uploadedDate) }}
+              </small>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-secondary" (click)="closeDetailsModal()">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
