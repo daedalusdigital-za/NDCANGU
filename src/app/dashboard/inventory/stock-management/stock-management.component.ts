@@ -108,22 +108,29 @@ export class StockManagementComponent implements OnInit {
 
     const stockUpdate: InventoryStockUpdateModel = {
       id: this.selectedItem.id,
-      stockAvailable: finalStockAmount
+      stockAvailable: finalStockAmount,
+      lastUpdated: new Date().toISOString()
     };
 
     this.loading = true;
 
     this.inventoryService.updateStock(stockUpdate).subscribe({
       next: (updatedItem: InventoryItem) => {
+        // Ensure lastUpdated is set
+        const itemWithTimestamp = {
+          ...updatedItem,
+          lastUpdated: updatedItem.lastUpdated || new Date().toISOString()
+        };
+
         // Update the item in our arrays
-        const index = this.inventoryItems.findIndex(item => item.id === updatedItem.id);
+        const index = this.inventoryItems.findIndex(item => item.id === itemWithTimestamp.id);
         if (index !== -1) {
-          this.inventoryItems[index] = updatedItem;
+          this.inventoryItems[index] = itemWithTimestamp;
         }
 
-        const filteredIndex = this.filteredItems.findIndex(item => item.id === updatedItem.id);
+        const filteredIndex = this.filteredItems.findIndex(item => item.id === itemWithTimestamp.id);
         if (filteredIndex !== -1) {
-          this.filteredItems[filteredIndex] = updatedItem;
+          this.filteredItems[filteredIndex] = itemWithTimestamp;
         }
 
         this.loading = false;
@@ -198,7 +205,8 @@ export class StockManagementComponent implements OnInit {
       supplierContact: '',
       status: statusValue,
       isActive: isActive,
-      notes: ''
+      notes: '',
+      lastUpdated: new Date().toISOString()
     };
 
     console.log('=== INVENTORY UPDATE DEBUG ===');
@@ -220,6 +228,7 @@ export class StockManagementComponent implements OnInit {
           ...this.editForm, // Use our form data as the base (preserves SKU, description, category, supplier, etc.)
           id: this.editForm.id, // Keep original ID
           status: updatedItem.status !== undefined ? updatedItem.status : statusValue, // Use API-confirmed status
+          lastUpdated: updatedItem.lastUpdated || new Date().toISOString(), // Use API timestamp or current time
           // Don't spread updatedItem to avoid null/empty values overwriting form data
         };
 

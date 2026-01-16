@@ -188,12 +188,14 @@ export interface InventoryItemModel {
   status: InventoryStatus;
   isActive?: boolean; // Map status to isActive for backend compatibility
   notes?: string;
+  lastUpdated?: string; // ISO date string - automatically updated on edits
 }
 
 // Model for stock updates only
 export interface InventoryStockUpdateModel {
   id: number;
   stockAvailable: number;
+  lastUpdated?: string; // ISO date string - automatically set when stock is updated
 }
 
 // Inventory statistics response
