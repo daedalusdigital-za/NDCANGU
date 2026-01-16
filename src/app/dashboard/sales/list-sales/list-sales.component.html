@@ -149,13 +149,15 @@
                                         </button>
                                         <button type="button"
                                                 class="btn btn-success"
-                                                (click)="exportData()">
-                                            <i class="mdi mdi-download me-1"></i>Export
+                                                (click)="exportToExcel()"
+                                                title="Export to Excel">
+                                            <i class="mdi mdi-file-excel me-1"></i>Export
                                         </button>
                                         <button type="button"
-                                                class="btn btn-success"
-                                                (click)="exportToExcel()">
-                                            <i class="dripicons-export me-1"></i>Export
+                                                class="btn btn-primary"
+                                                (click)="importFromExcel()"
+                                                title="Import from Excel">
+                                            <i class="mdi mdi-upload me-1"></i>Import
                                         </button>
                                     </div>
                                 </div>

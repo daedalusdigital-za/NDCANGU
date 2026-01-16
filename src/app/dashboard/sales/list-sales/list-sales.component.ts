@@ -3,6 +3,7 @@ import { OrderDataService, OrderRecord, SalesRecord } from '../../../services/or
 import { DatabaseService } from '../../../services/data/database.service';
 import { Sale, SaleItem } from '../../../shared/interfaces/common.interfaces';
 import { ToastrService } from 'ngx-toastr';
+import * as XLSX from 'xlsx';
 
 @Component({
   selector: 'app-list-sales',
@@ -610,14 +611,118 @@ export class ListSalesComponent implements OnInit {
   }
 
   exportToExcel(): void {
-    // Alternative export method for Excel format
+    let exportData: any[] = [];
+    let filename = '';
+    let sheetName = '';
+
     if (this.viewMode === 'orders') {
-      const exportData = this.orderDataService.exportOrderData();
-      this.downloadCSV(exportData, 'orders-export.xlsx');
+      exportData = this.filteredOrders.map(order => ({
+        'Order Number': order.orderNumber,
+        'Order Date': order.orderDate,
+        'Customer Name': order.customerName,
+        'Province': order.province,
+        'PO Number': order.poNumber,
+        'Item Description': order.itemDescription,
+        'Quantity': order.qtyBackOrder,
+        'Unit Price': order.unitPrice,
+        'Status': order.status,
+        'Total Value': order.totalValue
+      }));
+      filename = 'orders-export.xlsx';
+      sheetName = 'Orders';
+    } else if (this.viewMode === 'credited') {
+      exportData = this.filteredCreditedSales.map(sale => ({
+        'Invoice Number': sale.saleNumber,
+        'Sale Date': new Date(sale.saleDate).toLocaleDateString(),
+        'Customer Name': sale.customerName,
+        'Customer Phone': sale.customerPhone,
+        'Province': sale.provinceName,
+        'Original Amount': sale.total,
+        'Items Count': sale.saleItems?.length || 0,
+        'Status': 'Credited'
+      }));
+      filename = 'credited-sales-export.xlsx';
+      sheetName = 'Credited Sales';
     } else {
-      const exportData = this.orderDataService.exportSalesData();
-      this.downloadCSV(exportData, 'sales-export.xlsx');
+      exportData = this.filteredSales.map(sale => ({
+        'Invoice Number': sale.saleNumber,
+        'Sale Date': new Date(sale.saleDate).toLocaleDateString(),
+        'Customer Name': sale.customerName,
+        'Customer Phone': sale.customerPhone,
+        'Province': sale.provinceName,
+        'Subtotal': sale.subtotal,
+        'Total': sale.total,
+        'Items Count': sale.saleItems?.length || 0,
+        'Notes': sale.notes || ''
+      }));
+      filename = 'sales-export.xlsx';
+      sheetName = 'Sales';
     }
+
+    if (exportData.length === 0) {
+      this.toastr.warning('No data to export', 'Export');
+      return;
+    }
+
+    // Create worksheet
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportData);
+
+    // Create workbook
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, sheetName);
+
+    // Save file
+    XLSX.writeFile(wb, filename);
+    this.toastr.success(`Exported ${exportData.length} records`, 'Export Successful');
+  }
+
+  importFromExcel(): void {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = '.xlsx, .xls';
+    input.onchange = (event: any) => {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (e: any) => {
+          try {
+            const data = new Uint8Array(e.target.result);
+            const workbook = XLSX.read(data, { type: 'array' });
+            const firstSheetName = workbook.SheetNames[0];
+            const worksheet = workbook.Sheets[firstSheetName];
+            const jsonData = XLSX.utils.sheet_to_json(worksheet);
+
+            if (jsonData.length === 0) {
+              this.toastr.warning('No data found in the Excel file', 'Import');
+              return;
+            }
+
+            // Show preview modal or process data
+            this.processImportedData(jsonData);
+          } catch (error) {
+            console.error('Error reading Excel file:', error);
+            this.toastr.error('Failed to read Excel file. Please ensure it\'s a valid Excel file.', 'Import Error');
+          }
+        };
+        reader.readAsArrayBuffer(file);
+      }
+    };
+    input.click();
+  }
+
+  private processImportedData(data: any[]): void {
+    // TODO: Implement data validation and import logic
+    // This is a placeholder - you'll need to validate the data format
+    // and call the appropriate API to import the sales/orders
+
+    console.log('Imported data:', data);
+    this.toastr.info(`Found ${data.length} records in the file. Import functionality will be implemented based on your data structure.`, 'Import Preview');
+
+    // Example of what you might do:
+    // 1. Validate the data format matches expected structure
+    // 2. Transform the data to match your Sale/Order interface
+    // 3. Call API to bulk import:
+    // this.databaseService.bulkImportSales(transformedData).subscribe(...)
   }
 
   /**
