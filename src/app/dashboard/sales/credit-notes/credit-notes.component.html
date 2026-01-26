@@ -241,6 +241,21 @@
             </div>
           </div>
 
+          <div class="form-group" *ngIf="selectedSale">
+            <label for="invoiceNumberDisplay">Invoice Number *</label>
+            <input
+              type="text"
+              id="invoiceNumberDisplay"
+              class="form-control readonly-field"
+              [value]="selectedSale.saleNumber"
+              readonly
+              required
+            />
+            <small class="text-muted">
+              <i class="fas fa-info-circle"></i> Auto-filled from selected invoice
+            </small>
+          </div>
+
           <div class="form-group">
             <label for="customerName">Customer Name *</label>
             <input
