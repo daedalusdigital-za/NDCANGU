@@ -79,11 +79,13 @@ export class EditSaleModalComponent implements OnChanges {
       return;
     }
 
-    // Calculate subtotal from saleItems
+    // Calculate subtotal and total from saleItems
     const subtotal = this.saleData.saleItems ?
       this.saleData.saleItems.reduce((sum: number, item: SaleItem) => sum + (item.totalPrice || 0), 0) : 0;
 
-    console.log('Calculated subtotal:', subtotal);
+    const total = this.calculateTotalFromItems(this.saleData.saleItems || []);
+
+    console.log('Calculated subtotal:', subtotal, 'Total:', total);
 
     this.sale = {
       id: this.saleData.id || 0,
@@ -93,7 +95,7 @@ export class EditSaleModalComponent implements OnChanges {
       customerName: this.saleData.customerName || '',
       customerPhone: this.saleData.customerPhone || '',
       subtotal: subtotal,
-      total: this.saleData.total || subtotal,
+      total: total, // Will be recalculated on submit
       notes: this.saleData.notes || '',
       provinceId: 1, // Default value as not available in Sale interface
       saleItems: this.saleData.saleItems || []
@@ -110,6 +112,9 @@ export class EditSaleModalComponent implements OnChanges {
 
     this.isLoading = true;
 
+    // Calculate total from sale items (Total is read-only, auto-calculated)
+    const calculatedTotal = this.calculateTotal();
+
     // Prepare SaleModel payload for API
     const saleModel = {
       id: this.sale.id,
@@ -119,7 +124,7 @@ export class EditSaleModalComponent implements OnChanges {
       customerName: this.sale.customerName,
       customerPhone: this.sale.customerPhone,
       subtotal: parseFloat(this.sale.subtotal),
-      total: parseFloat(this.sale.total),
+      total: calculatedTotal,
       notes: this.sale.notes,
       provinceId: parseInt(this.sale.provinceId),
       saleItems: this.sale.saleItems.map((item: any) => ({
@@ -186,5 +191,39 @@ export class EditSaleModalComponent implements OnChanges {
     };
 
     return statusMap[status] || 0;
+  }
+
+  // Calculate total from sale items (Total is read-only, auto-calculated)
+  calculateTotal(): number {
+    if (!this.sale.saleItems || this.sale.saleItems.length === 0) {
+      return 0;
+    }
+
+    return this.sale.saleItems.reduce((sum: number, item: any) => {
+      const itemTotal = (item.quantity || 0) * (item.unitPrice || 0);
+      return sum + itemTotal;
+    }, 0);
+  }
+
+  // Calculate total from array of items (used during data population)
+  private calculateTotalFromItems(items: SaleItem[]): number {
+    if (!items || items.length === 0) {
+      return 0;
+    }
+
+    return items.reduce((sum: number, item: SaleItem) => {
+      return sum + (item.totalPrice || 0);
+    }, 0);
+  }
+
+  // Get display total for showing in UI
+  getDisplayTotal(): string {
+    return this.calculateTotal().toFixed(2);
+  }
+
+  // Called when user edits item quantity or price
+  onItemChanged(): void {
+    // Update the displayed total in real-time as user edits items
+    console.log('Item changed - total now:', this.calculateTotal());
   }
 }
