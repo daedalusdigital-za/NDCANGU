@@ -128,12 +128,22 @@ export class CreditNotesComponent implements OnInit {
 
   loadCreditNotes(): void {
     this.loading = true;
-    // TODO: Replace with actual API call when backend is ready
-    setTimeout(() => {
-      this.creditNotes = this.getMockCreditNotes();
-      this.filteredCreditNotes = this.creditNotes;
-      this.loading = false;
-    }, 500);
+    this.salesApiService.getCreditNotes().subscribe({
+      next: (response: any) => {
+        this.creditNotes = response.data || response;
+        this.filteredCreditNotes = this.creditNotes;
+        this.loading = false;
+        console.log('✅ Credit notes loaded:', this.creditNotes.length);
+      },
+      error: (error: any) => {
+        console.error('❌ Error loading credit notes:', error);
+        this.loading = false;
+        // Fallback to mock data for testing
+        this.creditNotes = this.getMockCreditNotes();
+        this.filteredCreditNotes = this.creditNotes;
+        this.toastr.error('Error loading credit notes. Using test data.', 'Error');
+      }
+    });
   }
 
   getMockCreditNotes(): CreditNote[] {
@@ -293,20 +303,68 @@ export class CreditNotesComponent implements OnInit {
   }
 
   submitCreditNote(): void {
-    // TODO: Implement actual API call with file upload
-    if (this.selectedFile) {
-      // In production, you would upload the file to the server
-      // const formData = new FormData();
-      // formData.append('file', this.selectedFile);
-      // formData.append('creditNoteData', JSON.stringify(this.newCreditNote));
-      // this.salesApiService.createCreditNoteWithDocument(formData).subscribe(...);
-
-      this.toastr.success(`Credit note created with document: ${this.uploadedFileName}`, 'Success');
-    } else {
-      this.toastr.success('Credit note created successfully', 'Success');
+    if (!this.newCreditNote.invoiceId) {
+      this.toastr.error('Please select an invoice', 'Validation Error');
+      return;
     }
-    this.closeAddModal();
-    this.loadCreditNotes();
+
+    if (!this.newCreditNote.creditAmount || this.newCreditNote.creditAmount <= 0) {
+      this.toastr.error('Please enter a valid credit amount', 'Validation Error');
+      return;
+    }
+
+    if (!this.newCreditNote.reason) {
+      this.toastr.error('Please enter a reason', 'Validation Error');
+      return;
+    }
+
+    // Prepare credit note data
+    const creditNoteData = {
+      invoiceId: this.newCreditNote.invoiceId,
+      invoiceNumber: this.newCreditNote.invoiceNumber,
+      customerId: this.newCreditNote.customerId,
+      customerName: this.newCreditNote.customerName,
+      originalAmount: this.newCreditNote.originalAmount,
+      creditAmount: this.newCreditNote.creditAmount,
+      reason: this.newCreditNote.reason,
+      reverseStock: this.newCreditNote.reverseStock,
+      reverseSale: this.newCreditNote.reverseSale,
+      notes: this.newCreditNote.notes
+    };
+
+    // Create credit note first
+    this.salesApiService.createCreditNote(creditNoteData).subscribe({
+      next: (response: any) => {
+        const createdCreditNote = response.data || response;
+        console.log('✅ Credit note created:', createdCreditNote);
+
+        // If file selected, upload it
+        if (this.selectedFile) {
+          this.salesApiService.uploadCreditNoteDocument(createdCreditNote.id, this.selectedFile).subscribe({
+            next: (uploadResponse: any) => {
+              console.log('✅ Document uploaded:', uploadResponse);
+              this.toastr.success(`Credit note created with document: ${this.uploadedFileName}`, 'Success');
+              this.closeAddModal();
+              this.loadCreditNotes();
+            },
+            error: (uploadError: any) => {
+              console.error('❌ Error uploading document:', uploadError);
+              this.toastr.warning('Credit note created but document upload failed', 'Partial Success');
+              this.closeAddModal();
+              this.loadCreditNotes();
+            }
+          });
+        } else {
+          this.toastr.success('Credit note created successfully', 'Success');
+          this.closeAddModal();
+          this.loadCreditNotes();
+        }
+      },
+      error: (error: any) => {
+        console.error('❌ Error creating credit note:', error);
+        this.toastr.error(error?.error?.message || 'Error creating credit note', 'Error');
+      }
+    });
   }
 
   openDetailsModal(creditNote: CreditNote): void {
@@ -320,17 +378,46 @@ export class CreditNotesComponent implements OnInit {
   }
 
   approveCreditNote(creditNote: CreditNote): void {
-    // TODO: Implement actual API call
-    creditNote.status = 'approved';
-    creditNote.approvedDate = new Date();
-    creditNote.approvedBy = 'Current User';
-    this.toastr.success('Credit note approved', 'Success');
+    const approvalData = {
+      approvedBy: 'Current User',
+      reverseSales: creditNote.reverseSale,
+      reverseInventory: creditNote.reverseStock
+    };
+
+    this.salesApiService.approveCreditNote(creditNote.id, approvalData).subscribe({
+      next: (response: any) => {
+        const updatedCreditNote = response.data || response;
+        creditNote.status = updatedCreditNote.status;
+        creditNote.approvedDate = updatedCreditNote.approvedDate;
+        creditNote.approvedBy = updatedCreditNote.approvedBy;
+        this.toastr.success('Credit note approved', 'Success');
+        console.log('✅ Credit note approved:', updatedCreditNote);
+      },
+      error: (error: any) => {
+        console.error('❌ Error approving credit note:', error);
+        this.toastr.error(error?.error?.message || 'Error approving credit note', 'Error');
+      }
+    });
   }
 
   rejectCreditNote(creditNote: CreditNote): void {
-    // TODO: Implement actual API call
-    creditNote.status = 'rejected';
-    this.toastr.warning('Credit note rejected', 'Rejected');
+    const rejectionData = {
+      rejectedBy: 'Current User',
+      rejectionReason: 'Rejected by user'
+    };
+
+    this.salesApiService.rejectCreditNote(creditNote.id, rejectionData).subscribe({
+      next: (response: any) => {
+        const updatedCreditNote = response.data || response;
+        creditNote.status = updatedCreditNote.status;
+        this.toastr.warning('Credit note rejected', 'Rejected');
+        console.log('✅ Credit note rejected:', updatedCreditNote);
+      },
+      error: (error: any) => {
+        console.error('❌ Error rejecting credit note:', error);
+        this.toastr.error(error?.error?.message || 'Error rejecting credit note', 'Error');
+      }
+    });
   }
 
   processCreditNote(creditNote: CreditNote): void {
@@ -377,13 +464,34 @@ export class CreditNotesComponent implements OnInit {
   }
 
   downloadDocument(creditNote: CreditNote): void {
-    if (creditNote.uploadedDocument) {
-      // TODO: Implement actual download from server
-      // For now, show a message
-      this.toastr.info('Downloading: ' + creditNote.uploadedDocument.fileName, 'Download');
-      // In production, you would fetch the file from the server and trigger download
-      // window.open(creditNote.uploadedDocument.fileUrl, '_blank');
+    if (!creditNote.uploadedDocument?.fileUrl) {
+      this.toastr.info('No document available for download', 'Info');
+      return;
     }
+
+    this.salesApiService.downloadCreditNoteDocument(creditNote.id).subscribe({
+      next: (response: any) => {
+        // Create blob and trigger download
+        const blob = new Blob([response], { type: 'application/pdf' });
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = creditNote.uploadedDocument?.fileName || `CN-${creditNote.creditNoteNumber}.pdf`;
+        link.click();
+        window.URL.revokeObjectURL(url);
+        this.toastr.success('Document downloaded', 'Success');
+        console.log('✅ Document downloaded:', creditNote.uploadedDocument?.fileName);
+      },
+      error: (error: any) => {
+        console.error('❌ Error downloading document:', error);
+        // Fallback: try to open the URL directly
+        if (creditNote.uploadedDocument?.fileUrl) {
+          window.open(creditNote.uploadedDocument.fileUrl, '_blank');
+        } else {
+          this.toastr.error(error?.error?.message || 'Error downloading document', 'Error');
+        }
+      }
+    });
   }
 
   formatDate(date: Date | undefined): string {

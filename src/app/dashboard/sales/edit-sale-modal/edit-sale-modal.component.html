@@ -160,6 +160,7 @@
                       <th style="width: 100px;">Quantity</th>
                       <th style="width: 120px;">Unit Price (R)</th>
                       <th style="width: 120px;">Subtotal (R)</th>
+                      <th style="width: 50px;">Action</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -189,6 +190,21 @@
                       </td>
                       <td class="text-end">
                         <span>{{ (item.quantity * item.unitPrice).toFixed(2) }}</span>
+                      </td>
+                      <td class="text-center">
+                        <!-- Delete button only shows if 2+ items -->
+                        <button
+                          type="button"
+                          class="btn btn-sm btn-danger"
+                          *ngIf="sale.saleItems.length > 1"
+                          (click)="onDeleteItem(i)"
+                          title="Delete this item">
+                          <i class="bi bi-trash"></i> Delete
+                        </button>
+                        <!-- Empty space if only 1 item -->
+                        <span *ngIf="sale.saleItems.length === 1" class="text-muted">
+                          <small>No delete (only item)</small>
+                        </span>
                       </td>
                     </tr>
                   </tbody>

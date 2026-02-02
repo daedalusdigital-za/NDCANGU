@@ -226,4 +226,21 @@ export class EditSaleModalComponent implements OnChanges {
     // Update the displayed total in real-time as user edits items
     console.log('Item changed - total now:', this.calculateTotal());
   }
+
+  // Delete a sale item from the list
+  onDeleteItem(index: number): void {
+    if (this.sale.saleItems.length <= 1) {
+      this.toastr.warning('Cannot delete the last item. A sale must have at least one item.', 'Warning');
+      return;
+    }
+
+    const itemToDelete = this.sale.saleItems[index];
+    const itemName = itemToDelete.name || `Item ${itemToDelete.inventoryItemId}`;
+
+    if (confirm(`Are you sure you want to delete "${itemName}"?`)) {
+      this.sale.saleItems.splice(index, 1);
+      this.toastr.info(`Deleted: ${itemName}`, 'Item Removed');
+      this.onItemChanged(); // Recalculate total
+    }
+  }
 }
