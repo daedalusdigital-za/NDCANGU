@@ -15,7 +15,8 @@ export class BaseService {
   constructor(private http: HttpClient) { }
 
   basePost<T>(url: string, payloads: any): Observable<ApiResponse<T>> {
-    return this.http.post<ApiResponse<T>>(`${this.API_URL}${url}`, payloads, {
+    const fullUrl = this.normalizeUrl(url);
+    return this.http.post<ApiResponse<T>>(fullUrl, payloads, {
       headers: this.getHeaders()
     }).pipe(
       timeout(this.REQUEST_TIMEOUT),
@@ -25,7 +26,8 @@ export class BaseService {
   }
 
   baseGet<T>(url: string): Observable<any> {
-    return this.http.get<any>(`${this.API_URL}${url}`, {
+    const fullUrl = this.normalizeUrl(url);
+    return this.http.get<any>(fullUrl, {
       headers: this.getHeaders()
     }).pipe(
       timeout(this.REQUEST_TIMEOUT),
@@ -55,7 +57,8 @@ export class BaseService {
   }
 
   basePatch<T>(url: string, payloads: any): Observable<ApiResponse<T>> {
-    return this.http.patch<ApiResponse<T>>(`${this.API_URL}${url}`, payloads, {
+    const fullUrl = this.normalizeUrl(url);
+    return this.http.patch<ApiResponse<T>>(fullUrl, payloads, {
       headers: this.getHeaders()
     }).pipe(
       timeout(this.REQUEST_TIMEOUT),
@@ -65,13 +68,24 @@ export class BaseService {
   }
 
   baseDelete<T>(url: string): Observable<ApiResponse<T>> {
-    return this.http.delete<ApiResponse<T>>(`${this.API_URL}${url}`, {
+    const fullUrl = this.normalizeUrl(url);
+    return this.http.delete<ApiResponse<T>>(fullUrl, {
       headers: this.getHeaders()
     }).pipe(
       timeout(this.REQUEST_TIMEOUT),
       map(response => this.handleResponse(response)),
       catchError(this.handleError)
     );
+  }
+
+  /**
+   * Normalize URL to prevent double slashes
+   * Ensures proper URL formatting regardless of trailing slashes
+   */
+  private normalizeUrl(url: string): string {
+    const baseUrl = this.API_URL.endsWith('/') ? this.API_URL.slice(0, -1) : this.API_URL;
+    const path = url.startsWith('/') ? url : '/' + url;
+    return `${baseUrl}${path}`;
   }
 
   private getHeaders(): HttpHeaders {

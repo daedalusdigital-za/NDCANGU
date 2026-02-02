@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  apiBaseUrl: 'https://ngcanduapi.azurewebsites.net/api/',
+  apiBaseUrl: 'https://ngcanduapi.azurewebsites.net/api',
   security: {
     passwordPolicy: {
       minLength: 8,

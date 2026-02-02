@@ -13,7 +13,7 @@ import { BaseService } from '../../../core/services/api/base-api.service';
 })
 export class SalesApiService {
   private readonly SALES_ENDPOINTS = {
-    SALES: '/Sales',
+    SALES: '/Sales/GetAll',
     SALE_BY_ID: '/Sales',
     INVENTORY: '/Inventory',
     ITEM_BY_ID: '/Inventory'
