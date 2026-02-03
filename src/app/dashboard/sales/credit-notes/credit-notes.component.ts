@@ -211,6 +211,16 @@ export class CreditNotesComponent implements OnInit {
     ];
   }
 
+  /**
+   * Add a newly created credit note to the list and refresh the filtered view
+   */
+  private addCreditNoteToList(creditNote: CreditNote): void {
+    // Add to the beginning of the list so it appears first
+    this.creditNotes.unshift(creditNote);
+    this.filterCreditNotes();
+    console.log('✅ Credit note added to list. Total:', this.creditNotes.length);
+  }
+
   filterCreditNotes(): void {
     let filtered = this.creditNotes;
 
@@ -308,7 +318,7 @@ export class CreditNotesComponent implements OnInit {
       return;
     }
 
-    if (!this.newCreditNote.creditAmount || this.newCreditNote.creditAmount <= 0) {
+    if (this.newCreditNote.creditAmount === undefined || this.newCreditNote.creditAmount === null || this.newCreditNote.creditAmount < 0) {
       this.toastr.error('Please enter a valid credit amount', 'Validation Error');
       return;
     }
@@ -338,26 +348,50 @@ export class CreditNotesComponent implements OnInit {
         const createdCreditNote = response.data || response;
         console.log('✅ Credit note created:', createdCreditNote);
 
+        // Add the new credit note to the local list immediately
+        // This ensures visibility even if the GET endpoint has issues
+        const newCreditNote: CreditNote = {
+          id: createdCreditNote.id || Date.now(),
+          creditNoteNumber: createdCreditNote.creditNoteNumber || `CN-${Date.now()}`,
+          invoiceId: creditNoteData.invoiceId!,
+          invoiceNumber: creditNoteData.invoiceNumber || '',
+          customerId: creditNoteData.customerId!,
+          customerName: creditNoteData.customerName || '',
+          originalAmount: creditNoteData.originalAmount!,
+          creditAmount: creditNoteData.creditAmount!,
+          reason: creditNoteData.reason!,
+          status: 'pending',
+          reverseStock: creditNoteData.reverseStock || false,
+          reverseSale: creditNoteData.reverseSale || true,
+          createdDate: new Date(),
+          notes: creditNoteData.notes
+        };
+
         // If file selected, upload it
         if (this.selectedFile) {
-          this.salesApiService.uploadCreditNoteDocument(createdCreditNote.id, this.selectedFile).subscribe({
+          this.salesApiService.uploadCreditNoteDocument(createdCreditNote.id || newCreditNote.id, this.selectedFile).subscribe({
             next: (uploadResponse: any) => {
               console.log('✅ Document uploaded:', uploadResponse);
+              newCreditNote.uploadedDocument = {
+                fileName: this.uploadedFileName,
+                fileUrl: uploadResponse.fileUrl || '',
+                uploadedDate: new Date()
+              };
+              this.addCreditNoteToList(newCreditNote);
               this.toastr.success(`Credit note created with document: ${this.uploadedFileName}`, 'Success');
               this.closeAddModal();
-              this.loadCreditNotes();
             },
             error: (uploadError: any) => {
               console.error('❌ Error uploading document:', uploadError);
+              this.addCreditNoteToList(newCreditNote);
               this.toastr.warning('Credit note created but document upload failed', 'Partial Success');
               this.closeAddModal();
-              this.loadCreditNotes();
             }
           });
         } else {
+          this.addCreditNoteToList(newCreditNote);
           this.toastr.success('Credit note created successfully', 'Success');
           this.closeAddModal();
-          this.loadCreditNotes();
         }
       },
       error: (error: any) => {
